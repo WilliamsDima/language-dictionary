@@ -8,6 +8,12 @@ export enum RoutesNames {
   // tabs stacks
   mainStack = 'mainStack',
   main = 'main',
+
+  settingsStack = 'settingsStack',
+  settings = 'settings',
+
+  profileStack = 'profileStack',
+  profile = 'profile',
 }
 
 let RoutesKeys: keyof typeof RoutesNames

@@ -1,8 +1,9 @@
 import React, { FC, memo } from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { styles } from './ButtonTabBar.styles'
 import { TabsKeys } from '@/app/Navigation/RoutesNames'
 import TabBarIcons from '../TabBarIcons/TabBarIcons'
+import Text from '../Text/Text'
 
 type ButtonTabBar = {
   onPress?: () => void

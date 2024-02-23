@@ -3,9 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MainTabRoutes from './TabStacks/MainTabRoutes'
 import { RoutesNames } from './RoutesNames'
 import TabBar from '@/shared/UI/TabBar/TabBar'
+import SettingsTabRoutes from './TabStacks/SettingsTabRoutes'
+import ProfileTabRoutes from './TabStacks/ProfileTabRoutes'
 
 export type TabParamsList = {
   [RoutesNames.mainStack]: undefined
+  [RoutesNames.settingsStack]: undefined
+  [RoutesNames.profileStack]: undefined
 }
 
 const Tab = createBottomTabNavigator<TabParamsList>()
@@ -28,6 +32,17 @@ const TabNavigation = () => {
         options={{ headerShown: false }}
         name={RoutesNames.mainStack}
         component={MainTabRoutes}
+      />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={RoutesNames.settingsStack}
+        component={SettingsTabRoutes}
+      />
+
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={RoutesNames.profileStack}
+        component={ProfileTabRoutes}
       />
     </Tab.Navigator>
   )

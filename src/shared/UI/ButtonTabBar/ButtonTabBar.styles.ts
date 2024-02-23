@@ -1,5 +1,5 @@
 import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize } from '@/shared/helpers/ScaleUtils'
+import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -9,10 +9,8 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(12),
-    fontWeight: '600',
-    fontFamily: 'Mulish',
+    fontSize: scaleFontSize(14),
+    marginTop: scaleWidth(5),
   },
   activeText: {
     color: COLORS.white,

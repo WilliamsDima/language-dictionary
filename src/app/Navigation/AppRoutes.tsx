@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { RoutesNames } from './RoutesNames'
 import StartRoutes from './Stacks/StartStack'
 import TabNavigation from './TabRoutes'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 export type AppParamsList = {
   [RoutesNames.start]: undefined
@@ -12,10 +13,11 @@ export type AppParamsList = {
 const Stack = createStackNavigator<AppParamsList>()
 
 const Routes = () => {
+  const { isAuth } = useAppSelector((store) => store.app)
   return (
     <>
       <NavigationContainer>
-        {false ? (
+        {!isAuth ? (
           <TabNavigation />
         ) : (
           <Stack.Navigator>

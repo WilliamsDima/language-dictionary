@@ -5,7 +5,6 @@ import {
   StatusBarProps,
   StatusBarStyle,
   ViewStyle,
-  useColorScheme,
   ScrollViewProps,
 } from 'react-native'
 
@@ -14,6 +13,7 @@ import { COLORS } from '@/assets/styles/colors'
 import Header, { HeaderProps } from '@/widgets/Header/Header'
 import VariableSafeAreaView from '../VariableSafeAreaView/VariableSafeAreaView'
 import { DismissKeyboardView } from '../DismissKeyboardHOC/DismissKeyboardHOC'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 interface Props extends HeaderProps {
   children: ReactNode
@@ -55,11 +55,11 @@ const Layout: FC<Props> = (props) => {
     ...headerProps
   } = props
 
-  const isDarkMode = useColorScheme() === 'dark'
+  const { theme } = useAppSelector((store) => store.app)
 
   const backgroundStyle = useMemo(() => {
-    return isDarkMode ? COLORS.white : COLORS.white
-  }, [isDarkMode])
+    return theme === 'dark' ? COLORS.gray_bg : COLORS.white
+  }, [theme])
 
   const overStylesSafeArea = useMemo(() => {
     return [
@@ -68,8 +68,9 @@ const Layout: FC<Props> = (props) => {
       showHeader && isScroll && styles.showHeaderWithScroll,
       paddingScreen && styles.padding,
       safeAreaStyles,
+      { backgroundColor: backgroundStyle },
     ]
-  }, [safeAreaStyles])
+  }, [safeAreaStyles, backgroundStyle])
 
   const overStylesScrollView = useMemo(() => {
     return [scrollViewStyles]
@@ -79,13 +80,6 @@ const Layout: FC<Props> = (props) => {
     <VariableSafeAreaView isSafeArea={!!isSafeArea} style={overStylesSafeArea}>
       {showHeader && <Header {...headerProps} />}
       {header}
-      {/* <StatusBar
-        barStyle={
-          statusBarStyle ?? isDarkMode ? 'light-content' : 'dark-content'
-        }
-        backgroundColor={statusBarBackgroundColor || backgroundStyle}
-        {...statusBarProps}
-      /> */}
 
       {dismissKeyboard ? (
         <DismissKeyboardView>

@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useMemo } from 'react'
 import {
   BottomTabDescriptorMap,
   BottomTabNavigationEventMap,
@@ -12,6 +12,8 @@ import { styles } from './TabBar.styles'
 import { TabsKeys } from '@/app/Navigation/RoutesNames'
 import { Shadow } from 'react-native-shadow-2'
 import ButtonTabBar from '../ButtonTabBar/ButtonTabBar'
+import { useAppSelector } from '@/shared/hooks/useStore'
+import { COLORS } from '@/assets/styles/colors'
 
 type Props = {
   state: TabNavigationState<ParamListBase>
@@ -22,10 +24,25 @@ type Props = {
 const TabBar: FC<Props> = (props) => {
   const { state, navigation } = props
 
-  const tabTitles = ['main']
+  const { theme } = useAppSelector((store) => store.app)
+
+  const colorShdow = useMemo(() => {
+    return theme === 'dark' ? COLORS.gray_bg : COLORS.white
+  }, [theme])
+
+  const backgroundColor = useMemo(() => {
+    return theme === 'dark' ? '#323233' : COLORS.white
+  }, [theme])
+
+  const tabTitles = useMemo(() => {
+    return ['Слова', 'Настройки', 'Профиль']
+  }, [])
 
   return (
-    <Shadow containerStyle={styles.containerStyle} style={styles.tab}>
+    <Shadow
+      containerStyle={[styles.containerStyle, { backgroundColor: colorShdow }]}
+      style={[styles.tab, { backgroundColor }]}
+    >
       {state?.routes.map((route, index) => {
         const isFocused = state.index === index
 
