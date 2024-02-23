@@ -33,6 +33,7 @@ local.properties
 .cxx/
 *.jks
 *.aab
+google-services.json
 
 # node.js
 #
