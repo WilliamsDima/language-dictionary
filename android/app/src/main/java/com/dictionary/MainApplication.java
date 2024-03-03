@@ -1,4 +1,4 @@
-package com.dictionary;
+package com.williamsdev.dictionary;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

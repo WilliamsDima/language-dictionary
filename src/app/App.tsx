@@ -9,7 +9,7 @@ import Routes from './Navigation/AppRoutes'
 
 // GoogleSignin.configure({
 //   webClientId:
-//     '528679131313-9gmigp7vccosvokpsb7vcl5976j9nkb3.apps.googleusercontent.com',
+//     '528679131313-vi6p1ilocsbp1r796frhh43p6votlshh.apps.googleusercontent.com',
 // })
 
 LogBox.ignoreLogs(['Remote debugger'])
