@@ -1,15 +1,32 @@
+import UserInfo from '@/entities/user/UserInfo/UserInfo'
 import Layout from '@/shared/UI/Layout/Layout'
-import Text from '@/shared/UI/Text/Text'
-import { useAuth } from '@/shared/hooks/useAuth'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import { View } from 'react-native'
+import { styles } from './ProfileScreen.styles'
+import Button from '@/shared/UI/Button/Button'
+import ModalLogout from '@/features/ModalLogout/ModalLogout'
 
 const ProfileScreen: FC = () => {
-  const { logoutHandler } = useAuth()
+  const [modalLogout, setModalLogout] = useState(false)
+
+  const showModalLogout = () => {
+    setModalLogout(true)
+  }
+
   return (
-    <Layout>
-      <Text style={{ marginTop: 50 }} onPress={logoutHandler}>
-        выйти
-      </Text>
+    <Layout isScroll>
+      <View style={styles.screen}>
+        <UserInfo />
+
+        <Button
+          classes={{ btn: styles.logout, textBtn: styles.logoutText }}
+          onPress={showModalLogout}
+        >
+          выйти из аккаунта
+        </Button>
+      </View>
+
+      <ModalLogout visible={modalLogout} setVisible={setModalLogout} />
     </Layout>
   )
 }

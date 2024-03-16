@@ -9,13 +9,14 @@ import React, {
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
-import { IUser } from '../store/slice/userSlice'
+import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { doc, setDoc } from 'firebase/firestore/lite'
 import { db, getUserData, logout } from '../firebase/api'
 
 type IContext = {
   logoutHandler: () => Promise<void>
   user: IUser | null
+  firebaseData: IFirebaseData | null
 }
 
 const AuthContext = createContext<IContext>({} as IContext)
@@ -25,9 +26,9 @@ type AuthProviderType = {
 }
 
 export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
-  const { setIsAuth, setUser } = useActions()
+  const { setIsAuth, setUser, setFirebaseData } = useActions()
 
-  const { user } = useAppSelector((store) => store.user)
+  const { user, firebaseData } = useAppSelector((store) => store.user)
 
   const onAuthStateChanged = async (user: FirebaseAuthTypes.User) => {
     console.log('onAuthStateChanged user', user)
@@ -39,12 +40,14 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     const userData = {
       name: user.displayName,
       items: isUser?.items ? isUser?.items : [],
+      uid: isUser?.uid ? isUser.uid : user.uid,
       dateRegistration: isUser?.dateRegistration
         ? isUser?.dateRegistration
-        : new Date(),
+        : +new Date(),
     }
 
     await setDoc(doc(db, 'users', user.uid), userData)
+    setFirebaseData(userData as any)
   }
 
   const logoutHandler = async () => {
@@ -68,8 +71,9 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     return {
       logoutHandler,
       user,
+      firebaseData,
     }
-  }, [logoutHandler, user])
+  }, [logoutHandler, user, firebaseData])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

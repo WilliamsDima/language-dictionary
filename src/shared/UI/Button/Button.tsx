@@ -3,12 +3,12 @@ import {
   GestureResponderEvent,
   TouchableOpacity,
   ViewStyle,
-  Text,
   TextStyle,
   TouchableOpacityProps,
   Pressable,
 } from 'react-native'
 import { styles } from './Button.styles'
+import Text from '../Text/Text'
 
 /**
  * UI Button
