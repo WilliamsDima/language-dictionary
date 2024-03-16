@@ -17,7 +17,7 @@ const Routes = () => {
   return (
     <>
       <NavigationContainer>
-        {!isAuth ? (
+        {isAuth ? (
           <TabNavigation />
         ) : (
           <Stack.Navigator>

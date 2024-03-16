@@ -5,8 +5,12 @@ import { View } from 'react-native'
 import { styles } from './MainScreen.styles'
 import ButtonAdd from './UI/ButtonAdd/ButtonAdd'
 import SearchWords from './UI/SearchWords/SearchWords'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 const MainScreen: FC = () => {
+  const { user } = useAppSelector((store) => store.user)
+  console.log('user', user)
+
   return (
     <Layout dismissKeyboard>
       <View style={styles.screen}>
