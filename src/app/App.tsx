@@ -6,6 +6,7 @@ import { EventProvider } from 'react-native-outside-press'
 import { Provider } from 'react-redux'
 import Routes from './Navigation/AppRoutes'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { AuthProvider } from '@/shared/hooks/useAuth'
 
 GoogleSignin.configure({
   webClientId:
@@ -25,9 +26,11 @@ const App: FC = () => {
 
   return (
     <Provider store={store}>
-      <EventProvider>
-        <Routes />
-      </EventProvider>
+      <AuthProvider>
+        <EventProvider>
+          <Routes />
+        </EventProvider>
+      </AuthProvider>
     </Provider>
   )
 }
