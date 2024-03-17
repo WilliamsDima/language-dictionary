@@ -31,7 +31,7 @@ const TabBar: FC<Props> = (props) => {
   }, [theme])
 
   const backgroundColor = useMemo(() => {
-    return theme === 'dark' ? '#323233' : COLORS.white
+    return theme === 'dark' ? COLORS.tab_bar_dark : COLORS.white
   }, [theme])
 
   const tabTitles = useMemo(() => {

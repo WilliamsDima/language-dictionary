@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: scaleFontSize(14),
     marginTop: scaleWidth(5),
+    textAlign: 'center',
   },
   activeText: {
     color: COLORS.white,

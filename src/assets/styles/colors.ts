@@ -12,4 +12,5 @@ export enum COLORS {
   red = '#FC5555',
   bg_modal = 'rgba(0, 0, 0, 0.5)',
   bg_modal_light = 'rgba(0, 0, 0, 0.2)',
+  tab_bar_dark = '#323233',
 }

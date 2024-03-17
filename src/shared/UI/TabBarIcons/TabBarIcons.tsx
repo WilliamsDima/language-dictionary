@@ -14,8 +14,8 @@ const TabBarIcons: FC<ButtonTabBar> = ({ routeName, isFocused }) => {
     case 'mainStack':
       return (
         <Svg
-          width={40}
-          height={40}
+          width={30}
+          height={30}
           stroke={isFocused ? COLORS.white : COLORS.white}
           fill={isFocused ? COLORS.green : 'transparent'}
           viewBox="0 0 24 24"
@@ -31,8 +31,8 @@ const TabBarIcons: FC<ButtonTabBar> = ({ routeName, isFocused }) => {
     case 'settingsStack':
       return (
         <Svg
-          width={40}
-          height={40}
+          width={30}
+          height={30}
           viewBox="0 0 30 30"
           stroke={isFocused ? COLORS.green : COLORS.white}
           fill={isFocused ? COLORS.green : COLORS.white}
@@ -48,8 +48,8 @@ const TabBarIcons: FC<ButtonTabBar> = ({ routeName, isFocused }) => {
     case 'profileStack':
       return (
         <Svg
-          width={40}
-          height={40}
+          width={30}
+          height={30}
           stroke={isFocused ? COLORS.green : COLORS.white}
           fill={isFocused ? COLORS.green : COLORS.white}
           viewBox="0 0 24 24"

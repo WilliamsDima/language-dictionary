@@ -11,10 +11,17 @@ import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
 import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { doc, setDoc } from 'firebase/firestore/lite'
-import { db, getUserData, logout } from '../firebase/api'
+import {
+  db,
+  deleteProfile,
+  deleteUserAPI,
+  getUserData,
+  logout,
+} from '../firebase/api'
 
 type IContext = {
   logoutHandler: () => Promise<void>
+  deleteAccaunt: () => void
   user: IUser | null
   firebaseData: IFirebaseData | null
 }
@@ -41,6 +48,7 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
       name: user.displayName,
       items: isUser?.items ? isUser?.items : [],
       uid: isUser?.uid ? isUser.uid : user.uid,
+      email: user?.email,
       dateRegistration: isUser?.dateRegistration
         ? isUser?.dateRegistration
         : +new Date(),
@@ -62,6 +70,17 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     }
   }
 
+  const deleteAccaunt = async () => {
+    if (user) {
+      console.log('deleteAccaunt')
+
+      await deleteUserAPI(user?.uid)
+      await deleteProfile(user)
+
+      logoutHandler()
+    }
+  }
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged as any)
     return subscriber // unsubscribe on unmount
@@ -70,10 +89,11 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   const value = useMemo(() => {
     return {
       logoutHandler,
+      deleteAccaunt,
       user,
       firebaseData,
     }
-  }, [logoutHandler, user, firebaseData])
+  }, [logoutHandler, deleteAccaunt, user, firebaseData])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

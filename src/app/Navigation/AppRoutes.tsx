@@ -5,6 +5,7 @@ import { RoutesNames } from './RoutesNames'
 import StartRoutes from './Stacks/StartStack'
 import TabNavigation from './TabRoutes'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import { useGlobalData } from '@/shared/hooks/useGlobalData'
 
 export type AppParamsList = {
   [RoutesNames.start]: undefined
@@ -13,7 +14,9 @@ export type AppParamsList = {
 const Stack = createStackNavigator<AppParamsList>()
 
 const Routes = () => {
+  useGlobalData()
   const { isAuth } = useAppSelector((store) => store.app)
+
   return (
     <>
       <NavigationContainer>

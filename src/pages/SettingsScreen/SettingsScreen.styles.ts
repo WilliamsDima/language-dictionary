@@ -12,23 +12,16 @@ export const styles = StyleSheet.create({
     position: 'relative',
     justifyContent: 'flex-start',
     paddingTop: scaleWidth(20),
+    paddingBottom: scaleWidth(40),
   },
 
-  logout: {
-    marginTop: scaleWidth(20),
+  privacyPolicy: {
     padding: scaleWidth(15),
-    backgroundColor: COLORS.red,
+    marginVertical: scaleWidth(20),
+    borderColor: COLORS.white,
   },
-
-  logoutText: {
-    fontSize: scaleFontSize(14),
-    textTransform: 'uppercase',
-  },
-
-  delete: {
-    marginTop: scaleWidth(20),
-    padding: scaleWidth(15),
-    borderColor: COLORS.red,
-    // backgroundColor: COLORS.red,
+  privacyPolicyText: {
+    color: COLORS.white,
+    fontSize: scaleFontSize(16),
   },
 })

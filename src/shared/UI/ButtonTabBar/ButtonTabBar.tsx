@@ -21,9 +21,11 @@ const ButtonTabBar: FC<ButtonTabBar> = ({
   return (
     <TouchableOpacity style={[styles.button]} onPress={onPress}>
       <TabBarIcons routeName={routeName} isFocused={isFocused} />
-      <Text style={[styles.title, isFocused && styles.activeText]}>
-        {assetNames}
-      </Text>
+      {/* {isFocused && (
+        <Text style={[styles.title, isFocused && styles.activeText]}>
+          {assetNames}
+        </Text>
+      )} */}
     </TouchableOpacity>
   )
 }

@@ -26,12 +26,29 @@ export const getUserData = async (
   return data
 }
 
+export const getAplicationData = async (): Promise<
+  DocumentData | undefined
+> => {
+  try {
+    const docRef = doc(db, 'app', 'info')
+    const docSnap = await getDoc(docRef)
+    const data = docSnap.data()
+    return data
+  } catch (error) {
+    console.log('getAplicationData error', error)
+  }
+}
+
 export const logout = () => {
   return auth().signOut() // Выход пользователя
 }
 
 export const deleteProfile = (user: any) => {
-  return deleteUser(user)
+  try {
+    return deleteUser(user)
+  } catch (error) {
+    console.log('deleteProfile error', error)
+  }
 }
 
 export const updateItemAPI = async (user: IUser, items: any[]) => {
@@ -41,5 +58,9 @@ export const updateItemAPI = async (user: IUser, items: any[]) => {
 }
 
 export const deleteUserAPI = async (id: string) => {
-  await deleteDoc(doc(db, 'users', id))
+  try {
+    await deleteDoc(doc(db, 'users', id))
+  } catch (error) {
+    console.log('deleteUserAPI error', error)
+  }
 }
