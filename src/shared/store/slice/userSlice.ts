@@ -12,11 +12,15 @@ export interface IFirebaseData {
 type InitialState = {
   user: null | IUser
   firebaseData: null | IFirebaseData
+  showAddModal: boolean
+  itemEdit: null | any
 }
 
 const initialState: InitialState = {
   user: null,
   firebaseData: null,
+  showAddModal: false,
+  itemEdit: null,
 }
 
 export const userSlice = createSlice({
@@ -31,6 +35,12 @@ export const userSlice = createSlice({
       { payload }: PayloadAction<null | IFirebaseData>
     ) => {
       state.firebaseData = payload
+    },
+    setShowAddModal: (state, { payload }: PayloadAction<boolean>) => {
+      state.showAddModal = payload
+    },
+    setItemEdit: (state, { payload }: PayloadAction<null | any>) => {
+      state.itemEdit = payload
     },
   },
 })

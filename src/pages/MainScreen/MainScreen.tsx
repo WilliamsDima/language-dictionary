@@ -6,6 +6,7 @@ import { styles } from './MainScreen.styles'
 import ButtonAdd from './UI/ButtonAdd/ButtonAdd'
 import SearchWords from './UI/SearchWords/SearchWords'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 
 const MainScreen: FC = () => {
   const { user } = useAppSelector((store) => store.user)
@@ -19,6 +20,8 @@ const MainScreen: FC = () => {
 
         <ButtonAdd />
       </View>
+
+      <ModalAddItem />
     </Layout>
   )
 }
