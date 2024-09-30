@@ -1,12 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { SelectOption } from '@/shared/UI/Select/Select'
 
 export type IUser = FirebaseAuthTypes.User
+
 export interface IFirebaseData {
   name: string
   items: any[]
   uid: string
   dateRegistration: Date
+  showVariantList: null | SelectOption
+  email: string
 }
 
 type InitialState = {

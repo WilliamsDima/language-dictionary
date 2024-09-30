@@ -30,7 +30,7 @@ export const useExpandAnim = () => {
 
     Animated.timing(animatedController, config).start()
     LayoutAnimation.configureNext(toggleAnimation)
-    setHidden(!hidden)
+    setHidden((prev) => !prev)
   }
 
   return { toggle, hidden }

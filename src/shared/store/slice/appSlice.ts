@@ -1,3 +1,4 @@
+import { SelectOption } from '@/shared/UI/Select/Select'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type ThemeApp = 'dark' | 'light'
@@ -29,6 +30,7 @@ export interface IAplication {
   }
   socials: ISocial[]
   version: string
+  showVariantsList: SelectOption[]
   privacy_policy_link: string
 }
 

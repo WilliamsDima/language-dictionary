@@ -3,10 +3,12 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query/react'
 
 import appReducer from './slice/appSlice'
 import userReducer from './slice/userSlice'
+import { baseApi } from '../API/baseApi'
 
 const rootReducer = combineReducers({
   app: appReducer,
   user: userReducer,
+  [baseApi.reducerPath]: baseApi.reducer,
 })
 
 export const store = configureStore({
@@ -14,7 +16,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(),
+    }).concat(baseApi.middleware),
 })
 
 setupListeners(store.dispatch)

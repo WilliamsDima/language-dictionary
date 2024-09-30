@@ -8,6 +8,7 @@ import AboutBlock from './UI/AboutBlock/AboutBlock'
 import DeveloperInfo from './UI/DeveloperInfo/DeveloperInfo'
 import Button from '@/shared/UI/Button/Button'
 import openInBrowser from '@/shared/helpers/openInBrowser'
+import Settings from './UI/Settings/Settings'
 
 const SettingsScreen: FC = () => {
   const { aplication } = useAppSelector((store) => store.app)
@@ -19,6 +20,7 @@ const SettingsScreen: FC = () => {
   return (
     <Layout isScroll>
       <View style={styles.screen}>
+        <Settings />
         <AboutBlock />
         <DeveloperInfo />
         <VersionBlock />

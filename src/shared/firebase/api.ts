@@ -57,6 +57,12 @@ export const updateItemAPI = async (user: IUser, items: any[]) => {
   })
 }
 
+export const updateUserProfile = async (user: IUser, items: any[]) => {
+  await updateDoc(doc(db, 'users', user.uid), {
+    items: items,
+  })
+}
+
 export const deleteUserAPI = async (id: string) => {
   try {
     await deleteDoc(doc(db, 'users', id))

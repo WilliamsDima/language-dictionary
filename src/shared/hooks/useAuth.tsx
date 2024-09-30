@@ -44,14 +44,15 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
     const isUser = await getUserData(user.uid)
 
-    const userData = {
-      name: user.displayName,
+    const userData: IFirebaseData = {
+      name: user.displayName || '',
       items: isUser?.items ? isUser?.items : [],
       uid: isUser?.uid ? isUser.uid : user.uid,
-      email: user?.email,
+      email: user?.email || '',
       dateRegistration: isUser?.dateRegistration
         ? isUser?.dateRegistration
         : +new Date(),
+      showVariantList: isUser?.showVariantList,
     }
 
     await setDoc(doc(db, 'users', user.uid), userData)
