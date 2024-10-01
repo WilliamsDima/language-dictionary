@@ -10,14 +10,8 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
 import { IFirebaseData, IUser } from '../store/slice/userSlice'
-import { doc, setDoc } from 'firebase/firestore/lite'
-import {
-  db,
-  deleteProfile,
-  deleteUserAPI,
-  getUserData,
-  logout,
-} from '../firebase/api'
+import { deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
+import { db, deleteProfile, getUserData, logout } from '../firebase/api'
 
 type IContext = {
   logoutHandler: () => Promise<void>
@@ -46,7 +40,6 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
     const userData: IFirebaseData = {
       name: user.displayName || '',
-      items: isUser?.items ? isUser?.items : [],
       uid: isUser?.uid ? isUser.uid : user.uid,
       email: user?.email || '',
       dateRegistration: isUser?.dateRegistration
@@ -103,4 +96,12 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
 export const useAuth = () => {
   return useContext(AuthContext)
+}
+
+export const deleteUserAPI = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, 'users', id))
+  } catch (error) {
+    console.log('deleteUserAPI error', error)
+  }
 }

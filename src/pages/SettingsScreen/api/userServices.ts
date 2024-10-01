@@ -1,10 +1,20 @@
 import { baseApi } from '@/shared/API/baseApi'
-import { getUserData, updateUserProfile } from '@/shared/firebase/api'
-import { IFirebaseData } from '@/shared/store/slice/userSlice'
+import {
+  getUserData,
+  getItems,
+  updateUserProfile,
+  addItemAPI,
+} from '@/shared/firebase/api'
+import { IFirebaseData, IItem } from '@/shared/store/slice/userSlice'
 
 export type UpdateUserProfileParams = {
   uid: string
   data: IFirebaseData
+}
+
+export type AddItemParams = {
+  uid: string
+  item: IItem
 }
 
 export const userServices = baseApi.injectEndpoints({
@@ -35,8 +45,38 @@ export const userServices = baseApi.injectEndpoints({
       },
       invalidatesTags: ['user'],
     }),
+    // получение списка
+    getItems: build.query<IItem[], string | undefined>({
+      async queryFn(uid) {
+        try {
+          const items = await getItems(uid)
+          return { data: items }
+        } catch (error: any) {
+          console.log('Error getItems', error?.message)
+          return { error: error.message }
+        }
+      },
+      providesTags: ['items'],
+    }),
+    // добавление элемента
+    addItem: build.mutation<IItem[], AddItemParams>({
+      async queryFn({ item, uid }) {
+        try {
+          const items = await addItemAPI(uid, item)
+          return { data: items }
+        } catch (error: any) {
+          console.log('Error addItem', error?.message)
+          return { error: error.message }
+        }
+      },
+      invalidatesTags: ['items'],
+    }),
   }),
 })
 
-export const { useGetUserProfileQuery, useUpdateUserProfileMutation } =
-  userServices
+export const {
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+  useGetItemsQuery,
+  useAddItemMutation,
+} = userServices

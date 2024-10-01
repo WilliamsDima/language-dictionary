@@ -5,6 +5,7 @@ import Text from '@/shared/UI/Text/Text'
 import EarthIcon from '@/assets/icons/UI/earth.svg'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
 import { ILanguage } from '@/shared/json/languages'
+import { COLORS } from '@/assets/styles/colors'
 
 /**
  * UI select language
@@ -18,9 +19,10 @@ type Props = {
   }
   onSelect?: (lang: ILanguage) => void
   language?: ILanguage
+  error?: boolean
 }
 
-const LanguagesSelect: FC<Props> = ({ classes, onSelect, language }) => {
+const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
   const [showModal, setShowModal] = useState(false)
 
   const openModal = () => {
@@ -35,7 +37,11 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language }) => {
   return (
     <>
       <TouchableOpacity
-        style={[styles.select, classes?.select]}
+        style={[
+          styles.select,
+          error && { backgroundColor: COLORS.red },
+          classes?.select,
+        ]}
         onPress={openModal}
       >
         <Text style={styles.title}>
@@ -48,6 +54,8 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language }) => {
           <EarthIcon width={25} height={25} />
         )}
       </TouchableOpacity>
+
+      {error && <Text style={styles.error}>Язык не выбран</Text>}
 
       <ModalLanguagesList
         setVisible={setShowModal}

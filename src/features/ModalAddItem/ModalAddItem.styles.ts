@@ -11,10 +11,12 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   container: {
-    maxWidth: '95%',
+    maxWidth: '90%',
     minWidth: '90%',
+    maxHeight: '95%',
+    minHeight: '95%',
     backgroundColor: COLORS.white,
-    paddingVertical: scaleWidth(20),
+    paddingTop: scaleWidth(10),
     borderRadius: scaleWidth(10),
     alignItems: 'center',
   },
@@ -26,8 +28,8 @@ export const styles = StyleSheet.create({
   },
 
   scroll: {
-    maxHeight: '90%',
-    width: '100%',
+    maxHeight: '95%',
+    minWidth: '100%',
   },
 
   title: {
@@ -37,26 +39,32 @@ export const styles = StyleSheet.create({
     marginBottom: scaleWidth(20),
     textTransform: 'uppercase',
   },
-
-  inputs: {
-    gap: scaleWidth(10),
-    paddingHorizontal: scaleWidth(10),
+  btnWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: scaleWidth(20),
+  },
+  btnAddItem: {
+    width: '100%',
+    alignItems: 'center',
   },
 
   input: {
     maxHeight: scaleWidth(100),
     height: 'auto',
     backgroundColor: COLORS.gray_text,
+    color: COLORS.black,
   },
 
   btns: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
+    maxWidth: '100%',
+    minWidth: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: scaleWidth(10),
+    paddingHorizontal: scaleWidth(20),
+    marginTop: scaleWidth(10),
+    marginBottom: scaleWidth(20),
   },
 
   footer: {

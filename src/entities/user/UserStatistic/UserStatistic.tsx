@@ -29,8 +29,6 @@ const UserStatistic: FC<Props> = (props) => {
   const { data: profile } = useGetUserProfileQuery(user?.uid)
   const [updateUserProfile] = useUpdateUserProfileMutation()
 
-  console.log('profile', profile)
-
   const onSelectLanguages = (langs: ILanguage[]) => {
     if (user && profile) {
       if (isNativeLanguage) {

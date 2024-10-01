@@ -6,8 +6,11 @@ import {
   getFirestore,
   DocumentData,
   getDoc,
+  collection,
+  getDocs,
+  addDoc,
 } from 'firebase/firestore/lite'
-import { IFirebaseData, IUser } from '../store/slice/userSlice'
+import { IFirebaseData, IItem, IUser } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../helpers/config/firebase'
 import auth from '@react-native-firebase/auth'
@@ -39,6 +42,71 @@ export const getAplicationData = async (): Promise<
   }
 }
 
+export const getItems = async (uid?: string) => {
+  try {
+    if (uid) {
+      const items: IItem[] = []
+      const itemsRef = collection(db, 'users', uid, 'items') // ссылка на коллекцию items
+      const querySnapshot = await getDocs(itemsRef) // получаем все документы коллекции items
+
+      querySnapshot.forEach((doc) => {
+        items.push({
+          idDoc: doc.id, // Получаем ID документа
+          ...(doc.data() as IItem), // Получаем остальные данные
+        })
+      })
+
+      return items // возвращаем массив объектов
+    }
+  } catch (error) {
+    console.log('getUserItems error', error)
+  }
+}
+
+export const addItemAPI = async (uid: string, newItem: IItem) => {
+  try {
+    // Создаем ссылку на коллекцию items для данного пользователя
+    const itemsRef = collection(db, 'users', uid, 'items')
+
+    // Добавляем новый элемент в коллекцию
+    const docRef = await addDoc(itemsRef, newItem)
+
+    return docRef
+  } catch (error) {
+    console.log('Error updating user profile or adding items:', error)
+  }
+}
+
+// Функция для удаления элемента из коллекции items
+export const deleteItemAPI = async (uid: string, itemId: string) => {
+  try {
+    // Создаем ссылку на документ с данным itemId
+    const itemRef = doc(db, 'users', uid, 'items', itemId)
+
+    // Удаляем документ
+    await deleteDoc(itemRef)
+
+    console.log('Item deleted with ID:', itemId)
+  } catch (error) {
+    console.log('Error deleting item:', error)
+  }
+}
+
+// Функция для обновления элемента в коллекции items
+export const updateItemAPI = async (
+  uid: string,
+  itemId: string,
+  updatedData: Partial<IItem>
+) => {
+  try {
+    const itemRef = doc(db, 'users', uid, 'items', itemId) // Получаем ссылку на документ
+    await updateDoc(itemRef, updatedData) // Обновляем документ
+    console.log('Item updated successfully')
+  } catch (error) {
+    console.log('Error updating item:', error)
+  }
+}
+
 export const logout = () => {
   return auth().signOut() // Выход пользователя
 }
@@ -51,12 +119,6 @@ export const deleteProfile = (user: any) => {
   }
 }
 
-export const updateItemAPI = async (user: IUser, items: any[]) => {
-  await updateDoc(doc(db, 'users', user.uid), {
-    items: items,
-  })
-}
-
 export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
   const user = uid ? await getUserData(uid) : ''
 
@@ -64,13 +126,5 @@ export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
     return updateDoc(doc(db, 'users', uid), {
       ...data,
     })
-  }
-}
-
-export const deleteUserAPI = async (id: string) => {
-  try {
-    await deleteDoc(doc(db, 'users', id))
-  } catch (error) {
-    console.log('deleteUserAPI error', error)
   }
 }

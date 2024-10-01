@@ -20,6 +20,10 @@ export const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: scaleFontSize(16),
   },
+  error: {
+    color: COLORS.red,
+    fontSize: scaleFontSize(14),
+  },
 
   flag: {
     width: scaleWidth(25),
