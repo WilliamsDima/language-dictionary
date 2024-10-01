@@ -25,6 +25,9 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: scaleFontSize(14),
   },
+  labelActive: {
+    color: COLORS.green,
+  },
 
   optionContainer: {
     position: 'absolute',
@@ -51,5 +54,21 @@ export const styles = StyleSheet.create({
 
   selectItem: {
     padding: scaleWidth(10),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  done: {
+    width: scaleWidth(25),
+    height: scaleWidth(25),
+    borderRadius: scaleWidth(5),
+    borderWidth: scaleWidth(1),
+    borderColor: COLORS.white,
+    marginRight: scaleWidth(5),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  doneActive: {
+    backgroundColor: COLORS.green,
+    borderColor: COLORS.green,
   },
 })

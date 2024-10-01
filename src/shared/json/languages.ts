@@ -17,7 +17,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 1,
       title: 'Russia',
-      flag: 'http://82.146.41.79:8180/storage/166/XMLID_5751_.png',
+      flag: 'http://195.201.60.76:8180/storage/166/XMLID_5751_.png',
     },
   },
   {
@@ -27,7 +27,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 2,
       title: 'England (United Kingdom)',
-      flag: 'http://82.146.41.79:8180/storage/170/Великобритания.png',
+      flag: 'http://195.201.60.76:8180/storage/170/Великобритания.png',
     },
   },
   {
@@ -36,8 +36,8 @@ export const languages: ILanguage[] = [
     short_name: 'bg',
     country: {
       id: 7,
-      title: ' Bulgaria',
-      flag: 'http://82.146.41.79:8180/storage/167/Болгария.png',
+      title: 'Bulgaria',
+      flag: 'http://195.201.60.76:8180/storage/167/Болгария.png',
     },
   },
   {
@@ -46,8 +46,8 @@ export const languages: ILanguage[] = [
     short_name: 'fr',
     country: {
       id: 15,
-      title: ' Netherlands',
-      flag: 'http://82.146.41.79:8180/storage/180/Нидерланды.png',
+      title: 'Français',
+      flag: 'http://195.201.60.76:8180/storage/180/Франция.png',
     },
   },
   {
@@ -56,8 +56,8 @@ export const languages: ILanguage[] = [
     short_name: 'cs',
     country: {
       id: 11,
-      title: ' Czechia',
-      flag: 'http://82.146.41.79:8180/storage/176/cz-Чехия.png',
+      title: 'Czechia',
+      flag: 'http://195.201.60.76:8180/storage/176/cz-Чехия.png',
     },
   },
   {
@@ -67,7 +67,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 17,
       title: ' Estonia',
-      flag: 'http://82.146.41.79:8180/storage/182/Эстония.png',
+      flag: 'http://195.201.60.76:8180/storage/182/Эстония.png',
     },
   },
   {
@@ -77,7 +77,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 19,
       title: ' Philippines',
-      flag: 'http://82.146.41.79:8180/storage/184/филиппины.png',
+      flag: 'http://195.201.60.76:8180/storage/184/филиппины.png',
     },
   },
   {
@@ -87,7 +87,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 9,
       title: ' Croatia',
-      flag: 'http://82.146.41.79:8180/storage/174/Хорватия.png',
+      flag: 'http://195.201.60.76:8180/storage/174/Хорватия.png',
     },
   },
   {
@@ -96,8 +96,8 @@ export const languages: ILanguage[] = [
     short_name: 'nl',
     country: {
       id: 15,
-      title: ' Netherlands',
-      flag: 'http://82.146.41.79:8180/storage/180/Нидерланды.png',
+      title: 'Netherlands',
+      flag: 'http://195.201.60.76:8180/storage/180/Нидерланды.png',
     },
   },
   {
@@ -107,7 +107,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 8,
       title: 'China',
-      flag: 'http://82.146.41.79:8180/storage/173/Китай.png',
+      flag: 'http://195.201.60.76:8180/storage/173/Китай.png',
     },
   },
   {
@@ -117,7 +117,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 4,
       title: 'Germany',
-      flag: 'http://82.146.41.79:8180/storage/171/Германия.png',
+      flag: 'http://195.201.60.76:8180/storage/171/Германия.png',
     },
   },
   {
@@ -127,7 +127,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 18,
       title: 'Greece',
-      flag: 'http://82.146.41.79:8180/storage/183/Греция.png',
+      flag: 'http://195.201.60.76:8180/storage/183/Греция.png',
     },
   },
   {
@@ -137,7 +137,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 24,
       title: 'Italy',
-      flag: 'http://82.146.41.79:8180/storage/189/Италия.png',
+      flag: 'http://195.201.60.76:8180/storage/189/Италия.png',
     },
   },
   {
@@ -147,7 +147,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 13,
       title: 'Denmark',
-      flag: 'http://82.146.41.79:8180/storage/178/dk-Дания.png',
+      flag: 'http://195.201.60.76:8180/storage/178/dk-Дания.png',
     },
   },
   {
@@ -157,7 +157,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 20,
       title: 'Finland',
-      flag: 'http://82.146.41.79:8180/storage/185/Финляндия.png',
+      flag: 'http://195.201.60.76:8180/storage/185/Финляндия.png',
     },
   },
   {
@@ -167,7 +167,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 16,
       title: 'Hungary',
-      flag: 'http://82.146.41.79:8180/storage/181/Венгрия.png',
+      flag: 'http://195.201.60.76:8180/storage/181/Венгрия.png',
     },
   },
   {
@@ -177,7 +177,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 23,
       title: 'Iceland',
-      flag: 'http://82.146.41.79:8180/storage/188/Исландия.png',
+      flag: 'http://195.201.60.76:8180/storage/188/Исландия.png',
     },
   },
   {
@@ -187,7 +187,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 10,
       title: 'Indonesia',
-      flag: 'http://82.146.41.79:8180/storage/175/Индонезия.png',
+      flag: 'http://195.201.60.76:8180/storage/175/Индонезия.png',
     },
   },
   {
@@ -197,7 +197,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 21,
       title: ' Latvia',
-      flag: 'http://82.146.41.79:8180/storage/193/Латвия.png',
+      flag: 'http://195.201.60.76:8180/storage/193/Латвия.png',
     },
   },
   {
@@ -207,7 +207,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 12,
       title: 'Iisrael',
-      flag: 'http://82.146.41.79:8180/storage/177/Израиль.png',
+      flag: 'http://195.201.60.76:8180/storage/177/Израиль.png',
     },
   },
   {
@@ -217,7 +217,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 14,
       title: 'Korea',
-      flag: 'http://82.146.41.79:8180/storage/179/Южная-Корея.png',
+      flag: 'http://195.201.60.76:8180/storage/179/Южная-Корея.png',
     },
   },
   {
@@ -227,7 +227,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -237,7 +237,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 31,
       title: 'Nepal',
-      flag: 'http://82.146.41.79:8180/storage/191/Непал.png',
+      flag: 'http://195.201.60.76:8180/storage/191/Непал.png',
     },
   },
   {
@@ -247,7 +247,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 28,
       title: 'Poland',
-      flag: 'http://82.146.41.79:8180/storage/192/Польша.png',
+      flag: 'http://195.201.60.76:8180/storage/192/Польша.png',
     },
   },
   {
@@ -257,7 +257,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 21,
       title: ' Latvia',
-      flag: 'http://82.146.41.79:8180/storage/193/Латвия.png',
+      flag: 'http://195.201.60.76:8180/storage/193/Латвия.png',
     },
   },
   {
@@ -267,7 +267,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 30,
       title: ' Japan',
-      flag: 'http://82.146.41.79:8180/storage/194/Япония.png',
+      flag: 'http://195.201.60.76:8180/storage/194/Япония.png',
     },
   },
   {
@@ -277,7 +277,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 26,
       title: ' Spain',
-      flag: 'http://82.146.41.79:8180/storage/195/Испания.png',
+      flag: 'http://195.201.60.76:8180/storage/195/Испания.png',
     },
   },
   {
@@ -287,7 +287,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 32,
       title: 'Norway',
-      flag: 'http://82.146.41.79:8180/storage/196/Норвенгия.png',
+      flag: 'http://195.201.60.76:8180/storage/196/Норвенгия.png',
     },
   },
   {
@@ -297,7 +297,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 27,
       title: 'Sweden',
-      flag: 'http://82.146.41.79:8180/storage/199/Швеция.png',
+      flag: 'http://195.201.60.76:8180/storage/199/Швеция.png',
     },
   },
   {
@@ -307,7 +307,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 10,
       title: ' Indonesia',
-      flag: 'http://82.146.41.79:8180/storage/175/Индонезия.png',
+      flag: 'http://195.201.60.76:8180/storage/175/Индонезия.png',
     },
   },
   {
@@ -317,7 +317,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -327,7 +327,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -337,7 +337,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -347,7 +347,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -357,7 +357,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -367,7 +367,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -377,7 +377,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 3,
       title: 'India',
-      flag: 'http://82.146.41.79:8180/storage/163/india_18180.png',
+      flag: 'http://195.201.60.76:8180/storage/163/india_18180.png',
     },
   },
   {
@@ -387,7 +387,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 33,
       title: 'Portugal',
-      flag: 'http://82.146.41.79:8180/storage/201/Португалия.png',
+      flag: 'http://195.201.60.76:8180/storage/201/Португалия.png',
     },
   },
   {
@@ -397,7 +397,7 @@ export const languages: ILanguage[] = [
     country: {
       id: 34,
       title: 'Romania',
-      flag: 'http://82.146.41.79:8180/storage/202/Румыния.png',
+      flag: 'http://195.201.60.76:8180/storage/202/Румыния.png',
     },
   },
 ]

@@ -53,6 +53,8 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
         ? isUser?.dateRegistration
         : +new Date(),
       showVariantList: isUser?.showVariantList,
+      languages: isUser?.languages || [],
+      native_language: isUser?.native_language || null,
     }
 
     await setDoc(doc(db, 'users', user.uid), userData)

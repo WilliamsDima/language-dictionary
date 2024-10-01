@@ -7,7 +7,7 @@ import {
   DocumentData,
   getDoc,
 } from 'firebase/firestore/lite'
-import { IUser } from '../store/slice/userSlice'
+import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../helpers/config/firebase'
 import auth from '@react-native-firebase/auth'
@@ -57,10 +57,14 @@ export const updateItemAPI = async (user: IUser, items: any[]) => {
   })
 }
 
-export const updateUserProfile = async (user: IUser, items: any[]) => {
-  await updateDoc(doc(db, 'users', user.uid), {
-    items: items,
-  })
+export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
+  const user = uid ? await getUserData(uid) : ''
+
+  if (user) {
+    return updateDoc(doc(db, 'users', uid), {
+      ...data,
+    })
+  }
 }
 
 export const deleteUserAPI = async (id: string) => {

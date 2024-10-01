@@ -1,10 +1,5 @@
 import React, { FC, memo, useMemo, useState } from 'react'
-import {
-  Animated,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from 'react-native'
+import { Animated, TouchableOpacity, View } from 'react-native'
 import { styles } from './Select.styles'
 import DoneWhiteIcon from '@/assets/icons/UI/done-white-64.svg'
 import ArrowDownIcon from '@/assets/icons/UI/arrow-down-green-64.svg'
@@ -27,7 +22,7 @@ interface Props {
   onPress?: () => void
   multiselect?: boolean
   options?: SelectOption[]
-  select?: SelectOption
+  select?: SelectOption | null
   selects?: SelectOption[]
   onSelect?: (value: SelectOption) => void
   placeholder?: string
@@ -42,16 +37,17 @@ const Select: FC<Props> = (props) => {
     placeholder = 'не выбрано',
     title,
     options,
+    onSelect,
   } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [heightList, setHeightList] = useState(0)
 
-  const { getAnimationStyles } = useRotateArrowAnim(!isOpen)
+  const { getAnimationStyles } = useRotateArrowAnim(isOpen)
 
   const textPlaceholder = useMemo(() => {
     if (multiselect && selects?.length) {
-      return selects[0].label
+      return selects.map((it) => it.label).join(', ')
     }
 
     if (!multiselect && select) {
@@ -62,7 +58,9 @@ const Select: FC<Props> = (props) => {
   }, [placeholder, multiselect, select, selects])
 
   const onClose = () => {
-    setIsOpen(false)
+    setTimeout(() => {
+      setIsOpen(false)
+    }, 100)
   }
 
   const onPress = () => {
@@ -77,7 +75,9 @@ const Select: FC<Props> = (props) => {
         onPress={onPress}
         activeOpacity={1}
       >
-        <Text style={styles.label}>{textPlaceholder}</Text>
+        <Text style={styles.label} numberOfLines={1}>
+          {textPlaceholder}
+        </Text>
 
         <Animated.View style={getAnimationStyles()}>
           <ArrowDownIcon width={24} height={24} />
@@ -98,9 +98,27 @@ const Select: FC<Props> = (props) => {
         >
           {options?.length ? (
             options?.map((it) => {
+              const active = multiselect
+                ? selects?.some((item) => item.value === it.value)
+                : it.value === select?.value
+
               return (
-                <TouchableOpacity key={it.value} style={styles.selectItem}>
-                  <Text style={styles.label}>{it.label}</Text>
+                <TouchableOpacity
+                  key={it.value}
+                  style={styles.selectItem}
+                  onPress={() => {
+                    onSelect && onSelect(it)
+                    !multiselect && onClose()
+                  }}
+                >
+                  {multiselect && (
+                    <View style={[styles.done, active && styles.doneActive]}>
+                      {active && <DoneWhiteIcon width={15} height={15} />}
+                    </View>
+                  )}
+                  <Text style={[styles.label, active && styles.labelActive]}>
+                    {it.label}
+                  </Text>
                 </TouchableOpacity>
               )
             })

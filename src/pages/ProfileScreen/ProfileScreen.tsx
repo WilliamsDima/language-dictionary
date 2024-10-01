@@ -27,6 +27,10 @@ const ProfileScreen: FC = () => {
 
         <UserStatistic />
 
+        {/* <Button classes={{ btn: styles.logout, textBtn: styles.logoutText }}>
+          редактировать
+        </Button> */}
+
         <Button
           classes={{ btn: styles.logout, textBtn: styles.logoutText }}
           onPress={showModalLogout}

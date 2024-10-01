@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { SelectOption } from '@/shared/UI/Select/Select'
+import { ILanguage } from '@/shared/json/languages'
 
 export type IUser = FirebaseAuthTypes.User
 
@@ -11,6 +12,8 @@ export interface IFirebaseData {
   dateRegistration: Date
   showVariantList: null | SelectOption
   email: string
+  languages: ILanguage[]
+  native_language: ILanguage | null
 }
 
 type InitialState = {
