@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
 
   versionUpdate: {
     fontSize: scaleFontSize(16),
-    color: COLORS.green,
+    color: COLORS.primery,
     textAlign: 'center',
     textTransform: 'uppercase',
     marginTop: scaleWidth(5),

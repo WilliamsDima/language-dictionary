@@ -2,18 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { SelectOption } from '@/shared/UI/Select/Select'
 import { ILanguage } from '@/shared/json/languages'
-import { AddItemWords } from '@/features/ModalAddItem/Model/items'
 
 export type IUser = FirebaseAuthTypes.User
-
-export interface IItem {
-  id: number
-  idDoc?: string
-  date: Date
-  description: string
-  language: ILanguage
-  items: AddItemWords[]
-}
 
 export interface IFirebaseData {
   name: string

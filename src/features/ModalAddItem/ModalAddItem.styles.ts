@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLORS.green,
+    color: COLORS.primery,
     fontSize: scaleFontSize(16),
     textAlign: 'center',
     marginBottom: scaleWidth(20),

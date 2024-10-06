@@ -7,12 +7,12 @@ export const styles = StyleSheet.create({
     gap: scaleWidth(10),
     paddingHorizontal: scaleWidth(10),
     borderBottomWidth: scaleWidth(1),
-    borderBottomColor: COLORS.green,
+    borderBottomColor: COLORS.primery,
     paddingVertical: scaleWidth(10),
   },
 
   index: {
-    color: COLORS.green,
+    color: COLORS.primery,
     textAlign: 'center',
     fontSize: scaleFontSize(15),
   },

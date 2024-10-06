@@ -95,6 +95,7 @@ export const useModalAddItem = () => {
           language,
           date: new Date(),
           id: +new Date(),
+          status: 'STUDY',
         },
         uid: user?.uid,
       }).then(() => {

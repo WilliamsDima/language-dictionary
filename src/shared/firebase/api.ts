@@ -10,10 +10,11 @@ import {
   getDocs,
   addDoc,
 } from 'firebase/firestore/lite'
-import { IFirebaseData, IItem, IUser } from '../store/slice/userSlice'
+import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../helpers/config/firebase'
 import auth from '@react-native-firebase/auth'
+import { IItem } from '@/entities/Item/model/item'
 
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)

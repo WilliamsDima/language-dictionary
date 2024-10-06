@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   languagesText: {
-    color: COLORS.green,
+    color: COLORS.primery,
   },
   languagesTextEmpty: {
     color: COLORS.red,

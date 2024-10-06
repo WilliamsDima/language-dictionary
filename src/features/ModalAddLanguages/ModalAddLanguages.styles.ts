@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLORS.green,
+    color: COLORS.primery,
     fontSize: scaleFontSize(16),
     textAlign: 'center',
     marginBottom: scaleWidth(20),
@@ -52,10 +52,10 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.dark_placeholder,
   },
   itemActive: {
-    borderColor: COLORS.green,
+    borderColor: COLORS.primery,
   },
   itemActiveSingle: {
-    backgroundColor: COLORS.green,
+    backgroundColor: COLORS.primery,
   },
   done: {
     width: scaleWidth(20),
@@ -68,8 +68,8 @@ export const styles = StyleSheet.create({
     marginRight: scaleWidth(10),
   },
   doneActive: {
-    borderColor: COLORS.green,
-    backgroundColor: COLORS.green,
+    borderColor: COLORS.primery,
+    backgroundColor: COLORS.primery,
   },
   full_name: {
     color: COLORS.black,

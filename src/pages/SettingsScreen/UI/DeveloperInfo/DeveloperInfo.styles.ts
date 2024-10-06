@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   },
   developerText: {
     fontSize: scaleFontSize(14),
-    color: COLORS.green,
+    color: COLORS.primery,
     marginLeft: scaleWidth(5),
   },
   googleplay: {

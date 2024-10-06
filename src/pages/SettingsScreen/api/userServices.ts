@@ -1,3 +1,4 @@
+import { IItem } from '@/entities/Item/model/item'
 import { baseApi } from '@/shared/API/baseApi'
 import {
   getUserData,
@@ -5,7 +6,7 @@ import {
   updateUserProfile,
   addItemAPI,
 } from '@/shared/firebase/api'
-import { IFirebaseData, IItem } from '@/shared/store/slice/userSlice'
+import { IFirebaseData } from '@/shared/store/slice/userSlice'
 
 export type UpdateUserProfileParams = {
   uid: string
@@ -15,6 +16,10 @@ export type UpdateUserProfileParams = {
 export type AddItemParams = {
   uid: string
   item: IItem
+}
+
+export type GetItemsParams = {
+  uid?: string
 }
 
 export const userServices = baseApi.injectEndpoints({
@@ -46,8 +51,8 @@ export const userServices = baseApi.injectEndpoints({
       invalidatesTags: ['user'],
     }),
     // получение списка
-    getItems: build.query<IItem[], string | undefined>({
-      async queryFn(uid) {
+    getItems: build.query<IItem[], GetItemsParams>({
+      async queryFn({ uid }) {
         try {
           const items = await getItems(uid)
           return { data: items }

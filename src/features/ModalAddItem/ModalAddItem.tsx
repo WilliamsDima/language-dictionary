@@ -140,7 +140,7 @@ const ModalAddItem: FC<Props> = () => {
                   ]}
                 >
                   {isLoading ? (
-                    <ActivityIndicator size={'large'} color={COLORS.green} />
+                    <ActivityIndicator size={'large'} color={COLORS.primery} />
                   ) : (
                     <>
                       <TouchableOpacity onPress={onCancelHandler}>

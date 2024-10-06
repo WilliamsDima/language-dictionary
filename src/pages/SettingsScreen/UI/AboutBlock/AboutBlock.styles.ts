@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   appName: {
-    color: COLORS.green,
+    color: COLORS.primery,
   },
 
   textBlock: {

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: scaleWidth(10),
     borderRadius: scaleWidth(5),
-    backgroundColor: COLORS.green,
+    backgroundColor: COLORS.primery,
   },
   title: {
     color: COLORS.white,

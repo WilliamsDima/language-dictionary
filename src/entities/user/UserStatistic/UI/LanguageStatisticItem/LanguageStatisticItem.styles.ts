@@ -14,6 +14,6 @@ export const styles = StyleSheet.create({
     marginRight: scaleWidth(3),
   },
   languagesText: {
-    color: COLORS.green,
+    color: COLORS.primery,
   },
 })

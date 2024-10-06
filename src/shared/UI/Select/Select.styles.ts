@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     fontSize: scaleFontSize(14),
   },
   labelActive: {
-    color: COLORS.green,
+    color: COLORS.primery,
   },
 
   optionContainer: {
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   doneActive: {
-    backgroundColor: COLORS.green,
-    borderColor: COLORS.green,
+    backgroundColor: COLORS.primery,
+    borderColor: COLORS.primery,
   },
 })

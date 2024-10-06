@@ -1,4 +1,5 @@
 export enum COLORS {
+  primery = '#00DDB3',
   gray_bg = '#1E1E1E',
   gray_bg_btn = '#333333',
   black = '#000000',
@@ -13,4 +14,7 @@ export enum COLORS {
   bg_modal = 'rgba(0, 0, 0, 0.5)',
   bg_modal_light = 'rgba(0, 0, 0, 0.2)',
   tab_bar_dark = '#323233',
+  item = '#1A2B23',
+  item_study = '#B8860B',
+  item_ready = '#228B22',
 }

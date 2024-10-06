@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   },
 
   focus: {
-    borderColor: COLORS.green,
+    borderColor: COLORS.primery,
     borderWidth: scaleWidth(1),
   },
 
