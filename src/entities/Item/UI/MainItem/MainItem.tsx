@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react'
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
 import { styles } from './MainItem.styles'
 import Text from '@/shared/UI/Text/Text'
 import { IItem } from '../../model/item'
@@ -67,6 +67,15 @@ const MainItem: FC<Props> = ({ item }) => {
             },
           ]}
         />
+        {!!item.language.country && (
+          <View style={styles.flagWrapper}>
+            <Image
+              source={{ uri: item.language.country.flag }}
+              style={styles.flag}
+            />
+          </View>
+        )}
+
         {item.date && (
           <Text style={styles.date}>
             {new Date(item.id).toLocaleDateString()}

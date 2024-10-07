@@ -17,12 +17,28 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: scaleWidth(5),
+    alignItems: 'center',
   },
   status: {
     width: scaleWidth(15),
     height: scaleWidth(15),
     borderRadius: scaleWidth(15 / 2),
   },
+
+  flagWrapper: {
+    width: '100%',
+    position: 'absolute',
+    zIndex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flag: {
+    width: scaleWidth(15),
+    height: scaleWidth(15),
+    borderRadius: scaleWidth(15 / 2),
+    resizeMode: 'cover',
+  },
+
   date: {
     fontSize: scaleFontSize(12),
     color: COLORS.gray_text,
