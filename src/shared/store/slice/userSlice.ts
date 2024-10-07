@@ -9,7 +9,10 @@ export interface IFirebaseData {
   name: string
   uid: string
   dateRegistration: Date
-  showVariantList: null | SelectOption
+  showVariantList: null | {
+    label: string
+    value: 'translate_only' | 'word_only' | 'word_and_translate'
+  }
   email: string
   languages: ILanguage[]
   native_language: ILanguage | null

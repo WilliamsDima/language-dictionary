@@ -5,6 +5,8 @@ import {
   getItems,
   updateUserProfile,
   addItemAPI,
+  updateItemAPI,
+  deleteItemAPI,
 } from '@/shared/firebase/api'
 import { IFirebaseData } from '@/shared/store/slice/userSlice'
 
@@ -16,6 +18,17 @@ export type UpdateUserProfileParams = {
 export type AddItemParams = {
   uid: string
   item: IItem
+}
+
+export type UpdateItemParams = {
+  uid: string
+  idDoc: string
+  updatedData: Partial<IItem>
+}
+
+export type DeleteItemParams = {
+  uid: string
+  idDoc: string
 }
 
 export type GetItemsParams = {
@@ -76,6 +89,32 @@ export const userServices = baseApi.injectEndpoints({
       },
       invalidatesTags: ['items'],
     }),
+    // обновление элемента
+    updateItem: build.mutation<any, UpdateItemParams>({
+      async queryFn({ idDoc, uid, updatedData }) {
+        try {
+          const res = await updateItemAPI(uid, idDoc, updatedData)
+          return { data: res }
+        } catch (error: any) {
+          console.log('Error updateItem', error?.message)
+          return { error: error.message }
+        }
+      },
+      invalidatesTags: ['items'],
+    }),
+    // удаление элемента
+    deleteItem: build.mutation<any, DeleteItemParams>({
+      async queryFn({ idDoc, uid }) {
+        try {
+          const res = await deleteItemAPI(uid, idDoc)
+          return { data: res }
+        } catch (error: any) {
+          console.log('Error deleteItem', error?.message)
+          return { error: error.message }
+        }
+      },
+      invalidatesTags: ['items'],
+    }),
   }),
 })
 
@@ -84,4 +123,6 @@ export const {
   useUpdateUserProfileMutation,
   useGetItemsQuery,
   useAddItemMutation,
+  useUpdateItemMutation,
+  useDeleteItemMutation,
 } = userServices

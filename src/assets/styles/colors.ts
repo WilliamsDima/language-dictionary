@@ -8,7 +8,7 @@ export enum COLORS {
   dark_placeholder = '#777777',
   gray_text = '#cccccc',
   live_color = '#ea5d4c',
-  live_color_opacity_1 = 'rgba(252, 85, 85, 0.10)',
+  red_opacity_1 = 'rgba(252, 85, 85, 0.50)',
   blue = '#5A6CF3',
   red = '#FC5555',
   bg_modal = 'rgba(0, 0, 0, 0.5)',

@@ -79,15 +79,13 @@ export const addItemAPI = async (uid: string, newItem: IItem) => {
 }
 
 // Функция для удаления элемента из коллекции items
-export const deleteItemAPI = async (uid: string, itemId: string) => {
+export const deleteItemAPI = async (uid: string, idDoc: string) => {
   try {
     // Создаем ссылку на документ с данным itemId
-    const itemRef = doc(db, 'users', uid, 'items', itemId)
+    const itemRef = doc(db, 'users', uid, 'items', idDoc)
 
     // Удаляем документ
-    await deleteDoc(itemRef)
-
-    console.log('Item deleted with ID:', itemId)
+    return deleteDoc(itemRef)
   } catch (error) {
     console.log('Error deleting item:', error)
   }
@@ -96,13 +94,12 @@ export const deleteItemAPI = async (uid: string, itemId: string) => {
 // Функция для обновления элемента в коллекции items
 export const updateItemAPI = async (
   uid: string,
-  itemId: string,
+  idDoc: string,
   updatedData: Partial<IItem>
 ) => {
   try {
-    const itemRef = doc(db, 'users', uid, 'items', itemId) // Получаем ссылку на документ
-    await updateDoc(itemRef, updatedData) // Обновляем документ
-    console.log('Item updated successfully')
+    const itemRef = doc(db, 'users', uid, 'items', idDoc) // Получаем ссылку на документ
+    return updateDoc(itemRef, updatedData) // Обновляем документ
   } catch (error) {
     console.log('Error updating item:', error)
   }

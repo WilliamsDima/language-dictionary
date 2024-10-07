@@ -21,7 +21,7 @@ const Settings: FC = () => {
   const onSelectShowVariant = (v: SelectOption) => {
     if (user && firebaseData) {
       updateUserProfile({
-        data: { ...firebaseData, showVariantList: v },
+        data: { ...firebaseData, showVariantList: v as any },
         uid: user?.uid,
       })
       setShowVariantSelect(v)

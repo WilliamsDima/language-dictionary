@@ -7,6 +7,7 @@ import LottieView from 'lottie-react-native'
 import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
 import Loader from '@/shared/UI/Loader/Loader'
+import ModalDeleteItem from '@/features/ModalDeleteItem/ModalDeleteItem'
 
 const MainList: FC = () => {
   const { user } = useAppSelector((store) => store.user)
@@ -55,6 +56,8 @@ const MainList: FC = () => {
           </Text>
         </View>
       )}
+
+      <ModalDeleteItem />
     </View>
   )
 }
