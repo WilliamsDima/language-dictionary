@@ -30,6 +30,7 @@ const ModalDeleteItem: FC<Props> = () => {
   const onDelete = () => {
     if (modalDeleteItem?.idDoc && user) {
       deleteItem({ idDoc: modalDeleteItem.idDoc, uid: user.uid })
+      onCancelHandler()
     }
   }
 
