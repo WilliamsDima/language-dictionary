@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   container: {
-    marginVertical: scaleWidth(20),
+    marginTop: scaleWidth(20),
     alignItems: 'center',
   },
   btn: {

@@ -46,8 +46,6 @@ const Settings: FC = () => {
       />
 
       <SaveData />
-
-      <Text>добавить кнопку для сохранения JSON items</Text>
     </View>
   )
 }
