@@ -6,15 +6,24 @@ import { useGetUserProfileQuery } from '@/pages/SettingsScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { AddItemWords } from '@/features/ModalAddItem/Model/items'
 import SoundBIcon from '@/assets/icons/UI/sound-primery-64.svg'
+import { textToSpeech } from '@/shared/helpers/textToSpeech'
+import { IItem } from '../../model/item'
 
 type Props = {
   item: AddItemWords
+  parentItem: IItem
   translateActive: boolean
   index: number
   isLast: boolean
 }
 
-const WordItem: FC<Props> = ({ item, index, translateActive, isLast }) => {
+const WordItem: FC<Props> = ({
+  item,
+  index,
+  translateActive,
+  parentItem,
+  isLast,
+}) => {
   const { user } = useAppSelector((store) => store.user)
   const { data: profile } = useGetUserProfileQuery(user?.uid)
 
@@ -22,7 +31,9 @@ const WordItem: FC<Props> = ({ item, index, translateActive, isLast }) => {
     return profile?.showVariantList
   }, [profile])
 
-  const sound = () => {}
+  const sound = () => {
+    textToSpeech({ lang: parentItem.language.short_name, text: item.word })
+  }
 
   return (
     <View style={[styles.item, isLast && styles.itemLast]}>
