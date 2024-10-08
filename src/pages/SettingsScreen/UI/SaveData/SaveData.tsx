@@ -10,9 +10,10 @@ import RNFS from 'react-native-fs'
 import { useActions } from '@/shared/hooks/useActions'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
+import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 
 const SaveData: FC = () => {
-  const { setLastSaveData } = useActions()
+  const { setLastSaveData, setTooltip } = useActions()
   const { user } = useAppSelector((store) => store.user)
   const { lastSaveData } = useAppSelector((store) => store.items)
 
@@ -28,10 +29,15 @@ const SaveData: FC = () => {
 
       const dateSave = new Date()
 
+      setTooltip({ children: <SaveDataTooltip path={path} />, time: 3000 })
       setLastSaveData(dateSave)
       setAsyncLocal(LOCAL_KEYS.saveDate, dateSave)
       console.log('save json')
     } catch (error) {
+      setTooltip({
+        children: <SaveDataTooltip error path={path} />,
+        time: 3000,
+      })
       console.log('save json Error', error)
     }
   }
@@ -45,17 +51,17 @@ const SaveData: FC = () => {
     return ''
   }, [lastSaveData])
 
-  return (
+  return !!data?.length ? (
     <View style={styles.container}>
       <Button isText={false} classes={{ btn: styles.btn }} onPress={toSave}>
-        <Text style={styles.btnText}>
-          Сохранить карточки на устройство в виде JSON файла
-        </Text>
+        <Text style={styles.btnText}>Сохранить карточки как JSON файл</Text>
         <SaveIcon width={30} height={30} />
       </Button>
 
       {!!dateSaveText && <Text style={styles.saveData}>{dateSaveText}</Text>}
     </View>
+  ) : (
+    <></>
   )
 }
 

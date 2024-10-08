@@ -1,3 +1,4 @@
+import { TooltipType } from '@/entities/Tooltip/model/Tooltip'
 import { SelectOption } from '@/shared/UI/Select/Select'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
@@ -38,12 +39,14 @@ type InitialState = {
   theme: ThemeApp
   isAuth: boolean
   aplication: null | IAplication
+  tooltip: TooltipType | null
 }
 
 const initialState: InitialState = {
   theme: 'dark',
   isAuth: false,
   aplication: null,
+  tooltip: null,
 }
 
 export const appSlice = createSlice({
@@ -58,6 +61,9 @@ export const appSlice = createSlice({
     },
     setIsAuth: (state, { payload }: PayloadAction<boolean>) => {
       state.isAuth = payload
+    },
+    setTooltip: (state, { payload }: PayloadAction<TooltipType | null>) => {
+      state.tooltip = payload
     },
   },
 })
