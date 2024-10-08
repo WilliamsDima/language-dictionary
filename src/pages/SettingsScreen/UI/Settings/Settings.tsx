@@ -7,6 +7,8 @@ import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
 } from '../../api/userServices'
+import Text from '@/shared/UI/Text/Text'
+import SaveData from '../SaveData/SaveData'
 
 const Settings: FC = () => {
   const { aplication } = useAppSelector((store) => store.app)
@@ -42,6 +44,10 @@ const Settings: FC = () => {
         onSelect={onSelectShowVariant}
         options={aplication?.showVariantsList}
       />
+
+      <SaveData />
+
+      <Text>добавить кнопку для сохранения JSON items</Text>
     </View>
   )
 }

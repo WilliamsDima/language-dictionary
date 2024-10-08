@@ -1,1 +1,3 @@
-export enum LOCAL_KEYS {}
+export enum LOCAL_KEYS {
+  saveDate = 'saveDate',
+}

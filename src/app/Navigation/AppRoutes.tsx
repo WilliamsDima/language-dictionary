@@ -6,6 +6,7 @@ import StartRoutes from './Stacks/StartStack'
 import TabNavigation from './TabRoutes'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGlobalData } from '@/shared/hooks/useGlobalData'
+import { useAsyncLocal } from '@/shared/hooks/useAsyncLocal'
 
 export type AppParamsList = {
   [RoutesNames.start]: undefined
@@ -14,7 +15,9 @@ export type AppParamsList = {
 const Stack = createStackNavigator<AppParamsList>()
 
 const Routes = () => {
+  useAsyncLocal()
   useGlobalData()
+
   const { isAuth } = useAppSelector((store) => store.app)
 
   return (

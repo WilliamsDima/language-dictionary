@@ -4,10 +4,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type InitialState = {
   modalDeleteItem: IItem | null
+  lastSaveData: Date | null | undefined
 }
 
 const initialState: InitialState = {
   modalDeleteItem: null,
+  lastSaveData: null,
 }
 
 export const itemsSlice = createSlice({
@@ -16,6 +18,12 @@ export const itemsSlice = createSlice({
   reducers: {
     setModalDeleteItem: (state, { payload }: PayloadAction<IItem | null>) => {
       state.modalDeleteItem = payload
+    },
+    setLastSaveData: (
+      state,
+      { payload }: PayloadAction<Date | null | undefined>
+    ) => {
+      state.lastSaveData = payload
     },
   },
 })
