@@ -13,6 +13,7 @@ import {
   query,
   CollectionReference,
   Query,
+  orderBy,
 } from 'firebase/firestore/lite'
 import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
@@ -50,7 +51,12 @@ export const getAplicationData = async (): Promise<
 export type FilterItems = {
   status?: StatusItem
   search?: string
+  sortDate?: 'asc' | 'desc'
+  languages?: number[]
 }
+
+// 'asc' — сортировка по возрастанию.
+// 'desc' — сортировка по убыванию.
 
 export const getItems = async (uid: string, filter?: FilterItems) => {
   try {
@@ -58,10 +64,23 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
       const items: IItem[] = []
       const itemsRef = collection(db, 'users', uid, 'items')
 
+      // TODO: разместить все по функциям
+
       // Создаем массив условий для фильтрации
       const filters = []
       if (filter?.status && filter.status !== 'ALL') {
         filters.push(where('status', '==', filter.status))
+      }
+
+      // Фильтрация по языкам, если указаны
+      if (filter?.languages && filter.languages.length > 0) {
+        const languageIds = filter.languages.map((lang) => lang)
+        filters.push(where('language.id', 'in', languageIds))
+      }
+
+      // Добавляем сортировку по дате, если задано sortOrder
+      if (filter?.sortDate) {
+        filters.push(orderBy('date', filter.sortDate))
       }
 
       // Выполняем запрос к базе данных с фильтрами, если они есть
@@ -76,10 +95,11 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
         // Если поиск включен, фильтруем элементы по полям word и translate
         if (filter?.search) {
           const searchTerm = filter.search.toLowerCase()
-          const filteredItems = itemArray.filter(
+          let filteredItems = itemArray.filter(
             (subItem) =>
               subItem.word.toLowerCase().includes(searchTerm) ||
-              subItem.translate.toLowerCase().includes(searchTerm)
+              subItem.translate.toLowerCase().includes(searchTerm) ||
+              itemData.description.toLowerCase().includes(searchTerm)
           )
 
           // Если есть совпадения, добавляем элемент с отфильтрованными данными
