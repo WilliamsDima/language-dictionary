@@ -1,5 +1,10 @@
 import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
+import {
+  height,
+  scaleFontSize,
+  scaleWidth,
+  width,
+} from '@/shared/helpers/ScaleUtils'
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -20,5 +25,18 @@ export const styles = StyleSheet.create({
   itemText: {
     fontSize: scaleFontSize(14),
     color: COLORS.gray_text,
+  },
+
+  loader: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width,
+    height: height,
+    zIndex: 10,
+  },
+  animLoader: {
+    width: scaleWidth(150),
+    height: scaleWidth(150),
   },
 })
