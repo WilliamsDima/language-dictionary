@@ -9,12 +9,16 @@ import {
   collection,
   getDocs,
   addDoc,
+  where,
+  query,
+  CollectionReference,
+  Query,
 } from 'firebase/firestore/lite'
 import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../helpers/config/firebase'
 import auth from '@react-native-firebase/auth'
-import { IItem } from '@/entities/Item/model/item'
+import { IItem, StatusItem } from '@/entities/Item/model/item'
 
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)
@@ -43,21 +47,61 @@ export const getAplicationData = async (): Promise<
   }
 }
 
-export const getItems = async (uid?: string) => {
+export type FilterItems = {
+  status?: StatusItem
+  search?: string
+}
+
+export const getItems = async (uid: string, filter?: FilterItems) => {
   try {
     if (uid) {
       const items: IItem[] = []
-      const itemsRef = collection(db, 'users', uid, 'items') // ссылка на коллекцию items
-      const querySnapshot = await getDocs(itemsRef) // получаем все документы коллекции items
+      const itemsRef = collection(db, 'users', uid, 'items')
+
+      console.log('filter', filter)
+
+      // Создаем массив условий для фильтрации
+      const filters = []
+      if (filter?.status && filter.status !== 'ALL') {
+        filters.push(where('status', '==', filter.status))
+      }
+
+      // Выполняем запрос к базе данных с фильтрами, если они есть
+      const ref = filters.length > 0 ? query(itemsRef, ...filters) : itemsRef
+
+      const querySnapshot = await getDocs(ref)
 
       querySnapshot.forEach((doc) => {
-        items.push({
-          idDoc: doc.id, // Получаем ID документа
-          ...(doc.data() as IItem), // Получаем остальные данные
-        })
+        const itemData = doc.data() as IItem
+        const { items: itemArray } = itemData
+
+        // Если поиск включен, фильтруем элементы по полям word и translate
+        if (filter?.search) {
+          const searchTerm = filter.search.toLowerCase()
+          const filteredItems = itemArray.filter(
+            (subItem) =>
+              subItem.word.toLowerCase().includes(searchTerm) ||
+              subItem.translate.toLowerCase().includes(searchTerm)
+          )
+
+          // Если есть совпадения, добавляем элемент с отфильтрованными данными
+          if (filteredItems.length > 0) {
+            items.push({
+              idDoc: doc.id,
+              ...itemData,
+              items: filteredItems, // Обновляем items только совпадающими элементами
+            })
+          }
+        } else {
+          // Если поиска нет, добавляем элемент как есть
+          items.push({
+            idDoc: doc.id,
+            ...itemData,
+          })
+        }
       })
 
-      return items // возвращаем массив объектов
+      return items
     }
   } catch (error) {
     console.log('getUserItems error', error)

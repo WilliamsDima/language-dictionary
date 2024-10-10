@@ -6,6 +6,7 @@ import {
   TextStyle,
   TouchableOpacityProps,
   Pressable,
+  StyleProp,
 } from 'react-native'
 import { styles } from './Button.styles'
 import Text from '../Text/Text'
@@ -19,7 +20,7 @@ import Text from '../Text/Text'
 interface Props extends TouchableOpacityProps {
   onPress?: ((event: GestureResponderEvent) => void) | undefined
   classes?: {
-    btn?: ViewStyle | ViewStyle[]
+    btn?: StyleProp<ViewStyle>
     textBtn?: TextStyle
   }
   children: ReactNode

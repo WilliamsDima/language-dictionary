@@ -1,7 +1,7 @@
 import { AddItemWords } from '@/features/ModalAddItem/Model/items'
 import { ILanguage } from '@/shared/json/languages'
 
-export type StatusItem = 'READY' | 'STUDY'
+export type StatusItem = 'READY' | 'STUDY' | 'ALL'
 
 export interface IItem {
   id: number

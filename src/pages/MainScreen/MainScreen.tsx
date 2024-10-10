@@ -6,12 +6,14 @@ import ButtonAdd from './UI/ButtonAdd/ButtonAdd'
 import SearchWords from './UI/SearchWords/SearchWords'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import MainList from '@/widgets/MainList/UI/MainList/MainList'
+import TabsWords from './UI/TabsWords/TabsWords'
 
 const MainScreen: FC = () => {
   return (
     <Layout dismissKeyboard>
       <View style={styles.screen}>
         <SearchWords />
+        <TabsWords />
 
         <MainList />
 

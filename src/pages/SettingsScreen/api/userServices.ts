@@ -1,4 +1,4 @@
-import { IItem } from '@/entities/Item/model/item'
+import { IItem, StatusItem } from '@/entities/Item/model/item'
 import { baseApi } from '@/shared/API/baseApi'
 import {
   getUserData,
@@ -7,6 +7,7 @@ import {
   addItemAPI,
   updateItemAPI,
   deleteItemAPI,
+  FilterItems,
 } from '@/shared/firebase/api'
 import { IFirebaseData } from '@/shared/store/slice/userSlice'
 
@@ -33,6 +34,7 @@ export type DeleteItemParams = {
 
 export type GetItemsParams = {
   uid?: string
+  filter?: FilterItems
 }
 
 export const userServices = baseApi.injectEndpoints({
@@ -65,9 +67,11 @@ export const userServices = baseApi.injectEndpoints({
     }),
     // получение списка
     getItems: build.query<IItem[], GetItemsParams>({
-      async queryFn({ uid }) {
+      async queryFn({ uid, filter }) {
         try {
-          const items = await getItems(uid)
+          if (!uid) return
+
+          const items = await getItems(uid, filter)
           return { data: items }
         } catch (error: any) {
           console.log('Error getItems', error?.message)
