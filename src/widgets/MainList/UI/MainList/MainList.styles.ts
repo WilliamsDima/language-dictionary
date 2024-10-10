@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   },
   columnWrapperStyle: {
     gap: scaleWidth(10),
+    paddingBottom: scaleWidth(300),
   },
   loader: {
     marginTop: scaleWidth(50),

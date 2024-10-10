@@ -51,11 +51,12 @@ const MainItem: FC<Props> = ({ item }) => {
   }
 
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.item,
         item.id === modalDeleteItem?.id && styles.itemDeleteActive,
       ]}
+      activeOpacity={1}
     >
       <View style={styles.header}>
         <View
@@ -137,7 +138,7 @@ const MainItem: FC<Props> = ({ item }) => {
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   )
 }
 
