@@ -3,7 +3,6 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import React, { FC } from 'react'
 import { View } from 'react-native'
 import { styles } from './AboutBlock.styles'
-import { APP_NAME } from '@/shared/constants/app'
 
 const AboutBlock: FC = () => {
   const { aplication } = useAppSelector((store) => store.app)
@@ -19,7 +18,7 @@ const AboutBlock: FC = () => {
             {!!blockName?.length && (
               <View style={styles.blockName}>
                 {blockName.map((bm, i) => {
-                  const isAppName = APP_NAME === bm
+                  const isAppName = aplication.appName === bm
 
                   return (
                     <Text
@@ -36,7 +35,7 @@ const AboutBlock: FC = () => {
             {!!text?.length && (
               <View style={styles.textBlock}>
                 {text.map((t, i) => {
-                  const isAppName = APP_NAME === t
+                  const isAppName = aplication.appName === t
 
                   return (
                     <Text
@@ -59,7 +58,7 @@ const AboutBlock: FC = () => {
                     <Text key={index} style={styles.punkt}>
                       {index + 1}.{' '}
                       {text.map((t, i) => {
-                        const isAppName = APP_NAME === t
+                        const isAppName = aplication.appName === t
 
                         return (
                           <Text

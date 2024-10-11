@@ -25,6 +25,7 @@ export interface IAbout {
 
 export interface IAplication {
   about: IAbout
+  appName: string
   developer: {
     icon: string
     link: string
