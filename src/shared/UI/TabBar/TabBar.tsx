@@ -24,7 +24,7 @@ type Props = {
 const TabBar: FC<Props> = (props) => {
   const { state, navigation } = props
 
-  const { theme } = useAppSelector((store) => store.app)
+  const { theme, hiddenTabBar } = useAppSelector((store) => store.app)
 
   const colorShdow = useMemo(() => {
     return theme === 'dark' ? COLORS.gray_bg : COLORS.white
@@ -38,7 +38,7 @@ const TabBar: FC<Props> = (props) => {
     return ['Слова', 'Настройки', 'Профиль']
   }, [])
 
-  return (
+  return !hiddenTabBar ? (
     <Shadow
       containerStyle={[styles.containerStyle, { backgroundColor: colorShdow }]}
       style={[styles.tab, { backgroundColor }]}
@@ -73,6 +73,8 @@ const TabBar: FC<Props> = (props) => {
         )
       })}
     </Shadow>
+  ) : (
+    <></>
   )
 }
 

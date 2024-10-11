@@ -1,3 +1,4 @@
+import { isSmallDevices } from './../../helpers/ScaleUtils'
 import { TooltipType } from '@/entities/Tooltip/model/Tooltip'
 import { SelectOption } from '@/shared/UI/Select/Select'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
@@ -40,6 +41,8 @@ type InitialState = {
   isAuth: boolean
   aplication: null | IAplication
   tooltip: TooltipType | null
+  hiddenTabBar: boolean
+  isWatchSplash: boolean
 }
 
 const initialState: InitialState = {
@@ -47,6 +50,8 @@ const initialState: InitialState = {
   isAuth: false,
   aplication: null,
   tooltip: null,
+  hiddenTabBar: false,
+  isWatchSplash: false,
 }
 
 export const appSlice = createSlice({
@@ -64,6 +69,12 @@ export const appSlice = createSlice({
     },
     setTooltip: (state, { payload }: PayloadAction<TooltipType | null>) => {
       state.tooltip = payload
+    },
+    setHiddenTabBar: (state, { payload }: PayloadAction<boolean>) => {
+      state.hiddenTabBar = payload
+    },
+    setIsWatchSplash: (state, { payload }: PayloadAction<boolean>) => {
+      state.isWatchSplash = payload
     },
   },
 })

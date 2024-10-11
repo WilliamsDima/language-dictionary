@@ -4,6 +4,7 @@ export enum RoutesNames {
   // start stack
   start = 'start',
   auth = 'auth',
+  splash = 'splash',
 
   // tabs stacks
   mainStack = 'mainStack',

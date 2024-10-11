@@ -64,8 +64,6 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
       const items: IItem[] = []
       const itemsRef = collection(db, 'users', uid, 'items')
 
-      // TODO: разместить все по функциям
-
       // Создаем массив условий для фильтрации
       const filters = []
       if (filter?.status && filter.status !== 'ALL') {

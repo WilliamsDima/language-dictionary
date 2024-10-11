@@ -3,9 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { screenOptions, stackOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import AuthScreen from '@/processes/AuthScreen/AuthScreen'
+import SplashScreen from '@/pages/SplashScreen/SplashScreen'
 
 export type StartParamsList = {
   [RoutesNames.auth]: undefined
+  [RoutesNames.splash]: undefined
 }
 
 const StartStack = createStackNavigator<StartParamsList>()
@@ -25,6 +27,11 @@ const StartRoutes = () => {
         headerShown: false,
       }}
     >
+      <StartStack.Screen
+        options={stackOptions}
+        name={RoutesNames.splash}
+        component={SplashScreen}
+      />
       <StartStack.Screen
         options={stackOptions}
         name={RoutesNames.auth}
