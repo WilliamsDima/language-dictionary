@@ -48,11 +48,15 @@ export const getAplicationData = async (): Promise<
   }
 }
 
+export type FilterMain = {
+  sortDate?: 'asc' | 'desc'
+  languages?: number[]
+}
+
 export type FilterItems = {
   status?: StatusItem
   search?: string
-  sortDate?: 'asc' | 'desc'
-  languages?: number[]
+  filter?: FilterMain
 }
 
 // 'asc' — сортировка по возрастанию.
@@ -71,14 +75,14 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
       }
 
       // Фильтрация по языкам, если указаны
-      if (filter?.languages && filter.languages.length > 0) {
-        const languageIds = filter.languages.map((lang) => lang)
+      if (filter?.filter?.languages && filter?.filter.languages?.length > 0) {
+        const languageIds = filter.filter.languages.map((lang) => lang)
         filters.push(where('language.id', 'in', languageIds))
       }
 
       // Добавляем сортировку по дате, если задано sortOrder
-      if (filter?.sortDate) {
-        filters.push(orderBy('date', filter.sortDate))
+      if (filter?.filter?.sortDate) {
+        filters.push(orderBy('date', filter.filter.sortDate))
       }
 
       // Выполняем запрос к базе данных с фильтрами, если они есть

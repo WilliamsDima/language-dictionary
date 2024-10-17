@@ -12,7 +12,9 @@ import { useCallbackDebounce } from '@/shared/hooks/useDebounce'
 
 const MainList: FC = () => {
   const { user } = useAppSelector((store) => store.user)
-  const { filterByStatus, search } = useAppSelector((store) => store.items)
+  const { filterByStatus, search, filterMain } = useAppSelector(
+    (store) => store.items
+  )
 
   // Локальное состояние для дебаунсированного поиска
   const [debouncedSearch, setDebouncedSearch] = useState(search)
@@ -33,12 +35,14 @@ const MainList: FC = () => {
       filter: {
         status: filterByStatus,
         search: debouncedSearch,
+        filter: {
+          sortDate: filterMain?.sortDate,
+          languages: filterMain?.languages,
+        },
       },
     },
     { skip: !user?.uid }
   )
-
-  console.log('data', data)
 
   const isFilterActive = useMemo(() => {
     return !!filterByStatus || !!debouncedSearch
@@ -54,6 +58,9 @@ const MainList: FC = () => {
         <FlatList
           keyExtractor={(item) => item.id.toString()}
           data={data}
+          ListHeaderComponent={
+            <Text style={styles.count}>Всего найдено: {data.length}</Text>
+          }
           showsVerticalScrollIndicator={false}
           style={styles.list}
           contentContainerStyle={styles.columnWrapperStyle}

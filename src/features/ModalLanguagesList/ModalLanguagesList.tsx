@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useState } from 'react'
 import { styles } from './ModalLanguagesList.styles'
 import {
   Animated,
@@ -35,6 +35,8 @@ const ModalLanguagesList: FC<Props> = ({
   const { getAnimationStyles } = useScaleAnim({
     active: visible,
   })
+
+  const [isonsError, setIsonsError] = useState<number[]>([])
 
   const onCancelHandler = () => {
     setVisible(false)
@@ -73,6 +75,7 @@ const ModalLanguagesList: FC<Props> = ({
               >
                 <View style={styles.list}>
                   {languages.map((it, i) => {
+                    const iconIsError = isonsError.includes(it.id)
                     return (
                       <TouchableOpacity
                         style={[
@@ -87,10 +90,15 @@ const ModalLanguagesList: FC<Props> = ({
                       >
                         <Text style={styles.name}>{it.full_name}</Text>
 
-                        <Image
-                          source={{ uri: it.country.flag }}
-                          style={styles.icon}
-                        />
+                        {!iconIsError && (
+                          <Image
+                            source={{ uri: it.country.flag }}
+                            style={styles.icon}
+                            onError={(error) => {
+                              setIsonsError((prev) => [...prev, it.id])
+                            }}
+                          />
+                        )}
                       </TouchableOpacity>
                     )
                   })}

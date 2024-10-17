@@ -1,5 +1,13 @@
 import React, { FC, memo, useMemo, useState } from 'react'
-import { Animated, TouchableOpacity, View } from 'react-native'
+import {
+  Animated,
+  Image,
+  ScrollView,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native'
 import { styles } from './Select.styles'
 import DoneWhiteIcon from '@/assets/icons/UI/done-white-64.svg'
 import ArrowDownIcon from '@/assets/icons/UI/arrow-down-green-64.svg'
@@ -13,9 +21,12 @@ import OutsidePressHandler from 'react-native-outside-press'
  * @format
  */
 
+export type SelectOptionValue = string | number
+
 export type SelectOption = {
-  value: string | number
+  value: SelectOptionValue
   label: string
+  iconUrl?: string
 }
 
 interface Props {
@@ -27,6 +38,9 @@ interface Props {
   onSelect?: (value: SelectOption) => void
   placeholder?: string
   title?: string
+  classes?: {
+    scroll?: StyleProp<ViewStyle>
+  }
 }
 
 const Select: FC<Props> = (props) => {
@@ -38,10 +52,13 @@ const Select: FC<Props> = (props) => {
     title,
     options,
     onSelect,
+    classes,
   } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [heightList, setHeightList] = useState(0)
+
+  const [isonsError, setIsonsError] = useState<SelectOptionValue[]>([])
 
   const { getAnimationStyles } = useRotateArrowAnim(isOpen)
 
@@ -96,35 +113,52 @@ const Select: FC<Props> = (props) => {
             setHeightList(nativeEvent.layout.height)
           }}
         >
-          {options?.length ? (
-            options?.map((it) => {
-              const active = multiselect
-                ? selects?.some((item) => item.value === it.value)
-                : it.value === select?.value
+          <ScrollView
+            style={classes?.scroll}
+            showsVerticalScrollIndicator={false}
+          >
+            {options?.length ? (
+              options?.map((it) => {
+                const active = multiselect
+                  ? selects?.some((item) => item.value === it.value)
+                  : it.value === select?.value
 
-              return (
-                <TouchableOpacity
-                  key={it.value}
-                  style={styles.selectItem}
-                  onPress={() => {
-                    onSelect && onSelect(it)
-                    !multiselect && onClose()
-                  }}
-                >
-                  {multiselect && (
-                    <View style={[styles.done, active && styles.doneActive]}>
-                      {active && <DoneWhiteIcon width={15} height={15} />}
-                    </View>
-                  )}
-                  <Text style={[styles.label, active && styles.labelActive]}>
-                    {it.label}
-                  </Text>
-                </TouchableOpacity>
-              )
-            })
-          ) : (
-            <Text style={styles.textEmptyOptions}>нет опций</Text>
-          )}
+                const iconIsError = isonsError.includes(it.value)
+
+                return (
+                  <TouchableOpacity
+                    key={it.value}
+                    style={styles.selectItem}
+                    onPress={() => {
+                      onSelect && onSelect(it)
+                      !multiselect && onClose()
+                    }}
+                  >
+                    {multiselect && (
+                      <View style={[styles.done, active && styles.doneActive]}>
+                        {active && <DoneWhiteIcon width={15} height={15} />}
+                      </View>
+                    )}
+
+                    {!!it.iconUrl && !iconIsError && (
+                      <Image
+                        style={styles.icon}
+                        onError={(error) => {
+                          setIsonsError((prev) => [...prev, it.value])
+                        }}
+                        source={{ uri: it.iconUrl }}
+                      />
+                    )}
+                    <Text style={[styles.label, active && styles.labelActive]}>
+                      {it.label}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              })
+            ) : (
+              <Text style={styles.textEmptyOptions}>нет опций</Text>
+            )}
+          </ScrollView>
         </OutsidePressHandler>
       )}
     </View>

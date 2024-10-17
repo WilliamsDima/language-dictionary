@@ -10,4 +10,10 @@ export const styles = StyleSheet.create({
     paddingTop: scaleWidth(20),
     height,
   },
+  top: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 })

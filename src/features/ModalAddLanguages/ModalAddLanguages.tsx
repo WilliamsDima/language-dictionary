@@ -36,6 +36,7 @@ const ModalAddLanguages: FC<Props> = ({
   })
 
   const [languagesSelects, setLanguagesSelects] = useState<ILanguage[]>([])
+  const [isonsError, setIsonsError] = useState<number[]>([])
 
   const onSelectLanguages = (l: ILanguage) => {
     if (multiselect) {
@@ -101,6 +102,8 @@ const ModalAddLanguages: FC<Props> = ({
                     (item) => item.id === it.id
                   )
 
+                  const iconIsError = isonsError.includes(it.id)
+
                   return (
                     <TouchableOpacity
                       key={it.id}
@@ -121,10 +124,13 @@ const ModalAddLanguages: FC<Props> = ({
                         </View>
                       )}
 
-                      {!!it.country.flag && (
+                      {!!it.country.flag && !iconIsError && (
                         <Image
                           source={{ uri: it.country.flag }}
                           style={styles.flag}
+                          onError={(error) => {
+                            setIsonsError((prev) => [...prev, it.id])
+                          }}
                         />
                       )}
                       <Text

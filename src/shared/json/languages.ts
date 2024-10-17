@@ -1,3 +1,5 @@
+import { SelectOption } from '../UI/Select/Select'
+
 export interface ILanguage {
   id: number
   full_name: string
@@ -401,3 +403,11 @@ export const languages: ILanguage[] = [
     },
   },
 ]
+
+export const languagesOptions: SelectOption[] = languages.map((it) => {
+  return {
+    label: it.country.title,
+    value: it.id,
+    iconUrl: it.country.flag,
+  }
+})

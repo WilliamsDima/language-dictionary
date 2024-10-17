@@ -7,7 +7,8 @@ export const styles = StyleSheet.create({
     height: scaleWidth(50),
   },
   wrapper: {
-    width: '100%',
     height: scaleWidth(50),
+    flex: 1,
+    marginRight: scaleWidth(10),
   },
 })

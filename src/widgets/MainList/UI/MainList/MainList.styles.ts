@@ -19,6 +19,11 @@ export const styles = StyleSheet.create({
   loader: {
     marginTop: scaleWidth(50),
   },
+  count: {
+    fontSize: scaleFontSize(14),
+    color: COLORS.gray_text,
+    textAlign: 'center',
+  },
   animLoader: {
     width: scaleWidth(150),
     height: scaleWidth(150),

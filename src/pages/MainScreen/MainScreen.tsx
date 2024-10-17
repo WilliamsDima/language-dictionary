@@ -7,12 +7,17 @@ import SearchWords from './UI/SearchWords/SearchWords'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import MainList from '@/widgets/MainList/UI/MainList/MainList'
 import TabsWords from './UI/TabsWords/TabsWords'
+import MainFilter from './UI/MainFilter/MainFilter'
 
 const MainScreen: FC = () => {
   return (
     <Layout dismissKeyboard>
       <View style={styles.screen}>
-        <SearchWords />
+        <View style={styles.top}>
+          <SearchWords />
+          <MainFilter />
+        </View>
+
         <TabsWords />
 
         <MainList />

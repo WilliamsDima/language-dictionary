@@ -71,4 +71,12 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.primery,
     borderColor: COLORS.primery,
   },
+
+  icon: {
+    width: scaleWidth(15),
+    height: scaleWidth(15),
+    borderRadius: scaleWidth(15 / 2),
+    resizeMode: 'contain',
+    marginRight: scaleWidth(5),
+  },
 })
