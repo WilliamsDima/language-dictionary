@@ -4,6 +4,7 @@ import { screenOptions, stackOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import AuthScreen from '@/processes/AuthScreen/AuthScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 export type StartParamsList = {
   [RoutesNames.auth]: undefined
@@ -19,6 +20,7 @@ const StartStack = createStackNavigator<StartParamsList>()
  */
 
 const StartRoutes = () => {
+  const { isWatchSplash } = useAppSelector((store) => store.app)
   return (
     <StartStack.Navigator
       screenOptions={{
@@ -27,11 +29,14 @@ const StartRoutes = () => {
         headerShown: false,
       }}
     >
-      <StartStack.Screen
-        options={stackOptions}
-        name={RoutesNames.splash}
-        component={SplashScreen}
-      />
+      {!isWatchSplash && (
+        <StartStack.Screen
+          options={stackOptions}
+          name={RoutesNames.splash}
+          component={SplashScreen}
+        />
+      )}
+
       <StartStack.Screen
         options={stackOptions}
         name={RoutesNames.auth}

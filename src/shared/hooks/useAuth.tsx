@@ -8,10 +8,11 @@ import React, {
 } from 'react'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { useActions } from './useActions'
-import { useAppSelector } from './useStore'
+import { useAppDispatch, useAppSelector } from './useStore'
 import { IFirebaseData, IUser } from '../store/slice/userSlice'
 import { deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
 import { db, deleteProfile, getUserData, logout } from '../firebase/api'
+import { baseApi } from '../API/baseApi'
 
 type IContext = {
   logoutHandler: () => Promise<void>
@@ -28,6 +29,8 @@ type AuthProviderType = {
 
 export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   const { setIsAuth, setUser, setFirebaseData } = useActions()
+
+  const dispatch = useAppDispatch()
 
   const { user, firebaseData } = useAppSelector((store) => store.user)
 
@@ -57,6 +60,7 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   const logoutHandler = async () => {
     console.log('logoutHandler')
     try {
+      dispatch(baseApi.util.resetApiState())
       await logout()
       setIsAuth(false)
       setUser(null)
