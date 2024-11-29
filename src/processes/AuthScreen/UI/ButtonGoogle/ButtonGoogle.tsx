@@ -11,11 +11,10 @@ import { useActions } from '@/shared/hooks/useActions'
 interface Props {}
 
 const ButtonGoogle: FC<Props> = (props) => {
-  const { setIsAuth, setUser } = useActions()
+  const { setIsAuth } = useActions()
   // Handle user state changes
   const onAuthStateChanged = (user: any) => {
     setIsAuth(!!user)
-    setUser(user)
   }
 
   const onGoogleButtonPress = async () => {

@@ -2,9 +2,9 @@ import React, { FC, memo } from 'react'
 import { View } from 'react-native'
 import { styles } from './UserInfo.styles'
 import UserAvatart from '@/shared/UI/UserAvatart/UserAvatart'
-import { useAuth } from '@/shared/hooks/useAuth'
 import Text from '@/shared/UI/Text/Text'
 import { dateFormat } from '@/shared/helpers/dateFormat'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 /**
  * информация о пользователе
@@ -15,14 +15,17 @@ import { dateFormat } from '@/shared/helpers/dateFormat'
 type Props = {}
 
 const UserInfo: FC<Props> = (props) => {
-  const { user, firebaseData } = useAuth()
+  const { firebaseData } = useAppSelector((store) => store.user)
 
   return (
     <View style={styles.wrapper}>
-      <UserAvatart uri={user?.photoURL || ''} name={user?.displayName || ''} />
+      <UserAvatart
+        uri={firebaseData?.image || ''}
+        name={firebaseData?.name || ''}
+      />
 
       <View style={styles.info}>
-        <Text style={styles.name}>{user?.displayName}</Text>
+        <Text style={styles.name}>{firebaseData?.name}</Text>
         <Text style={styles.date}>
           Дата регистрации:{' '}
           {dateFormat({ date: firebaseData?.dateRegistration, type: 'FULL' })}

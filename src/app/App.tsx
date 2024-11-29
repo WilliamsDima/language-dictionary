@@ -7,13 +7,16 @@ import { Provider } from 'react-redux'
 import Routes from './Navigation/AppRoutes'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AuthProvider } from '@/shared/hooks/useAuth'
+import VKLogin from 'react-native-vkontakte-login'
+import { GOOGLE_WEB_CLIENT_ID, VK_APP } from '@env'
 
 GoogleSignin.configure({
-  webClientId:
-    '528679131313-9gmigp7vccosvokpsb7vcl5976j9nkb3.apps.googleusercontent.com',
+  webClientId: GOOGLE_WEB_CLIENT_ID,
   offlineAccess: true,
   scopes: ['profile', 'email'],
 })
+
+VKLogin.initialize(VK_APP)
 
 LogBox.ignoreLogs(['Remote debugger'])
 

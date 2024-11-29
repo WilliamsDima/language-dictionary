@@ -14,10 +14,13 @@ import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 
 const SaveData: FC = () => {
   const { setLastSaveData, setTooltip } = useActions()
-  const { user } = useAppSelector((store) => store.user)
+  const { firebaseData } = useAppSelector((store) => store.user)
   const { lastSaveData } = useAppSelector((store) => store.items)
 
-  const { data } = useGetItemsQuery({ uid: user?.uid }, { skip: !user?.uid })
+  const { data } = useGetItemsQuery(
+    { uid: firebaseData?.uid },
+    { skip: !firebaseData?.uid }
+  )
 
   const toSave = async () => {
     const jsonString = JSON.stringify(data)

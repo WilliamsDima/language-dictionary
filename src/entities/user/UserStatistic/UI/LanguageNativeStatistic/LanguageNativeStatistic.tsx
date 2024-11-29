@@ -16,8 +16,8 @@ const LanguageNativeStatistic: FC<Props> = ({
   setIsNativeLanguage,
   setShowModalLanguages,
 }) => {
-  const { user } = useAppSelector((store) => store.user)
-  const { data: profile } = useGetUserProfileQuery(user?.uid)
+  const { firebaseData } = useAppSelector((store) => store.user)
+  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
   return (
     <>

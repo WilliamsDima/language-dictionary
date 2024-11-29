@@ -24,8 +24,8 @@ const WordItem: FC<Props> = ({
   parentItem,
   isLast,
 }) => {
-  const { user } = useAppSelector((store) => store.user)
-  const { data: profile } = useGetUserProfileQuery(user?.uid)
+  const { firebaseData } = useAppSelector((store) => store.user)
+  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
   const viewTypeItem = useMemo(() => {
     return profile?.showVariantList

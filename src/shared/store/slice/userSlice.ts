@@ -16,29 +16,27 @@ export interface IFirebaseData {
   email: string
   languages: ILanguage[]
   native_language: ILanguage | null
+  image: string
 }
 
 type InitialState = {
-  user: null | IUser
   firebaseData: null | IFirebaseData
   showAddModal: boolean
   itemEdit: null | any
+  isVkLogin: boolean
 }
 
 const initialState: InitialState = {
-  user: null,
   firebaseData: null,
   showAddModal: false,
   itemEdit: null,
+  isVkLogin: false,
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, { payload }: PayloadAction<null | IUser>) => {
-      state.user = payload
-    },
     setFirebaseData: (
       state,
       { payload }: PayloadAction<null | IFirebaseData>
@@ -50,6 +48,9 @@ export const userSlice = createSlice({
     },
     setItemEdit: (state, { payload }: PayloadAction<null | any>) => {
       state.itemEdit = payload
+    },
+    setIsVkLogin: (state, { payload }: PayloadAction<boolean>) => {
+      state.isVkLogin = payload
     },
   },
 })

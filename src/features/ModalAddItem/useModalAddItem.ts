@@ -14,9 +14,9 @@ import { useActions } from '@/shared/hooks/useActions'
 export const useModalAddItem = () => {
   const { setShowAddModal } = useActions()
 
-  const { showAddModal, user } = useAppSelector((store) => store.user)
+  const { showAddModal, firebaseData } = useAppSelector((store) => store.user)
 
-  const { data: profile } = useGetUserProfileQuery(user?.uid)
+  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
   const [addItemAPI, { isLoading }] = useAddItemMutation()
 
   const { isOpen } = useKeyboardState()
@@ -71,7 +71,7 @@ export const useModalAddItem = () => {
   }
 
   const onConfirm = () => {
-    if (user && profile) {
+    if (firebaseData && profile) {
       const itemsError = items.some(
         (it) => !it.word.trim() || !it.translate.trim()
       )
@@ -97,7 +97,7 @@ export const useModalAddItem = () => {
           id: +new Date(),
           status: 'STUDY',
         },
-        uid: user?.uid,
+        uid: firebaseData?.uid,
       }).then(() => {
         onCancelHandler()
       })

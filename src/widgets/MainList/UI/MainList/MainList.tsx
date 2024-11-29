@@ -11,7 +11,7 @@ import ModalDeleteItem from '@/features/ModalDeleteItem/ModalDeleteItem'
 import { useCallbackDebounce } from '@/shared/hooks/useDebounce'
 
 const MainList: FC = () => {
-  const { user } = useAppSelector((store) => store.user)
+  const { firebaseData } = useAppSelector((store) => store.user)
   const { filterByStatus, search, filterMain } = useAppSelector(
     (store) => store.items
   )
@@ -31,7 +31,7 @@ const MainList: FC = () => {
 
   const { data, isLoading } = useGetItemsQuery(
     {
-      uid: user?.uid,
+      uid: firebaseData?.uid,
       filter: {
         status: filterByStatus,
         search: debouncedSearch,
@@ -41,7 +41,7 @@ const MainList: FC = () => {
         },
       },
     },
-    { skip: !user?.uid }
+    { skip: !firebaseData?.uid }
   )
 
   const isFilterActive = useMemo(() => {

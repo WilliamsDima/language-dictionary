@@ -7,17 +7,20 @@ import React, {
   useEffect,
 } from 'react'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import VKLogin from 'react-native-vkontakte-login'
 import { useActions } from './useActions'
 import { useAppDispatch, useAppSelector } from './useStore'
-import { IFirebaseData, IUser } from '../store/slice/userSlice'
+import { IFirebaseData } from '../store/slice/userSlice'
 import { deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
 import { db, deleteProfile, getUserData, logout } from '../firebase/api'
 import { baseApi } from '../API/baseApi'
+import { removeAsyncLocal } from '../helpers/asyncStorage'
+import { LOCAL_KEYS } from '../constants/localStorage'
+import { useUserVk } from '../API/getUserVk'
 
 type IContext = {
   logoutHandler: () => Promise<void>
   deleteAccaunt: () => void
-  user: IUser | null
   firebaseData: IFirebaseData | null
 }
 
@@ -28,16 +31,18 @@ type AuthProviderType = {
 }
 
 export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
-  const { setIsAuth, setUser, setFirebaseData } = useActions()
+  const { setIsAuth, setFirebaseData, setIsVkLogin } = useActions()
 
   const dispatch = useAppDispatch()
 
-  const { user, firebaseData } = useAppSelector((store) => store.user)
+  const { firebaseData, isVkLogin } = useAppSelector((store) => store.user)
+  const { aplication } = useAppSelector((store) => store.app)
+
+  useUserVk()
 
   const onAuthStateChanged = async (user: FirebaseAuthTypes.User) => {
     console.log('onAuthStateChanged user', user)
     setIsAuth(!!user)
-    setUser(user)
 
     const isUser = await getUserData(user.uid)
 
@@ -48,22 +53,38 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
       dateRegistration: isUser?.dateRegistration
         ? isUser?.dateRegistration
         : +new Date(),
-      showVariantList: isUser?.showVariantList,
+      showVariantList:
+        isUser?.showVariantList || aplication?.showVariantsList?.[1] || null,
       languages: isUser?.languages || [],
       native_language: isUser?.native_language || null,
+      image: user.photoURL || '',
     }
 
     await setDoc(doc(db, 'users', user.uid), userData)
     setFirebaseData(userData as any)
   }
 
+  const logoutVk = async () => {
+    setIsVkLogin(false)
+    await removeAsyncLocal(LOCAL_KEYS.vk_token)
+    await removeAsyncLocal(LOCAL_KEYS.vk_id_user)
+    return VKLogin.logout()
+  }
+
+  console.log('isVkLogin', isVkLogin)
+
   const logoutHandler = async () => {
     console.log('logoutHandler')
     try {
       dispatch(baseApi.util.resetApiState())
-      await logout()
+
+      if (!isVkLogin) {
+        await logout()
+      }
+
+      await logoutVk()
       setIsAuth(false)
-      setUser(null)
+      setFirebaseData(null)
     } catch (error: any) {
       if (error) console.log('error logout: ', error)
     } finally {
@@ -71,11 +92,11 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   }
 
   const deleteAccaunt = async () => {
-    if (user) {
+    if (firebaseData) {
       console.log('deleteAccaunt')
 
-      await deleteUserAPI(user?.uid)
-      await deleteProfile(user)
+      await deleteUserAPI(firebaseData?.uid)
+      await deleteProfile(firebaseData)
 
       logoutHandler()
     }
@@ -90,10 +111,9 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     return {
       logoutHandler,
       deleteAccaunt,
-      user,
       firebaseData,
     }
-  }, [logoutHandler, deleteAccaunt, user, firebaseData])
+  }, [logoutHandler, deleteAccaunt, firebaseData])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

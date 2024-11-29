@@ -12,19 +12,19 @@ import SaveData from '../SaveData/SaveData'
 
 const Settings: FC = () => {
   const { aplication } = useAppSelector((store) => store.app)
-  const { user, firebaseData } = useAppSelector((store) => store.user)
+  const { firebaseData } = useAppSelector((store) => store.user)
 
-  const { data: profile } = useGetUserProfileQuery(user?.uid)
+  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
   const [updateUserProfile] = useUpdateUserProfileMutation()
 
   const [showVariantSelect, setShowVariantSelect] =
     useState<SelectOption | null>(null)
 
   const onSelectShowVariant = (v: SelectOption) => {
-    if (user && firebaseData) {
+    if (firebaseData && firebaseData) {
       updateUserProfile({
         data: { ...firebaseData, showVariantList: v as any },
-        uid: user?.uid,
+        uid: firebaseData?.uid,
       })
       setShowVariantSelect(v)
     }

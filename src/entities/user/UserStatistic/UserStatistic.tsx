@@ -24,21 +24,21 @@ import Loader from '@/shared/UI/Loader/Loader'
 type Props = {}
 
 const UserStatistic: FC<Props> = (props) => {
-  const { user } = useAppSelector((store) => store.user)
+  const { firebaseData } = useAppSelector((store) => store.user)
 
   const [showModalLanguages, setShowModalLanguages] = useState(false)
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
 
   const { data: profile, isLoading: isLoadingProfile } = useGetUserProfileQuery(
-    user?.uid
+    firebaseData?.uid
   )
   const [updateUserProfile] = useUpdateUserProfileMutation()
 
   const { data, isLoading } = useGetItemsQuery(
     {
-      uid: user?.uid,
+      uid: firebaseData?.uid,
     },
-    { skip: !user?.uid }
+    { skip: !firebaseData?.uid }
   )
 
   const loading = useMemo(() => {
@@ -77,16 +77,16 @@ const UserStatistic: FC<Props> = (props) => {
   }, [data])
 
   const onSelectLanguages = (langs: ILanguage[]) => {
-    if (user && profile) {
+    if (firebaseData && profile) {
       if (isNativeLanguage) {
         updateUserProfile({
           data: { ...profile, native_language: langs[0] || null },
-          uid: user?.uid,
+          uid: firebaseData?.uid,
         })
       } else {
         updateUserProfile({
           data: { ...profile, languages: langs },
-          uid: user?.uid,
+          uid: firebaseData?.uid,
         })
       }
     }

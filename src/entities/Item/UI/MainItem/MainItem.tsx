@@ -20,7 +20,7 @@ type Props = {
 
 const MainItem: FC<Props> = ({ item }) => {
   const { setModalDeleteItem } = useActions()
-  const { user } = useAppSelector((store) => store.user)
+  const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
 
   const { hidden: hiddenFooter, toggle: toggleFooter } = useExpandAnim()
@@ -29,16 +29,16 @@ const MainItem: FC<Props> = ({ item }) => {
   const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
 
   const updateStatus = () => {
-    if (user && item.idDoc) {
+    if (firebaseData && item.idDoc) {
       if (item.status === 'READY') {
         updateItem({
-          uid: user.uid,
+          uid: firebaseData.uid,
           idDoc: item.idDoc,
           updatedData: { ...item, status: 'STUDY' },
         })
       } else {
         updateItem({
-          uid: user.uid,
+          uid: firebaseData.uid,
           idDoc: item.idDoc,
           updatedData: { ...item, status: 'READY' },
         })

@@ -4,6 +4,7 @@ import { Image, View } from 'react-native'
 import ButtonGoogle from './UI/ButtonGoogle/ButtonGoogle'
 import { styles } from './AuthScreen.styles'
 import Text from '@/shared/UI/Text/Text'
+import ButtonVk from './UI/ButtonVk/ButtonVk'
 
 const AuthScreen: FC = () => {
   return (
@@ -18,6 +19,8 @@ const AuthScreen: FC = () => {
         </View>
 
         <ButtonGoogle />
+
+        <ButtonVk />
       </View>
     </Layout>
   )

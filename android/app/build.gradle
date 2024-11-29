@@ -113,6 +113,9 @@ dependencies {
     implementation project(':react-native-fs')
 
     implementation("com.google.firebase:firebase-auth")
+
+    // vk
+    implementation project(':react-native-vkontakte-login')
     
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")

@@ -14,7 +14,7 @@ type Props = {}
 
 const ModalDeleteItem: FC<Props> = () => {
   const { setModalDeleteItem } = useActions()
-  const { user } = useAppSelector((store) => store.user)
+  const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
 
   const [deleteItem] = useDeleteItemMutation()
@@ -28,8 +28,8 @@ const ModalDeleteItem: FC<Props> = () => {
   }
 
   const onDelete = () => {
-    if (modalDeleteItem?.idDoc && user) {
-      deleteItem({ idDoc: modalDeleteItem.idDoc, uid: user.uid })
+    if (modalDeleteItem?.idDoc && firebaseData) {
+      deleteItem({ idDoc: modalDeleteItem.idDoc, uid: firebaseData.uid })
       onCancelHandler()
     }
   }

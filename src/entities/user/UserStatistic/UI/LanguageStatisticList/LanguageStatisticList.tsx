@@ -17,12 +17,15 @@ const LanguageStatisticList: FC<Props> = ({
   setIsNativeLanguage,
   setShowModalLanguages,
 }) => {
-  const { user } = useAppSelector((store) => store.user)
-  const { data: profile } = useGetUserProfileQuery(user?.uid)
+  const { firebaseData } = useAppSelector((store) => store.user)
+  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
+
+  console.log('firebaseData', firebaseData)
+  console.log('profile', profile)
 
   return (
     <>
-      {profile?.languages.length ? (
+      {profile?.languages?.length ? (
         <View style={styles.languages}>
           <Text style={styles.itemText}>Изучаемые языки:</Text>
           {profile?.languages.map((item) => {

@@ -50,6 +50,8 @@ buck-out/
 !debug.keystore
 .env*
 
+.env
+
 # testing
 /coverage
 
