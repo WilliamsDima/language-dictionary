@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native'
 import {
   useAddItemMutation,
   useGetUserProfileQuery,
+  useUpdateItemMutation,
 } from '@/pages/SettingsScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
@@ -14,23 +15,30 @@ import { useActions } from '@/shared/hooks/useActions'
 export const useModalAddItem = () => {
   const { setShowAddModal } = useActions()
 
+  const { itemEdit } = useAppSelector((store) => store.user)
   const { showAddModal, firebaseData } = useAppSelector((store) => store.user)
 
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
+
   const [addItemAPI, { isLoading }] = useAddItemMutation()
+  const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
 
   const { isOpen } = useKeyboardState()
   const scrollref = useRef<ScrollView>(null)
 
   const [language, setLanguage] = useState<undefined | ILanguage>()
 
-  const [items, setItems] = useState<AddItemWords[]>(() => [
-    {
-      id: +new Date(),
-      word: '',
-      translate: '',
-    },
-  ])
+  const [items, setItems] = useState<AddItemWords[]>(() =>
+    itemEdit
+      ? itemEdit.items
+      : [
+          {
+            id: +new Date(),
+            word: '',
+            translate: '',
+          },
+        ]
+  )
 
   const [description, setDescription] = useState('')
 
@@ -71,6 +79,9 @@ export const useModalAddItem = () => {
   }
 
   const onConfirm = () => {
+    // console.log('onConfirm', firebaseData)
+    // console.log('onConfirm', profile)
+
     if (firebaseData && profile) {
       const itemsError = items.some(
         (it) => !it.word.trim() || !it.translate.trim()
@@ -88,19 +99,29 @@ export const useModalAddItem = () => {
 
       if (error) return
 
-      addItemAPI({
-        item: {
-          items,
-          description,
-          language,
-          date: new Date(),
-          id: +new Date(),
-          status: 'STUDY',
-        },
-        uid: firebaseData?.uid,
-      }).then(() => {
-        onCancelHandler()
-      })
+      if (itemEdit?.idDoc) {
+        updateItem({
+          uid: firebaseData.uid,
+          idDoc: itemEdit.idDoc,
+          updatedData: { ...itemEdit, items, description, language },
+        }).then(() => {
+          onCancelHandler()
+        })
+      } else {
+        addItemAPI({
+          item: {
+            items,
+            description,
+            language,
+            date: new Date(),
+            id: +new Date(),
+            status: 'STUDY',
+          },
+          uid: firebaseData?.uid,
+        }).then(() => {
+          onCancelHandler()
+        })
+      }
     }
   }
 
@@ -117,6 +138,14 @@ export const useModalAddItem = () => {
     return () => {}
   }, [isOpen, scrollref])
 
+  useEffect(() => {
+    if (itemEdit) {
+      setItems(itemEdit.items)
+      setLanguage(itemEdit.language)
+      setDescription(itemEdit.description)
+    }
+  }, [itemEdit])
+
   return {
     onSelectLanguage,
     onConfirm,
@@ -129,7 +158,7 @@ export const useModalAddItem = () => {
     errorItems,
     scrollref,
     language,
-    isLoading,
+    isLoading: isLoading || isLoadingUpdate,
     description,
     showAddModal,
     isOpen,

@@ -44,6 +44,9 @@ export const userServices = baseApi.injectEndpoints({
       async queryFn(uid) {
         try {
           const user = uid ? await getUserData(uid) : ''
+
+          //console.log('getUserProfile user', user)
+
           return { data: user }
         } catch (error: any) {
           console.log('Error getUserProfile', error?.message)

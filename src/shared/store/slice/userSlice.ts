@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { SelectOption } from '@/shared/UI/Select/Select'
 import { ILanguage } from '@/shared/json/languages'
+import { IItem } from '@/entities/Item/model/item'
 
 export type IUser = FirebaseAuthTypes.User
 
@@ -22,7 +23,7 @@ export interface IFirebaseData {
 type InitialState = {
   firebaseData: null | IFirebaseData
   showAddModal: boolean
-  itemEdit: null | any
+  itemEdit: null | IItem
   isVkLogin: boolean
 }
 

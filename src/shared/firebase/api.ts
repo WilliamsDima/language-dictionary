@@ -29,9 +29,13 @@ authFirebase.languageCode = 'ru'
 export const getUserData = async (
   id: string
 ): Promise<DocumentData | undefined> => {
+  //console.log('getUserData id', id)
+
   const docRef = doc(db, 'users', id)
   const docSnap = await getDoc(docRef)
   const data = docSnap.data()
+
+  //console.log('getUserData data', data)
   return data
 }
 

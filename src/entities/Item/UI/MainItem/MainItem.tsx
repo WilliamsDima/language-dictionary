@@ -19,7 +19,7 @@ type Props = {
 }
 
 const MainItem: FC<Props> = ({ item }) => {
-  const { setModalDeleteItem } = useActions()
+  const { setModalDeleteItem, setItemEdit, setShowAddModal } = useActions()
   const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
 
@@ -27,6 +27,11 @@ const MainItem: FC<Props> = ({ item }) => {
   const { hidden: hiddenTranslate, toggle: toggleTranslate } = useExpandAnim()
 
   const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
+
+  const editItem = () => {
+    setItemEdit(item)
+    setShowAddModal(true)
+  }
 
   const updateStatus = () => {
     if (firebaseData && item.idDoc) {
@@ -104,7 +109,7 @@ const MainItem: FC<Props> = ({ item }) => {
 
       {!hiddenFooter && (
         <View style={styles.footer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={editItem}>
             <EditIcon width={25} height={25} />
           </TouchableOpacity>
 
