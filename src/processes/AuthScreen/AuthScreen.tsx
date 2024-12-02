@@ -18,9 +18,11 @@ const AuthScreen: FC = () => {
           </Text>
         </View>
 
-        <ButtonGoogle />
+        <View style={styles.btns}>
+          <ButtonGoogle />
 
-        <ButtonVk />
+          <ButtonVk />
+        </View>
       </View>
     </Layout>
   )

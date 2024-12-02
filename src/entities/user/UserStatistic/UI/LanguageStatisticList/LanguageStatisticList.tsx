@@ -20,9 +20,6 @@ const LanguageStatisticList: FC<Props> = ({
   const { firebaseData } = useAppSelector((store) => store.user)
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
-  console.log('firebaseData', firebaseData)
-  console.log('profile', profile)
-
   return (
     <>
       {profile?.languages?.length ? (

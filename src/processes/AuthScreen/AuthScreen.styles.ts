@@ -23,4 +23,10 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: scaleWidth(20),
   },
+
+  btns: {
+    flexDirection: 'column',
+    gap: scaleWidth(20),
+    width: '100%',
+  },
 })

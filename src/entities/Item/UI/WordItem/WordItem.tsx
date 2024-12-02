@@ -24,12 +24,15 @@ const WordItem: FC<Props> = ({
   parentItem,
   isLast,
 }) => {
+  const { aplication } = useAppSelector((store) => store.app)
   const { firebaseData } = useAppSelector((store) => store.user)
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
   const viewTypeItem = useMemo(() => {
     return profile?.showVariantList
-  }, [profile])
+      ? profile?.showVariantList
+      : aplication?.showVariantsList[1]
+  }, [profile, aplication])
 
   const sound = () => {
     textToSpeech({ lang: parentItem.language.short_name, text: item.word })

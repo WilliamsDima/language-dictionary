@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { styles } from './ButtonVk.styles'
 import Button from '@/shared/UI/Button/Button'
-import GoogleIcon from '@/assets/icons/UI/google.svg'
+import VkIcon from '@/assets/icons/UI/vk-64.svg'
 import Text from '@/shared/UI/Text/Text'
 import { View } from 'react-native'
 import VKLogin from 'react-native-vkontakte-login'
@@ -17,19 +17,16 @@ import { useUserVk } from '@/shared/API/getUserVk'
 interface Props {}
 
 const ButtonVk: FC<Props> = (props) => {
-  const { setFirebaseData, setIsVkLogin } = useActions()
+  const { setFirebaseData, setIsVkLogin, setIsAuth } = useActions()
   const { aplication } = useAppSelector((store) => store.app)
 
   const { getUserVk } = useUserVk()
 
   const handleVKLogin = async () => {
     const auth = await VKLogin.login(['email'])
-    console.log('handleVKLogin auth', auth)
 
     // Запрос на получение данных пользователя
     const data = await getUserVk()
-
-    console.log('handleVKLogin data', data)
 
     if (data && Array.isArray(data.response) && data.response?.length) {
       const user = data.response[0]
@@ -57,8 +54,12 @@ const ButtonVk: FC<Props> = (props) => {
       }
 
       await setDoc(doc(db, 'users', user.id.toString()), userData)
+
+      console.log('vk login')
+
       setFirebaseData(userData as any)
       setIsVkLogin(true)
+      setIsAuth(true)
 
       // auth.token - Токен доступа
       // auth.user_id - ID пользователя
@@ -78,7 +79,7 @@ const ButtonVk: FC<Props> = (props) => {
       >
         <View style={styles.content}>
           <Text style={styles.text}>Войти с помощью ВКонтакте</Text>
-          <GoogleIcon />
+          <VkIcon width={24} height={24} />
         </View>
       </Button>
     </>

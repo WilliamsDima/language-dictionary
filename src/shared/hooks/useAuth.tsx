@@ -12,7 +12,13 @@ import { useActions } from './useActions'
 import { useAppDispatch, useAppSelector } from './useStore'
 import { IFirebaseData } from '../store/slice/userSlice'
 import { deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
-import { db, deleteProfile, getUserData, logout } from '../firebase/api'
+import {
+  db,
+  deleteAllItems,
+  deleteProfile,
+  getUserData,
+  logout,
+} from '../firebase/api'
 import { baseApi } from '../API/baseApi'
 import { removeAsyncLocal } from '../helpers/asyncStorage'
 import { LOCAL_KEYS } from '../constants/localStorage'
@@ -71,10 +77,7 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     return VKLogin.logout()
   }
 
-  console.log('isVkLogin', isVkLogin)
-
   const logoutHandler = async () => {
-    console.log('logoutHandler')
     try {
       dispatch(baseApi.util.resetApiState())
 
@@ -95,10 +98,19 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     if (firebaseData) {
       console.log('deleteAccaunt')
 
-      await deleteUserAPI(firebaseData?.uid)
-      await deleteProfile(firebaseData)
+      deleteUserAPI(firebaseData?.uid.toString())
 
-      logoutHandler()
+      if (isVkLogin) {
+        await deleteAllItems(firebaseData?.uid.toString())
+      }
+
+      if (!isVkLogin) {
+        await deleteProfile(firebaseData)
+      }
+
+      setTimeout(() => {
+        logoutHandler()
+      }, 500)
     }
   }
 

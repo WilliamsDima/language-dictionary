@@ -190,3 +190,23 @@ export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
     })
   }
 }
+
+export const deleteAllItems = async (uid: string) => {
+  try {
+    // Получаем ссылку на коллекцию 'items' для пользователя
+    const itemsRef = collection(db, 'users', uid, 'items')
+
+    // Получаем все документы из коллекции
+    const querySnapshot = await getDocs(itemsRef)
+
+    // Создаем массив промисов для удаления каждого документа
+    const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref))
+
+    // Выполняем все операции удаления
+    await Promise.all(deletePromises)
+
+    console.log('Все документы из коллекции items удалены.')
+  } catch (error) {
+    console.error('Ошибка при удалении документов из коллекции items:', error)
+  }
+}
