@@ -7,8 +7,12 @@ import Button from '@/shared/UI/Button/Button'
 import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
+import { useAppNavigation } from '@/shared/hooks/useNavigation'
+import { RoutesNames } from '@/app/Navigation/RoutesNames'
 
 const ProfileScreen: FC = () => {
+  const { navigate } = useAppNavigation()
+
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
 
@@ -18,6 +22,10 @@ const ProfileScreen: FC = () => {
 
   const showModalDelete = () => {
     setModalDelete(true)
+  }
+
+  const startRepeat = () => {
+    navigate(RoutesNames.cardsRepetition)
   }
 
   return (
@@ -30,6 +38,13 @@ const ProfileScreen: FC = () => {
         {/* <Button classes={{ btn: styles.logout, textBtn: styles.logoutText }}>
           редактировать
         </Button> */}
+
+        <Button
+          classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
+          onPress={startRepeat}
+        >
+          начать повторение
+        </Button>
 
         <Button
           classes={{ btn: styles.logout, textBtn: styles.logoutText }}

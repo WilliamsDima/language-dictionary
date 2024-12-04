@@ -20,6 +20,12 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.red,
   },
 
+  repeatBtn: {
+    marginTop: scaleWidth(20),
+    padding: scaleWidth(15),
+    backgroundColor: COLORS.primery,
+  },
+
   logoutText: {
     fontSize: scaleFontSize(14),
     textTransform: 'uppercase',

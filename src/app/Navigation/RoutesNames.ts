@@ -15,6 +15,7 @@ export enum RoutesNames {
 
   profileStack = 'profileStack',
   profile = 'profile',
+  cardsRepetition = 'cardsRepetition',
 }
 
 let RoutesKeys: keyof typeof RoutesNames

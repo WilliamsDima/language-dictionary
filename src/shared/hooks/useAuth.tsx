@@ -46,7 +46,9 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
   useUserVk()
 
-  const onAuthStateChanged = async (user: FirebaseAuthTypes.User) => {
+  const onAuthStateChanged = async (user?: FirebaseAuthTypes.User) => {
+    if (!user) return
+
     console.log('onAuthStateChanged user', user)
     setIsAuth(!!user)
 
