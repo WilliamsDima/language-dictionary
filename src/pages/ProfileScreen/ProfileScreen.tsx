@@ -9,12 +9,23 @@ import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
 import { RoutesNames } from '@/app/Navigation/RoutesNames'
+import { useAppSelector } from '@/shared/hooks/useStore'
+import { useGetItemsQuery } from '../SettingsScreen/api/userServices'
 
 const ProfileScreen: FC = () => {
   const { navigate } = useAppNavigation()
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
+
+  const { firebaseData } = useAppSelector((store) => store.user)
+
+  const { data: cards } = useGetItemsQuery(
+    {
+      uid: firebaseData?.uid,
+    },
+    { skip: !firebaseData?.uid }
+  )
 
   const showModalLogout = () => {
     setModalLogout(true)
@@ -39,12 +50,14 @@ const ProfileScreen: FC = () => {
           редактировать
         </Button> */}
 
-        <Button
-          classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
-          onPress={startRepeat}
-        >
-          начать повторение
-        </Button>
+        {!!cards?.length && (
+          <Button
+            classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
+            onPress={startRepeat}
+          >
+            начать повторение
+          </Button>
+        )}
 
         <Button
           classes={{ btn: styles.logout, textBtn: styles.logoutText }}

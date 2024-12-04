@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     zIndex: 1000,
-    top: scaleWidth(40),
+    top: scaleWidth(10),
   },
   footer: {
     position: 'absolute',

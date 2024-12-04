@@ -19,27 +19,27 @@ export const styles = StyleSheet.create({
   },
   itemWrapper: {
     height: height,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
 
     width: '100%',
   },
   item: {
     paddingHorizontal: APP_PADDING,
     width: width,
-    //height: '80%',
-    justifyContent: 'center',
+    height: '100%',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'column',
     //height: 'auto',
     //height: scaleWidth(40),
     zIndex: 100,
+    marginTop: scaleWidth(40),
   },
   press: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: scaleWidth(300),
+    //backgroundColor: 'white',
   },
   img: {
     // width: scaleWidth(256),
@@ -55,12 +55,40 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  card: {
+    width: '100%',
+    height: height / 1.7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backfaceVisibility: 'hidden', // Скрыть обратную сторону
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+  },
+  cardBack: {
+    position: 'absolute',
+    top: 0,
+  },
+
+  footer: {
+    position: 'absolute',
+    bottom: scaleWidth(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  description: {
+    color: COLORS.gray_text,
+    fontSize: scaleFontSize(14),
+    fontStyle: 'normal',
+    fontWeight: '600',
+    marginBottom: scaleWidth(20),
+  },
+
   itemWords: {
     // flexDirection: 'column',
     // gap: scaleWidth(10),
     //backgroundColor: 'red',
-    maxHeight: height / 1.4,
-    minHeight: height / 1.4,
+    maxHeight: height / 1.38,
+    minHeight: height / 1.38,
   },
   contentContainerStyle: {
     flexDirection: 'column',
@@ -78,26 +106,18 @@ export const styles = StyleSheet.create({
   itemWord: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.white,
+
     padding: scaleWidth(10),
     borderRadius: scaleWidth(10),
     flex: 1,
   },
-  text2: {
-    borderTopWidth: scaleWidth(1),
-    borderTopColor: COLORS.gray_text,
-    width: '100%',
-    textAlign: 'center',
-    paddingTop: scaleWidth(5),
-
-    color: COLORS.primery,
-    fontSize: scaleFontSize(20),
-    fontStyle: 'normal',
-    fontWeight: '600',
+  itemWordBorder: {
+    borderBottomWidth: scaleWidth(1),
+    borderBottomColor: COLORS.black,
   },
+
   text: {
-    color: COLORS.white,
+    color: COLORS.black,
     textAlign: 'center',
     fontSize: scaleFontSize(20),
     fontStyle: 'normal',

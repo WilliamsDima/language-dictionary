@@ -18,6 +18,7 @@ const Slides: FC<Props> = ({}) => {
     flatList,
     scrollX,
     currentSlideData,
+    currentSlide,
     onEnd,
     updateCurrentSlideIndex,
   } = useCardsContext()
@@ -30,7 +31,9 @@ const Slides: FC<Props> = ({}) => {
     <View style={styles.container}>
       <View style={styles.slidesWrapper}>
         <View style={styles.header}>
-          <Text>1/10</Text>
+          <Text>
+            {currentSlide + 1}/{data.length}
+          </Text>
         </View>
 
         <GestureHandlerRootView>
