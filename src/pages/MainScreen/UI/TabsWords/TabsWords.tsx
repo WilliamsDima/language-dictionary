@@ -1,36 +1,11 @@
 import React, { FC } from 'react'
 import { styles } from './TabsWords.styles'
 import { View } from 'react-native'
-import { StatusItem } from '@/entities/Item/model/item'
-import { COLORS } from '@/assets/styles/colors'
 import Button from '@/shared/UI/Button/Button'
 import Text from '@/shared/UI/Text/Text'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-
-export type TabWord = {
-  status: StatusItem
-  label: string
-  color: string
-}
-
-export const tabsWords: TabWord[] = [
-  {
-    status: 'ALL',
-    label: 'Все',
-    color: COLORS.white,
-  },
-  {
-    status: 'STUDY',
-    label: 'В изучении',
-    color: COLORS.item_study,
-  },
-  {
-    status: 'READY',
-    label: 'Изучено',
-    color: COLORS.item_ready,
-  },
-]
+import { tabsWords } from '@/shared/helpers/tabsWord'
 
 type Props = {}
 

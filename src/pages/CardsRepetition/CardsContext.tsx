@@ -7,6 +7,7 @@ import React, {
   useState,
   useRef,
   RefObject,
+  useEffect,
 } from 'react'
 import {
   NativeScrollEvent,
@@ -22,7 +23,7 @@ import {
   State,
 } from 'react-native-gesture-handler'
 import { useGetItemsQuery } from '../SettingsScreen/api/userServices'
-import { IItem } from '@/entities/Item/model/item'
+import { IItem, StatusItem } from '@/entities/Item/model/item'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { width } from '@/shared/helpers/ScaleUtils'
@@ -39,6 +40,7 @@ type IContext = {
   scrollX: Animated.Value
   isLoading: boolean
   currentSlideData?: CardSlideType
+  setItems: React.Dispatch<React.SetStateAction<IItem[]>>
   swipeSlide: (
     event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>
   ) => void
@@ -60,26 +62,34 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const scrollX = useRef(new Animated.Value(0)).current
 
   const { firebaseData } = useAppSelector((store) => store.user)
+  const { filterCardsModal } = useAppSelector((store) => store.items)
 
   const { data: cards, isLoading } = useGetItemsQuery(
     {
       uid: firebaseData?.uid,
+      filter: {
+        status: filterCardsModal.status,
+        filter: {
+          languages: filterCardsModal.languages,
+        },
+      },
     },
     { skip: !firebaseData?.uid }
   )
 
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [items, setItems] = useState<IItem[]>([])
+
   const data = useMemo(() => {
     return (
-      cards?.map((it, index) => {
+      items.map((it, index) => {
         return {
           index,
           item: it,
         }
       }) || []
     )
-  }, [cards])
-
-  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  }, [items])
 
   const currentSlideData = useMemo(() => {
     return data.find((it, i) => i === currentSlide)
@@ -138,6 +148,12 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     setCurrentSlide(currentIndex)
   }
 
+  useEffect(() => {
+    if (cards && !items.length) {
+      setItems(cards)
+    }
+  }, [cards, items])
+
   const value = useMemo(() => {
     return {
       data,
@@ -146,6 +162,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       scrollX,
       currentSlideData,
       isLoading,
+      setItems,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
@@ -158,6 +175,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     scrollX,
     currentSlideData,
     isLoading,
+    setItems,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,

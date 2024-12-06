@@ -7,16 +7,15 @@ import Button from '@/shared/UI/Button/Button'
 import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
-import { useAppNavigation } from '@/shared/hooks/useNavigation'
-import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGetItemsQuery } from '../SettingsScreen/api/userServices'
+import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
+import { CardsProvider } from '../CardsRepetition/CardsContext'
 
 const ProfileScreen: FC = () => {
-  const { navigate } = useAppNavigation()
-
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
+  const [modalCards, setModalCards] = useState(false)
 
   const { firebaseData } = useAppSelector((store) => store.user)
 
@@ -36,7 +35,7 @@ const ProfileScreen: FC = () => {
   }
 
   const startRepeat = () => {
-    navigate(RoutesNames.cardsRepetition)
+    setModalCards(true)
   }
 
   return (
@@ -74,10 +73,10 @@ const ProfileScreen: FC = () => {
           удалить аккаунт
         </Button>
       </View>
-
       <ModalDeleteAccaunt visible={modalDelete} setVisible={setModalDelete} />
-
       <ModalLogout visible={modalLogout} setVisible={setModalLogout} />
+
+      <ModalCardsFilter visible={modalCards} setVisible={setModalCards} />
     </Layout>
   )
 }

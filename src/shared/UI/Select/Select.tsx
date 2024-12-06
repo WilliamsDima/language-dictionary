@@ -4,6 +4,7 @@ import {
   Image,
   ScrollView,
   StyleProp,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -39,7 +40,9 @@ interface Props {
   placeholder?: string
   title?: string
   classes?: {
+    container?: StyleProp<ViewStyle>
     scroll?: StyleProp<ViewStyle>
+    title?: StyleProp<TextStyle>
   }
 }
 
@@ -85,14 +88,17 @@ const Select: FC<Props> = (props) => {
   }
 
   return (
-    <View style={styles.container}>
-      {!!title && <Text style={styles.title}>{title}</Text>}
+    <View style={[styles.container, classes?.container]}>
+      {!!title && <Text style={[styles.title, classes?.title]}>{title}</Text>}
       <TouchableOpacity
         style={[styles.btn, isOpen && styles.btnOpen]}
         onPress={onPress}
         activeOpacity={1}
       >
-        <Text style={styles.label} numberOfLines={1}>
+        <Text
+          style={[styles.placeholder, isOpen && styles.placeholderOpen]}
+          numberOfLines={1}
+        >
           {textPlaceholder}
         </Text>
 

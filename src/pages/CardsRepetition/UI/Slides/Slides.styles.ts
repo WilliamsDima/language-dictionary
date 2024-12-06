@@ -28,6 +28,25 @@ export const styles = StyleSheet.create({
     fontSize: scaleFontSize(14),
     fontWeight: '600',
   },
+
+  empty: {
+    width: '100%',
+    marginTop: scaleWidth(50),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: {
+    fontSize: scaleFontSize(16),
+    color: COLORS.white,
+    fontWeight: '700',
+    maxWidth: '80%',
+    textAlign: 'center',
+  },
+  anim: {
+    width: scaleWidth(200),
+    height: scaleWidth(200),
+  },
+
   footer: {
     position: 'absolute',
     zIndex: 1000,

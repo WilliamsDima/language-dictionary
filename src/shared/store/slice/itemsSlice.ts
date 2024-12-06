@@ -1,6 +1,13 @@
 import { IItem, StatusItem } from '@/entities/Item/model/item'
 import { FilterMain } from '@/shared/firebase/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { ShowVariantListVale } from './userSlice'
+
+export type FilterCardsModal = {
+  status: StatusItem
+  languages: number[]
+  showVariant: ShowVariantListVale | null
+}
 
 type InitialState = {
   modalDeleteItem: IItem | null
@@ -9,6 +16,7 @@ type InitialState = {
   search: string
   showFilterMain: boolean
   filterMain: FilterMain | null
+  filterCardsModal: FilterCardsModal
 }
 
 const initialState: InitialState = {
@@ -18,6 +26,11 @@ const initialState: InitialState = {
   search: '',
   showFilterMain: false,
   filterMain: null,
+  filterCardsModal: {
+    status: 'STUDY',
+    languages: [],
+    showVariant: 'word_only',
+  },
 }
 
 export const itemsSlice = createSlice({
@@ -44,6 +57,12 @@ export const itemsSlice = createSlice({
     },
     setFilterMain: (state, { payload }: PayloadAction<FilterMain | null>) => {
       state.filterMain = payload
+    },
+    setFilterCardsModal: (
+      state,
+      { payload }: PayloadAction<FilterCardsModal>
+    ) => {
+      state.filterCardsModal = payload
     },
   },
 })

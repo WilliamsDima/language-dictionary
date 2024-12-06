@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import {
   Animated,
   ScrollView,
@@ -12,8 +12,7 @@ import { CardSlideType, useCardsContext } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
 import LinearGradient from 'react-native-linear-gradient'
-import { textToSpeech } from '@/shared/helpers/textToSpeech'
-import SoundBIcon from '@/assets/icons/UI/sound-primery-64.svg'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 type Props = {
   item: CardSlideType
@@ -24,16 +23,13 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
   item,
   isFlipped,
 }) => {
-  const sound = (text: string) => {
-    textToSpeech({
-      lang: item.item.language.short_name,
-      text: text,
-    })
-  }
+  const { filterCardsModal } = useAppSelector((store) => store.items)
 
   return item.item.items.map((it, i) => {
-    const firstText = it.word
-    const secondText = it.translate
+    const firstText =
+      filterCardsModal.showVariant === 'word_only' ? it.word : it.translate
+    const secondText =
+      filterCardsModal.showVariant === 'word_only' ? it.translate : it.word
 
     return (
       <View style={styles.itemWordWrapper} key={it.id}>

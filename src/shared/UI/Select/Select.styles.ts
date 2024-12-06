@@ -24,6 +24,14 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: scaleFontSize(14),
+    color: COLORS.white,
+  },
+  placeholder: {
+    color: COLORS.dark_placeholder,
+  },
+  placeholderOpen: {
+    fontSize: scaleFontSize(14),
+    color: COLORS.white,
   },
   labelActive: {
     color: COLORS.primery,

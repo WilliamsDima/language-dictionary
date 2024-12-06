@@ -14,6 +14,8 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { COLORS } from '@/assets/styles/colors'
 import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
+import { StatusItem } from '@/entities/Item/model/item'
+import LottieView from 'lottie-react-native'
 
 type Props = {}
 
@@ -26,6 +28,8 @@ const Slides: FC<Props> = ({}) => {
     currentSlideData,
     currentSlide,
     onEnd,
+    nextSlide,
+    setItems,
     updateCurrentSlideIndex,
   } = useCardsContext()
 
@@ -47,12 +51,42 @@ const Slides: FC<Props> = ({}) => {
           uid: firebaseData.uid,
           idDoc: currentSlideData.item.idDoc,
           updatedData: { ...currentSlideData.item, status: 'STUDY' },
+        }).finally(() => {
+          setItems((prev) => {
+            const newItems = prev.map((it) => {
+              if (it.id === currentSlideData.item.id) {
+                return {
+                  ...it,
+                  status: 'STUDY' as StatusItem,
+                }
+              }
+              return it
+            })
+
+            return newItems
+          })
+          nextSlide()
         })
       } else {
         updateItem({
           uid: firebaseData.uid,
           idDoc: currentSlideData.item.idDoc,
           updatedData: { ...currentSlideData.item, status: 'READY' },
+        }).finally(() => {
+          setItems((prev) => {
+            const newItems = prev.map((it) => {
+              if (it.id === currentSlideData.item.id) {
+                return {
+                  ...it,
+                  status: 'READY' as StatusItem,
+                }
+              }
+              return it
+            })
+
+            return newItems
+          })
+          nextSlide()
         })
       }
     }
@@ -65,11 +99,13 @@ const Slides: FC<Props> = ({}) => {
   return (
     <View style={styles.container}>
       <View style={styles.slidesWrapper}>
-        <View style={styles.header}>
-          <Text style={styles.count}>
-            {currentSlide + 1}/{data.length}
-          </Text>
-        </View>
+        {!!data.length && (
+          <View style={styles.header}>
+            <Text style={styles.count}>
+              {currentSlide + 1}/{data.length}
+            </Text>
+          </View>
+        )}
 
         <GestureHandlerRootView>
           <FlatList
@@ -88,34 +124,50 @@ const Slides: FC<Props> = ({}) => {
             contentContainerStyle={styles.contentContainerStyle}
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews={false}
+            ListEmptyComponent={
+              <View style={styles.empty}>
+                <LottieView
+                  source={require('../../../../widgets/MainList/model/empty-list-lottie.json')}
+                  style={styles.anim}
+                  autoPlay
+                  loop
+                />
+
+                <Text style={styles.emptyText}>
+                  Ничего не найдено по выбранному фильтру
+                </Text>
+              </View>
+            }
           />
         </GestureHandlerRootView>
 
         <View style={styles.footer}>
-          <View style={styles.btns}>
-            {/* учить или на повторение сделать ввиде иконки */}
-            <Button
-              isText={false}
-              style={styles.btnGroup}
-              onPress={changeStatus}
-            >
-              {isLoadingUpdate ? (
-                <ActivityIndicator size={'small'} color={COLORS.primery} />
-              ) : (
-                <>
-                  {currentStatusSlide === 'STUDY' ? (
-                    <DoneIcon width={24} height={24} />
-                  ) : (
-                    <RepeatIcon width={24} height={24} />
-                  )}
-                </>
-              )}
-            </Button>
+          {!!data.length && (
+            <View style={styles.btns}>
+              {/* учить или на повторение сделать ввиде иконки */}
+              <Button
+                isText={false}
+                style={styles.btnGroup}
+                onPress={changeStatus}
+              >
+                {isLoadingUpdate ? (
+                  <ActivityIndicator size={'small'} color={COLORS.primery} />
+                ) : (
+                  <>
+                    {currentStatusSlide === 'STUDY' ? (
+                      <DoneIcon width={24} height={24} />
+                    ) : (
+                      <RepeatIcon width={24} height={24} />
+                    )}
+                  </>
+                )}
+              </Button>
 
-            <Button isText={false} style={styles.btnGroup} onPress={editItem}>
-              <EditIcon width={24} height={24} />
-            </Button>
-          </View>
+              <Button isText={false} style={styles.btnGroup} onPress={editItem}>
+                <EditIcon width={24} height={24} />
+              </Button>
+            </View>
+          )}
 
           <Button
             onPress={onEnd}

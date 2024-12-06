@@ -6,14 +6,20 @@ import { IItem } from '@/entities/Item/model/item'
 
 export type IUser = FirebaseAuthTypes.User
 
+export type ShowVariantListVale =
+  | 'translate_only'
+  | 'word_only'
+  | 'word_and_translate'
+export type ShowVariantList = {
+  label: string
+  value: ShowVariantListVale
+}
+
 export interface IFirebaseData {
   name: string
   uid: string
   dateRegistration: Date
-  showVariantList: null | {
-    label: string
-    value: 'translate_only' | 'word_only' | 'word_and_translate'
-  }
+  showVariantList: null | ShowVariantList
   email: string
   languages: ILanguage[]
   native_language: ILanguage | null
