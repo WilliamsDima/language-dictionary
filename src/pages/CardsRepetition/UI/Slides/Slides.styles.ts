@@ -24,6 +24,10 @@ export const styles = StyleSheet.create({
     zIndex: 1000,
     top: scaleWidth(10),
   },
+  count: {
+    fontSize: scaleFontSize(14),
+    fontWeight: '600',
+  },
   footer: {
     position: 'absolute',
     zIndex: 1000,

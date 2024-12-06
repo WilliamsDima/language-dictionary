@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react'
-import { Animated, FlatList, View } from 'react-native'
+import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
 import { styles } from './Slides.styles'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -9,10 +9,16 @@ import Button from '@/shared/UI/Button/Button'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import DoneIcon from '@/assets/icons/UI/done-primery-64.svg'
 import RepeatIcon from '@/assets/icons/UI/repeat-64-orange.svg'
+import { useUpdateItemMutation } from '@/pages/SettingsScreen/api/userServices'
+import { useAppSelector } from '@/shared/hooks/useStore'
+import { COLORS } from '@/assets/styles/colors'
+import { useActions } from '@/shared/hooks/useActions'
+import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 
 type Props = {}
 
 const Slides: FC<Props> = ({}) => {
+  const { setItemEdit, setShowAddModal } = useActions()
   const {
     data,
     flatList,
@@ -23,6 +29,35 @@ const Slides: FC<Props> = ({}) => {
     updateCurrentSlideIndex,
   } = useCardsContext()
 
+  const { firebaseData } = useAppSelector((store) => store.user)
+
+  const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
+
+  const editItem = () => {
+    if (currentSlideData?.item) {
+      setItemEdit(currentSlideData?.item)
+      setShowAddModal(true)
+    }
+  }
+
+  const changeStatus = () => {
+    if (firebaseData && currentSlideData?.item.idDoc) {
+      if (currentSlideData.item.status === 'READY') {
+        updateItem({
+          uid: firebaseData.uid,
+          idDoc: currentSlideData.item.idDoc,
+          updatedData: { ...currentSlideData.item, status: 'STUDY' },
+        })
+      } else {
+        updateItem({
+          uid: firebaseData.uid,
+          idDoc: currentSlideData.item.idDoc,
+          updatedData: { ...currentSlideData.item, status: 'READY' },
+        })
+      }
+    }
+  }
+
   const currentStatusSlide = useMemo(() => {
     return currentSlideData?.item.status
   }, [currentSlideData])
@@ -31,7 +66,7 @@ const Slides: FC<Props> = ({}) => {
     <View style={styles.container}>
       <View style={styles.slidesWrapper}>
         <View style={styles.header}>
-          <Text>
+          <Text style={styles.count}>
             {currentSlide + 1}/{data.length}
           </Text>
         </View>
@@ -59,15 +94,25 @@ const Slides: FC<Props> = ({}) => {
         <View style={styles.footer}>
           <View style={styles.btns}>
             {/* учить или на повторение сделать ввиде иконки */}
-            <Button isText={false} style={styles.btnGroup}>
-              {currentStatusSlide === 'STUDY' ? (
-                <DoneIcon width={24} height={24} />
+            <Button
+              isText={false}
+              style={styles.btnGroup}
+              onPress={changeStatus}
+            >
+              {isLoadingUpdate ? (
+                <ActivityIndicator size={'small'} color={COLORS.primery} />
               ) : (
-                <RepeatIcon width={24} height={24} />
+                <>
+                  {currentStatusSlide === 'STUDY' ? (
+                    <DoneIcon width={24} height={24} />
+                  ) : (
+                    <RepeatIcon width={24} height={24} />
+                  )}
+                </>
               )}
             </Button>
 
-            <Button isText={false} style={styles.btnGroup}>
+            <Button isText={false} style={styles.btnGroup} onPress={editItem}>
               <EditIcon width={24} height={24} />
             </Button>
           </View>
@@ -81,6 +126,8 @@ const Slides: FC<Props> = ({}) => {
           </Button>
         </View>
       </View>
+
+      <ModalAddItem />
     </View>
   )
 }

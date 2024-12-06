@@ -101,6 +101,19 @@ export const styles = StyleSheet.create({
     minWidth: '100%',
     maxWidth: '100%',
     gap: scaleWidth(10),
+    position: 'relative',
+  },
+  innerShadowTop: {
+    position: 'absolute',
+    top: -10,
+    left: 0,
+    right: 0,
+    height: '30%',
+  },
+  innerShadowBottom: {
+    position: 'absolute',
+    bottom: 0,
+    height: '30%',
   },
 
   itemWord: {
@@ -116,6 +129,13 @@ export const styles = StyleSheet.create({
     borderBottomColor: COLORS.black,
   },
 
+  wrapperText: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   text: {
     color: COLORS.black,
     textAlign: 'center',
@@ -123,5 +143,18 @@ export const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '600',
     paddingBottom: scaleWidth(5),
+  },
+  text2: {
+    color: COLORS.primery,
+  },
+
+  btn: {
+    padding: scaleWidth(10),
+  },
+  btnText: {
+    textAlign: 'center',
+    fontSize: scaleFontSize(16),
+    fontStyle: 'normal',
+    fontWeight: '600',
   },
 })

@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useMemo, useRef, useState } from 'react'
 import {
   Animated,
   ScrollView,
@@ -11,14 +11,30 @@ import { PanGestureHandler } from 'react-native-gesture-handler'
 import { CardSlideType, useCardsContext } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
+import LinearGradient from 'react-native-linear-gradient'
+import { textToSpeech } from '@/shared/helpers/textToSpeech'
+import SoundBIcon from '@/assets/icons/UI/sound-primery-64.svg'
 
 type Props = {
   item: CardSlideType
   index: number
 }
 
-const CardContent: FC<Props> = ({ item }) => {
+const CardContent: FC<Props & { isFlipped: boolean }> = ({
+  item,
+  isFlipped,
+}) => {
+  const sound = (text: string) => {
+    textToSpeech({
+      lang: item.item.language.short_name,
+      text: text,
+    })
+  }
+
   return item.item.items.map((it, i) => {
+    const firstText = it.word
+    const secondText = it.translate
+
     return (
       <View style={styles.itemWordWrapper} key={it.id}>
         <View
@@ -27,7 +43,15 @@ const CardContent: FC<Props> = ({ item }) => {
             item.item.items.length > 1 && styles.itemWordBorder,
           ]}
         >
-          <Text style={styles.text}>{it.translate}</Text>
+          {!isFlipped ? (
+            <View style={styles.wrapperText}>
+              <Text style={styles.text}>{firstText}</Text>
+            </View>
+          ) : (
+            <View style={styles.wrapperText}>
+              <Text style={[styles.text, styles.text2]}>{secondText}</Text>
+            </View>
+          )}
         </View>
       </View>
     )
@@ -106,7 +130,15 @@ const SlideItem: FC<Props> = (props) => {
                     { opacity: frontOpacity },
                   ]}
                 >
-                  <CardContent {...props} />
+                  <LinearGradient
+                    colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0)']}
+                    style={styles.innerShadowTop}
+                  />
+                  <LinearGradient
+                    colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']}
+                    style={styles.innerShadowBottom}
+                  />
+                  <CardContent isFlipped={isFlipped} {...props} />
                 </Animated.View>
 
                 {/* Задняя сторона */}
@@ -118,7 +150,15 @@ const SlideItem: FC<Props> = (props) => {
                     { opacity: backOpacity },
                   ]}
                 >
-                  <CardContent {...props} />
+                  <LinearGradient
+                    colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0)']}
+                    style={styles.innerShadowTop}
+                  />
+                  <LinearGradient
+                    colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']}
+                    style={styles.innerShadowBottom}
+                  />
+                  <CardContent isFlipped={isFlipped} {...props} />
                 </Animated.View>
               </ScrollView>
 
@@ -129,7 +169,13 @@ const SlideItem: FC<Props> = (props) => {
                   </Text>
                 )}
 
-                <Button onPress={flipCard}>Проверить</Button>
+                <Button
+                  style={styles.btn}
+                  classes={{ textBtn: styles.btnText }}
+                  onPress={flipCard}
+                >
+                  Проверить
+                </Button>
               </View>
             </TouchableOpacity>
           </Animated.View>
