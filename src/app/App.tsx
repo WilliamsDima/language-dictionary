@@ -8,7 +8,10 @@ import Routes from './Navigation/AppRoutes'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AuthProvider } from '@/shared/hooks/useAuth'
 import VKLogin from 'react-native-vkontakte-login'
+import CodePush from 'react-native-code-push'
 import { GOOGLE_WEB_CLIENT_ID, VK_APP } from '@env'
+
+let codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_START }
 
 GoogleSignin.configure({
   webClientId: GOOGLE_WEB_CLIENT_ID,
@@ -24,6 +27,11 @@ const App: FC = () => {
   useEffect(() => {
     helloApp()
 
+    CodePush.sync({
+      updateDialog: true,
+      installMode: CodePush.InstallMode.IMMEDIATE,
+    })
+
     // setTimeout(SplashScreen.hide, 500)
   }, [])
 
@@ -38,4 +46,4 @@ const App: FC = () => {
   )
 }
 
-export default App
+export default CodePush(codePushOptions)(App)
