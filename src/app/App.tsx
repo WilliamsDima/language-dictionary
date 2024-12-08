@@ -27,9 +27,15 @@ const App: FC = () => {
   useEffect(() => {
     helloApp()
 
+    // Запуск проверки обновлений вручную
     CodePush.sync({
-      updateDialog: true,
       installMode: CodePush.InstallMode.IMMEDIATE,
+      updateDialog: {
+        appendReleaseDescription: true,
+        optionalUpdateMessage: 'An update is available!',
+        optionalIgnoreButtonLabel: 'Ignore',
+        optionalInstallButtonLabel: 'Install',
+      },
     })
 
     // setTimeout(SplashScreen.hide, 500)
