@@ -1,7 +1,7 @@
 {
   "name": "Dictionary",
-  "version": "1.0.2",
-  "buildNumber": "5",
+  "version": "1.0.3",
+  "buildNumber": "6",
   "private": true,
   "rnpm": {
     "assets": [
