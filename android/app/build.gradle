@@ -100,7 +100,7 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            buildConfigField "String", "CODE_PUSH_KEY", "DSK_sRsdA3v6ym4gaGcUYtwOA7rrNN7qUCcBs1"
+            buildConfigField "String", "CODE_PUSH_KEY", "\"DSK_sRsdA3v6ym4gaGcUYtwOA7rrNN7qUCcBs1\""
         }
     }
 }
