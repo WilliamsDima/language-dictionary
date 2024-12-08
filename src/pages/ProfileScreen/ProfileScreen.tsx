@@ -55,6 +55,25 @@ const ProfileScreen: FC = () => {
     CodePush.clearUpdates()
   }
 
+  const startUpdate = () => {
+    CodePush.sync({
+      installMode: CodePush.InstallMode.IMMEDIATE,
+      updateDialog: {
+        appendReleaseDescription: true,
+        optionalUpdateMessage: 'Новое обновление доступно!',
+        optionalIgnoreButtonLabel: 'Игнорировать',
+        optionalInstallButtonLabel: 'Установить',
+      },
+    }).then((status) => {
+      if (status === CodePush.SyncStatus.UPDATE_INSTALLED) {
+        Alert.alert(
+          'Обновление установлено',
+          'Новое обновление успешно применено!'
+        )
+      }
+    })
+  }
+
   return (
     <Layout isScroll>
       <View style={styles.screen}>
@@ -65,6 +84,13 @@ const ProfileScreen: FC = () => {
         {/* <Button classes={{ btn: styles.logout, textBtn: styles.logoutText }}>
           редактировать
         </Button> */}
+
+        <Button
+          classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
+          onPress={startUpdate}
+        >
+          начать обновление
+        </Button>
 
         <Button
           classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
