@@ -11,7 +11,7 @@ import VKLogin from 'react-native-vkontakte-login'
 import CodePush from 'react-native-code-push'
 import { GOOGLE_WEB_CLIENT_ID, VK_APP } from '@env'
 
-let codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_START }
+let codePushOptions = { checkFrequency: CodePush.CheckFrequency.MANUAL }
 
 GoogleSignin.configure({
   webClientId: GOOGLE_WEB_CLIENT_ID,

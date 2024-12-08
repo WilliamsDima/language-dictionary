@@ -89,7 +89,7 @@ const ProfileScreen: FC = () => {
           classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
           onPress={startUpdate}
         >
-          начать обновление
+          начать обновление 1111
         </Button>
 
         <Button
