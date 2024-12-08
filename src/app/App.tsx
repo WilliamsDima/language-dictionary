@@ -38,22 +38,22 @@ const App: FC = () => {
     })
 
     // Запуск проверки обновлений вручную
-    CodePush.sync({
-      installMode: CodePush.InstallMode.IMMEDIATE,
-      updateDialog: {
-        appendReleaseDescription: true,
-        optionalUpdateMessage: 'Новое обновление доступно!',
-        optionalIgnoreButtonLabel: 'Игнорировать',
-        optionalInstallButtonLabel: 'Установить',
-      },
-    }).then((status) => {
-      if (status === CodePush.SyncStatus.UPDATE_INSTALLED) {
-        Alert.alert(
-          'Обновление установлено',
-          'Новое обновление успешно применено!'
-        )
-      }
-    })
+    // CodePush.sync({
+    //   installMode: CodePush.InstallMode.IMMEDIATE,
+    //   updateDialog: {
+    //     appendReleaseDescription: true,
+    //     optionalUpdateMessage: 'Новое обновление доступно!',
+    //     optionalIgnoreButtonLabel: 'Игнорировать',
+    //     optionalInstallButtonLabel: 'Установить',
+    //   },
+    // }).then((status) => {
+    //   if (status === CodePush.SyncStatus.UPDATE_INSTALLED) {
+    //     Alert.alert(
+    //       'Обновление установлено',
+    //       'Новое обновление успешно применено!'
+    //     )
+    //   }
+    // })
 
     // setTimeout(SplashScreen.hide, 500)
   }, [])
