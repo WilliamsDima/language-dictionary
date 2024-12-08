@@ -42,7 +42,7 @@ const TabBar: FC<Props> = (props) => {
   const setColorForNavigationBar = async (isChange: boolean) => {
     try {
       const response = await changeNavigationBarColor(
-        isChange ? COLORS.black : COLORS.red,
+        isChange ? COLORS.black : COLORS.tab_bar_dark,
         false,
         false
       )

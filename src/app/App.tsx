@@ -1,7 +1,7 @@
 import { helloApp } from '@/shared/helpers/ScaleUtils'
 import { store } from '@/shared/store/store'
 import React, { useEffect, FC } from 'react'
-import { LogBox } from 'react-native'
+import { Alert, LogBox } from 'react-native'
 import { EventProvider } from 'react-native-outside-press'
 import { Provider } from 'react-redux'
 import Routes from './Navigation/AppRoutes'
@@ -26,6 +26,8 @@ LogBox.ignoreLogs(['Remote debugger'])
 const App: FC = () => {
   useEffect(() => {
     helloApp()
+
+    Alert.alert('работает!!!')
 
     // Запуск проверки обновлений вручную
     CodePush.sync({
