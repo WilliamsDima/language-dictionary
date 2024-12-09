@@ -52,6 +52,7 @@ const ModalUpdateApp: FC<Props> = () => {
     if (isWatchSplash) {
       CodePush.checkForUpdate().then((update) => {
         console.log('checkForUpdate update:', update)
+        Alert.alert('checkForUpdate update', JSON.stringify(update))
         if (update) {
           console.log('Обновление доступно:', update)
           setShowUpdateModal(true)
