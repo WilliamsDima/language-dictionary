@@ -58,7 +58,6 @@ const ModalUpdateApp: FC<Props> = () => {
           setShowUpdateModal(true)
         } else {
           console.log('Обновлений нет.')
-          setShowUpdateModal(true)
         }
       })
     }
