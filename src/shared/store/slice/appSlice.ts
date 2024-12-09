@@ -44,6 +44,7 @@ type InitialState = {
   tooltip: TooltipType | null
   hiddenTabBar: boolean
   isWatchSplash: boolean
+  showUpdateModal: boolean
 }
 
 const initialState: InitialState = {
@@ -53,6 +54,7 @@ const initialState: InitialState = {
   tooltip: null,
   hiddenTabBar: false,
   isWatchSplash: false,
+  showUpdateModal: false,
 }
 
 export const appSlice = createSlice({
@@ -76,6 +78,9 @@ export const appSlice = createSlice({
     },
     setIsWatchSplash: (state, { payload }: PayloadAction<boolean>) => {
       state.isWatchSplash = payload
+    },
+    setShowUpdateModal: (state, { payload }: PayloadAction<boolean>) => {
+      state.showUpdateModal = payload
     },
   },
 })

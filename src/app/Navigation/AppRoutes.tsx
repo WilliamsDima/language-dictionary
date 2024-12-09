@@ -8,6 +8,7 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGlobalData } from '@/shared/hooks/useGlobalData'
 import { useAsyncLocal } from '@/shared/hooks/useAsyncLocal'
 import Tooltip from '@/entities/Tooltip/UI/Tooltip'
+import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
 
 export type AppParamsList = {
   [RoutesNames.start]: undefined
@@ -40,6 +41,7 @@ const Routes = () => {
       </NavigationContainer>
 
       <Tooltip />
+      <ModalUpdateApp />
     </>
   )
 }

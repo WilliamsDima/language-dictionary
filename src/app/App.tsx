@@ -27,34 +27,6 @@ const App: FC = () => {
   useEffect(() => {
     helloApp()
 
-    CodePush.checkForUpdate().then((update) => {
-      if (update) {
-        console.log('Обновление доступно:', update)
-        Alert.alert('Новое обновление доступно!')
-      } else {
-        Alert.alert('Обновлений нет.')
-        console.log('Обновлений нет.')
-      }
-    })
-
-    // Запуск проверки обновлений вручную
-    // CodePush.sync({
-    //   installMode: CodePush.InstallMode.IMMEDIATE,
-    //   updateDialog: {
-    //     appendReleaseDescription: true,
-    //     optionalUpdateMessage: 'Новое обновление доступно!',
-    //     optionalIgnoreButtonLabel: 'Игнорировать',
-    //     optionalInstallButtonLabel: 'Установить',
-    //   },
-    // }).then((status) => {
-    //   if (status === CodePush.SyncStatus.UPDATE_INSTALLED) {
-    //     Alert.alert(
-    //       'Обновление установлено',
-    //       'Новое обновление успешно применено!'
-    //     )
-    //   }
-    // })
-
     // setTimeout(SplashScreen.hide, 500)
   }, [])
 

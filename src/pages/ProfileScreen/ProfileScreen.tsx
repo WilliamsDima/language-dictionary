@@ -10,8 +10,6 @@ import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGetItemsQuery } from '../SettingsScreen/api/userServices'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
-import { CardsProvider } from '../CardsRepetition/CardsContext'
-import CodePush from 'react-native-code-push'
 
 const ProfileScreen: FC = () => {
   const [modalLogout, setModalLogout] = useState(false)
@@ -39,41 +37,6 @@ const ProfileScreen: FC = () => {
     setModalCards(true)
   }
 
-  const checkUpdate = () => {
-    CodePush.checkForUpdate().then((update) => {
-      if (update) {
-        console.log('Обновление доступно:', update)
-        Alert.alert('Новое обновление доступно!')
-      } else {
-        Alert.alert('Обновлений нет.')
-        console.log('Обновлений нет.')
-      }
-    })
-  }
-
-  const clearUpdate = () => {
-    CodePush.clearUpdates()
-  }
-
-  const startUpdate = () => {
-    CodePush.sync({
-      installMode: CodePush.InstallMode.IMMEDIATE,
-      updateDialog: {
-        appendReleaseDescription: true,
-        optionalUpdateMessage: 'Новое обновление доступно!',
-        optionalIgnoreButtonLabel: 'Игнорировать',
-        optionalInstallButtonLabel: 'Установить',
-      },
-    }).then((status) => {
-      if (status === CodePush.SyncStatus.UPDATE_INSTALLED) {
-        Alert.alert(
-          'Обновление установлено',
-          'Новое обновление успешно применено!'
-        )
-      }
-    })
-  }
-
   return (
     <Layout isScroll>
       <View style={styles.screen}>
@@ -84,27 +47,6 @@ const ProfileScreen: FC = () => {
         {/* <Button classes={{ btn: styles.logout, textBtn: styles.logoutText }}>
           редактировать
         </Button> */}
-
-        <Button
-          classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
-          onPress={startUpdate}
-        >
-          начать обновление 1111
-        </Button>
-
-        <Button
-          classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
-          onPress={checkUpdate}
-        >
-          проверить обновление
-        </Button>
-
-        <Button
-          classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
-          onPress={clearUpdate}
-        >
-          сбросить обновление
-        </Button>
 
         {!!cards?.length && (
           <Button
