@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.gray_text,
+    backgroundColor: COLORS.red,
   },
 
   words: {
