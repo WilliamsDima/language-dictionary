@@ -18,6 +18,8 @@ const UpdateButton: FC = () => {
     CodePush.checkForUpdate().then((update) => {
       if (update) {
         setUpdateAvailable(true)
+      } else {
+        setUpdateAvailable(false)
       }
     })
   }, [])
