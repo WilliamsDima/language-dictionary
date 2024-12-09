@@ -27,6 +27,8 @@ const App: FC = () => {
   useEffect(() => {
     helloApp()
 
+    Alert.alert('update')
+
     // setTimeout(SplashScreen.hide, 500)
   }, [])
 
