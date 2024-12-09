@@ -9,6 +9,7 @@ import {
 } from '../../api/userServices'
 import Text from '@/shared/UI/Text/Text'
 import SaveData from '../SaveData/SaveData'
+import UpdateButton from '../UpdateButton/UpdateButton'
 
 const Settings: FC = () => {
   const { aplication } = useAppSelector((store) => store.app)
@@ -44,6 +45,8 @@ const Settings: FC = () => {
         onSelect={onSelectShowVariant}
         options={aplication?.showVariantsList}
       />
+
+      <UpdateButton />
 
       <SaveData />
     </View>
