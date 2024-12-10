@@ -82,6 +82,8 @@ android {
         versionCode 8
         versionName "1.0.6"
     }
+
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -121,6 +123,8 @@ dependencies {
     implementation project(':react-native-splash-screen')
 
     implementation("com.google.firebase:firebase-auth")
+
+
 
     // vk
     implementation project(':react-native-vkontakte-login')

@@ -9,6 +9,7 @@ import { useGlobalData } from '@/shared/hooks/useGlobalData'
 import { useAsyncLocal } from '@/shared/hooks/useAsyncLocal'
 import Tooltip from '@/entities/Tooltip/UI/Tooltip'
 import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
+import { useAdsOpenApp } from '@/shared/hooks/useAdsOpenApp'
 
 export type AppParamsList = {
   [RoutesNames.start]: undefined
@@ -19,6 +20,7 @@ const Stack = createStackNavigator<AppParamsList>()
 const Routes = () => {
   useAsyncLocal()
   useGlobalData()
+  useAdsOpenApp() // реклама при открытии
 
   const { isAuth } = useAppSelector((store) => store.app)
 

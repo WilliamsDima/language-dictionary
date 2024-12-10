@@ -58,7 +58,8 @@
     "react-native-tts": "^4.1.1",
     "react-native-vector-icons": "^10.0.3",
     "react-native-vkontakte-login": "^1.0.1",
-    "react-redux": "^9.1.0"
+    "react-redux": "^9.1.0",
+    "yandex-mobile-ads": "^7.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

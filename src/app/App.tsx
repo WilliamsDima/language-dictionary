@@ -11,6 +11,7 @@ import VKLogin from 'react-native-vkontakte-login'
 import CodePush from 'react-native-code-push'
 import { GOOGLE_WEB_CLIENT_ID, VK_APP } from '@env'
 import SplashScreen from 'react-native-splash-screen'
+import { MobileAds } from 'yandex-mobile-ads'
 
 let codePushOptions = { checkFrequency: CodePush.CheckFrequency.MANUAL }
 
@@ -27,6 +28,10 @@ LogBox.ignoreLogs(['Remote debugger'])
 const App: FC = () => {
   useEffect(() => {
     helloApp()
+    ;(async () => {
+      // Configure the user privacy data policy before init sdk
+      await MobileAds.initialize()
+    })()
 
     setTimeout(SplashScreen.hide, 500)
   }, [])

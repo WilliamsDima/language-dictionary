@@ -7,6 +7,7 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         ndkVersion = "23.1.7779620"
+        //kotlinVersion = "1.9.24"
 
         googlePlayServicesAuthVersion = "20.7.0" // <--- use this version or newer
     }
@@ -18,5 +19,24 @@ buildscript {
         classpath("com.android.tools.build:gradle:8.1.0")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath 'com.google.gms:google-services:4.4.0'
+    }
+}
+
+
+allprojects {
+    repositories {
+        // ...
+        // IronSource
+        maven { url 'https://android-sdk.is.com/' }
+        // Pangle
+        maven { url 'https://artifact.bytedance.com/repository/pangle' }
+        // Tapjoy
+        maven { url 'https://sdk.tapjoy.com/' }
+        // Mintegral
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' }
+        // Chartboost
+        maven { url 'https://cboost.jfrog.io/artifactory/chartboost-ads/' }
+        // AppNext
+        maven { url 'https://dl.appnext.com/' }
     }
 }
