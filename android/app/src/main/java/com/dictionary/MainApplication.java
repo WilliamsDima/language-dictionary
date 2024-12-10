@@ -12,6 +12,7 @@ import java.util.List;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import com.rnfs.RNFSPackage;
 import com.microsoft.codepush.react.CodePush;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

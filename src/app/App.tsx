@@ -10,6 +10,7 @@ import { AuthProvider } from '@/shared/hooks/useAuth'
 import VKLogin from 'react-native-vkontakte-login'
 import CodePush from 'react-native-code-push'
 import { GOOGLE_WEB_CLIENT_ID, VK_APP } from '@env'
+import SplashScreen from 'react-native-splash-screen'
 
 let codePushOptions = { checkFrequency: CodePush.CheckFrequency.MANUAL }
 
@@ -27,7 +28,7 @@ const App: FC = () => {
   useEffect(() => {
     helloApp()
 
-    // setTimeout(SplashScreen.hide, 500)
+    setTimeout(SplashScreen.hide, 500)
   }, [])
 
   return (

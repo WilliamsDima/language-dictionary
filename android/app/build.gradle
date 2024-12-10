@@ -115,6 +115,8 @@ dependencies {
 
     implementation project(':react-native-code-push')
 
+    implementation project(':react-native-splash-screen')
+
     implementation("com.google.firebase:firebase-auth")
 
     // vk
