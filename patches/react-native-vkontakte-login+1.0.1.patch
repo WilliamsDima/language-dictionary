@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-vkontakte-login/android/build.gradle b/node_modules/react-native-vkontakte-login/android/build.gradle
+index 40e9381..f7d9375 100644
+--- a/node_modules/react-native-vkontakte-login/android/build.gradle
++++ b/node_modules/react-native-vkontakte-login/android/build.gradle
+@@ -5,6 +5,8 @@ def safeExtGet(prop, fallback) {
+ }
+ 
+ android {
++    namespace "camp.kuznetsov.rn.vkontakte"
++
+     compileSdkVersion safeExtGet('compileSdkVersion', 28)
+     buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
+ 

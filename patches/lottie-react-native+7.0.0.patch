@@ -1,0 +1,24 @@
+diff --git a/node_modules/lottie-react-native/android/build.gradle b/node_modules/lottie-react-native/android/build.gradle
+index 095c090..6724bbb 100644
+--- a/node_modules/lottie-react-native/android/build.gradle
++++ b/node_modules/lottie-react-native/android/build.gradle
+@@ -41,6 +41,8 @@ android {
+         println "DEPRECATION WARNING: The `namespace` property is not available in your version of AGP. Please upgrade to AGP 4.2+."
+     }
+ 
++
++
+     compileSdk getExtOrDefault('compileSdkVersion', 31)
+ 
+     // Used to override the NDK path/version on internal CI or by allowing
+@@ -62,6 +64,10 @@ android {
+         }
+     }
+ 
++    buildFeatures {
++        buildConfig true
++    }
++
+     packagingOptions {
+         exclude "**/libreact_render*.so"
+     }
