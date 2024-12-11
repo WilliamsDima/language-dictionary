@@ -28,12 +28,13 @@ LogBox.ignoreLogs(['Remote debugger'])
 const App: FC = () => {
   useEffect(() => {
     helloApp()
+
+    setTimeout(SplashScreen.hide, 500)
+
     ;(async () => {
       // Configure the user privacy data policy before init sdk
       await MobileAds.initialize()
     })()
-
-    setTimeout(SplashScreen.hide, 500)
   }, [])
 
   return (
