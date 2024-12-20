@@ -14,7 +14,7 @@ const ButtonGoogle: FC<Props> = (props) => {
   const { setIsAuth } = useActions()
   // Handle user state changes
   const onAuthStateChanged = (user: any) => {
-    Alert.alert('onAuthStateChanged user', JSON.stringify(user))
+    //Alert.alert('onAuthStateChanged user', JSON.stringify(user))
     console.log('onAuthStateChanged user', user)
 
     setIsAuth(!!user)
@@ -30,7 +30,7 @@ const ButtonGoogle: FC<Props> = (props) => {
 
       console.log('userInfo', userInfo)
 
-      Alert.alert('userInfo', JSON.stringify(userInfo))
+      //Alert.alert('userInfo', JSON.stringify(userInfo))
 
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(
@@ -42,7 +42,7 @@ const ButtonGoogle: FC<Props> = (props) => {
       // Sign-in the user with the credential
       return auth().signInWithCredential(googleCredential)
     } catch (error) {
-      Alert.alert('onGoogleButtonPress error', JSON.stringify(error))
+      // Alert.alert('onGoogleButtonPress error', JSON.stringify(error))
       console.log('onGoogleButtonPress error', error)
     }
   }
