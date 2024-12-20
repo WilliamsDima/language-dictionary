@@ -1,7 +1,7 @@
 {
   "name": "WordCards",
-  "version": "1.0.6",
-  "buildNumber": "9",
+  "version": "1.0.7",
+  "buildNumber": "10",
   "private": true,
   "rnpm": {
     "assets": [
