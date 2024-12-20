@@ -14,14 +14,14 @@ const ButtonGoogle: FC<Props> = (props) => {
   const { setIsAuth } = useActions()
   // Handle user state changes
   const onAuthStateChanged = (user: any) => {
-    //Alert.alert('onAuthStateChanged user', JSON.stringify(user))
+    // Alert.alert('onAuthStateChanged user', JSON.stringify(user))
     console.log('onAuthStateChanged user', user)
 
     setIsAuth(!!user)
   }
 
   const onGoogleButtonPress = async () => {
-    Alert.alert('onGoogleButtonPress')
+    // Alert.alert('onGoogleButtonPress')
     try {
       // Check if your device supports Google Play
       await GoogleSignin.hasPlayServices()
@@ -42,7 +42,7 @@ const ButtonGoogle: FC<Props> = (props) => {
       // Sign-in the user with the credential
       return auth().signInWithCredential(googleCredential)
     } catch (error) {
-      // Alert.alert('onGoogleButtonPress error', JSON.stringify(error))
+      //Alert.alert('onGoogleButtonPress error', JSON.stringify(error))
       console.log('onGoogleButtonPress error', error)
     }
   }
