@@ -1,4 +1,4 @@
-package com.williamsdev.dictionary;
+package com.williamsdev.dictionary_app;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

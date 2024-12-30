@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.williamsdev.dictionary",
+  "applicationId": "com.williamsdev.dictionary_app",
   "variantName": "release",
   "elements": [
     {
