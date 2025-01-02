@@ -59,7 +59,7 @@ const ButtonGoogle: FC<Props> = (props) => {
       onPress={onGoogleButtonPress}
     >
       <View style={styles.content}>
-        <Text style={styles.text}>Войти с помощью Google</Text>
+        <Text style={styles.text}>Войти с помощью Google 2</Text>
         <GoogleIcon />
       </View>
     </Button>

@@ -6,6 +6,7 @@ import {
   StyleProp,
   TextStyle,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   ViewStyle,
 } from 'react-native'
@@ -139,6 +140,7 @@ const Select: FC<Props> = (props) => {
                       onSelect && onSelect(it)
                       !multiselect && onClose()
                     }}
+                    activeOpacity={1}
                   >
                     {multiselect && (
                       <View style={[styles.done, active && styles.doneActive]}>
