@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply plugin: 'com.google.gms.google-services'
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -103,6 +104,7 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODE_PUSH_KEY", "\"DSK_sRsdA3v6ym4gaGcUYtwOA7rrNN7qUCcBs1\""
         }
     }
 }
@@ -110,6 +112,14 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    
+
+    implementation project(':react-native-code-push')
+
+    implementation project(':react-native-splash-screen')
+
+    // vk
+    implementation project(':react-native-vkontakte-login')
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -117,3 +127,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle" 

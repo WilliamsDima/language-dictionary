@@ -12,9 +12,8 @@ module.exports = {
         'no-undef': 'off',
         indent: ['error', 2],
         quotes: ['error', 'single'],
-        semi: ['error', 'always'],
-        // 'linebreak-style': ['error', 'off'],
+        semi: ['off'], // Не требовать точек с запятой
       },
     },
   ],
-};
+}
