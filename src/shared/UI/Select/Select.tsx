@@ -1,23 +1,15 @@
-import React, { FC, memo, useMemo, useState } from 'react'
+import React, { FC, memo, useEffect, useState } from 'react'
 import {
-  Animated,
-  FlatList,
   Image,
-  ScrollView,
   StyleProp,
   TextStyle,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   ViewStyle,
 } from 'react-native'
-import { styles } from './Select.styles'
-import DoneWhiteIcon from '@/assets/icons/UI/done-white-64.svg'
-import ArrowDownIcon from '@/assets/icons/UI/arrow-down-green-64.svg'
 import Text from '../Text/Text'
-import { useRotateArrowAnim } from '@/shared/hooks/useRotateArrowAnim'
-import OutsidePressHandler from 'react-native-outside-press'
-import SelectDropdown from 'react-native-select-dropdown'
+import { MultiSelect } from 'react-native-element-dropdown'
+import { styles } from './Select.styles'
 
 /**
  * UI Select
@@ -34,12 +26,11 @@ export type SelectOption = {
 }
 
 interface Props {
-  onPress?: () => void
   multiselect?: boolean
   options?: SelectOption[]
   select?: SelectOption | null
   selects?: SelectOption[]
-  onSelect?: (value: SelectOption) => void
+  onMultiSelect?: (value: SelectOption[]) => void
   placeholder?: string
   title?: string
   classes?: {
@@ -57,124 +48,69 @@ const Select: FC<Props> = (props) => {
     placeholder = 'не выбрано',
     title,
     options,
-    onSelect,
+    onMultiSelect,
     classes,
   } = props
 
-  const [isOpen, setIsOpen] = useState(false)
-  const [heightList, setHeightList] = useState(0)
+  const [multiselectSelected, setMultiselect] = useState<string[]>([])
 
-  const [isonsError, setIsonsError] = useState<SelectOptionValue[]>([])
-
-  const { getAnimationStyles } = useRotateArrowAnim(isOpen)
-
-  const textPlaceholder = useMemo(() => {
-    if (multiselect && selects?.length) {
-      return selects.map((it) => it.label).join(', ')
+  useEffect(() => {
+    if (!multiselectSelected.length && selects?.length) {
+      setMultiselect(selects.map((it) => it.value as string))
     }
-
-    if (!multiselect && select) {
-      return select.label
-    }
-
-    return placeholder
-  }, [placeholder, multiselect, select, selects])
-
-  const onClose = () => {
-    setTimeout(() => {
-      setIsOpen(false)
-    }, 100)
-  }
-
-  const onPress = () => {
-    setIsOpen((prev) => !prev)
-  }
+  }, [multiselectSelected, selects])
 
   return (
-    <>
-      <SelectDropdown
+    <View>
+      {!!title && <Text style={[styles.title, classes?.title]}>{title}</Text>}
+
+      <MultiSelect
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        containerStyle={styles.containerStyle}
         data={options || []}
-        onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index)
-        }}
-        renderButton={(selectedItem, isOpened) => {
-          console.log(' renderButton selectedItem', selectedItem)
-
-          return (
-            <View style={[styles.container, classes?.container]}>
-              {!!title && (
-                <Text style={[styles.title, classes?.title]}>{title}</Text>
-              )}
-              <TouchableOpacity
-                style={[styles.btn, isOpen && styles.btnOpen]}
-                onPress={onPress}
-                activeOpacity={1}
-              >
-                <Text
-                  style={[styles.placeholder, isOpen && styles.placeholderOpen]}
-                  numberOfLines={1}
-                >
-                  {textPlaceholder}
-                </Text>
-
-                <Animated.View style={getAnimationStyles()}>
-                  <ArrowDownIcon width={24} height={24} />
-                </Animated.View>
-              </TouchableOpacity>
-            </View>
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        value={multiselectSelected}
+        search
+        searchPlaceholder="Поиск..."
+        onChange={(item) => {
+          setMultiselect(item)
+          onMultiSelect?.(
+            options?.filter((it) => item.includes(it.value as any)) || []
           )
         }}
-        renderItem={(item, index, isSelected) => {
-          const active = multiselect
-            ? selects?.some((it) => it.value === item.value)
-            : item.value === select?.value
-
-          const iconIsError = isonsError.includes(item.value)
+        renderItem={(item: SelectOption, active) => {
           return (
-            <View
-              style={styles.selectItem}
-              // onPress={() => {
-              //   onSelect && onSelect(it)
-              //   !multiselect && onClose()
-              // }}
-              // activeOpacity={1}
-            >
-              {multiselect && (
-                <View style={[styles.done, active && styles.doneActive]}>
-                  {active && <DoneWhiteIcon width={15} height={15} />}
-                </View>
+            <View style={[styles.item, active && styles.itemActive]}>
+              {!!item.iconUrl && (
+                <Image source={{ uri: item.iconUrl }} style={styles.icon} />
               )}
 
-              {!!item.iconUrl && !iconIsError && (
-                <Image
-                  style={styles.icon}
-                  onError={() => {
-                    setIsonsError((prev) => [...prev, item.value])
-                  }}
-                  source={{ uri: item.iconUrl }}
-                />
-              )}
-              <Text style={[styles.label, active && styles.labelActive]}>
+              <Text
+                style={[
+                  styles.selectedTextStyle,
+                  active && styles.selectedTextStyleActive,
+                ]}
+              >
                 {item.label}
               </Text>
             </View>
           )
         }}
-        showsVerticalScrollIndicator={false}
-        dropdownStyle={{
-          width: 200,
-          height: 50,
-          backgroundColor: '#E9ECEF',
-          borderRadius: 12,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingHorizontal: 12,
-        }}
+        renderSelectedItem={(item, unSelect) => (
+          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+            <View style={styles.selectedStyle}>
+              <Text style={styles.textSelectedStyle}>{item.label}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       />
-
-      {/* <Text style={styles.textEmptyOptions}>нет опций</Text> */}
-    </>
+    </View>
   )
 }
 

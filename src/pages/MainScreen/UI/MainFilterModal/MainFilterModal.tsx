@@ -22,7 +22,7 @@ const sortByDate: SelectOption[] = [
   },
 ]
 
-const MainFilterModal: FC<Props> = (props) => {
+const MainFilterModal: FC<Props> = () => {
   const { setShowFilterMain, setFilterMain } = useActions()
   const { showFilterMain, filterMain } = useAppSelector((store) => store.items)
 
@@ -42,16 +42,8 @@ const MainFilterModal: FC<Props> = (props) => {
     setSortDateValue(value)
   }
 
-  const onSelectLanguages = (value: SelectOption) => {
-    setLanguages((prev) => {
-      const isLang = prev.some((it) => it.value === value.value)
-
-      if (isLang) {
-        return prev.filter((it) => it.value !== value.value)
-      }
-
-      return [...prev, value]
-    })
+  const onSelectLanguages = (value: SelectOption[]) => {
+    setLanguages(value)
   }
 
   const onSubmit = () => {
@@ -96,15 +88,15 @@ const MainFilterModal: FC<Props> = (props) => {
             <Select
               title="Сортировка по дате"
               select={sortDateValue}
-              onSelect={onSelectSortDate}
               options={sortByDate}
             />
 
             <Select
               title="Язык"
               selects={languages}
-              onSelect={onSelectLanguages}
+              onMultiSelect={onSelectLanguages}
               options={languagesOptions}
+              placeholder="Выбор языка"
               multiselect
               classes={{ scroll: styles.scrollSelect }}
             />

@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { styles } from './MainFilter.styles'
 import { TouchableOpacity } from 'react-native'
 import FilterWhite from '@/assets/icons/UI/filter-white-64.svg'
 import FilterPrimery from '@/assets/icons/UI/filter-primery-64.svg'
@@ -9,7 +8,7 @@ import MainFilterModal from '../MainFilterModal/MainFilterModal'
 
 interface Props {}
 
-const MainFilter: FC<Props> = (props) => {
+const MainFilter: FC<Props> = () => {
   const { setShowFilterMain } = useActions()
   const { filterMain } = useAppSelector((store) => store.items)
 
