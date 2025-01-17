@@ -64,18 +64,14 @@ const TabBar: FC<Props> = (props) => {
         const isFocused = state.index === index
 
         const onPress = () => {
-          if (route?.state?.routeNames) {
-            navigation.navigate(route?.state?.routeNames[0])
-          } else {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            })
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          })
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name, { merge: true })
-            }
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name as keyof TabParamList)
           }
         }
 
