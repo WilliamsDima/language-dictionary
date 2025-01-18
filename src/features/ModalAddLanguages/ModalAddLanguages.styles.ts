@@ -4,15 +4,16 @@ import { StyleSheet, NativeModules } from 'react-native'
 
 export const styles = StyleSheet.create({
   wrapper: {
-    height: height + NativeModules?.StatusBarManager?.HEIGHT || 0,
+    height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.bg_modal,
     width: '100%',
   },
   container: {
-    maxWidth: '95%',
+    maxWidth: '90%',
     minWidth: '90%',
+    width: '100%',
     backgroundColor: COLORS.white,
     paddingVertical: scaleWidth(20),
     borderRadius: scaleWidth(10),
@@ -33,6 +34,7 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     gap: scaleWidth(10),
+    width: '100%',
   },
 
   title: {
@@ -46,6 +48,7 @@ export const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
+
     padding: scaleWidth(10),
     borderRadius: scaleWidth(5),
     borderWidth: scaleWidth(1),

@@ -4,7 +4,7 @@ import { StyleSheet, NativeModules } from 'react-native'
 
 export const styles = StyleSheet.create({
   wrapper: {
-    height: height + NativeModules?.StatusBarManager?.HEIGHT || 0,
+    height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.bg_modal,

@@ -406,7 +406,7 @@ export const languages: ILanguage[] = [
 
 export const languagesOptions: SelectOption[] = languages.map((it) => {
   return {
-    label: it.country.title,
+    label: it.country.title + ' ' + it.full_name,
     value: it.id,
     iconUrl: it.country.flag,
   }

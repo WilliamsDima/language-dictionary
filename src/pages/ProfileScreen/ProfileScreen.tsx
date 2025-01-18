@@ -1,7 +1,7 @@
 import UserInfo from '@/entities/user/UserInfo/UserInfo'
 import Layout from '@/shared/UI/Layout/Layout'
 import React, { FC, useState } from 'react'
-import { Alert, View } from 'react-native'
+import { View } from 'react-native'
 import { styles } from './ProfileScreen.styles'
 import Button from '@/shared/UI/Button/Button'
 import ModalLogout from '@/features/ModalLogout/ModalLogout'

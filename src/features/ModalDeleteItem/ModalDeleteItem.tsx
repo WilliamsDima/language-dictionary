@@ -3,7 +3,6 @@ import { styles } from './ModalDeleteItem.styles'
 import { View, Animated, TouchableOpacity } from 'react-native'
 import Modal from '@/shared/UI/Modal/Modal'
 import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
-import DropShadow from 'react-native-drop-shadow'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
@@ -38,7 +37,6 @@ const ModalDeleteItem: FC<Props> = () => {
     <Modal
       visible={!!modalDeleteItem}
       transparent
-      statusBarTranslucent
       onRequestClose={onCancelHandler}
       animationType="fade"
     >
@@ -48,50 +46,38 @@ const ModalDeleteItem: FC<Props> = () => {
         onPress={onCancelHandler}
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
-          <DropShadow
-            style={{
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 0,
-              },
-              shadowOpacity: 0.15,
-              shadowRadius: 5,
-            }}
-          >
-            <TouchableOpacity style={styles.container} activeOpacity={1}>
-              <Text style={styles.title}>
-                Вы уверены что хотите удалить карточку?
-              </Text>
+          <TouchableOpacity style={styles.container} activeOpacity={1}>
+            <Text style={styles.title}>
+              Вы уверены что хотите удалить карточку?
+            </Text>
 
-              <Text style={styles.text}>
-                Вы не сможите восстановить её после удаления.
-              </Text>
+            <Text style={styles.text}>
+              Вы не сможите восстановить её после удаления.
+            </Text>
 
-              <View style={styles.btns}>
-                <Button
-                  type="BORDER-TRANSPARENT"
-                  classes={{
-                    btn: [styles.btn, styles.cancel],
-                    textBtn: styles.cancelText,
-                  }}
-                  onPress={onCancelHandler}
-                >
-                  Отмена
-                </Button>
+            <View style={styles.btns}>
+              <Button
+                type="BORDER-TRANSPARENT"
+                classes={{
+                  btn: [styles.btn, styles.cancel],
+                  textBtn: styles.cancelText,
+                }}
+                onPress={onCancelHandler}
+              >
+                Отмена
+              </Button>
 
-                <Button
-                  classes={{
-                    btn: [styles.btn, styles.logout],
-                    textBtn: styles.logoutText,
-                  }}
-                  onPress={onDelete}
-                >
-                  удалить
-                </Button>
-              </View>
-            </TouchableOpacity>
-          </DropShadow>
+              <Button
+                classes={{
+                  btn: [styles.btn, styles.logout],
+                  textBtn: styles.logoutText,
+                }}
+                onPress={onDelete}
+              >
+                удалить
+              </Button>
+            </View>
+          </TouchableOpacity>
         </Animated.View>
       </TouchableOpacity>
     </Modal>

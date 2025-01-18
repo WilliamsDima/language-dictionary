@@ -6,11 +6,12 @@ import { useGetItemsQuery } from '../../api/userServices'
 import Text from '@/shared/UI/Text/Text'
 import SaveIcon from '@/assets/icons/UI/save-primery-64.svg'
 import Button from '@/shared/UI/Button/Button'
-import RNFS from 'react-native-fs'
+import * as RNFS from '@dr.pogodin/react-native-fs'
 import { useActions } from '@/shared/hooks/useActions'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
+import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
 
 const SaveData: FC = () => {
   const { setLastSaveData, setTooltip } = useActions()
@@ -25,7 +26,9 @@ const SaveData: FC = () => {
   const toSave = async () => {
     const jsonString = JSON.stringify(data)
 
-    const path = `${RNFS.DownloadDirectoryPath}/dictinary-save.json`
+    const path = `${
+      RNFS.DownloadDirectoryPath
+    }/dictinary-save-${new Date().getTime()}.json`
 
     try {
       await RNFS.writeFile(path, jsonString, 'utf8')
@@ -41,6 +44,7 @@ const SaveData: FC = () => {
         children: <SaveDataTooltip error path={path} />,
         time: 3000,
       })
+      copyToClipboard(jsonString)
       console.log('save json Error', error)
     }
   }

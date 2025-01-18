@@ -1,10 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { setupListeners } from '@reduxjs/toolkit/dist/query/react'
 
 import appReducer from './slice/appSlice'
 import userReducer from './slice/userSlice'
 import itemsReducer from './slice/itemsSlice'
 import { baseApi } from '../API/baseApi'
+import { setupListeners } from '@reduxjs/toolkit/query'
 
 const rootReducer = combineReducers({
   app: appReducer,

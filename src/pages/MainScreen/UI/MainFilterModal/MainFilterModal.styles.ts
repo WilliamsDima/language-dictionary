@@ -22,10 +22,6 @@ export const styles = StyleSheet.create({
     gap: scaleWidth(20),
   },
 
-  scrollSelect: {
-    height: scaleWidth(200),
-  },
-
   top: {
     width: '100%',
     justifyContent: 'center',

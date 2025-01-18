@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import Modal from '@/shared/UI/Modal/Modal'
 import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
-import DropShadow from 'react-native-drop-shadow'
 import Text from '@/shared/UI/Text/Text'
 import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
 import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
@@ -69,7 +68,6 @@ const ModalAddLanguages: FC<Props> = ({
     <Modal
       visible={visible}
       transparent
-      statusBarTranslucent
       onRequestClose={onCancelHandler}
       animationType="fade"
     >
@@ -79,89 +77,75 @@ const ModalAddLanguages: FC<Props> = ({
         onPress={onCancelHandler}
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
-          <DropShadow
-            style={{
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 0,
-              },
-              shadowOpacity: 0.15,
-              shadowRadius: 5,
-            }}
-          >
-            <TouchableOpacity style={styles.container} activeOpacity={1}>
-              <Text style={styles.title}>Список языков:</Text>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={styles.scroll}
-                contentContainerStyle={styles.scrollContainer}
-              >
-                {languages.map((it) => {
-                  const active = languagesSelects.some(
-                    (item) => item.id === it.id
-                  )
+          <TouchableOpacity style={styles.container} activeOpacity={1}>
+            <Text style={styles.title}>Список языков:</Text>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContainer}
+            >
+              {languages.map((it) => {
+                const active = languagesSelects.some(
+                  (item) => item.id === it.id
+                )
 
-                  const iconIsError = isonsError.includes(it.id)
+                const iconIsError = isonsError.includes(it.id)
 
-                  return (
-                    <TouchableOpacity
-                      key={it.id}
+                return (
+                  <TouchableOpacity
+                    key={it.id}
+                    style={[
+                      styles.item,
+                      active && !multiselect && styles.itemActiveSingle,
+                      active && styles.itemActive,
+                    ]}
+                    onPress={() => {
+                      onSelectLanguages(it)
+                    }}
+                  >
+                    {multiselect && (
+                      <View style={[styles.done, active && styles.doneActive]}>
+                        {active && <DoneIcon width={15} height={15} />}
+                      </View>
+                    )}
+
+                    {!!it.country.flag && !iconIsError && (
+                      <Image
+                        source={{ uri: it.country.flag }}
+                        style={styles.flag}
+                        onError={(error) => {
+                          setIsonsError((prev) => [...prev, it.id])
+                        }}
+                      />
+                    )}
+                    <Text
                       style={[
-                        styles.item,
-                        active && !multiselect && styles.itemActiveSingle,
-                        active && styles.itemActive,
+                        styles.full_name,
+                        active && !multiselect && styles.full_nameActive,
                       ]}
-                      onPress={() => {
-                        onSelectLanguages(it)
-                      }}
                     >
-                      {multiselect && (
-                        <View
-                          style={[styles.done, active && styles.doneActive]}
-                        >
-                          {active && <DoneIcon width={15} height={15} />}
-                        </View>
-                      )}
+                      {it.full_name}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              })}
+            </ScrollView>
 
-                      {!!it.country.flag && !iconIsError && (
-                        <Image
-                          source={{ uri: it.country.flag }}
-                          style={styles.flag}
-                          onError={(error) => {
-                            setIsonsError((prev) => [...prev, it.id])
-                          }}
-                        />
-                      )}
-                      <Text
-                        style={[
-                          styles.full_name,
-                          active && !multiselect && styles.full_nameActive,
-                        ]}
-                      >
-                        {it.full_name}
-                      </Text>
-                    </TouchableOpacity>
-                  )
-                })}
-              </ScrollView>
+            <View style={styles.btns}>
+              <TouchableOpacity onPress={onCancelHandler}>
+                <CloseIcon width={34} />
+              </TouchableOpacity>
 
-              <View style={styles.btns}>
-                <TouchableOpacity onPress={onCancelHandler}>
-                  <CloseIcon width={34} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    onConfirm(languagesSelects)
-                    onCancelHandler()
-                  }}
-                >
-                  <ReadyIcon width={34} />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </DropShadow>
+              <TouchableOpacity
+                onPress={() => {
+                  onConfirm(languagesSelects)
+                  onCancelHandler()
+                }}
+              >
+                <ReadyIcon width={34} />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
         </Animated.View>
       </TouchableOpacity>
     </Modal>

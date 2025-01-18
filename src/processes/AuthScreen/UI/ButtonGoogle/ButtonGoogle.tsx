@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { styles } from './ButtonGoogle.styles'
 import Button from '@/shared/UI/Button/Button'
 import GoogleIcon from '@/assets/icons/UI/google.svg'
@@ -13,12 +13,15 @@ interface Props {}
 const ButtonGoogle: FC<Props> = (props) => {
   const { setIsAuth } = useActions()
   // Handle user state changes
-  const onAuthStateChanged = (user: any) => {
-    // Alert.alert('onAuthStateChanged user', JSON.stringify(user))
-    console.log('onAuthStateChanged user', user)
+  const onAuthStateChanged = useCallback(
+    (user: any) => {
+      // Alert.alert('onAuthStateChanged user', JSON.stringify(user))
+      // console.log('onAuthStateChanged user', user)
 
-    setIsAuth(!!user)
-  }
+      setIsAuth(!!user)
+    },
+    [setIsAuth]
+  )
 
   const onGoogleButtonPress = async () => {
     // Alert.alert('onGoogleButtonPress')
@@ -28,13 +31,13 @@ const ButtonGoogle: FC<Props> = (props) => {
       // Get the users ID token
       const userInfo = await GoogleSignin.signIn()
 
-      console.log('userInfo', userInfo)
+      // console.log('userInfo', userInfo)
 
-      //Alert.alert('userInfo', JSON.stringify(userInfo))
+      // Alert.alert('userInfo', JSON.stringify(userInfo))
 
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(
-        userInfo.idToken
+        userInfo.data?.idToken as string
       )
 
       // console.log('googleCredential', googleCredential)
@@ -42,15 +45,15 @@ const ButtonGoogle: FC<Props> = (props) => {
       // Sign-in the user with the credential
       return auth().signInWithCredential(googleCredential)
     } catch (error) {
-      //Alert.alert('onGoogleButtonPress error', JSON.stringify(error))
-      console.log('onGoogleButtonPress error', error)
+      // Alert.alert('onGoogleButtonPress error', JSON.stringify(error))
+      // console.log('onGoogleButtonPress error', error)
     }
   }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
     return subscriber // unsubscribe on unmount
-  }, [])
+  }, [onAuthStateChanged])
 
   return (
     <Button
@@ -59,7 +62,7 @@ const ButtonGoogle: FC<Props> = (props) => {
       onPress={onGoogleButtonPress}
     >
       <View style={styles.content}>
-        <Text style={styles.text}>Войти с помощью Google 2</Text>
+        <Text style={styles.text}>Войти с помощью Google</Text>
         <GoogleIcon />
       </View>
     </Button>

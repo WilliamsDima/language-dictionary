@@ -4,7 +4,7 @@ import { StyleSheet, NativeModules } from 'react-native'
 
 export const styles = StyleSheet.create({
   wrapper: {
-    height: height + NativeModules?.StatusBarManager?.HEIGHT || 0,
+    height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.bg_modal,
@@ -12,7 +12,8 @@ export const styles = StyleSheet.create({
   },
   container: {
     maxWidth: '90%',
-    minWidth: '80%',
+    minWidth: '90%',
+    width: '100%',
     backgroundColor: COLORS.white,
     padding: scaleWidth(20),
     borderRadius: scaleWidth(10),

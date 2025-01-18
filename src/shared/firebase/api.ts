@@ -11,15 +11,13 @@ import {
   addDoc,
   where,
   query,
-  CollectionReference,
-  Query,
   orderBy,
 } from 'firebase/firestore/lite'
-import { IFirebaseData, IUser } from '../store/slice/userSlice'
+import { IFirebaseData } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
-import { firebaseConfig } from '../helpers/config/firebase'
 import auth from '@react-native-firebase/auth'
 import { IItem, StatusItem } from '@/entities/Item/model/item'
+import { firebaseConfig } from '../helpers/config/firebase'
 
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)

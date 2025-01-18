@@ -2,14 +2,14 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import React, { FC, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { styles } from './Settings.styles'
-import Select, { SelectOption } from '@/shared/UI/Select/Select'
+import Select from '@/shared/UI/Select/Select'
 import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
 } from '../../api/userServices'
-import Text from '@/shared/UI/Text/Text'
 import SaveData from '../SaveData/SaveData'
 import UpdateButton from '../UpdateButton/UpdateButton'
+import { SelectOption } from '@/shared/UI/types'
 
 const Settings: FC = () => {
   const { aplication } = useAppSelector((store) => store.app)

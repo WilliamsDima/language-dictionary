@@ -16,7 +16,7 @@ import { useUserVk } from '@/shared/API/getUserVk'
 
 interface Props {}
 
-const ButtonVk: FC<Props> = (props) => {
+const ButtonVk: FC<Props> = () => {
   const { setFirebaseData, setIsVkLogin, setIsAuth } = useActions()
   const { aplication } = useAppSelector((store) => store.app)
 

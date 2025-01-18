@@ -5,6 +5,7 @@ import React, {
   useContext,
   ReactNode,
   useEffect,
+  useCallback,
 } from 'react'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import VKLogin from 'react-native-vkontakte-login'
@@ -46,57 +47,65 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
   useUserVk()
 
-  const onAuthStateChanged = async (user?: FirebaseAuthTypes.User) => {
-    if (!user) return
+  const onAuthStateChanged = useCallback(
+    async (user?: FirebaseAuthTypes.User) => {
+      // console.log('onAuthStateChanged user', user)
+      if (!user) return
 
-    console.log('onAuthStateChanged user', user)
-    setIsAuth(!!user)
+      setIsAuth(!!user)
 
-    const isUser = await getUserData(user.uid)
+      const isUser = await getUserData(user.uid)
 
-    const userData: IFirebaseData = {
-      name: user.displayName || '',
-      uid: isUser?.uid ? isUser.uid : user.uid,
-      email: user?.email || '',
-      dateRegistration: isUser?.dateRegistration
-        ? isUser?.dateRegistration
-        : +new Date(),
-      showVariantList:
-        isUser?.showVariantList || aplication?.showVariantsList?.[1] || null,
-      languages: isUser?.languages || [],
-      native_language: isUser?.native_language || null,
-      image: user.photoURL || '',
-    }
+      const userData: IFirebaseData = {
+        name: user.displayName || '',
+        uid: isUser?.uid ? isUser.uid : user.uid,
+        email: user?.email || '',
+        dateRegistration: isUser?.dateRegistration
+          ? isUser?.dateRegistration
+          : +new Date(),
+        showVariantList:
+          isUser?.showVariantList || aplication?.showVariantsList?.[1] || null,
+        languages: isUser?.languages || [],
+        native_language: isUser?.native_language || null,
+        image: user.photoURL || '',
+      }
 
-    await setDoc(doc(db, 'users', user.uid), userData)
-    setFirebaseData(userData as any)
-  }
+      await setDoc(doc(db, 'users', user.uid), userData)
+      setFirebaseData(userData as any)
+    },
+    [aplication?.showVariantsList, setFirebaseData, setIsAuth]
+  )
 
-  const logoutVk = async () => {
+  const logoutVk = useCallback(async () => {
+    console.log('logoutVk')
+
     setIsVkLogin(false)
     await removeAsyncLocal(LOCAL_KEYS.vk_token)
     await removeAsyncLocal(LOCAL_KEYS.vk_id_user)
     return VKLogin.logout()
-  }
+  }, [setIsVkLogin])
 
-  const logoutHandler = async () => {
+  const logoutHandler = useCallback(async () => {
+    console.log('logoutHandler')
+
     try {
       dispatch(baseApi.util.resetApiState())
 
-      if (!isVkLogin) {
+      if (isVkLogin) {
+        await logoutVk()
+      } else {
         await logout()
       }
 
-      await logoutVk()
       setIsAuth(false)
       setFirebaseData(null)
     } catch (error: any) {
       if (error) console.log('error logout: ', error)
     } finally {
     }
-  }
+  }, [dispatch, isVkLogin, logoutVk, setFirebaseData, setIsAuth])
 
-  const deleteAccaunt = async () => {
+  const deleteAccaunt = useCallback(async () => {
     if (firebaseData) {
       console.log('deleteAccaunt')
 
@@ -114,12 +123,12 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
         logoutHandler()
       }, 500)
     }
-  }
+  }, [firebaseData, isVkLogin, logoutHandler])
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged as any)
     return subscriber // unsubscribe on unmount
-  }, [])
+  }, [onAuthStateChanged])
 
   const value = useMemo(() => {
     return {

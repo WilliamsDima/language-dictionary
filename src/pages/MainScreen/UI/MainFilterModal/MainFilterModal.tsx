@@ -5,9 +5,11 @@ import Modal from '@/shared/UI/Modal/Modal'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import Close from '@/assets/icons/UI/close-red-64.svg'
-import Select, { SelectOption } from '@/shared/UI/Select/Select'
+import Select from '@/shared/UI/Select/Select'
 import Button from '@/shared/UI/Button/Button'
 import { languagesOptions } from '@/shared/json/languages'
+import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
+import { SelectOption } from '@/shared/UI/types'
 
 interface Props {}
 
@@ -22,7 +24,7 @@ const sortByDate: SelectOption[] = [
   },
 ]
 
-const MainFilterModal: FC<Props> = (props) => {
+const MainFilterModal: FC<Props> = () => {
   const { setShowFilterMain, setFilterMain } = useActions()
   const { showFilterMain, filterMain } = useAppSelector((store) => store.items)
 
@@ -42,16 +44,8 @@ const MainFilterModal: FC<Props> = (props) => {
     setSortDateValue(value)
   }
 
-  const onSelectLanguages = (value: SelectOption) => {
-    setLanguages((prev) => {
-      const isLang = prev.some((it) => it.value === value.value)
-
-      if (isLang) {
-        return prev.filter((it) => it.value !== value.value)
-      }
-
-      return [...prev, value]
-    })
+  const onSelectLanguages = (value: SelectOption[]) => {
+    setLanguages(value)
   }
 
   const onSubmit = () => {
@@ -79,12 +73,7 @@ const MainFilterModal: FC<Props> = (props) => {
   }, [filterMain, showFilterMain])
 
   return (
-    <Modal
-      visible={showFilterMain}
-      onRequestClose={onClose}
-      transparent
-      statusBarTranslucent
-    >
+    <Modal visible={showFilterMain} onRequestClose={onClose} transparent>
       <TouchableOpacity
         style={styles.wrapper}
         activeOpacity={1}
@@ -101,17 +90,16 @@ const MainFilterModal: FC<Props> = (props) => {
             <Select
               title="Сортировка по дате"
               select={sortDateValue}
-              onSelect={onSelectSortDate}
               options={sortByDate}
+              onSelect={onSelectSortDate}
             />
 
-            <Select
+            <MultiselectDropdown
               title="Язык"
               selects={languages}
-              onSelect={onSelectLanguages}
+              onSelects={onSelectLanguages}
               options={languagesOptions}
-              multiselect
-              classes={{ scroll: styles.scrollSelect }}
+              placeholder="Выбор языка"
             />
           </View>
 

@@ -17,7 +17,7 @@ const Modal: FC<Props> = (props) => {
 
   const overStyle = useMemo(() => {
     return [styles.modal, style]
-  }, [])
+  }, [style])
 
   return (
     <ModalRN
