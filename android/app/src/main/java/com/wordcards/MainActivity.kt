@@ -7,6 +7,10 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import org.devio.rn.splashscreen.SplashScreen
 import android.os.Bundle
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 class MainActivity : ReactActivity() {
 
   /**
@@ -24,6 +28,17 @@ class MainActivity : ReactActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
       SplashScreen.show(this, R.style.SplashScreenTheme, true)
+
+      val appCenterSecret = BuildConfig.APP_CENTER_SECRET
+
+      // Инициализация App Center
+      AppCenter.start(
+          application, 
+          appCenterSecret, // App Secret
+          Analytics::class.java, 
+          Crashes::class.java
+      )
+
       super.onCreate(savedInstanceState)
   }
 }
