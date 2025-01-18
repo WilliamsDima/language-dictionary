@@ -1,114 +1,60 @@
 import React, { FC, memo, useEffect, useState } from 'react'
-import {
-  Image,
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native'
+import { StyleProp, TextStyle, View } from 'react-native'
 import Text from '../Text/Text'
-import { MultiSelect } from 'react-native-element-dropdown'
+import { Dropdown } from 'react-native-element-dropdown'
 import { styles } from './Select.styles'
-
-/**
- * UI Select
- *
- * @format
- */
-
-export type SelectOptionValue = string | number
-
-export type SelectOption = {
-  value: SelectOptionValue
-  label: string
-  iconUrl?: string
-}
+import { SelectOption } from '../types'
 
 interface Props {
-  multiselect?: boolean
   options?: SelectOption[]
   select?: SelectOption | null
-  selects?: SelectOption[]
-  onMultiSelect?: (value: SelectOption[]) => void
+  onSelect?: (value: SelectOption) => void
   placeholder?: string
   title?: string
   classes?: {
-    container?: StyleProp<ViewStyle>
-    scroll?: StyleProp<ViewStyle>
     title?: StyleProp<TextStyle>
   }
 }
 
 const Select: FC<Props> = (props) => {
   const {
-    multiselect,
     select,
-    selects,
     placeholder = 'не выбрано',
     title,
+    onSelect,
     options,
-    onMultiSelect,
     classes,
   } = props
 
-  const [multiselectSelected, setMultiselect] = useState<string[]>([])
+  const [selected, setSelected] = useState<string>('')
 
   useEffect(() => {
-    if (!multiselectSelected.length && selects?.length) {
-      setMultiselect(selects.map((it) => it.value as string))
+    if (!selected && select) {
+      setSelected(select.value as string)
     }
-  }, [multiselectSelected, selects])
+  }, [selected, select])
 
   return (
     <View>
       {!!title && <Text style={[styles.title, classes?.title]}>{title}</Text>}
 
-      <MultiSelect
-        style={styles.dropdown}
+      <Dropdown
+        style={[styles.dropdown]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
         containerStyle={styles.containerStyle}
+        iconStyle={styles.iconStyle}
         data={options || []}
+        maxHeight={300}
         labelField="label"
         valueField="value"
         placeholder={placeholder}
-        value={multiselectSelected}
-        search
-        searchPlaceholder="Поиск..."
+        value={selected}
         onChange={(item) => {
-          setMultiselect(item)
-          onMultiSelect?.(
-            options?.filter((it) => item.includes(it.value as any)) || []
-          )
+          setSelected(item.value)
+          onSelect?.(item)
         }}
-        renderItem={(item: SelectOption, active) => {
-          return (
-            <View style={[styles.item, active && styles.itemActive]}>
-              {!!item.iconUrl && (
-                <Image source={{ uri: item.iconUrl }} style={styles.icon} />
-              )}
-
-              <Text
-                style={[
-                  styles.selectedTextStyle,
-                  active && styles.selectedTextStyleActive,
-                ]}
-              >
-                {item.label}
-              </Text>
-            </View>
-          )
-        }}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
       />
     </View>
   )

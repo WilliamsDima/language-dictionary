@@ -10,10 +10,10 @@ import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { tabsWords } from '@/shared/helpers/tabsWord'
 import { useActions } from '@/shared/hooks/useActions'
 import { StatusItem } from '@/entities/Item/model/item'
-import Select, { SelectOption } from '@/shared/UI/Select/Select'
 import { languagesOptions } from '@/shared/json/languages'
 import { ShowVariantListVale } from '@/shared/store/slice/userSlice'
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
+import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
+import { SelectOption } from '@/shared/UI/types'
 
 const showVariantListOptions: SelectOption[] = [
   {
@@ -45,16 +45,8 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
   const [showVariantSelect, setShowVariantSelect] =
     useState<SelectOption | null>(() => showVariantListOptions[0])
 
-  const onSelectLanguages = (value: SelectOption) => {
-    setLanguages((prev) => {
-      const isLang = prev.some((it) => it.value === value.value)
-
-      if (isLang) {
-        return prev.filter((it) => it.value !== value.value)
-      }
-
-      return [...prev, value]
-    })
+  const onSelectLanguages = (value: SelectOption[]) => {
+    setLanguages(value)
   }
 
   const onSelectShowVariant = (v: SelectOption) => {
@@ -138,18 +130,13 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
               })}
             </View>
 
-            <Select
+            <MultiselectDropdown
               title="Язык"
               selects={languages}
-              onSelect={onSelectLanguages}
+              onSelects={onSelectLanguages}
               options={languagesOptions}
-              multiselect
               classes={{
-                scroll: styles.scrollSelect,
                 title: styles.titleSelect,
-                container: {
-                  marginTop: scaleWidth(20),
-                },
               }}
             />
 

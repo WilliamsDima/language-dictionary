@@ -5,9 +5,11 @@ import Modal from '@/shared/UI/Modal/Modal'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import Close from '@/assets/icons/UI/close-red-64.svg'
-import Select, { SelectOption } from '@/shared/UI/Select/Select'
+import Select from '@/shared/UI/Select/Select'
 import Button from '@/shared/UI/Button/Button'
 import { languagesOptions } from '@/shared/json/languages'
+import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
+import { SelectOption } from '@/shared/UI/types'
 
 interface Props {}
 
@@ -89,16 +91,15 @@ const MainFilterModal: FC<Props> = () => {
               title="Сортировка по дате"
               select={sortDateValue}
               options={sortByDate}
+              onSelect={onSelectSortDate}
             />
 
-            <Select
+            <MultiselectDropdown
               title="Язык"
               selects={languages}
-              onMultiSelect={onSelectLanguages}
+              onSelects={onSelectLanguages}
               options={languagesOptions}
               placeholder="Выбор языка"
-              multiselect
-              classes={{ scroll: styles.scrollSelect }}
             />
           </View>
 
