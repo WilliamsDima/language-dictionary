@@ -3,7 +3,7 @@ import { AppState } from 'react-native'
 import { useEffect } from 'react'
 
 let adRequestConfiguration = new AdRequestConfiguration({
-  adUnitId: 'R-M-13286454-1',
+  adUnitId: 'R-M-13740901-1',
   //adUnitId: 'demo-appopenad-yandex',
 })
 
