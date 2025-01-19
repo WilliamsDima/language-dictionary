@@ -84,7 +84,7 @@ android {
         applicationId "com.williamsdev.wordcards"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
+        versionCode 19
         versionName "1.0.9"
         buildConfigField "String", "APP_CENTER_SECRET", "\"${appCenterSecret}\""
     }
