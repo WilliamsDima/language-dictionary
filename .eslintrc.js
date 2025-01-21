@@ -10,7 +10,7 @@ module.exports = {
         '@typescript-eslint/no-shadow': ['error'],
         'no-shadow': 'off',
         'no-undef': 'off',
-        indent: ['error', 2],
+        indent: ['error', 'off'],
         quotes: ['error', 'single'],
         semi: ['off'], // Не требовать точек с запятой
       },

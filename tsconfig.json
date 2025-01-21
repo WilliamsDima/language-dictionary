@@ -3,6 +3,8 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
+    "types": ["jest"],
+
     /* Completeness */
     "baseUrl": "./src",
     "paths": {

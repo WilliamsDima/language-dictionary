@@ -4,6 +4,12 @@ type Props = {
 }
 
 export const dateFormat = ({ date, type }: Props) => {
+  // Проверяем, является ли date корректной датой
+  const parsedDate = typeof date === 'number' ? new Date(date) : date
+  if (!(parsedDate instanceof Date) || isNaN(parsedDate.getTime())) {
+    return undefined
+  }
+
   switch (type) {
     case 'FULL': {
       if (date) {
@@ -13,9 +19,10 @@ export const dateFormat = ({ date, type }: Props) => {
 
         return `${day.padStart(2, '0')}.${month.padStart(2, '0')}.${year}`
       }
+      break
     }
     default: {
-      return ''
+      return undefined
     }
   }
 }
