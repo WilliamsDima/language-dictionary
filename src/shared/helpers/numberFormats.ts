@@ -10,6 +10,7 @@ export const numberFormatter = (num: number, digits?: number) => {
     { value: 1e15, symbol: 'P' },
     { value: 1e18, symbol: 'E' },
   ]
+
   const rx = /\.0+$|(\.[0-9]*[1-9])0+$/
   var item = lookup
     .slice()
@@ -41,14 +42,4 @@ export const formatNumberWithSpaces = (number: number) => {
   }
 
   return result
-}
-
-// 16000 -> 16 000 $
-export const formatPrice = (price: number, sign = '$') => {
-  const pieces = parseFloat(price.toString()).toFixed(2).split('')
-  let ii = pieces.length - 3
-  while ((ii -= 3) > 0) {
-    pieces.splice(ii, 0, ' ')
-  }
-  return pieces.join('').replace('.00', '') + ' ' + sign
 }

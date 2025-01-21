@@ -6,7 +6,7 @@ import {
   useGetItemsQuery,
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
-} from '@/pages/SettingsScreen/api/userServices'
+} from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import ModalAddLanguages from '@/features/ModalAddLanguages/ModalAddLanguages'
 import { ILanguage } from '@/shared/json/languages'

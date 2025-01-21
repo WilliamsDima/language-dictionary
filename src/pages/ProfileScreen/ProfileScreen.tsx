@@ -8,7 +8,7 @@ import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGetItemsQuery } from '../SettingsScreen/api/userServices'
+import { useGetItemsQuery } from './api/userServices'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
 
 const ProfileScreen: FC = () => {

@@ -6,7 +6,7 @@ import Select from '@/shared/UI/Select/Select'
 import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
-} from '../../api/userServices'
+} from '../../../ProfileScreen/api/userServices'
 import SaveData from '../SaveData/SaveData'
 import UpdateButton from '../UpdateButton/UpdateButton'
 import { SelectOption } from '@/shared/UI/types'

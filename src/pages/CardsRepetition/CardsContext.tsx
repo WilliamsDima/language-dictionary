@@ -22,7 +22,7 @@ import {
   PanGestureHandlerEventPayload,
   State,
 } from 'react-native-gesture-handler'
-import { useGetItemsQuery } from '../SettingsScreen/api/userServices'
+import { useGetItemsQuery } from '../ProfileScreen/api/userServices'
 import { IItem, StatusItem } from '@/entities/Item/model/item'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'

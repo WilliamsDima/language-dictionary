@@ -8,7 +8,7 @@ import {
   useAddItemMutation,
   useGetUserProfileQuery,
   useUpdateItemMutation,
-} from '@/pages/SettingsScreen/api/userServices'
+} from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 
