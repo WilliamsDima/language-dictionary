@@ -10,9 +10,9 @@ import DotsVerticalIcon from '@/assets/icons/UI/dots-vertical-white-64.svg'
 import { useExpandAnim } from '@/shared/hooks/useExpandAnim'
 import { COLORS } from '@/assets/styles/colors'
 import WordItems from '../WordItems/WordItems'
-import { useUpdateItemMutation } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
+import { useUpdateItemMutation } from '@/pages/MainScreen/api/cardsServices'
 
 type Props = {
   item: IItem

@@ -7,7 +7,7 @@ import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useDeleteItemMutation } from '@/pages/ProfileScreen/api/userServices'
+import { useDeleteItemMutation } from '@/pages/MainScreen/api/cardsServices'
 
 type Props = {}
 

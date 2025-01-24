@@ -29,6 +29,8 @@ export const getUserData = async (
 ): Promise<DocumentData | undefined> => {
   //console.log('getUserData id', id)
 
+  // console.log('getUserData')
+
   const docRef = doc(db, 'users', id)
   const docSnap = await getDoc(docRef)
   const data = docSnap.data()
@@ -40,6 +42,7 @@ export const getUserData = async (
 export const getAplicationData = async (): Promise<
   DocumentData | undefined
 > => {
+  // console.log('getAplicationData')
   try {
     const docRef = doc(db, 'app', 'info')
     const docSnap = await getDoc(docRef)
@@ -65,6 +68,7 @@ export type FilterItems = {
 // 'desc' — сортировка по убыванию.
 
 export const getItems = async (uid: string, filter?: FilterItems) => {
+  // console.log('getItems')
   try {
     if (uid) {
       const items: IItem[] = []
@@ -131,6 +135,7 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
 }
 
 export const addItemAPI = async (uid: string, newItem: IItem) => {
+  // console.log('addItemAPI')
   try {
     // Создаем ссылку на коллекцию items для данного пользователя
     const itemsRef = collection(db, 'users', uid, 'items')
@@ -146,6 +151,7 @@ export const addItemAPI = async (uid: string, newItem: IItem) => {
 
 // Функция для удаления элемента из коллекции items
 export const deleteItemAPI = async (uid: string, idDoc: string) => {
+  // console.log('deleteItemAPI')
   try {
     // Создаем ссылку на документ с данным itemId
     const itemRef = doc(db, 'users', uid, 'items', idDoc)
@@ -163,6 +169,7 @@ export const updateItemAPI = async (
   idDoc: string,
   updatedData: Partial<IItem>
 ) => {
+  // console.log('updateItemAPI')
   try {
     const itemRef = doc(db, 'users', uid, 'items', idDoc) // Получаем ссылку на документ
     return updateDoc(itemRef, updatedData) // Обновляем документ
@@ -172,10 +179,12 @@ export const updateItemAPI = async (
 }
 
 export const logout = () => {
+  console.log('logout')
   return auth().signOut() // Выход пользователя
 }
 
 export const deleteProfile = (user: any) => {
+  console.log('deleteProfile')
   try {
     return deleteUser(user)
   } catch (error) {
@@ -184,6 +193,8 @@ export const deleteProfile = (user: any) => {
 }
 
 export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
+  // console.log('updateUserProfile')
+
   const user = uid ? await getUserData(uid) : ''
 
   if (user) {
@@ -194,6 +205,7 @@ export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
 }
 
 export const deleteAllItems = async (uid: string) => {
+  // console.log('deleteAllItems')
   try {
     // Получаем ссылку на коллекцию 'items' для пользователя
     const itemsRef = collection(db, 'users', uid, 'items')

@@ -2,7 +2,6 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import React, { FC, useMemo } from 'react'
 import { View } from 'react-native'
 import { styles } from './SaveData.styles'
-import { useGetItemsQuery } from '../../../ProfileScreen/api/userServices'
 import Text from '@/shared/UI/Text/Text'
 import SaveIcon from '@/assets/icons/UI/save-primery-64.svg'
 import Button from '@/shared/UI/Button/Button'
@@ -12,6 +11,7 @@ import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
+import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 const SaveData: FC = () => {
   const { setLastSaveData, setTooltip } = useActions()

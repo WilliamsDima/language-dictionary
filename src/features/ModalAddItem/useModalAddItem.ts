@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import { AddItemWords } from './Model/items'
 import useKeyboardState from '@/shared/hooks/useKeyboardState'
 import { ScrollView } from 'react-native'
-import {
-  useAddItemMutation,
-  useGetUserProfileQuery,
-  useUpdateItemMutation,
-} from '@/pages/ProfileScreen/api/userServices'
+import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
+import {
+  useAddItemMutation,
+  useUpdateItemMutation,
+} from '@/pages/MainScreen/api/cardsServices'
 
 export const useModalAddItem = () => {
   const { setShowAddModal } = useActions()

@@ -2,13 +2,13 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import { FlatList, View } from 'react-native'
 import { styles } from './MainList.styles'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGetItemsQuery } from '@/pages/ProfileScreen/api/userServices'
 import LottieView from 'lottie-react-native'
 import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
 import Loader from '@/shared/UI/Loader/Loader'
 import ModalDeleteItem from '@/features/ModalDeleteItem/ModalDeleteItem'
 import { useCallbackDebounce } from '@/shared/hooks/useDebounce'
+import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 const MainList: FC = () => {
   const { firebaseData } = useAppSelector((store) => store.user)

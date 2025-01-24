@@ -3,7 +3,6 @@ import { View } from 'react-native'
 import { styles } from './UserStatistic.styles'
 import Text from '@/shared/UI/Text/Text'
 import {
-  useGetItemsQuery,
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
 } from '@/pages/ProfileScreen/api/userServices'
@@ -14,6 +13,7 @@ import LanguageStatisticList from './UI/LanguageStatisticList/LanguageStatisticL
 import LanguageNativeStatistic from './UI/LanguageNativeStatistic/LanguageNativeStatistic'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
 import Loader from '@/shared/UI/Loader/Loader'
+import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 /**
  * информация о пользователе

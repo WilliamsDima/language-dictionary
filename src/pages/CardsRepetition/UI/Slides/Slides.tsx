@@ -9,13 +9,13 @@ import Button from '@/shared/UI/Button/Button'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import DoneIcon from '@/assets/icons/UI/done-primery-64.svg'
 import RepeatIcon from '@/assets/icons/UI/repeat-64-orange.svg'
-import { useUpdateItemMutation } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { COLORS } from '@/assets/styles/colors'
 import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import { StatusItem } from '@/entities/Item/model/item'
 import LottieView from 'lottie-react-native'
+import { useUpdateItemMutation } from '@/pages/MainScreen/api/cardsServices'
 
 type Props = {}
 

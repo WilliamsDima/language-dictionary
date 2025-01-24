@@ -8,8 +8,8 @@ import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGetItemsQuery } from './api/userServices'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
+import { useGetItemsQuery } from '../MainScreen/api/cardsServices'
 
 const ProfileScreen: FC = () => {
   const [modalLogout, setModalLogout] = useState(false)

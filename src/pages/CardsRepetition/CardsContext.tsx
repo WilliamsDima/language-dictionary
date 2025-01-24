@@ -22,11 +22,11 @@ import {
   PanGestureHandlerEventPayload,
   State,
 } from 'react-native-gesture-handler'
-import { useGetItemsQuery } from '../ProfileScreen/api/userServices'
 import { IItem, StatusItem } from '@/entities/Item/model/item'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { width } from '@/shared/helpers/ScaleUtils'
+import { useGetItemsQuery } from '../MainScreen/api/cardsServices'
 
 export type CardSlideType = {
   index: number
