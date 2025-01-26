@@ -17,6 +17,7 @@ type InitialState = {
   showFilterMain: boolean
   filterMain: FilterMain | null
   filterCardsModal: FilterCardsModal
+  items: IItem[]
 }
 
 const initialState: InitialState = {
@@ -31,12 +32,16 @@ const initialState: InitialState = {
     languages: [],
     showVariant: 'word_only',
   },
+  items: [],
 }
 
 export const itemsSlice = createSlice({
   name: 'items',
   initialState,
   reducers: {
+    setItems: (state, { payload }: PayloadAction<IItem[]>) => {
+      state.items = payload ? payload : state.items
+    },
     setModalDeleteItem: (state, { payload }: PayloadAction<IItem | null>) => {
       state.modalDeleteItem = payload
     },

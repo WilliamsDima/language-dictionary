@@ -5,8 +5,9 @@ import {
   addItemAPI,
   updateItemAPI,
   deleteItemAPI,
-  FilterItems,
+  GetItemsParams,
 } from '@/shared/firebase/api'
+import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore/lite'
 
 export type AddItemParams = {
   uid: string
@@ -24,21 +25,28 @@ export type DeleteItemParams = {
   idDoc: string
 }
 
-export type GetItemsParams = {
+export type GetItemsCountParams = {
   uid?: string
-  filter?: FilterItems
 }
 
 export const cardsServices = baseApi.injectEndpoints({
   endpoints: (build) => ({
     // получение списка
-    getItems: build.query<IItem[], GetItemsParams>({
-      async queryFn({ uid, filter }) {
+    getItems: build.query<
+      {
+        items: IItem[]
+        lastVisible?: QueryDocumentSnapshot<DocumentData, DocumentData>
+      },
+      GetItemsParams
+    >({
+      async queryFn(query) {
         try {
-          if (!uid) return
+          if (!query?.uid) return
 
-          const items = await getItems(uid, filter)
-          return { data: items }
+          const items = await getItems(query)
+          return {
+            data: { items: items?.items, lastVisible: items?.lastVisible },
+          }
         } catch (error: any) {
           console.log('Error getItems', error?.message)
           return { error: error.message }

@@ -10,8 +10,13 @@ import {
   getDocs,
   addDoc,
   where,
-  query,
   orderBy,
+  query,
+  limit,
+  startAt,
+  startAfter,
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
 } from 'firebase/firestore/lite'
 import { IFirebaseData } from '../store/slice/userSlice'
 import { initializeApp } from 'firebase/app'
@@ -64,10 +69,24 @@ export type FilterItems = {
   filter?: FilterMain
 }
 
+export type GetItemsParams = {
+  uid?: string
+  filter?: FilterItems
+  page?: number
+  limitCount?: number
+  lastVisible?: QueryDocumentSnapshot<DocumentData, DocumentData>
+}
+
 // 'asc' — сортировка по возрастанию.
 // 'desc' — сортировка по убыванию.
 
-export const getItems = async (uid: string, filter?: FilterItems) => {
+export const getItems = async ({
+  filter,
+  limitCount,
+  page,
+  uid,
+  lastVisible,
+}: GetItemsParams) => {
   // console.log('getItems')
   try {
     if (uid) {
@@ -92,9 +111,23 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
       }
 
       // Выполняем запрос к базе данных с фильтрами, если они есть
-      const ref = filters.length > 0 ? query(itemsRef, ...filters) : itemsRef
+      let queryRef = filters.length > 0 ? query(itemsRef, ...filters) : itemsRef
 
-      const querySnapshot = await getDocs(ref)
+      if (filter?.filter?.sortDate) {
+        queryRef = query(queryRef, orderBy('date')) // Убедимся, что есть сортировка
+      }
+
+      if (page && page > 1 && lastVisible) {
+        queryRef = query(queryRef, startAfter(lastVisible)) // Загружаем после lastVisible
+      }
+
+      if (limitCount) queryRef = query(queryRef, limit(limitCount))
+
+      const querySnapshot = await getDocs(queryRef)
+
+      // Проверяем, есть ли еще данные для следующей страницы
+      const newLastVisibleDoc =
+        querySnapshot.docs[querySnapshot.docs.length - 1]
 
       querySnapshot.forEach((doc) => {
         const itemData = doc.data() as IItem
@@ -127,7 +160,10 @@ export const getItems = async (uid: string, filter?: FilterItems) => {
         }
       })
 
-      return items
+      return {
+        items,
+        lastVisible: newLastVisibleDoc, // Возвращаем последний элемент для следующей страницы
+      }
     }
   } catch (error) {
     console.log('getUserItems error', error)

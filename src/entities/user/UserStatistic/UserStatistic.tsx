@@ -46,9 +46,9 @@ const UserStatistic: FC<Props> = (props) => {
   }, [isLoading, isLoadingProfile])
 
   const allWordsCount = useMemo(() => {
-    if (data) {
+    if (data?.items) {
       return formatNumberWithSpaces(
-        data.reduce((prev, next) => prev + next.items.length, 0)
+        data.items.reduce((prev, next) => prev + next.items.length, 0)
       )
     }
     return []
@@ -57,7 +57,7 @@ const UserStatistic: FC<Props> = (props) => {
   const allWordsReady = useMemo(() => {
     if (data) {
       return formatNumberWithSpaces(
-        data.reduce((prev, next) => {
+        data.items.reduce((prev, next) => {
           return prev + (next.status === 'READY' ? next.items.length : 0)
         }, 0)
       )
@@ -68,7 +68,7 @@ const UserStatistic: FC<Props> = (props) => {
   const allWordsStady = useMemo(() => {
     if (data) {
       return formatNumberWithSpaces(
-        data.reduce((prev, next) => {
+        data.items.reduce((prev, next) => {
           return prev + (next.status === 'STUDY' ? 1 : 0)
         }, 0)
       )
@@ -105,7 +105,7 @@ const UserStatistic: FC<Props> = (props) => {
 
         <View style={styles.item}>
           <Text style={styles.itemText}>
-            Всего карочек: {data?.length || 0}
+            Всего карочек: {data?.items?.length || 0}
           </Text>
         </View>
 

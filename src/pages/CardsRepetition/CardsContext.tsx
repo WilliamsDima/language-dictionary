@@ -150,7 +150,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
   useEffect(() => {
     if (cards && !items.length) {
-      setItems(cards)
+      setItems(cards.items)
     }
   }, [cards, items])
 
