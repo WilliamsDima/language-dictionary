@@ -11,20 +11,14 @@ import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
-import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 const SaveData: FC = () => {
   const { setLastSaveData, setTooltip } = useActions()
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { lastSaveData } = useAppSelector((store) => store.items)
 
-  const { data } = useGetItemsQuery(
-    { uid: firebaseData?.uid },
-    { skip: !firebaseData?.uid }
-  )
+  const { lastSaveData, items } = useAppSelector((store) => store.items)
 
   const toSave = async () => {
-    const jsonString = JSON.stringify(data)
+    const jsonString = JSON.stringify(items)
 
     const path = `${
       RNFS.DownloadDirectoryPath
@@ -58,7 +52,7 @@ const SaveData: FC = () => {
     return ''
   }, [lastSaveData])
 
-  return !!data?.items?.length ? (
+  return !!items?.length ? (
     <View style={styles.container}>
       <Button isText={false} classes={{ btn: styles.btn }} onPress={toSave}>
         <Text style={styles.btnText}>Сохранить карточки как JSON файл</Text>

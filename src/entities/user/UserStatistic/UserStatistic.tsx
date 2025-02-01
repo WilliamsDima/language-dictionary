@@ -13,7 +13,6 @@ import LanguageStatisticList from './UI/LanguageStatisticList/LanguageStatisticL
 import LanguageNativeStatistic from './UI/LanguageNativeStatistic/LanguageNativeStatistic'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
 import Loader from '@/shared/UI/Loader/Loader'
-import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 /**
  * информация о пользователе
@@ -25,6 +24,7 @@ type Props = {}
 
 const UserStatistic: FC<Props> = (props) => {
   const { firebaseData } = useAppSelector((store) => store.user)
+  const { items } = useAppSelector((store) => store.items)
 
   const [showModalLanguages, setShowModalLanguages] = useState(false)
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
@@ -34,47 +34,40 @@ const UserStatistic: FC<Props> = (props) => {
   )
   const [updateUserProfile] = useUpdateUserProfileMutation()
 
-  const { data, isLoading } = useGetItemsQuery(
-    {
-      uid: firebaseData?.uid,
-    },
-    { skip: !firebaseData?.uid }
-  )
-
   const loading = useMemo(() => {
-    return isLoading || isLoadingProfile
-  }, [isLoading, isLoadingProfile])
+    return isLoadingProfile
+  }, [isLoadingProfile])
 
   const allWordsCount = useMemo(() => {
-    if (data?.items) {
+    if (items) {
       return formatNumberWithSpaces(
-        data.items.reduce((prev, next) => prev + next.items.length, 0)
+        items.reduce((prev, next) => prev + next.items.length, 0)
       )
     }
     return []
-  }, [data])
+  }, [items])
 
   const allWordsReady = useMemo(() => {
-    if (data) {
+    if (items) {
       return formatNumberWithSpaces(
-        data.items.reduce((prev, next) => {
+        items.reduce((prev, next) => {
           return prev + (next.status === 'READY' ? next.items.length : 0)
         }, 0)
       )
     }
     return []
-  }, [data])
+  }, [items])
 
   const allWordsStady = useMemo(() => {
-    if (data) {
+    if (items) {
       return formatNumberWithSpaces(
-        data.items.reduce((prev, next) => {
+        items.reduce((prev, next) => {
           return prev + (next.status === 'STUDY' ? 1 : 0)
         }, 0)
       )
     }
     return []
-  }, [data])
+  }, [items])
 
   const onSelectLanguages = (langs: ILanguage[]) => {
     if (firebaseData && profile) {
@@ -105,7 +98,7 @@ const UserStatistic: FC<Props> = (props) => {
 
         <View style={styles.item}>
           <Text style={styles.itemText}>
-            Всего карочек: {data?.items?.length || 0}
+            Всего карочек: {items?.length || 0}
           </Text>
         </View>
 

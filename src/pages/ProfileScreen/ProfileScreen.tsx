@@ -9,21 +9,13 @@ import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
-import { useGetItemsQuery } from '../MainScreen/api/cardsServices'
 
 const ProfileScreen: FC = () => {
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
   const [modalCards, setModalCards] = useState(false)
 
-  const { firebaseData } = useAppSelector((store) => store.user)
-
-  const { data: cards } = useGetItemsQuery(
-    {
-      uid: firebaseData?.uid,
-    },
-    { skip: !firebaseData?.uid }
-  )
+  const { items } = useAppSelector((store) => store.items)
 
   const showModalLogout = () => {
     setModalLogout(true)
@@ -48,7 +40,7 @@ const ProfileScreen: FC = () => {
           редактировать
         </Button> */}
 
-        {!!cards?.items?.length && (
+        {!!items?.length && (
           <Button
             classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
             onPress={startRepeat}
