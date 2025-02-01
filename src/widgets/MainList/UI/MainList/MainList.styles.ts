@@ -17,7 +17,13 @@ export const styles = StyleSheet.create({
     paddingBottom: scaleWidth(300),
   },
   loader: {
-    marginTop: scaleWidth(50),
+    bottom: scaleWidth(100),
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    zIndex: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   count: {
     fontSize: scaleFontSize(14),

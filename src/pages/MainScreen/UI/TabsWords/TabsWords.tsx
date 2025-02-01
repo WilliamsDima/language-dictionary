@@ -6,12 +6,50 @@ import Text from '@/shared/UI/Text/Text'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { tabsWords } from '@/shared/helpers/tabsWord'
+import { useMainScreen } from '@/shared/hooks/useMainScreen'
+import { useLazyGetItemsQuery } from '../../api/cardsServices'
+import { StatusItem } from '@/entities/Item/model/item'
 
 type Props = {}
 
 const TabsWords: FC<Props> = (props) => {
   const { setFilterByStatus } = useActions()
-  const { filterByStatus } = useAppSelector((store) => store.items)
+  const { firebaseData } = useAppSelector((store) => store.user)
+  const { filterByStatus, filterMain } = useAppSelector((store) => store.items)
+
+  const { page, setAllItems, setLastVisible, setIsLoading } = useMainScreen()
+
+  const [getItems] = useLazyGetItemsQuery()
+
+  const onPresHandler = (status: StatusItem) => {
+    if (firebaseData) {
+      setFilterByStatus(status)
+      setIsLoading(true)
+      getItems({
+        uid: firebaseData?.uid,
+        filter: {
+          status,
+          search: '',
+          filter: {
+            sortDate: filterMain?.sortDate,
+            languages: filterMain?.languages,
+          },
+        },
+        limitCount: 10,
+        page: 1,
+      })
+        .then((res) => {
+          if (res?.data?.items) {
+            setAllItems(res.data?.items)
+            setLastVisible(res.data?.lastVisible)
+          }
+        })
+        .finally(() => {
+          setIsLoading(false)
+          page.current = page.current + 1
+        })
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -21,7 +59,7 @@ const TabsWords: FC<Props> = (props) => {
             key={it.status}
             isText={false}
             onPress={() => {
-              setFilterByStatus(it.status)
+              onPresHandler(it.status)
             }}
             classes={{
               btn: [

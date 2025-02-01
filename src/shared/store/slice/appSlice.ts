@@ -1,6 +1,6 @@
 import { isSmallDevices } from './../../helpers/ScaleUtils'
 import { TooltipType } from '@/entities/Tooltip/model/Tooltip'
-import { SelectOption } from '@/shared/UI/Select/Select'
+import { SelectOption } from '@/shared/UI/types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type ThemeApp = 'dark' | 'light'

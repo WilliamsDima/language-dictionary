@@ -5,6 +5,7 @@ import { RoutesNames } from '../RoutesNames'
 import MainScreen from '@/pages/MainScreen/MainScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import { MainProvider } from '@/shared/hooks/useMainScreen'
 
 const MainStack = createStackNavigator()
 
@@ -26,11 +27,13 @@ const MainTabRoutes = () => {
         />
       )}
 
-      <MainStack.Screen
-        options={stackOptions}
-        name={RoutesNames.main}
-        component={MainScreen}
-      />
+      <MainStack.Screen options={stackOptions} name={RoutesNames.main}>
+        {(props) => (
+          <MainProvider {...props}>
+            <MainScreen />
+          </MainProvider>
+        )}
+      </MainStack.Screen>
     </MainStack.Navigator>
   )
 }
