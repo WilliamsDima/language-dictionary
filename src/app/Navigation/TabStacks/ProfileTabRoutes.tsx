@@ -22,7 +22,10 @@ const ProfileTabRoutes = () => {
         component={ProfileScreen}
       />
 
-      <ProfileStack.Screen options={stackOptions} name={RoutesNames.main}>
+      <ProfileStack.Screen
+        options={stackOptions}
+        name={RoutesNames.cardsRepetition}
+      >
         {(props) => (
           <CardProvider {...props}>
             <CardsRepetition />
