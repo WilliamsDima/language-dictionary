@@ -179,7 +179,14 @@ export const addItemAPI = async (uid: string, newItem: IItem) => {
     // Добавляем новый элемент в коллекцию
     const docRef = await addDoc(itemsRef, newItem)
 
-    return docRef
+    // Получаем сам документ с его данными
+    const docSnap = await getDoc(doc(db, 'users', uid, 'items', docRef.id))
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data(), idDoc: docRef.id }
+    }
+
+    return undefined
   } catch (error) {
     console.log('Error updating user profile or adding items:', error)
   }
@@ -193,7 +200,9 @@ export const deleteItemAPI = async (uid: string, idDoc: string) => {
     const itemRef = doc(db, 'users', uid, 'items', idDoc)
 
     // Удаляем документ
-    return deleteDoc(itemRef)
+    await deleteDoc(itemRef)
+
+    return { success: true, id: idDoc }
   } catch (error) {
     console.log('Error deleting item:', error)
   }
@@ -207,8 +216,17 @@ export const updateItemAPI = async (
 ) => {
   // console.log('updateItemAPI')
   try {
-    const itemRef = doc(db, 'users', uid, 'items', idDoc) // Получаем ссылку на документ
-    return updateDoc(itemRef, updatedData) // Обновляем документ
+    const itemRef = doc(db, 'users', uid, 'items', idDoc)
+
+    // Обновляем документ
+    await updateDoc(itemRef, updatedData)
+
+    // Получаем обновленный документ
+    const docSnap = await getDoc(itemRef)
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data(), idDoc: itemRef.id }
+    }
   } catch (error) {
     console.log('Error updating item:', error)
   }

@@ -7,21 +7,19 @@ import { ScrollView } from 'react-native'
 import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import {
-  useAddItemMutation,
-  useUpdateItemMutation,
-} from '@/pages/MainScreen/api/cardsServices'
+import { useCards } from '@/shared/hooks/useCards'
 
 export const useModalAddItem = () => {
-  const { setShowAddModal } = useActions()
+  const { setShowAddModal, setItemEdit } = useActions()
 
   const { itemEdit } = useAppSelector((store) => store.user)
   const { showAddModal, firebaseData } = useAppSelector((store) => store.user)
 
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
-  const [addItemAPI, { isLoading }] = useAddItemMutation()
-  const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { updateItemHandler, addItemHandler } = useCards()
 
   const { isOpen } = useKeyboardState()
   const scrollref = useRef<ScrollView>(null)
@@ -78,7 +76,7 @@ export const useModalAddItem = () => {
     setDescription('')
   }
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
     // console.log('onConfirm', firebaseData)
     // console.log('onConfirm', profile)
 
@@ -100,27 +98,23 @@ export const useModalAddItem = () => {
       if (error) return
 
       if (itemEdit?.idDoc) {
-        updateItem({
-          uid: firebaseData.uid,
-          idDoc: itemEdit.idDoc,
-          updatedData: { ...itemEdit, items, description, language },
-        }).then(() => {
-          onCancelHandler()
-        })
+        setIsLoading(true)
+        await updateItemHandler({ ...itemEdit, items, description, language })
+        setIsLoading(false)
+        setItemEdit(null)
+        onCancelHandler()
       } else {
-        addItemAPI({
-          item: {
-            items,
-            description,
-            language,
-            date: new Date(),
-            id: +new Date(),
-            status: 'STUDY',
-          },
-          uid: firebaseData?.uid,
-        }).then(() => {
-          onCancelHandler()
+        setIsLoading(true)
+        await addItemHandler({
+          items,
+          description,
+          language,
+          date: new Date(),
+          id: +new Date(),
+          status: 'STUDY',
         })
+        setIsLoading(false)
+        onCancelHandler()
       }
     }
   }
@@ -158,7 +152,7 @@ export const useModalAddItem = () => {
     errorItems,
     scrollref,
     language,
-    isLoading: isLoading || isLoadingUpdate,
+    isLoading,
     description,
     showAddModal,
     isOpen,

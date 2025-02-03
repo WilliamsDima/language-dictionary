@@ -42,6 +42,22 @@ export const itemsSlice = createSlice({
     setItems: (state, { payload }: PayloadAction<IItem[]>) => {
       state.items = payload ? payload : state.items
     },
+    addItemAC: (state, { payload }: PayloadAction<IItem>) => {
+      state.items.push(payload)
+    },
+    updateItemAC: (state, { payload }: PayloadAction<IItem>) => {
+      state.items = state.items.map((it) => {
+        if (it.id === payload.id) {
+          return payload
+        }
+        return it
+      })
+    },
+    deleteItemAC: (state, { payload }: PayloadAction<string>) => {
+      state.items = state.items.filter((it) => {
+        return it.idDoc !== payload
+      })
+    },
     setModalDeleteItem: (state, { payload }: PayloadAction<IItem | null>) => {
       state.modalDeleteItem = payload
     },

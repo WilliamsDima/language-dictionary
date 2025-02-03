@@ -29,16 +29,15 @@ export type GetItemsCountParams = {
   uid?: string
 }
 
+export type GetItemsRequest = {
+  items: IItem[]
+  lastVisible?: QueryDocumentSnapshot<DocumentData, DocumentData>
+}
+
 export const cardsServices = baseApi.injectEndpoints({
   endpoints: (build) => ({
     // получение списка
-    getItems: build.query<
-      {
-        items: IItem[]
-        lastVisible?: QueryDocumentSnapshot<DocumentData, DocumentData>
-      },
-      GetItemsParams
-    >({
+    getItems: build.query<GetItemsRequest, GetItemsParams>({
       async queryFn(query) {
         try {
           if (!query?.uid) return
@@ -55,7 +54,7 @@ export const cardsServices = baseApi.injectEndpoints({
       providesTags: ['items'],
     }),
     // добавление элемента
-    addItem: build.mutation<IItem[], AddItemParams>({
+    addItem: build.mutation<IItem, AddItemParams>({
       async queryFn({ item, uid }) {
         try {
           const items = await addItemAPI(uid, item)
@@ -68,7 +67,7 @@ export const cardsServices = baseApi.injectEndpoints({
       invalidatesTags: ['items'],
     }),
     // обновление элемента
-    updateItem: build.mutation<any, UpdateItemParams>({
+    updateItem: build.mutation<IItem, UpdateItemParams>({
       async queryFn({ idDoc, uid, updatedData }) {
         try {
           const res = await updateItemAPI(uid, idDoc, updatedData)
@@ -81,7 +80,10 @@ export const cardsServices = baseApi.injectEndpoints({
       invalidatesTags: ['items'],
     }),
     // удаление элемента
-    deleteItem: build.mutation<any, DeleteItemParams>({
+    deleteItem: build.mutation<
+      { success: boolean; id: string },
+      DeleteItemParams
+    >({
       async queryFn({ idDoc, uid }) {
         try {
           const res = await deleteItemAPI(uid, idDoc)

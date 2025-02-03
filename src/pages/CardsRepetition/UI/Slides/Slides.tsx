@@ -1,9 +1,9 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
 import { styles } from './Slides.styles'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { useCardsContext } from '../../CardsContext'
+import { useCardsRepetition } from '../../CardsContext'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
@@ -13,9 +13,8 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { COLORS } from '@/assets/styles/colors'
 import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
-import { StatusItem } from '@/entities/Item/model/item'
 import LottieView from 'lottie-react-native'
-import { useUpdateItemMutation } from '@/pages/MainScreen/api/cardsServices'
+import { useCards } from '@/shared/hooks/useCards'
 
 type Props = {}
 
@@ -29,13 +28,14 @@ const Slides: FC<Props> = ({}) => {
     currentSlide,
     onEnd,
     nextSlide,
-    setItems,
     updateCurrentSlideIndex,
-  } = useCardsContext()
+  } = useCardsRepetition()
 
   const { firebaseData } = useAppSelector((store) => store.user)
 
-  const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { updateItemHandler } = useCards()
 
   const editItem = () => {
     if (currentSlideData?.item) {
@@ -44,50 +44,30 @@ const Slides: FC<Props> = ({}) => {
     }
   }
 
-  const changeStatus = () => {
+  const changeStatus = async () => {
     if (firebaseData && currentSlideData?.item.idDoc) {
       if (currentSlideData.item.status === 'READY') {
-        updateItem({
-          uid: firebaseData.uid,
-          idDoc: currentSlideData.item.idDoc,
-          updatedData: { ...currentSlideData.item, status: 'STUDY' },
-        }).finally(() => {
-          setItems((prev) => {
-            const newItems = prev.map((it) => {
-              if (it.id === currentSlideData.item.id) {
-                return {
-                  ...it,
-                  status: 'STUDY' as StatusItem,
-                }
-              }
-              return it
-            })
+        setIsLoading(true)
 
-            return newItems
-          })
-          nextSlide()
+        await updateItemHandler({
+          ...currentSlideData.item,
+          status: 'STUDY',
         })
+
+        nextSlide()
+
+        setIsLoading(false)
       } else {
-        updateItem({
-          uid: firebaseData.uid,
-          idDoc: currentSlideData.item.idDoc,
-          updatedData: { ...currentSlideData.item, status: 'READY' },
-        }).finally(() => {
-          setItems((prev) => {
-            const newItems = prev.map((it) => {
-              if (it.id === currentSlideData.item.id) {
-                return {
-                  ...it,
-                  status: 'READY' as StatusItem,
-                }
-              }
-              return it
-            })
+        setIsLoading(true)
 
-            return newItems
-          })
-          nextSlide()
+        await updateItemHandler({
+          ...currentSlideData.item,
+          status: 'READY',
         })
+
+        nextSlide()
+
+        setIsLoading(false)
       }
     }
   }
@@ -150,7 +130,7 @@ const Slides: FC<Props> = ({}) => {
                 style={styles.btnGroup}
                 onPress={changeStatus}
               >
-                {isLoadingUpdate ? (
+                {isLoading ? (
                   <ActivityIndicator size={'small'} color={COLORS.primery} />
                 ) : (
                   <>

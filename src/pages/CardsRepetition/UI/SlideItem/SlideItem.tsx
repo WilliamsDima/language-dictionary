@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { styles } from './SlideItem.styles'
 import { PanGestureHandler } from 'react-native-gesture-handler'
-import { CardSlideType, useCardsContext } from '../../CardsContext'
+import { CardSlideType, useCardsRepetition } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
 import LinearGradient from 'react-native-linear-gradient'
@@ -56,7 +56,7 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
-  const { scrollX, nextSlide, swipeSlide } = useCardsContext()
+  const { scrollX, nextSlide, swipeSlide } = useCardsRepetition()
 
   const inputRange = [(index - 1) * width, index * width, (index + 1) * width]
 

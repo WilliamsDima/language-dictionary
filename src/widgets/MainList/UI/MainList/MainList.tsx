@@ -6,14 +6,14 @@ import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
 import Loader from '@/shared/UI/Loader/Loader'
 import ModalDeleteItem from '@/features/ModalDeleteItem/ModalDeleteItem'
-import { useMainScreen } from '@/shared/hooks/useMainScreen'
+import { useCards } from '@/shared/hooks/useCards'
 import { useAppSelector } from '@/shared/hooks/useStore'
 
 const MainList: FC = () => {
   const { filterByStatus } = useAppSelector((store) => store.items)
 
   const { allItems, counts, isLoading, isFilterActive, loadMoreItems } =
-    useMainScreen()
+    useCards()
 
   return (
     <View style={styles.listWrapper}>

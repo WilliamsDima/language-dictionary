@@ -22,11 +22,9 @@ import {
   PanGestureHandlerEventPayload,
   State,
 } from 'react-native-gesture-handler'
-import { IItem, StatusItem } from '@/entities/Item/model/item'
-import { useActions } from '@/shared/hooks/useActions'
-import { useAppSelector } from '@/shared/hooks/useStore'
+import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
-import { useGetItemsQuery } from '../MainScreen/api/cardsServices'
+import { useCards } from '@/shared/hooks/useCards'
 
 export type CardSlideType = {
   index: number
@@ -40,7 +38,6 @@ type IContext = {
   scrollX: Animated.Value
   isLoading: boolean
   currentSlideData?: CardSlideType
-  setItems: React.Dispatch<React.SetStateAction<IItem[]>>
   swipeSlide: (
     event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>
   ) => void
@@ -56,40 +53,24 @@ type CardsProviderType = {
 }
 
 export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
-  const {} = useActions()
   const { goBack } = useNavigation<NavigateStack>()
   const flatList = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
 
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { filterCardsModal } = useAppSelector((store) => store.items)
-
-  const { data: cards, isLoading } = useGetItemsQuery(
-    {
-      uid: firebaseData?.uid,
-      filter: {
-        status: filterCardsModal.status,
-        filter: {
-          languages: filterCardsModal.languages,
-        },
-      },
-    },
-    { skip: !firebaseData?.uid }
-  )
+  const { getItemsRepetition, page, allItems, isLoading } = useCards()
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
-  const [items, setItems] = useState<IItem[]>([])
 
   const data = useMemo(() => {
     return (
-      items.map((it, index) => {
+      allItems.map((it, index) => {
         return {
           index,
           item: it,
         }
       }) || []
     )
-  }, [items])
+  }, [allItems])
 
   const currentSlideData = useMemo(() => {
     return data.find((it, i) => i === currentSlide)
@@ -149,10 +130,14 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   }
 
   useEffect(() => {
-    if (cards && !items.length) {
-      setItems(cards.items)
+    page.current = 1
+  }, [])
+
+  useEffect(() => {
+    if ((currentSlide + 1) % 10 === 0 && !isLoading) {
+      getItemsRepetition()
     }
-  }, [cards, items])
+  }, [currentSlide, isLoading])
 
   const value = useMemo(() => {
     return {
@@ -162,7 +147,6 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       scrollX,
       currentSlideData,
       isLoading,
-      setItems,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
@@ -175,7 +159,6 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     scrollX,
     currentSlideData,
     isLoading,
-    setItems,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,
@@ -185,6 +168,6 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   return <CardsContext.Provider value={value}>{children}</CardsContext.Provider>
 }
 
-export const useCardsContext = () => {
+export const useCardsRepetition = () => {
   return useContext(CardsContext)
 }
