@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useState } from 'react'
 import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
 import { styles } from './MainItem.styles'
 import Text from '@/shared/UI/Text/Text'
@@ -12,7 +12,7 @@ import { COLORS } from '@/assets/styles/colors'
 import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import { useUpdateItemMutation } from '@/pages/MainScreen/api/cardsServices'
+import { useCards } from '@/shared/hooks/useCards'
 
 type Props = {
   item: IItem
@@ -26,28 +26,25 @@ const MainItem: FC<Props> = ({ item }) => {
   const { hidden: hiddenFooter, toggle: toggleFooter } = useExpandAnim()
   const { hidden: hiddenTranslate, toggle: toggleTranslate } = useExpandAnim()
 
-  const [updateItem, { isLoading: isLoadingUpdate }] = useUpdateItemMutation()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { updateItemHandler } = useCards()
 
   const editItem = () => {
     setItemEdit(item)
     setShowAddModal(true)
   }
 
-  const updateStatus = () => {
+  const updateStatus = async () => {
     if (firebaseData && item.idDoc) {
+      setIsLoading(true)
       if (item.status === 'READY') {
-        updateItem({
-          uid: firebaseData.uid,
-          idDoc: item.idDoc,
-          updatedData: { ...item, status: 'STUDY' },
-        })
+        await updateItemHandler({ ...item, status: 'STUDY' })
       } else {
-        updateItem({
-          uid: firebaseData.uid,
-          idDoc: item.idDoc,
-          updatedData: { ...item, status: 'READY' },
-        })
+        await updateItemHandler({ ...item, status: 'READY' })
       }
+
+      setIsLoading(false)
     }
   }
 
@@ -113,7 +110,7 @@ const MainItem: FC<Props> = ({ item }) => {
             <EditIcon width={25} height={25} />
           </TouchableOpacity>
 
-          {isLoadingUpdate ? (
+          {isLoading ? (
             <ActivityIndicator
               size={'small'}
               color={

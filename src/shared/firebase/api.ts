@@ -87,7 +87,7 @@ export const getItems = async ({
   uid,
   lastVisible,
 }: GetItemsParams) => {
-  // console.log('getItems')
+  // console.log('getItems filter', filter)
   try {
     if (uid) {
       const items: IItem[] = []
@@ -113,9 +113,9 @@ export const getItems = async ({
       // Выполняем запрос к базе данных с фильтрами, если они есть
       let queryRef = filters.length > 0 ? query(itemsRef, ...filters) : itemsRef
 
-      if (filter?.filter?.sortDate) {
-        queryRef = query(queryRef, orderBy('date')) // Убедимся, что есть сортировка
-      }
+      // if (filter?.filter?.sortDate) {
+      //   queryRef = query(queryRef, orderBy('date')) // Убедимся, что есть сортировка
+      // }
 
       if (page && page > 1 && lastVisible) {
         queryRef = query(queryRef, startAfter(lastVisible)) // Загружаем после lastVisible

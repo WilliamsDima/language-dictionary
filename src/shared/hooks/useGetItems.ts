@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
-import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
+import { useLazyGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 export const useGetItems = () => {
   const { setItems } = useActions()
@@ -12,21 +12,19 @@ export const useGetItems = () => {
 
   const [isInitial, setIsInitial] = useState(false)
 
-  const { data } = useGetItemsQuery(
-    {
-      uid: firebaseData?.uid,
-    },
-    { skip: !firebaseData?.uid || !isAuth }
-  )
+  const [getItems] = useLazyGetItemsQuery()
 
   useEffect(() => {
-    if (isAuth && data && !items.length && !isInitial) {
+    if (isAuth && !items.length && !isInitial && firebaseData?.uid) {
       setIsInitial(true)
-      setItems(data.items)
+
+      getItems({ uid: firebaseData?.uid }).then((res) => {
+        if (res.data?.items) setItems(res.data?.items)
+      })
     }
 
     if (!isAuth) {
       setIsInitial(false)
     }
-  }, [isAuth, data, items, isInitial])
+  }, [isAuth, items, isInitial, firebaseData])
 }

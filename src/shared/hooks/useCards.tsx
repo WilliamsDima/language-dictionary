@@ -161,7 +161,7 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
         status: filterByStatus,
         search: debouncedSearch,
         filter: {
-          sortDate: filterMain?.sortDate,
+          sortDate: filterMain?.sortDate || 'asc',
           languages: filterMain?.languages,
         },
       },

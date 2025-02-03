@@ -35,7 +35,9 @@ const MainFilterModal: FC<Props> = () => {
 
   const { firebaseData } = useAppSelector((store) => store.user)
 
-  const [sortDateValue, setSortDateValue] = useState<null | SelectOption>(null)
+  const [sortDateValue, setSortDateValue] = useState<SelectOption>(
+    sortByDate[1]
+  )
   const [languages, setLanguages] = useState<SelectOption[]>([])
 
   const { page, isLoading, setAllItems, setLastVisible, setIsLoading } =
@@ -48,7 +50,7 @@ const MainFilterModal: FC<Props> = () => {
   }
 
   const onCancel = () => {
-    setSortDateValue(null)
+    setSortDateValue({ label: 'По возрастанию', value: 'asc' })
     setLanguages([])
   }
 
@@ -63,11 +65,10 @@ const MainFilterModal: FC<Props> = () => {
   const onSubmit = () => {
     setIsLoading(true)
     if (firebaseData) {
-      getItems({
+      const sendData = {
         uid: firebaseData?.uid,
         filter: {
           status: filterByStatus,
-          search: '',
           filter: {
             sortDate: sortDateValue?.value as any,
             languages: languages.map((it) => +it.value),
@@ -75,16 +76,19 @@ const MainFilterModal: FC<Props> = () => {
         },
         limitCount: 10,
         page: 1,
-      })
+      }
+
+      getItems(sendData)
         .then((res) => {
           if (res.data?.items) {
             setAllItems(res.data?.items)
             setLastVisible(res.data?.lastVisible)
             page.current = 1
 
-            setSortDateValue(null)
+            setSortDateValue(sortByDate[1])
             setLanguages([])
             setShowFilterMain(false)
+
             setFilterMain({
               sortDate: sortDateValue?.value as any,
               languages: languages.map((it) => +it.value),
@@ -99,9 +103,10 @@ const MainFilterModal: FC<Props> = () => {
 
   useEffect(() => {
     if (filterMain) {
-      setSortDateValue(
-        sortByDate.find((it) => it?.value === filterMain?.sortDate) || null
+      const dateValue = sortByDate.find(
+        (it) => it?.value === filterMain?.sortDate
       )
+      dateValue && setSortDateValue(dateValue)
 
       const langs = languagesOptions?.filter((it) => {
         return filterMain?.languages?.includes(+it?.value)

@@ -35,10 +35,10 @@ const MultiselectDropdown: FC<Props> = (props) => {
   const [multiselectSelected, setMultiselect] = useState<string[]>([])
 
   useEffect(() => {
-    if (!multiselectSelected.length && selects?.length) {
+    if (selects) {
       setMultiselect(selects.map((it) => it.value as string))
     }
-  }, [multiselectSelected, selects])
+  }, [selects])
 
   return (
     <View>

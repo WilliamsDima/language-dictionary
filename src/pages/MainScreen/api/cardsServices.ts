@@ -48,7 +48,7 @@ export const cardsServices = baseApi.injectEndpoints({
           }
         } catch (error: any) {
           console.log('Error getItems', error?.message)
-          return { error: error.message }
+          return { error: error?.message }
         }
       },
       providesTags: ['items'],

@@ -26,7 +26,9 @@ const initialState: InitialState = {
   filterByStatus: 'ALL',
   search: '',
   showFilterMain: false,
-  filterMain: null,
+  filterMain: {
+    sortDate: 'desc',
+  },
   filterCardsModal: {
     status: 'STUDY',
     languages: [],
@@ -76,7 +78,7 @@ export const itemsSlice = createSlice({
     setShowFilterMain: (state, { payload }: PayloadAction<boolean>) => {
       state.showFilterMain = payload
     },
-    setFilterMain: (state, { payload }: PayloadAction<FilterMain | null>) => {
+    setFilterMain: (state, { payload }: PayloadAction<FilterMain>) => {
       state.filterMain = payload
     },
     setFilterCardsModal: (
