@@ -29,7 +29,7 @@ const VersionBlock: FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.version}>Версия: {aplication?.version}</Text>
-      <Text style={styles.version}>Версия appcenter: 1.0.6</Text>
+      {/* <Text style={styles.version}>Версия appcenter: 1.0.6</Text> */}
 
       {!!checkVersion && (
         <>

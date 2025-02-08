@@ -10,6 +10,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  innerShadow: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 15, // Высота внутренней тени
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+  },
   btnText: {
     color: COLORS.white,
     fontFamily: 'Mulish',

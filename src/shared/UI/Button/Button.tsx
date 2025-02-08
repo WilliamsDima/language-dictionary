@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { styles } from './Button.styles'
 import Text from '../Text/Text'
+import LinearGradient from 'react-native-linear-gradient'
 
 /**
  * UI Button
@@ -96,6 +97,17 @@ const Button: FC<Props> = (props) => {
       disabled={disabled}
       {...rest}
     >
+      <LinearGradient
+        colors={[
+          'transparent',
+          'rgba(0, 0, 0, 0.05)',
+          'rgba(0, 0, 0, 0.1)',
+          'rgba(0, 0, 0, 0.2)',
+          'rgba(0, 0, 0, 0.3)',
+        ]}
+        locations={[0, 0.3, 0.6, 0.8, 1]} // Плавный градиент
+        style={styles.innerShadow}
+      />
       {isText ? <Text style={stylesText}>{children}</Text> : children}
     </TouchableOpacity>
   )
