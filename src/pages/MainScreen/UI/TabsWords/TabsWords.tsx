@@ -6,7 +6,7 @@ import Text from '@/shared/UI/Text/Text'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { tabsWords } from '@/shared/helpers/tabsWord'
-import { useCards } from '@/shared/hooks/useCards'
+import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
 import { StatusItem } from '@/entities/Item/model/item'
 
@@ -17,7 +17,7 @@ const TabsWords: FC<Props> = (props) => {
   const { firebaseData } = useAppSelector((store) => store.user)
   const { filterByStatus, filterMain } = useAppSelector((store) => store.items)
 
-  const { page, setAllItems, setLastVisible, setIsLoading } = useCards()
+  const { page, setAllItems, setLastVisible, setIsLoading } = useCardsContext()
 
   const [getItems] = useLazyGetItemsQuery()
 

@@ -6,9 +6,11 @@ import { CardsProvider } from './CardsContext'
 import { useHiddenTabBar } from '@/shared/hooks/useHiddenTabBar'
 import { COLORS } from '@/assets/styles/colors'
 import Slides from './UI/Slides/Slides'
+import { useAdsScreen } from '@/shared/hooks/useAdsScreen'
 
 const CardsRepetition: FC = () => {
   useHiddenTabBar()
+  useAdsScreen()
   return (
     <CardsProvider>
       <Layout isSafeArea>

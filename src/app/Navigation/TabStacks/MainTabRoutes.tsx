@@ -5,7 +5,7 @@ import { RoutesNames } from '../RoutesNames'
 import MainScreen from '@/pages/MainScreen/MainScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { CardProvider } from '@/shared/hooks/useCards'
+import { CardProvider } from '@/shared/hooks/useCardsContext'
 
 const MainStack = createStackNavigator()
 

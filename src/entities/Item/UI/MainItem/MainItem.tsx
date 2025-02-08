@@ -12,7 +12,7 @@ import { COLORS } from '@/assets/styles/colors'
 import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import { useCards } from '@/shared/hooks/useCards'
+import { useCardsContext } from '@/shared/hooks/useCardsContext'
 
 type Props = {
   item: IItem
@@ -28,7 +28,7 @@ const MainItem: FC<Props> = ({ item }) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const { updateItemHandler } = useCards()
+  const { updateItemHandler } = useCardsContext()
 
   const editItem = () => {
     setItemEdit(item)

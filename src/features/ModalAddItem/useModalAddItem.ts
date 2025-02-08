@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native'
 import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import { useCards } from '@/shared/hooks/useCards'
+import { useCardsContext } from '@/shared/hooks/useCardsContext'
 
 export const useModalAddItem = () => {
   const { setShowAddModal, setItemEdit } = useActions()
@@ -19,7 +19,7 @@ export const useModalAddItem = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const { updateItemHandler, addItemHandler } = useCards()
+  const { updateItemHandler, addItemHandler } = useCardsContext()
 
   const { isOpen } = useKeyboardState()
   const scrollref = useRef<ScrollView>(null)

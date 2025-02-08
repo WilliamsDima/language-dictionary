@@ -1,56 +1,21 @@
-import React, {
-  FC,
-  useMemo,
-  createContext,
-  useContext,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import { useAppSelector } from './useStore'
-import { IItem } from '@/entities/Item/model/item'
-import { useCallbackDebounce } from './useDebounce'
 import {
   useAddItemMutation,
   useDeleteItemMutation,
   useLazyGetItemsQuery,
   useUpdateItemMutation,
 } from '@/pages/MainScreen/api/cardsServices'
+import { useAppSelector } from './useStore'
+import { useMemo, useRef, useState } from 'react'
+import { IItem } from '@/entities/Item/model/item'
 import { useActions } from './useActions'
 import ItemTooltip from '../UI/Tooltips/ItemTooltip/ItemTooltip'
+import { Vibration } from 'react-native'
 
-type IContext = {
-  isFilterActive: boolean
-  allItems: IItem[]
-  loadMoreItems: () => void
-  counts: {
-    ALL: number
-    READY: number
-    STUDY: number
-  }
-  isLoading: boolean
-  page: React.MutableRefObject<number>
-  setLastVisible: React.Dispatch<any>
-  setAllItems: React.Dispatch<React.SetStateAction<IItem[]>>
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-  updateItemHandler: (itemEdit: IItem) => Promise<void> | undefined
-  addItemHandler: (item: IItem) => Promise<void> | undefined
-  deleteItemHandler: (idDoc: string) => Promise<void> | undefined
-  getItemsRepetition: () => Promise<any> | undefined
-}
-
-const CardContext = createContext<IContext>({} as IContext)
-
-type CardsProviderType = {
-  children: ReactNode
-}
-
-export const CardProvider: FC<CardsProviderType> = ({ children }) => {
+export const useCards = () => {
   const { addItemAC, deleteItemAC, updateItemAC, setTooltip } = useActions()
 
   const { firebaseData } = useAppSelector((store) => store.user)
-  const { filterByStatus, search, filterMain, items, filterCardsModal } =
+  const { filterByStatus, search, filterMain, filterCardsModal, items } =
     useAppSelector((store) => store.items)
 
   const page = useRef<number>(1)
@@ -58,18 +23,15 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
   const [allItems, setAllItems] = useState<IItem[]>([]) // для хранения всех элементов
   const [lastVisible, setLastVisible] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
-
   // Локальное состояние для дебаунсированного поиска
   const [debouncedSearch, setDebouncedSearch] = useState(search)
+
+  //console.log(`allItems ${name}: `, allItems.length)
 
   const [getItems] = useLazyGetItemsQuery()
   const [addItemAPI] = useAddItemMutation()
   const [updateItem] = useUpdateItemMutation()
   const [deleteItem] = useDeleteItemMutation()
-
-  const isFilterActive = useMemo(() => {
-    return !!filterByStatus || !!debouncedSearch
-  }, [filterByStatus, debouncedSearch])
 
   const counts = useMemo(() => {
     return {
@@ -79,10 +41,22 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
     }
   }, [items])
 
-  // Используем дебаунс для поиска
-  const debouncedSearchHandler = useCallbackDebounce((value: string) => {
-    setDebouncedSearch(value)
-  }, 500)
+  const getItemsHandler = (page: number) => {
+    return getItems({
+      uid: firebaseData?.uid,
+      filter: {
+        status: filterByStatus,
+        search: debouncedSearch,
+        filter: {
+          sortDate: filterMain?.sortDate || 'asc',
+          languages: filterMain?.languages,
+        },
+      },
+      limitCount: 10,
+      page,
+      lastVisible,
+    })
+  }
 
   // обновление карточки
   const updateItemHandler = (itemEdit: IItem) => {
@@ -125,6 +99,9 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
             return [res.data, ...prev]
           })
           addItemAC(res.data)
+          setTimeout(() => {
+            Vibration.vibrate(300)
+          }, 300)
 
           setTooltip({ children: <ItemTooltip type="ADD" />, time: 3000 })
         }
@@ -154,29 +131,12 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
     }
   }
 
-  const getItemsHandler = (page: number) => {
-    return getItems({
-      uid: firebaseData?.uid,
-      filter: {
-        status: filterByStatus,
-        search: debouncedSearch,
-        filter: {
-          sortDate: filterMain?.sortDate || 'asc',
-          languages: filterMain?.languages,
-        },
-      },
-      limitCount: 10,
-      page,
-      lastVisible,
-    })
-  }
-
   // получение карточек для повторения
-  const getItemsRepetition = () => {
-    console.log('getItemsRepetition')
+  const getMoreItemsRepetition = () => {
+    if (!firebaseData || isLoading || !lastVisible) return
 
     setIsLoading(true)
-    return getItems({
+    getItems({
       uid: firebaseData?.uid,
       filter: {
         status: filterCardsModal.status,
@@ -185,7 +145,7 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
         },
       },
       limitCount: 10,
-      page: page.current,
+      page: page.current + 1,
       lastVisible,
     })
       .then((res) => {
@@ -199,6 +159,35 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
       .finally(() => {
         setIsLoading(false)
         page.current = page.current + 1
+      })
+  }
+
+  // получение карточек для повторения первый раз
+  const getItemsRepetition = () => {
+    setAllItems([])
+    setLastVisible(null)
+
+    setIsLoading(true)
+    getItems({
+      uid: firebaseData?.uid,
+      filter: {
+        status: filterCardsModal.status,
+        filter: {
+          languages: filterCardsModal?.languages,
+        },
+      },
+      limitCount: 10,
+      page: 1,
+      lastVisible,
+    })
+      .then((res) => {
+        if (res?.data?.items) {
+          setLastVisible(res.data.lastVisible)
+          setAllItems(res.data?.items)
+        }
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 
@@ -226,77 +215,22 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
       })
   }
 
-  useEffect(() => {
-    if (!allItems.length) {
-      setIsLoading(true)
-      getItemsHandler(1)
-        .then((res) => {
-          if (res?.data?.items) {
-            setAllItems(res?.data.items)
-            setLastVisible(res.data.lastVisible)
-          }
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    }
-  }, [allItems])
-
-  // Обновляем значение дебаунса при изменении search
-  useEffect(() => {
-    debouncedSearchHandler(search)
-  }, [search, debouncedSearchHandler])
-
-  // поиск
-  useEffect(() => {
-    setIsLoading(true)
-    getItemsHandler(1)
-      .then((res) => {
-        if (res?.data?.items) {
-          setAllItems(res?.data.items)
-          setLastVisible(res.data.lastVisible)
-        }
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [debouncedSearch])
-
-  const value = useMemo(() => {
-    return {
-      isFilterActive,
-      allItems,
-      counts,
-      isLoading,
-      page,
-      loadMoreItems,
-      setLastVisible,
-      setAllItems,
-      setIsLoading,
-      updateItemHandler,
-      addItemHandler,
-      deleteItemHandler,
-      getItemsRepetition,
-    }
-  }, [
-    isFilterActive,
+  return {
+    debouncedSearch,
     allItems,
-    isLoading,
-    counts,
     page,
-    loadMoreItems,
-    setLastVisible,
-    setAllItems,
-    setIsLoading,
-    updateItemHandler,
-    addItemHandler,
+    counts,
+    isLoading,
+    setDebouncedSearch,
+    getItemsHandler,
     deleteItemHandler,
+    addItemHandler,
+    updateItemHandler,
+    getMoreItemsRepetition,
+    loadMoreItems,
+    setIsLoading,
+    setAllItems,
+    setLastVisible,
     getItemsRepetition,
-  ])
-
-  return <CardContext.Provider value={value}>{children}</CardContext.Provider>
-}
-
-export const useCards = () => {
-  return useContext(CardContext)
+  }
 }

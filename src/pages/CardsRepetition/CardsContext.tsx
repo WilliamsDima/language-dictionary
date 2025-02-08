@@ -24,6 +24,7 @@ import {
 } from 'react-native-gesture-handler'
 import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
+import { useAppSelector } from '@/shared/hooks/useStore'
 import { useCards } from '@/shared/hooks/useCards'
 
 export type CardSlideType = {
@@ -38,6 +39,7 @@ type IContext = {
   scrollX: Animated.Value
   isLoading: boolean
   currentSlideData?: CardSlideType
+  count: number
   swipeSlide: (
     event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>
   ) => void
@@ -57,9 +59,24 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const flatList = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
 
-  const { getItemsRepetition, page, allItems, isLoading } = useCards()
+  const { filterCardsModal } = useAppSelector((store) => store.items)
+
+  const {
+    getMoreItemsRepetition,
+    page,
+    allItems,
+    isLoading,
+    counts,
+    setLastVisible,
+    setAllItems,
+    getItemsRepetition,
+  } = useCards()
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
+
+  const count = useMemo(() => {
+    return counts[filterCardsModal.status]
+  }, [counts, filterCardsModal])
 
   const data = useMemo(() => {
     return (
@@ -131,13 +148,16 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
   useEffect(() => {
     page.current = 1
+    setAllItems([])
+    setLastVisible(null)
+    getItemsRepetition()
   }, [])
 
   useEffect(() => {
-    if ((currentSlide + 1) % 10 === 0 && !isLoading) {
-      getItemsRepetition()
+    if ((currentSlide + 1) % 9 === 0) {
+      getMoreItemsRepetition()
     }
-  }, [currentSlide, isLoading])
+  }, [currentSlide])
 
   const value = useMemo(() => {
     return {
@@ -147,6 +167,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       scrollX,
       currentSlideData,
       isLoading,
+      count,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
@@ -159,6 +180,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     scrollX,
     currentSlideData,
     isLoading,
+    count,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,

@@ -4,7 +4,6 @@ import { screenOptions, stackOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import ProfileScreen from '@/pages/ProfileScreen/ProfileScreen'
 import CardsRepetition from '@/pages/CardsRepetition/CardsRepetition'
-import { CardProvider } from '@/shared/hooks/useCards'
 
 const ProfileStack = createStackNavigator()
 
@@ -25,13 +24,8 @@ const ProfileTabRoutes = () => {
       <ProfileStack.Screen
         options={stackOptions}
         name={RoutesNames.cardsRepetition}
-      >
-        {(props) => (
-          <CardProvider {...props}>
-            <CardsRepetition />
-          </CardProvider>
-        )}
-      </ProfileStack.Screen>
+        component={CardsRepetition}
+      />
     </ProfileStack.Navigator>
   )
 }

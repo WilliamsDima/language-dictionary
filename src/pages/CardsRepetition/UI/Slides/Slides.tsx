@@ -26,6 +26,7 @@ const Slides: FC<Props> = ({}) => {
     scrollX,
     currentSlideData,
     currentSlide,
+    count,
     onEnd,
     nextSlide,
     updateCurrentSlideIndex,
@@ -82,7 +83,7 @@ const Slides: FC<Props> = ({}) => {
         {!!data.length && (
           <View style={styles.header}>
             <Text style={styles.count}>
-              {currentSlide + 1}/{data.length}
+              {currentSlide + 1}/{count}
             </Text>
           </View>
         )}

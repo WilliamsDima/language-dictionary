@@ -11,7 +11,7 @@ import { languagesOptions } from '@/shared/json/languages'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
 import { SelectOption } from '@/shared/UI/types'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
-import { useCards } from '@/shared/hooks/useCards'
+import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { COLORS } from '@/assets/styles/colors'
 
 interface Props {}
@@ -41,7 +41,7 @@ const MainFilterModal: FC<Props> = () => {
   const [languages, setLanguages] = useState<SelectOption[]>([])
 
   const { page, isLoading, setAllItems, setLastVisible, setIsLoading } =
-    useCards()
+    useCardsContext()
 
   const [getItems] = useLazyGetItemsQuery()
 
