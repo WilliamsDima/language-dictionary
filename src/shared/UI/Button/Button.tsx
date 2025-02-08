@@ -89,6 +89,27 @@ const Button: FC<Props> = (props) => {
       disabled={disabled}
       {...rest}
     >
+      <LinearGradient
+        colors={[
+          'transparent',
+          'rgba(0, 0, 0, 0.05)',
+          'rgba(0, 0, 0, 0.1)',
+          'rgba(0, 0, 0, 0.2)',
+          'rgba(0, 0, 0, 0.3)',
+        ]}
+        locations={[0, 0.3, 0.6, 0.8, 1]} // Плавный градиент
+        style={[
+          styles.innerShadow,
+          {
+            borderBottomLeftRadius:
+              stylesBtn?.borderBottomLeftRadius ?? stylesBtn?.borderRadius ?? 0,
+            borderBottomRightRadius:
+              stylesBtn?.borderBottomRightRadius ??
+              stylesBtn?.borderRadius ??
+              0,
+          },
+        ]}
+      />
       {isText ? <Text style={stylesText}>{children}</Text> : children}
     </Pressable>
   ) : (

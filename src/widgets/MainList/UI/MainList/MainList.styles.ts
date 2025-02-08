@@ -1,5 +1,5 @@
 import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
+import { height, scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
@@ -48,5 +48,16 @@ export const styles = StyleSheet.create({
   anim: {
     width: scaleWidth(200),
     height: scaleWidth(200),
+  },
+  scrollToTopBtn: {
+    position: 'absolute',
+    zIndex: 100,
+    top: height / 1.67,
+    right: 0,
+    flex: 1,
+    height: 45,
+    width: 45,
+    borderRadius: 10,
+    backgroundColor: COLORS.primery,
   },
 })
