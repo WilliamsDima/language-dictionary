@@ -16,8 +16,8 @@ export const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 15, // Высота внутренней тени
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
+    // borderBottomLeftRadius: 16,
+    // borderBottomRightRadius: 16,
   },
   btnText: {
     color: COLORS.white,

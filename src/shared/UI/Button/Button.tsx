@@ -7,6 +7,7 @@ import {
   TouchableOpacityProps,
   Pressable,
   StyleProp,
+  StyleSheet,
 } from 'react-native'
 import { styles } from './Button.styles'
 import Text from '../Text/Text'
@@ -60,14 +61,14 @@ const Button: FC<Props> = (props) => {
     return disabled ? styles.disabled : {}
   }, [disabled])
 
-  const stylesBtn = useMemo(() => {
-    return [
+  const stylesBtn: StyleProp<ViewStyle> = useMemo(() => {
+    return StyleSheet.flatten([
       !isPreseble && styles.button,
       !isPreseble && stylesType?.btn,
       classes?.btn,
       stylesDisabled,
       style,
-    ]
+    ])
   }, [stylesDisabled, styles, isPreseble, classes?.btn, stylesType, style])
 
   const stylesText = useMemo(() => {
@@ -106,7 +107,17 @@ const Button: FC<Props> = (props) => {
           'rgba(0, 0, 0, 0.3)',
         ]}
         locations={[0, 0.3, 0.6, 0.8, 1]} // Плавный градиент
-        style={styles.innerShadow}
+        style={[
+          styles.innerShadow,
+          {
+            borderBottomLeftRadius:
+              stylesBtn?.borderBottomLeftRadius ?? stylesBtn?.borderRadius ?? 0,
+            borderBottomRightRadius:
+              stylesBtn?.borderBottomRightRadius ??
+              stylesBtn?.borderRadius ??
+              0,
+          },
+        ]}
       />
       {isText ? <Text style={stylesText}>{children}</Text> : children}
     </TouchableOpacity>
