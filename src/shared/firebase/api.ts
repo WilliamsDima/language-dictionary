@@ -172,7 +172,10 @@ export const getItems = async ({
       }
     }
   } catch (error) {
-    console.log('getUserItems error', error)
+    console.log('Error getUserItems', error)
+    return {
+      error: `Error getUserItems: ${JSON.stringify(error)}`,
+    }
   }
 }
 
@@ -194,7 +197,10 @@ export const addItemAPI = async (uid: string, newItem: IItem) => {
 
     return undefined
   } catch (error) {
-    console.log('Error updating user profile or adding items:', error)
+    console.log('Error adding items:', error)
+    return {
+      error: `Error adding items: ${JSON.stringify(error)}`,
+    }
   }
 }
 

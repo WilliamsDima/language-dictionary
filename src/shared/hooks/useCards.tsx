@@ -59,74 +59,87 @@ export const useCards = () => {
   }
 
   // обновление карточки
-  const updateItemHandler = (itemEdit: IItem) => {
-    if (firebaseData && itemEdit) {
-      return updateItem({
-        uid: firebaseData.uid,
-        idDoc: itemEdit?.idDoc!,
-        updatedData: itemEdit,
-      }).then((res) => {
-        console.log('updateItemHandler res', res.data)
+  const updateItemHandler = async (itemEdit: IItem) => {
+    try {
+      if (firebaseData && itemEdit) {
+        const res = await updateItem({
+          uid: firebaseData.uid,
+          idDoc: itemEdit?.idDoc!,
+          updatedData: itemEdit,
+        }).unwrap()
 
-        if (res.data) {
-          updateItemAC(res.data)
+        console.log('updateItemHandler res', res)
+
+        if (res) {
+          updateItemAC(res)
           setAllItems((prev) => {
             return prev.map((it) => {
-              if (it.id === res.data.id) {
-                return res.data
+              if (it.id === res.id) {
+                return res
               }
               return it
             })
           })
 
-          setTooltip({ children: <ItemTooltip type="UPDATE" />, time: 3000 })
+          setTooltip({
+            children: <ItemTooltip type="UPDATE" />,
+            time: 3000,
+          })
         }
-      })
+      }
+    } catch (error) {
+      setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
     }
   }
 
   // добавление карточки
-  const addItemHandler = (item: IItem) => {
+  const addItemHandler = async (item: IItem) => {
     if (firebaseData && item) {
-      return addItemAPI({
-        item,
-        uid: firebaseData?.uid,
-      }).then((res) => {
-        console.log('addItemHandler res', res.data)
+      try {
+        const res = await addItemAPI({ item, uid: firebaseData.uid }).unwrap()
 
-        if (res.data) {
-          setAllItems((prev) => {
-            return [res.data, ...prev]
-          })
-          addItemAC(res.data)
-          setTimeout(() => {
-            Vibration.vibrate(300)
-          }, 300)
+        console.log('addItemHandler res', res)
 
-          setTooltip({ children: <ItemTooltip type="ADD" />, time: 3000 })
-        }
-      })
+        setAllItems((prev) => [res, ...prev])
+        addItemAC(res)
+
+        setTimeout(() => Vibration.vibrate(300), 300)
+        setTooltip({ children: <ItemTooltip type="ADD" />, time: 3000 })
+      } catch (error) {
+        setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
+      }
     }
   }
 
   // удаление карточки
-  const deleteItemHandler = (idDoc: string) => {
+  const deleteItemHandler = async (idDoc: string) => {
     console.log('deleteItemHandler idDoc', idDoc)
-    if (firebaseData && idDoc) {
-      return deleteItem({
-        idDoc,
-        uid: firebaseData.uid,
-      }).then((res) => {
+
+    try {
+      if (firebaseData && idDoc) {
+        const res = await deleteItem({
+          idDoc,
+          uid: firebaseData.uid,
+        }).unwrap()
+
         console.log('deleteItemHandler res', res)
 
-        if (res.data?.success) {
+        if (res?.success) {
           setAllItems((prev) => {
             return prev.filter((it) => it.idDoc !== idDoc)
           })
           deleteItemAC(idDoc)
 
-          setTooltip({ children: <ItemTooltip type="DELETE" />, time: 3000 })
+          setTooltip({
+            children: <ItemTooltip type="DELETE" />,
+            time: 3000,
+          })
         }
+      }
+    } catch (error) {
+      setTooltip({
+        children: <ItemTooltip type="ERROR" />,
+        time: 3000,
       })
     }
   }

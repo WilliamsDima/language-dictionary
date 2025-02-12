@@ -48,6 +48,8 @@ export const cardsServices = baseApi.injectEndpoints({
           const items = await getItems(query)
           return {
             data: { items: items?.items, lastVisible: items?.lastVisible },
+            error: items?.error,
+            meta: {},
           }
         } catch (error: any) {
           console.log('Error getItems', error?.message)
@@ -59,13 +61,8 @@ export const cardsServices = baseApi.injectEndpoints({
     // добавление элемента
     addItem: build.mutation<IItem, AddItemParams>({
       async queryFn({ item, uid }) {
-        try {
-          const items = await addItemAPI(uid, item)
-          return { data: items }
-        } catch (error: any) {
-          console.log('Error addItem', error?.message)
-          return { error: error.message }
-        }
+        const items = await addItemAPI(uid, item)
+        return { data: items, error: items?.error, meta: {} }
       },
       invalidatesTags: ['items'],
     }),

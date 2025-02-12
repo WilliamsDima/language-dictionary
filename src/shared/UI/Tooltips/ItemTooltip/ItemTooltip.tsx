@@ -7,25 +7,29 @@ import DeleteIcon from '@/assets/icons/UI/trash-red-64.svg'
 import ErrorIcon from '@/assets/icons/UI/error-circle-red-64.svg'
 
 type Props = {
-  type: 'UPDATE' | 'DELETE' | 'ADD'
+  type: 'UPDATE' | 'DELETE' | 'ADD' | 'ERROR'
+  text?: string
 }
 
-const ItemTooltip: FC<Props> = ({ type }) => {
-  const text = useMemo(() => {
+const ItemTooltip: FC<Props> = ({ type, text }) => {
+  const textHadler = useMemo(() => {
     switch (type) {
       case 'ADD':
-        return 'Карточка добавлена!'
+        return text || 'Карточка добавлена!'
 
       case 'UPDATE':
-        return 'Карточка обновлена!'
+        return text || 'Карточка обновлена!'
 
       case 'DELETE':
-        return 'Карточка удалена!'
+        return text || 'Карточка удалена!'
+
+      case 'ERROR':
+        return text || 'Что-то пошло не так...'
 
       default:
         return 'error text'
     }
-  }, [type])
+  }, [type, text])
 
   const icon = useMemo(() => {
     switch (type) {
@@ -38,6 +42,9 @@ const ItemTooltip: FC<Props> = ({ type }) => {
       case 'DELETE':
         return <DeleteIcon width={30} height={30} />
 
+      case 'ERROR':
+        return <ErrorIcon width={30} height={30} />
+
       default:
         return <ErrorIcon width={30} height={30} />
     }
@@ -46,7 +53,7 @@ const ItemTooltip: FC<Props> = ({ type }) => {
   return (
     <View style={styles.container}>
       <View style={styles.tooltip}>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.text}>{textHadler}</Text>
         {icon}
       </View>
     </View>
