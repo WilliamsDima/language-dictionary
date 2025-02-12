@@ -114,15 +114,15 @@ export const getItems = async ({
       // Выполняем запрос к базе данных с фильтрами, если они есть
       let queryRef = filters.length > 0 ? query(itemsRef, ...filters) : itemsRef
 
-      // if (filter?.filter?.sortDate) {
-      //   queryRef = query(queryRef, orderBy('date')) // Убедимся, что есть сортировка
-      // }
-
-      if (page && page > 1 && lastVisible) {
+      // применяем пагинацию только если не используется поиск
+      if (page && page > 1 && lastVisible && !filter?.search) {
         queryRef = query(queryRef, startAfter(lastVisible)) // Загружаем после lastVisible
       }
 
-      if (limitCount) queryRef = query(queryRef, limit(limitCount))
+      // применяем лимит только если не используется поиск
+      if (limitCount && !filter?.search) {
+        queryRef = query(queryRef, limit(limitCount))
+      }
 
       const querySnapshot = await getDocs(queryRef)
 
@@ -130,30 +130,35 @@ export const getItems = async ({
       const newLastVisibleDoc =
         querySnapshot.docs[querySnapshot.docs.length - 1]
 
-      querySnapshot.forEach((doc) => {
+      querySnapshot?.docs?.forEach((doc) => {
         const itemData = doc.data() as IItem
         const { items: itemArray } = itemData
 
-        // Если поиск включен, фильтруем элементы по полям word и translate
+        // Убедимся, что description есть, иначе присвоим пустую строку
+        const description = itemData.description?.toLowerCase() || ''
+
         if (filter?.search) {
           const searchTerm = filter.search.toLowerCase()
-          let filteredItems = itemArray.filter(
-            (subItem) =>
-              subItem.word.toLowerCase().includes(searchTerm) ||
-              subItem.translate.toLowerCase().includes(searchTerm) ||
-              itemData.description.toLowerCase().includes(searchTerm)
-          )
 
-          // Если есть совпадения, добавляем элемент с отфильтрованными данными
+          let filteredItems = itemArray.filter((subItem) => {
+            const word = subItem.word?.toLowerCase() || ''
+            const translate = subItem.translate?.toLowerCase() || ''
+
+            return (
+              word.includes(searchTerm) ||
+              translate.includes(searchTerm) ||
+              description.includes(searchTerm)
+            )
+          })
+
           if (filteredItems.length > 0) {
             items.push({
               idDoc: doc.id,
               ...itemData,
-              items: filteredItems, // Обновляем items только совпадающими элементами
+              items: filteredItems, // Оставляем только найденные элементы
             })
           }
         } else {
-          // Если поиска нет, добавляем элемент как есть
           items.push({
             idDoc: doc.id,
             ...itemData,
