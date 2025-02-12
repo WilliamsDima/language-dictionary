@@ -11,7 +11,7 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import VKLogin from 'react-native-vkontakte-login'
 import { useActions } from './useActions'
 import { useAppDispatch, useAppSelector } from './useStore'
-import { IFirebaseData } from '../store/slice/userSlice'
+import { IFirebaseData, IUserActivity } from '../store/slice/userSlice'
 import { deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
 import {
   db,
@@ -56,6 +56,31 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
       const isUser = await getUserData(user.uid)
 
+      let activity: IUserActivity | undefined = isUser?.activity
+
+      // активностей ещё не было
+      if (!activity) {
+        const year = new Date().getFullYear()
+        const month = new Date().getMonth()
+
+        activity = {
+          year: {
+            [year]: {
+              [month]: {
+                activeDays: [],
+                addedCards: 0,
+                openApp: 0,
+                repeatCard: 0,
+                startTraningCards: 0,
+                studiedCard: 0,
+                totalTimeSpent: 0,
+                viewedAds: 0,
+              },
+            },
+          },
+        }
+      }
+
       const userData: IFirebaseData = {
         name: user.displayName || '',
         uid: isUser?.uid ? isUser.uid : user.uid,
@@ -68,6 +93,7 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
         languages: isUser?.languages || [],
         native_language: isUser?.native_language || null,
         image: user.photoURL || '',
+        activity,
       }
 
       await setDoc(doc(db, 'users', user.uid), userData)

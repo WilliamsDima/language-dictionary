@@ -5,6 +5,7 @@ import { RoutesNames } from './RoutesNames'
 import TabBar from '@/shared/UI/TabBar/TabBar'
 import SettingsTabRoutes from './TabStacks/SettingsTabRoutes'
 import ProfileTabRoutes from './TabStacks/ProfileTabRoutes'
+import { useTimeTracker } from '@/shared/hooks/useTimeTracker'
 
 export type TabParamsList = {
   [RoutesNames.mainStack]: undefined
@@ -21,6 +22,8 @@ const Tab = createBottomTabNavigator<TabParamsList>()
  */
 
 const TabNavigation = () => {
+  useTimeTracker()
+
   return (
     <Tab.Navigator
       tabBar={(props) => <TabBar {...props} />}

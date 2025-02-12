@@ -258,15 +258,16 @@ export const deleteProfile = (user: any) => {
   }
 }
 
-export const updateUserProfile = async (uid: string, data: IFirebaseData) => {
+export const updateUserProfile = async (
+  uid: string,
+  data: Partial<IFirebaseData>
+) => {
   // console.log('updateUserProfile')
 
   const user = uid ? await getUserData(uid) : ''
 
   if (user) {
-    return updateDoc(doc(db, 'users', uid), {
-      ...data,
-    })
+    return updateDoc(doc(db, 'users', uid), data)
   }
 }
 
