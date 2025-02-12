@@ -88,6 +88,7 @@ export const getItems = async ({
   lastVisible,
 }: GetItemsParams) => {
   // console.log('getItems filter', filter)
+
   try {
     if (uid) {
       const items: IItem[] = []

@@ -221,6 +221,7 @@ export const useCards = () => {
     page,
     counts,
     isLoading,
+    firebaseData,
     setDebouncedSearch,
     getItemsHandler,
     deleteItemHandler,

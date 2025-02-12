@@ -13,6 +13,11 @@ export const userServices = baseApi.injectEndpoints({
     getUserProfile: build.query<IFirebaseData, string | undefined>({
       async queryFn(uid) {
         try {
+          if (!uid) {
+            console.warn('getUserProfile: uid is undefined')
+            return { data: null }
+          }
+
           const user = uid ? await getUserData(uid) : ''
 
           //console.log('getUserProfile user', user)

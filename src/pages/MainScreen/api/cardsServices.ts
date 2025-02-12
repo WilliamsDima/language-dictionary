@@ -40,7 +40,10 @@ export const cardsServices = baseApi.injectEndpoints({
     getItems: build.query<GetItemsRequest, GetItemsParams>({
       async queryFn(query) {
         try {
-          if (!query?.uid) return
+          if (!query?.uid) {
+            console.warn('getItems: uid is undefined')
+            return { data: { items: [], lastVisible: undefined } }
+          }
 
           const items = await getItems(query)
           return {
