@@ -1,12 +1,15 @@
 import { useCallback } from 'react'
-import { updateUserProfile } from '../firebase/api'
+import { getUserData, updateUserProfile } from '../firebase/api'
 import { IActivityMonth } from '../store/slice/userSlice'
 import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
-import { produce } from 'immer'
 
 type Props = {
   totalTimeSpent?: number
+  openApp?: boolean
+  activeDay?: string
+  addedCard?: boolean
+  viewedAds?: boolean
 }
 
 export const useUserActivity = () => {
@@ -14,13 +17,18 @@ export const useUserActivity = () => {
   const { firebaseData } = useAppSelector((store) => store.user)
 
   const updateActivity = useCallback(
-    (data: Props) => {
+    async (data: Props) => {
       console.log('updateActivity data', data)
+      console.log('updateActivity firebaseData', firebaseData)
 
-      const { totalTimeSpent } = data
-      if (!firebaseData?.uid || !firebaseData?.activity) return
+      const { totalTimeSpent, openApp, activeDay, addedCard, viewedAds } = data
 
-      console.log(11111)
+      const user = await getUserData(firebaseData?.uid)
+      const activityData = user?.activity
+
+      console.log('updateActivity activityData', activityData)
+
+      if (!firebaseData?.uid || !activityData) return
 
       const year = new Date().getFullYear()
       const month = new Date().getMonth()
@@ -36,33 +44,59 @@ export const useUserActivity = () => {
         viewedAds: 0,
       }
 
-      // Используем immer для изменения состояния
-      const activity = produce(firebaseData.activity, (draft) => {
-        // года ещё нету
-        if (!draft.year[year]) {
-          draft.year[year] = {}
+      // Создаем копию, так как мутировать `activityData` напрямую нельзя
+      const activity = JSON.parse(JSON.stringify(activityData))
+
+      if (!activity.year) {
+        activity.year = {}
+      }
+
+      // года ещё нет
+      if (!activity.year[year]) {
+        activity.year[year] = {}
+      }
+
+      // месяца ещё нет
+      if (!activity.year[year][month]) {
+        activity.year[year][month] = defaultMonth
+      }
+
+      // Обновляем значения времени
+      if (totalTimeSpent) {
+        activity.year[year][month].totalTimeSpent += totalTimeSpent
+      }
+
+      // открыл приложение
+      if (openApp) {
+        activity.year[year][month].openApp += 1
+      }
+
+      // активные дни
+      if (activeDay) {
+        if (!activity.year[year][month].activeDays.includes(activeDay)) {
+          activity.year[year][month].activeDays.push(activeDay)
         }
+      }
 
-        // месяца ещё нету
-        if (!draft.year[year][month]) {
-          draft.year[year][month] = defaultMonth
-        }
+      // добавление карточек
+      if (addedCard) {
+        activity.year[year][month].addedCards += 1
+      }
 
-        // обновляем время
-        if (totalTimeSpent) {
-          draft.year[year][month].totalTimeSpent += totalTimeSpent
-        }
-      })
+      // посмотрел рекламу
+      if (viewedAds) {
+        activity.year[year][month].viewedAds += 1
+      }
 
-      console.log('activity', activity)
+      console.log('month', activity.year[year][month])
 
-      updateUserProfile(firebaseData.uid, { activity })
+      await updateUserProfile(firebaseData.uid, { activity })
       setFirebaseData({
         ...firebaseData,
         activity,
       })
     },
-    [firebaseData]
+    [firebaseData, setFirebaseData]
   )
 
   return {

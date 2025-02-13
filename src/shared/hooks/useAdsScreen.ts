@@ -1,5 +1,7 @@
 import { AdRequestConfiguration, InterstitialAdLoader } from 'yandex-mobile-ads'
 import { useEffect } from 'react'
+import { useUserActivity } from './useUserActivity'
+import { useAppSelector } from './useStore'
 
 let adRequestConfiguration = new AdRequestConfiguration({
   // adUnitId: 'demo-interstitial-yandex',
@@ -8,6 +10,8 @@ let adRequestConfiguration = new AdRequestConfiguration({
 
 // реклама при открытии
 export const useAdsScreen = () => {
+  const { updateActivity } = useUserActivity()
+
   useEffect(() => {
     ;(async () => {
       let loader = await InterstitialAdLoader.create()
@@ -25,19 +29,26 @@ export const useAdsScreen = () => {
 
       if (ad) {
         ad.onAdShown = () => {
-          console.log('Did show')
+          updateActivity({ viewedAds: true })
+          console.log('useAdsScreen Did show')
         }
         ad.onAdFailedToShow = (error) => {
-          console.log(`Did fail to show with error: ${JSON.stringify(error)}`)
+          console.log(
+            `useAdsScreen Did fail to show with error: ${JSON.stringify(error)}`
+          )
         }
         ad.onAdClicked = () => {
-          console.log('Did click')
+          console.log('useAdsScreen Did click')
         }
         ad.onAdDismissed = () => {
-          console.log('Did dismiss')
+          console.log('useAdsScreen Did dismiss')
         }
         ad.onAdImpression = (impressionData) => {
-          console.log(`Did track impression: ${JSON.stringify(impressionData)}`)
+          console.log(
+            `useAdsScreen Did track impression: ${JSON.stringify(
+              impressionData
+            )}`
+          )
         }
         ad.show()
       }

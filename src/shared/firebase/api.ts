@@ -30,8 +30,9 @@ export const authFirebase = getAuth(app)
 authFirebase.languageCode = 'ru'
 
 export const getUserData = async (
-  id: string
+  id?: string
 ): Promise<DocumentData | undefined> => {
+  if (!id) return
   //console.log('getUserData id', id)
 
   // console.log('getUserData')
@@ -267,6 +268,7 @@ export const updateUserProfile = async (
   const user = uid ? await getUserData(uid) : ''
 
   if (user) {
+    console.log('updateUserProfile')
     return updateDoc(doc(db, 'users', uid), data)
   }
 }

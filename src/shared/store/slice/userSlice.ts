@@ -15,12 +15,12 @@ export type ShowVariantList = {
 }
 
 export interface IActivityMonth {
-  addedCards: number // добавлено карточек за месяц
+  addedCards: number // добавлено карточек за месяц ✅
   viewedAds: number // количество просмотренной рекламмы
-  openApp: number // количество заходов в приложение
+  openApp: number // количество заходов в приложение ✅
   startTraningCards: number // количество раз сколько было заходов на повторение карточек
-  activeDays: string[] // количество активных дней в месяце
-  totalTimeSpent: number // Время в секундах за месяц проведено в приложении
+  activeDays: string[] // количество активных дней в месяце ✅
+  totalTimeSpent: number // Время в секундах за месяц проведено в приложении ✅
   studiedCard: number // количество изученных карточек за месяц
   repeatCard: number // количество повторений карточек за месяц
 }

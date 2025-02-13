@@ -6,6 +6,7 @@ import TabBar from '@/shared/UI/TabBar/TabBar'
 import SettingsTabRoutes from './TabStacks/SettingsTabRoutes'
 import ProfileTabRoutes from './TabStacks/ProfileTabRoutes'
 import { useTimeTracker } from '@/shared/hooks/useTimeTracker'
+import { useAdsOpenApp } from '@/shared/hooks/useAdsOpenApp'
 
 export type TabParamsList = {
   [RoutesNames.mainStack]: undefined

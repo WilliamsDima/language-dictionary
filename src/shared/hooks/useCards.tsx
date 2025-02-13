@@ -5,11 +5,12 @@ import {
   useUpdateItemMutation,
 } from '@/pages/MainScreen/api/cardsServices'
 import { useAppSelector } from './useStore'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { IItem } from '@/entities/Item/model/item'
 import { useActions } from './useActions'
 import ItemTooltip from '../UI/Tooltips/ItemTooltip/ItemTooltip'
 import { Vibration } from 'react-native'
+import { useUserActivity } from './useUserActivity'
 
 export const useCards = () => {
   const { addItemAC, deleteItemAC, updateItemAC, setTooltip } = useActions()
@@ -27,6 +28,8 @@ export const useCards = () => {
   const [debouncedSearch, setDebouncedSearch] = useState(search)
 
   //console.log(`allItems ${name}: `, allItems.length)
+
+  const { updateActivity } = useUserActivity()
 
   const [getItems] = useLazyGetItemsQuery()
   const [addItemAPI] = useAddItemMutation()
@@ -100,11 +103,16 @@ export const useCards = () => {
 
         console.log('addItemHandler res', res)
 
-        setAllItems((prev) => [res, ...prev])
-        addItemAC(res)
-
-        setTimeout(() => Vibration.vibrate(300), 300)
-        setTooltip({ children: <ItemTooltip type="ADD" />, time: 3000 })
+        if (res) {
+          updateActivity({ addedCard: true })
+          setAllItems((prev) => [res, ...prev])
+          addItemAC(res)
+          setTimeout(() => Vibration.vibrate(300), 300)
+          setTooltip({
+            children: <ItemTooltip type="ADD" />,
+            time: 3000,
+          })
+        }
       } catch (error) {
         setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
       }
