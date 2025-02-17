@@ -59,7 +59,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const flatList = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
 
-  const { filterCardsModal } = useAppSelector((store) => store.items)
+  const { filterCardsModal, items } = useAppSelector((store) => store.items)
 
   const {
     getMoreItemsRepetition,
@@ -73,21 +73,25 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   } = useCards()
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
-
-  const count = useMemo(() => {
-    return counts[filterCardsModal.status]
-  }, [counts, filterCardsModal])
+  const [count, setCount] = useState<number>(0)
 
   const data = useMemo(() => {
     return (
-      allItems.map((it, index) => {
-        return {
-          index,
-          item: it,
-        }
-      }) || []
+      items
+        .filter((it) =>
+          filterCardsModal.languages.length
+            ? filterCardsModal.languages.includes(it.language.id)
+            : true && filterCardsModal.status === it.status
+        )
+        .map((it, index) => {
+          return {
+            index,
+            item: it,
+          }
+        })
+        .sort(() => Math.random() - 0.5) || []
     )
-  }, [allItems])
+  }, [items, filterCardsModal])
 
   const currentSlideData = useMemo(() => {
     return data.find((it, i) => i === currentSlide)
@@ -153,11 +157,18 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     getItemsRepetition()
   }, [])
 
+  // пагинация убрана
+  // useEffect(() => {
+  //   if ((currentSlide + 1) % 9 === 0) {
+  //     getMoreItemsRepetition()
+  //   }
+  // }, [currentSlide])
+
   useEffect(() => {
-    if ((currentSlide + 1) % 9 === 0) {
-      getMoreItemsRepetition()
+    if (!count) {
+      setCount(counts[filterCardsModal.status])
     }
-  }, [currentSlide])
+  }, [counts, filterCardsModal, count])
 
   const value = useMemo(() => {
     return {
