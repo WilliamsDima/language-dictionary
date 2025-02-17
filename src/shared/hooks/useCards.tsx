@@ -75,6 +75,7 @@ export const useCards = () => {
 
         if (res) {
           updateItemAC(res)
+
           setAllItems((prev) => {
             return prev.map((it) => {
               if (it.id === res.id) {

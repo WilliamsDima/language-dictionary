@@ -53,17 +53,17 @@ export const useAdsOpenApp = () => {
           )
         }
 
-        // const handleAppStateChange = (nextAppState: string) => {
-        //   if (nextAppState === 'active') {
-        //     ad.show()
-        //     subscription.remove()
-        //   }
-        // }
+        const handleAppStateChange = (nextAppState: string) => {
+          if (nextAppState === 'active') {
+            ad.show()
+            subscription.remove()
+          }
+        }
 
-        // const subscription = AppState.addEventListener(
-        //   'change',
-        //   handleAppStateChange
-        // )
+        const subscription = AppState.addEventListener(
+          'change',
+          handleAppStateChange
+        )
       }
     })()
   }, [])

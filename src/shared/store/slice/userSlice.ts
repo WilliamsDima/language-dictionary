@@ -16,13 +16,13 @@ export type ShowVariantList = {
 
 export interface IActivityMonth {
   addedCards: number // добавлено карточек за месяц ✅
-  viewedAds: number // количество просмотренной рекламмы
+  viewedAds: number // количество просмотренной рекламмы ✅
   openApp: number // количество заходов в приложение ✅
-  startTraningCards: number // количество раз сколько было заходов на повторение карточек
+  startTraningCards: number // количество раз сколько было заходов на повторение карточек ✅
   activeDays: string[] // количество активных дней в месяце ✅
   totalTimeSpent: number // Время в секундах за месяц проведено в приложении ✅
-  studiedCard: number // количество изученных карточек за месяц
-  repeatCard: number // количество повторений карточек за месяц
+  studiedCard: number // количество изученных карточек за месяц ✅
+  repeatCard: number // количество повторений карточек за месяц ✅
 }
 
 // api для запросов на получение примера использования слова, но работает только для английского https://www.wordsapi.com/

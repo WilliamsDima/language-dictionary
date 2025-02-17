@@ -13,6 +13,7 @@ import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
+import { useUserActivity } from '@/shared/hooks/useUserActivity'
 
 type Props = {
   item: IItem
@@ -30,6 +31,8 @@ const MainItem: FC<Props> = ({ item }) => {
 
   const { updateItemHandler } = useCardsContext()
 
+  const { updateActivity } = useUserActivity()
+
   const editItem = () => {
     setItemEdit(item)
     setShowAddModal(true)
@@ -40,8 +43,10 @@ const MainItem: FC<Props> = ({ item }) => {
       setIsLoading(true)
       if (item.status === 'READY') {
         await updateItemHandler({ ...item, status: 'STUDY' })
+        updateActivity({ repeatCard: true })
       } else {
         await updateItemHandler({ ...item, status: 'READY' })
+        updateActivity({ studiedCard: true })
       }
 
       setIsLoading(false)

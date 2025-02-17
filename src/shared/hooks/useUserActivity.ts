@@ -10,6 +10,9 @@ type Props = {
   activeDay?: string
   addedCard?: boolean
   viewedAds?: boolean
+  startTraningCards?: boolean
+  studiedCard?: boolean
+  repeatCard?: boolean
 }
 
 export const useUserActivity = () => {
@@ -18,15 +21,22 @@ export const useUserActivity = () => {
 
   const updateActivity = useCallback(
     async (data: Props) => {
-      console.log('updateActivity data', data)
-      console.log('updateActivity firebaseData', firebaseData)
+      // console.log('updateActivity data', data)
+      // console.log('updateActivity firebaseData', firebaseData)
 
-      const { totalTimeSpent, openApp, activeDay, addedCard, viewedAds } = data
+      const {
+        totalTimeSpent,
+        openApp,
+        activeDay,
+        addedCard,
+        viewedAds,
+        startTraningCards,
+        studiedCard,
+        repeatCard,
+      } = data
 
       const user = await getUserData(firebaseData?.uid)
       const activityData = user?.activity
-
-      console.log('updateActivity activityData', activityData)
 
       if (!firebaseData?.uid || !activityData) return
 
@@ -88,7 +98,22 @@ export const useUserActivity = () => {
         activity.year[year][month].viewedAds += 1
       }
 
-      console.log('month', activity.year[year][month])
+      // зашел на повторение карточкек
+      if (startTraningCards) {
+        activity.year[year][month].startTraningCards += 1
+      }
+
+      // количество раз изучил карточку
+      if (studiedCard) {
+        activity.year[year][month].studiedCard += 1
+      }
+
+      // количество раз повторил карточку
+      if (repeatCard) {
+        activity.year[year][month].repeatCard += 1
+      }
+
+      // console.log('month', activity.year[year][month])
 
       await updateUserProfile(firebaseData.uid, { activity })
       setFirebaseData({

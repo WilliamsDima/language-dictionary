@@ -15,6 +15,7 @@ import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import LottieView from 'lottie-react-native'
 import { useCards } from '@/shared/hooks/useCards'
+import { useUserActivity } from '@/shared/hooks/useUserActivity'
 
 type Props = {}
 
@@ -37,6 +38,7 @@ const Slides: FC<Props> = ({}) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const { updateItemHandler } = useCards()
+  const { updateActivity } = useUserActivity()
 
   const editItem = () => {
     if (currentSlideData?.item) {
@@ -55,6 +57,8 @@ const Slides: FC<Props> = ({}) => {
           status: 'STUDY',
         })
 
+        updateActivity({ repeatCard: true })
+
         nextSlide()
 
         setIsLoading(false)
@@ -65,6 +69,8 @@ const Slides: FC<Props> = ({}) => {
           ...currentSlideData.item,
           status: 'READY',
         })
+
+        updateActivity({ studiedCard: true })
 
         nextSlide()
 
