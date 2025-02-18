@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { styles } from './UpdateButton.styles'
 import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
-import CodePush from 'react-native-code-push'
+// import CodePush from 'react-native-code-push'
 
 const UpdateButton: FC = () => {
   const { setShowUpdateModal } = useActions()
@@ -15,13 +15,13 @@ const UpdateButton: FC = () => {
   }
 
   useEffect(() => {
-    CodePush.checkForUpdate().then((update) => {
-      if (update) {
-        setUpdateAvailable(true)
-      } else {
-        setUpdateAvailable(false)
-      }
-    })
+    // CodePush.checkForUpdate().then((update) => {
+    //   if (update) {
+    //     setUpdateAvailable(true)
+    //   } else {
+    //     setUpdateAvailable(false)
+    //   }
+    // })
   }, [])
 
   return updateAvailable ? (

@@ -56,6 +56,8 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
       const isUser = await getUserData(user.uid)
 
+      // console.log('onAuthStateChanged isUser', isUser)
+
       let activity: IUserActivity | undefined = isUser?.activity
 
       // активностей ещё не было
@@ -95,6 +97,8 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
         image: user.photoURL || '',
         activity,
       }
+
+      // console.log('onAuthStateChanged userData', userData)
 
       await setDoc(doc(db, 'users', user.uid), userData)
       setFirebaseData(userData as any)
