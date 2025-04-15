@@ -9,6 +9,7 @@ Word Cards - <a href=" https://play.google.com/store/apps/details?id=com.william
 ## Techstack
 
 [![node](https://img.shields.io/static/v1?label=node&message=20.15.1&color=026E00&style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+[![typescript](https://img.shields.io/static/v1?label=typescript&message=5.0.4&color=3178C6&style=for-the-badge&logo=typescript&logoColor=3178C6)](https://www.typescriptlang.org/)
 [![yarn](https://img.shields.io/static/v1?label=yarn&message=1.22.19&color=2C8EBB&style=for-the-badge&logo=yarn&logoColor=white)](https://classic.yarnpkg.com/en/)
 [![react](https://img.shields.io/static/v1?label=react&message=18.3.1&color=61DBFB&style=for-the-badge&logo=react&logoColor=white)](https://ru.reactjs.org/)
 [![react native](https://img.shields.io/static/v1?label=react-native&message=0.76.5&color=61DBFB&style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
