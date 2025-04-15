@@ -1,4 +1,4 @@
-Word Cards - <a href=" https://play.google.com/store/apps/details?id=com.williamsdev.wordcards">Google Play</a>
+Word Cards - <a href="https://play.google.com/store/apps/details?id=com.williamsdev.wordcards">Google Play</a>
 
 <ul>
 	<li><a href="https://t.me/DyWilliams">front - Dmitry Williams</a></li>
