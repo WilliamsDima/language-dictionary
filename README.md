@@ -1,79 +1,43 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+Word Cards - <a href=" https://play.google.com/store/apps/details?id=com.williamsdev.wordcards">Google Play</a>
 
-# Getting Started
+<ul>
+	<li><a href="https://t.me/DyWilliams">front - Dmitry Williams</a></li>
+</ul>
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+---
 
-## Step 1: Start the Metro Server
+## Techstack
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+[![node](https://img.shields.io/static/v1?label=node&message=20.15.1&color=026E00&style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+[![yarn](https://img.shields.io/static/v1?label=yarn&message=1.22.19&color=2C8EBB&style=for-the-badge&logo=yarn&logoColor=white)](https://classic.yarnpkg.com/en/)
+[![react](https://img.shields.io/static/v1?label=react&message=18.3.1&color=61DBFB&style=for-the-badge&logo=react&logoColor=white)](https://ru.reactjs.org/)
+[![react native](https://img.shields.io/static/v1?label=react-native&message=0.76.5&color=61DBFB&style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
+[![reduxtoolkit](https://img.shields.io/static/v1?label=redux%20toolkit&message=2.5.2&color=764ABD&style=for-the-badge&logo=redux&logoColor=764ABD)](https://redux-toolkit.js.org/)
 
-To start Metro, run the following command from the _root_ of your React Native project:
+---
 
-```bash
-# using npm
-npm start
+## Работа с архитектурой FSD
 
-# OR using Yarn
-yarn start
-```
+Подробнее можно почитать:
 
-## Step 2: Start your Application
+- [Feature-Sliced Design Methodology](https://feature-sliced.design/)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- `shared` - переиспользуемый код, не имеющий отношения к специфике приложения/бизнеса.(например, UIKit, libs, API).
+- `entities` - (сущности) — бизнес-сущности.(например, User, Product, Order).
+- `features` - (фичи) — взаимодействия с пользователем, действия, которые несут бизнес-ценность для пользователя.(например, SendComment, AddToCart, UsersSearch).
+- `widgets` - (виджеты) — композиционный слой для соединения сущностей и фич в самостоятельные блоки(например, IssuesList, UserProfile).
+- `pages` - (страницы) — композиционный слой для сборки полноценных страниц из сущностей, фич и виджетов.
+- `processes` - (процессы, устаревший слой) — сложные сценарии, покрывающие несколько страниц.(например, авторизация)
+- `app` - настройки, стили и провайдеры для всего приложения.
 
-### For Android
+Также, присутствуют такие директории:
 
-```bash
-# using npm
-npm run android
+- `assets` – тут расположены иконки, картинки, шрифты, глобальные стили.
+- `helpers` – тут расположены вспомогательные функции, костанты и утилиты.
+- `hooks` – кастомные хуки.
+- `store` – инициализация redux store.
+- `services` – инстанс api (axios, RTK Query, Firebase).
 
-# OR using Yarn
-yarn android
-```
+## Возможные ошибки и исправления
 
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---

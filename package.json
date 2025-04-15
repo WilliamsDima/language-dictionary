@@ -58,8 +58,7 @@
     "react-native-tts": "^4.1.1",
     "react-native-vkontakte-login": "^1.0.1",
     "react-redux": "^9.2.0",
-    "yandex-mobile-ads": "^7.8.0",
-    "yarn": "^1.22.22"
+    "yandex-mobile-ads": "^7.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
