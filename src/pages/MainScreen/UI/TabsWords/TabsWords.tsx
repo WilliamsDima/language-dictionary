@@ -8,7 +8,7 @@ import { useActions } from '@/shared/hooks/useActions'
 import { tabsWords } from '@/shared/helpers/tabsWord'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
-import { StatusItem } from '@/entities/Item/model/item'
+import { IItem, StatusItem } from '@/entities/Item/model/item'
 
 type Props = {}
 
@@ -40,7 +40,16 @@ const TabsWords: FC<Props> = (props) => {
       })
         .then((res) => {
           if (res?.data?.items) {
-            setAllItems(res.data?.items)
+            if (res.data?.items) {
+              const obj: Record<number, IItem> = {}
+
+              res.data?.items.forEach((it) => {
+                obj[it.id] = it
+              })
+
+              setAllItems(obj)
+            }
+
             setLastVisible(res.data?.lastVisible)
           }
         })

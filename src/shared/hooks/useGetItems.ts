@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
 import { useLazyGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
+import { IItem } from '@/entities/Item/model/item'
 
 export const useGetItems = () => {
   const { setItems } = useActions()
@@ -15,11 +16,24 @@ export const useGetItems = () => {
   const [getItems] = useLazyGetItemsQuery()
 
   useEffect(() => {
-    if (isAuth && !items.length && !isInitial && firebaseData?.uid) {
+    if (
+      isAuth &&
+      !Object.keys(items).length &&
+      !isInitial &&
+      firebaseData?.uid
+    ) {
       setIsInitial(true)
 
       getItems({ uid: firebaseData?.uid }).then((res) => {
-        if (res.data?.items) setItems(res.data?.items)
+        if (res.data?.items) {
+          const obj: Record<number, IItem> = {}
+
+          res.data?.items.forEach((it) => {
+            obj[it.id] = it
+          })
+
+          setItems(obj)
+        }
       })
     }
 

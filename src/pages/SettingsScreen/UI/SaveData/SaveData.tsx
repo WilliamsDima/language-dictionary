@@ -52,7 +52,7 @@ const SaveData: FC = () => {
     return ''
   }, [lastSaveData])
 
-  return !!items?.length ? (
+  return !!Object.keys(items)?.length ? (
     <View style={styles.container}>
       <Button isText={false} classes={{ btn: styles.btn }} onPress={toSave}>
         <Text style={styles.btnText}>Сохранить карточки как JSON файл</Text>

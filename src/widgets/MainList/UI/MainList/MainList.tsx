@@ -46,12 +46,12 @@ const MainList: FC = () => {
         </View>
       )}
 
-      {allItems?.length ? (
+      {!!allItems && !!Object.keys(allItems)?.length ? (
         <>
           <FlatList
             ref={flatListRef}
             keyExtractor={(item) => item.id.toString()}
-            data={allItems}
+            data={Object.values(allItems)}
             ListHeaderComponent={
               <Text style={styles.count}>
                 Всего найдено: {counts[filterByStatus]}

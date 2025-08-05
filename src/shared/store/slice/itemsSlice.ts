@@ -17,7 +17,7 @@ type InitialState = {
   showFilterMain: boolean
   filterMain: FilterMain | null
   filterCardsModal: FilterCardsModal
-  items: IItem[]
+  items: Record<number, IItem>
 }
 
 const initialState: InitialState = {
@@ -34,31 +34,28 @@ const initialState: InitialState = {
     languages: [],
     showVariant: 'word_only',
   },
-  items: [],
+  items: {},
 }
 
 export const itemsSlice = createSlice({
   name: 'items',
   initialState,
   reducers: {
-    setItems: (state, { payload }: PayloadAction<IItem[]>) => {
+    setItems: (state, { payload }: PayloadAction<Record<number, IItem>>) => {
       state.items = payload ? payload : state.items
     },
     addItemAC: (state, { payload }: PayloadAction<IItem>) => {
-      state.items.push(payload)
+      state.items[payload.id] = payload
     },
     updateItemAC: (state, { payload }: PayloadAction<IItem>) => {
-      state.items = state.items.map((it) => {
-        if (it.id === payload.id) {
-          return payload
-        }
-        return it
-      })
+      if (state.items[payload.id]) {
+        state.items[payload.id] = payload
+      }
     },
-    deleteItemAC: (state, { payload }: PayloadAction<string>) => {
-      state.items = state.items.filter((it) => {
-        return it.idDoc !== payload
-      })
+    deleteItemAC: (state, { payload }: PayloadAction<IItem>) => {
+      if (state.items[payload.id]) {
+        delete state.items[payload.id]
+      }
     },
     setModalDeleteItem: (state, { payload }: PayloadAction<IItem | null>) => {
       state.modalDeleteItem = payload

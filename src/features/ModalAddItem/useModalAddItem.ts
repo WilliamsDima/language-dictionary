@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native'
 import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import { useCardsContext } from '@/shared/hooks/useCardsContext'
+import { useCards } from '@/shared/hooks/useCards'
 
 export const useModalAddItem = () => {
   const { setShowAddModal, setItemEdit } = useActions()
@@ -19,7 +19,7 @@ export const useModalAddItem = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const { updateItemHandler, addItemHandler } = useCardsContext()
+  const { updateItemHandler, addItemHandler } = useCards()
 
   const { isOpen } = useKeyboardState()
   const scrollref = useRef<ScrollView>(null)
@@ -74,16 +74,22 @@ export const useModalAddItem = () => {
     setShowAddModal(false)
     setLanguage(undefined)
     setDescription('')
+    setItemEdit(null)
   }
 
   const onConfirm = async () => {
-    // console.log('onConfirm', firebaseData)
-    // console.log('onConfirm', profile)
+    console.log('onConfirm', firebaseData)
+    console.log('onConfirm', profile)
 
     if (firebaseData && profile) {
       const itemsError = items.some(
         (it) => !it.word.trim() || !it.translate.trim()
       )
+
+      console.log('items', items)
+      console.log('itemsError', itemsError)
+      console.log('language', language)
+      console.log('itemEdit', itemEdit)
 
       const error = !language || itemsError
 
@@ -99,6 +105,8 @@ export const useModalAddItem = () => {
 
       if (itemEdit?.idDoc) {
         setIsLoading(true)
+        console.log(1111)
+
         await updateItemHandler({ ...itemEdit, items, description, language })
         setIsLoading(false)
         setItemEdit(null)
