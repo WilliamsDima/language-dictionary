@@ -246,7 +246,7 @@ export const useCards = () => {
 
   // Функция для загрузки данных с пагинацией
   // Обрабатываем загрузку новых элементов при достижении конца списка
-  const loadMoreItems = () => {
+  const loadMoreItems = useCallback(() => {
     if (!firebaseData || isLoading || !lastVisible) return
 
     console.log('loadMoreItems')
@@ -259,9 +259,21 @@ export const useCards = () => {
           setLastVisible(res.data.lastVisible)
 
           setAllItems((prevItems) => {
-            const obj = {
-              ...prevItems,
-              ...res.data?.items!,
+            let obj: Record<number, IItem> = {}
+            if (!!debouncedSearch) {
+              const array = [
+                ...Object.values(prevItems || {}),
+                ...res.data?.items!,
+              ]
+
+              array.forEach((it) => {
+                obj[it.id] = it
+              })
+            } else {
+              obj = {
+                ...prevItems,
+                ...res.data?.items!,
+              }
             }
 
             return obj
@@ -272,7 +284,7 @@ export const useCards = () => {
         setIsLoading(false)
         page.current = page.current + 1
       })
-  }
+  }, [firebaseData, isLoading, lastVisible, debouncedSearch])
 
   return {
     debouncedSearch,
