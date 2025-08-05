@@ -84,10 +84,12 @@ const ModalAddLanguages: FC<Props> = ({
               style={styles.scroll}
               contentContainerStyle={styles.scrollContainer}
             >
-              {languages.map((it) => {
+              {languages.map((it, i) => {
                 const active = languagesSelects.some(
                   (item) => item.id === it.id
                 )
+
+                const isLast = i === languages.length - 1
 
                 const iconIsError = isonsError.includes(it.id)
 
@@ -98,6 +100,7 @@ const ModalAddLanguages: FC<Props> = ({
                       styles.item,
                       active && !multiselect && styles.itemActiveSingle,
                       active && styles.itemActive,
+                      isLast && { marginBottom: 50 },
                     ]}
                     onPress={() => {
                       onSelectLanguages(it)
@@ -133,7 +136,7 @@ const ModalAddLanguages: FC<Props> = ({
 
             <View style={styles.btns}>
               <TouchableOpacity onPress={onCancelHandler}>
-                <CloseIcon width={34} />
+                <CloseIcon width={24} height={24} />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -142,7 +145,7 @@ const ModalAddLanguages: FC<Props> = ({
                   onCancelHandler()
                 }}
               >
-                <ReadyIcon width={34} />
+                <ReadyIcon width={24} height={24} />
               </TouchableOpacity>
             </View>
           </TouchableOpacity>

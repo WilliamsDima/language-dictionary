@@ -4,6 +4,6 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   btn: {
     position: 'absolute',
-    bottom: scaleWidth(100),
+    bottom: scaleWidth(150),
   },
 })

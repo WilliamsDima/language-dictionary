@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   container: {
     maxWidth: '90%',
     minWidth: '80%',
-    maxHeight: '90%',
+    maxHeight: '80%',
     backgroundColor: COLORS.white,
     paddingHorizontal: scaleWidth(20),
     borderRadius: scaleWidth(10),

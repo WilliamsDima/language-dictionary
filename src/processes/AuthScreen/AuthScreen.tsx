@@ -4,9 +4,11 @@ import { Image, View } from 'react-native'
 import ButtonGoogle from './UI/ButtonGoogle/ButtonGoogle'
 import { styles } from './AuthScreen.styles'
 import Text from '@/shared/UI/Text/Text'
-// import ButtonVk from './UI/ButtonVk/ButtonVk'
+import ButtonVk from './UI/ButtonVk/ButtonVk'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 const AuthScreen: FC = () => {
+  const { aplication } = useAppSelector((store) => store.app)
   return (
     <Layout>
       <View style={styles.screen}>
@@ -21,7 +23,7 @@ const AuthScreen: FC = () => {
         <View style={styles.btns}>
           <ButtonGoogle />
 
-          {/* <ButtonVk /> */}
+          {!!aplication?.showVKAuth && <ButtonVk />}
         </View>
       </View>
     </Layout>

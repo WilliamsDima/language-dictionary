@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { screenOptions, stackOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import AuthScreen from '@/processes/AuthScreen/AuthScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import changeNavigationBarColor from 'react-native-navigation-bar-color'
+import { COLORS } from '@/assets/styles/colors'
 
 export type StartParamsList = {
   [RoutesNames.auth]: undefined
@@ -21,6 +23,19 @@ const StartStack = createStackNavigator<StartParamsList>()
 
 const StartRoutes = () => {
   const { isWatchSplash } = useAppSelector((store) => store.app)
+
+  const setColorForNavigationBar = async () => {
+    try {
+      await changeNavigationBarColor(COLORS.gray_bg, false, false)
+    } catch (e) {
+      console.log('error setColorForNavigationBar', e)
+    }
+  }
+
+  useEffect(() => {
+    if (isWatchSplash) setColorForNavigationBar()
+  }, [isWatchSplash])
+
   return (
     <StartStack.Navigator
       screenOptions={{

@@ -7,8 +7,6 @@ export const useUserVk = () => {
   const { setIsAuth, setFirebaseData, setIsVkLogin } = useActions()
 
   const getUserVk = async () => {
-    console.log('getUserVk')
-
     try {
       const auth = await VKLogin.login(['email'])
 

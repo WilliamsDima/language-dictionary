@@ -1,8 +1,5 @@
 import React, { FC, memo, useEffect, useMemo } from 'react'
-import {
-  BottomTabDescriptorMap,
-  BottomTabNavigationEventMap,
-} from '@react-navigation/bottom-tabs/lib/typescript/src/types'
+
 import {
   NavigationHelpers,
   ParamListBase,
@@ -18,8 +15,8 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color'
 
 type Props = {
   state: TabNavigationState<ParamListBase>
-  descriptors: BottomTabDescriptorMap
-  navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
+  descriptors: any
+  navigation: NavigationHelpers<ParamListBase, any>
 }
 
 const TabBar: FC<Props> = (props) => {
@@ -71,7 +68,7 @@ const TabBar: FC<Props> = (props) => {
           })
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name as keyof TabParamList)
+            navigation.navigate(route.name)
           }
         }
 

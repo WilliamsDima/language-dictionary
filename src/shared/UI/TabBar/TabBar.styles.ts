@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: scaleWidth(30),
     paddingVertical: scaleWidth(20),
+    paddingBottom: 50,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.white,

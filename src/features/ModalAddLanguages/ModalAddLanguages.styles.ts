@@ -4,31 +4,36 @@ import { StyleSheet, NativeModules } from 'react-native'
 
 export const styles = StyleSheet.create({
   wrapper: {
-    height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.bg_modal,
     width: '100%',
-  },
-  container: {
-    maxWidth: '90%',
-    minWidth: '90%',
-    width: '100%',
-    backgroundColor: COLORS.white,
-    paddingVertical: scaleWidth(20),
-    borderRadius: scaleWidth(10),
-    paddingBottom: scaleWidth(40),
-    alignItems: 'center',
+    height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
   },
 
   wrapperContainer: {
     width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
+  container: {
+    maxWidth: '90%',
+    minWidth: '90%',
+    width: '100%',
+    height: height - 200,
+    // maxHeight: '90%',
+    backgroundColor: COLORS.white,
+    paddingVertical: scaleWidth(20),
+    borderRadius: scaleWidth(10),
+    overflow: 'hidden',
+    //paddingBottom: scaleWidth(40),
+    alignItems: 'center',
+  },
+
   scroll: {
-    maxHeight: '90%',
+    maxHeight: height - 300,
     width: '100%',
     paddingHorizontal: scaleWidth(10),
   },
@@ -96,16 +101,18 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: scaleWidth(10),
+    paddingHorizontal: scaleWidth(10),
+    paddingVertical: scaleWidth(10),
+    backgroundColor: COLORS.white,
   },
 
-  footer: {
-    marginTop: scaleWidth(20),
-    paddingHorizontal: scaleWidth(10),
-    paddingTop: scaleWidth(20),
-    borderTopWidth: scaleWidth(1),
-    borderTopColor: COLORS.gray_text,
-  },
+  // footer: {
+  //   marginTop: scaleWidth(20),
+  //   paddingHorizontal: scaleWidth(10),
+  //   paddingTop: scaleWidth(20),
+  //   borderTopWidth: scaleWidth(1),
+  //   borderTopColor: COLORS.gray_text,
+  // },
 
   selectLang: {
     marginTop: scaleWidth(10),
