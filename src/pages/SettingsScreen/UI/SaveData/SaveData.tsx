@@ -20,6 +20,8 @@ const SaveData: FC = () => {
   const toSave = async () => {
     const jsonString = JSON.stringify(items)
 
+    //console.log('jsonString', jsonString)
+
     const path = `${
       RNFS.DownloadDirectoryPath
     }/dictinary-save-${new Date().getTime()}.json`
