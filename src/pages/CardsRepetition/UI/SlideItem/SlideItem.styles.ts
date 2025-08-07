@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     //height: 'auto',
     //height: scaleWidth(40),
     zIndex: 100,
-    marginTop: scaleWidth(40),
+    marginTop: scaleWidth(30),
   },
   press: {
     justifyContent: 'center',
@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
 
   card: {
     width: '100%',
-    height: height / 1.7,
+    height: height / 1.8,
     justifyContent: 'center',
     alignItems: 'center',
     backfaceVisibility: 'hidden', // Скрыть обратную сторону
@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
 
   footer: {
     position: 'absolute',
-    bottom: scaleWidth(10),
+    bottom: scaleWidth(50),
     justifyContent: 'center',
     alignItems: 'center',
   },

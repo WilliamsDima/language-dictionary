@@ -40,7 +40,7 @@ const ProfileScreen: FC = () => {
           редактировать
         </Button> */}
 
-        {!!items?.length && (
+        {!!Object.keys(items)?.length && (
           <Button
             classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
             onPress={startRepeat}

@@ -34,6 +34,7 @@ const Slides: FC<Props> = ({}) => {
   } = useCardsRepetition()
 
   const { firebaseData } = useAppSelector((store) => store.user)
+  const { items } = useAppSelector((store) => store.items)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -47,13 +48,17 @@ const Slides: FC<Props> = ({}) => {
     }
   }
 
+  const currentItem = useMemo(() => {
+    return currentSlideData && items[currentSlideData?.item.id]
+  }, [currentSlideData, items])
+
   const changeStatus = async () => {
-    if (firebaseData && currentSlideData?.item.idDoc) {
-      if (currentSlideData.item.status === 'READY') {
+    if (firebaseData && currentSlideData?.item.idDoc && currentItem) {
+      if (currentItem.status === 'READY') {
         setIsLoading(true)
 
         await updateItemHandler({
-          ...currentSlideData.item,
+          ...currentItem,
           status: 'STUDY',
         })
 
@@ -66,7 +71,7 @@ const Slides: FC<Props> = ({}) => {
         setIsLoading(true)
 
         await updateItemHandler({
-          ...currentSlideData.item,
+          ...currentItem,
           status: 'READY',
         })
 
@@ -78,10 +83,6 @@ const Slides: FC<Props> = ({}) => {
       }
     }
   }
-
-  const currentStatusSlide = useMemo(() => {
-    return currentSlideData?.item.status
-  }, [currentSlideData])
 
   return (
     <View style={styles.container}>
@@ -141,7 +142,7 @@ const Slides: FC<Props> = ({}) => {
                   <ActivityIndicator size={'small'} color={COLORS.primery} />
                 ) : (
                   <>
-                    {currentStatusSlide === 'STUDY' ? (
+                    {currentItem?.status === 'STUDY' ? (
                       <DoneIcon width={24} height={24} />
                     ) : (
                       <RepeatIcon width={24} height={24} />

@@ -21,13 +21,11 @@ export const useCards = () => {
 
   const page = useRef<number>(1)
 
-  const [allItems, setAllItems] = useState<IItem[]>([]) // для хранения всех элементов
+  const [allItems, setAllItems] = useState<Record<number, IItem> | null>(null) // для хранения всех элементов
   const [lastVisible, setLastVisible] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
   // Локальное состояние для дебаунсированного поиска
   const [debouncedSearch, setDebouncedSearch] = useState(search)
-
-  //console.log(`allItems ${name}: `, allItems.length)
 
   const { updateActivity } = useUserActivity()
 
@@ -37,10 +35,11 @@ export const useCards = () => {
   const [deleteItem] = useDeleteItemMutation()
 
   const counts = useMemo(() => {
+    const values = Object.values(items)
     return {
-      ALL: items.length,
-      READY: items.filter((it) => it.status === 'READY').length,
-      STUDY: items.filter((it) => it.status === 'STUDY').length,
+      ALL: values.length,
+      READY: values.filter((it) => it.status === 'READY').length,
+      STUDY: values.filter((it) => it.status === 'STUDY').length,
     }
   }, [items])
 
@@ -63,6 +62,7 @@ export const useCards = () => {
 
   // обновление карточки
   const updateItemHandler = async (itemEdit: IItem) => {
+    console.log('updateItemHandler itemEdit', itemEdit)
     try {
       if (firebaseData && itemEdit) {
         const res = await updateItem({
@@ -77,12 +77,15 @@ export const useCards = () => {
           updateItemAC(res)
 
           setAllItems((prev) => {
-            return prev.map((it) => {
-              if (it.id === res.id) {
-                return res
-              }
-              return it
-            })
+            const obj = {
+              ...prev,
+            }
+
+            if (obj[itemEdit.id]) {
+              obj[itemEdit.id] = res
+            }
+
+            return obj
           })
 
           setTooltip({
@@ -92,6 +95,7 @@ export const useCards = () => {
         }
       }
     } catch (error) {
+      console.log('updateItemHandler error', error)
       setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
     }
   }
@@ -106,7 +110,14 @@ export const useCards = () => {
 
         if (res) {
           updateActivity({ addedCard: true })
-          setAllItems((prev) => [res, ...prev])
+          setAllItems((prev) => {
+            const obj: Record<number, IItem> = {
+              [res.id]: res,
+              ...prev,
+            }
+
+            return obj
+          })
           addItemAC(res)
           setTimeout(() => Vibration.vibrate(300), 300)
           setTooltip({
@@ -121,13 +132,13 @@ export const useCards = () => {
   }
 
   // удаление карточки
-  const deleteItemHandler = async (idDoc: string) => {
-    console.log('deleteItemHandler idDoc', idDoc)
+  const deleteItemHandler = async (item: IItem) => {
+    console.log('deleteItemHandler item', item)
 
     try {
-      if (firebaseData && idDoc) {
+      if (firebaseData && item?.idDoc) {
         const res = await deleteItem({
-          idDoc,
+          idDoc: item.idDoc,
           uid: firebaseData.uid,
         }).unwrap()
 
@@ -135,9 +146,17 @@ export const useCards = () => {
 
         if (res?.success) {
           setAllItems((prev) => {
-            return prev.filter((it) => it.idDoc !== idDoc)
+            const obj = {
+              ...prev,
+            }
+
+            if (obj[item.id]) {
+              delete obj[item.id]
+            }
+
+            return obj
           })
-          deleteItemAC(idDoc)
+          deleteItemAC(item)
 
           setTooltip({
             children: <ItemTooltip type="DELETE" />,
@@ -174,7 +193,10 @@ export const useCards = () => {
         if (res?.data?.items) {
           setLastVisible(res.data.lastVisible)
           setAllItems((prevItems) => {
-            return [...prevItems, ...res.data?.items!]
+            return {
+              ...prevItems,
+              ...res.data?.items!,
+            }
           })
         }
       })
@@ -186,7 +208,7 @@ export const useCards = () => {
 
   // получение карточек для повторения первый раз
   const getItemsRepetition = () => {
-    setAllItems([])
+    setAllItems({})
     setLastVisible(null)
 
     setIsLoading(true)
@@ -205,7 +227,16 @@ export const useCards = () => {
       .then((res) => {
         if (res?.data?.items) {
           setLastVisible(res.data.lastVisible)
-          setAllItems(res.data?.items)
+
+          if (res.data?.items) {
+            const obj: Record<number, IItem> = {}
+
+            res.data?.items.forEach((it) => {
+              obj[it.id] = it
+            })
+
+            setAllItems(obj)
+          }
         }
       })
       .finally(() => {
@@ -215,7 +246,7 @@ export const useCards = () => {
 
   // Функция для загрузки данных с пагинацией
   // Обрабатываем загрузку новых элементов при достижении конца списка
-  const loadMoreItems = () => {
+  const loadMoreItems = useCallback(() => {
     if (!firebaseData || isLoading || !lastVisible) return
 
     console.log('loadMoreItems')
@@ -226,8 +257,26 @@ export const useCards = () => {
       .then((res) => {
         if (res?.data?.items) {
           setLastVisible(res.data.lastVisible)
+
           setAllItems((prevItems) => {
-            return [...prevItems, ...res.data?.items!]
+            let obj: Record<number, IItem> = {}
+            if (!!debouncedSearch) {
+              const array = [
+                ...Object.values(prevItems || {}),
+                ...res.data?.items!,
+              ]
+
+              array.forEach((it) => {
+                obj[it.id] = it
+              })
+            } else {
+              obj = {
+                ...prevItems,
+                ...res.data?.items!,
+              }
+            }
+
+            return obj
           })
         }
       })
@@ -235,7 +284,7 @@ export const useCards = () => {
         setIsLoading(false)
         page.current = page.current + 1
       })
-  }
+  }, [firebaseData, isLoading, lastVisible, debouncedSearch])
 
   return {
     debouncedSearch,

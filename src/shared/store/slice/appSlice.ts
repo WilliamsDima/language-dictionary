@@ -35,6 +35,7 @@ export interface IAplication {
   version: string
   showVariantsList: SelectOption[]
   privacy_policy_link: string
+  showVKAuth: boolean
 }
 
 type InitialState = {

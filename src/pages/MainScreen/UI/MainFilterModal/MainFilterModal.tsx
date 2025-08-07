@@ -13,6 +13,7 @@ import { SelectOption } from '@/shared/UI/types'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { COLORS } from '@/assets/styles/colors'
+import { IItem } from '@/entities/Item/model/item'
 
 interface Props {}
 
@@ -81,7 +82,16 @@ const MainFilterModal: FC<Props> = () => {
       getItems(sendData)
         .then((res) => {
           if (res.data?.items) {
-            setAllItems(res.data?.items)
+            if (res.data?.items) {
+              const obj: Record<number, IItem> = {}
+
+              res.data?.items.forEach((it) => {
+                obj[it.id] = it
+              })
+
+              setAllItems(obj)
+            }
+
             setLastVisible(res.data?.lastVisible)
             page.current = 1
 

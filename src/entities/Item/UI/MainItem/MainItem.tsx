@@ -12,8 +12,9 @@ import { COLORS } from '@/assets/styles/colors'
 import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useUserActivity } from '@/shared/hooks/useUserActivity'
+import { useCards } from '@/shared/hooks/useCards'
+import { useCardsContext } from '@/shared/hooks/useCardsContext'
 
 type Props = {
   item: IItem

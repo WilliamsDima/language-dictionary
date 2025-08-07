@@ -74,24 +74,12 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [count, setCount] = useState<number>(0)
-
-  const data = useMemo(() => {
-    return (
-      items
-        .filter((it) =>
-          filterCardsModal.languages.length
-            ? filterCardsModal.languages.includes(it.language.id)
-            : true && filterCardsModal.status === it.status
-        )
-        .map((it, index) => {
-          return {
-            index,
-            item: it,
-          }
-        })
-        .sort(() => Math.random() - 0.5) || []
-    )
-  }, [items, filterCardsModal])
+  const [data, setData] = useState<
+    {
+      index: number
+      item: IItem
+    }[]
+  >([])
 
   const currentSlideData = useMemo(() => {
     return data.find((it, i) => i === currentSlide)
@@ -152,7 +140,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
   useEffect(() => {
     page.current = 1
-    setAllItems([])
+    setAllItems({})
     setLastVisible(null)
     getItemsRepetition()
   }, [])
@@ -163,6 +151,26 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   //     getMoreItemsRepetition()
   //   }
   // }, [currentSlide])
+
+  useEffect(() => {
+    if (!data?.length) {
+      setData(
+        Object.values(items)
+          .filter((it) =>
+            filterCardsModal.languages.length
+              ? filterCardsModal.languages.includes(it.language.id)
+              : true && filterCardsModal.status === it.status
+          )
+          .map((it, index) => {
+            return {
+              index,
+              item: it,
+            }
+          })
+          .sort(() => Math.random() - 0.5) || []
+      )
+    }
+  }, [items, filterCardsModal, data])
 
   useEffect(() => {
     if (!count) {

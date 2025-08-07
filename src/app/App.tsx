@@ -21,7 +21,7 @@ GoogleSignin.configure({
   scopes: ['profile', 'email'],
 })
 
-// VKLogin.initialize(VK_APP)
+VKLogin?.initialize(VK_APP)
 
 LogBox.ignoreLogs(['Remote debugger'])
 
@@ -31,7 +31,6 @@ const App: FC = () => {
 
     setTimeout(SplashScreen.hide, 500)
     ;(async () => {
-      // Configure the user privacy data policy before init sdk
       await MobileAds.initialize()
     })()
   }, [])

@@ -38,14 +38,14 @@ type AuthProviderType = {
 }
 
 export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
+  useUserVk()
+
   const { setIsAuth, setFirebaseData, setIsVkLogin } = useActions()
 
   const dispatch = useAppDispatch()
 
   const { firebaseData, isVkLogin } = useAppSelector((store) => store.user)
   const { aplication } = useAppSelector((store) => store.app)
-
-  useUserVk()
 
   const onAuthStateChanged = useCallback(
     async (user?: FirebaseAuthTypes.User) => {

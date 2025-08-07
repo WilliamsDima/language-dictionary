@@ -7,7 +7,7 @@ import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useCardsContext } from '@/shared/hooks/useCardsContext'
+import { useCards } from '@/shared/hooks/useCards'
 
 type Props = {}
 
@@ -16,7 +16,7 @@ const ModalDeleteItem: FC<Props> = () => {
   const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
 
-  const { deleteItemHandler } = useCardsContext()
+  const { deleteItemHandler } = useCards()
 
   const { getAnimationStyles } = useScaleAnim({
     active: !!modalDeleteItem,
@@ -28,7 +28,7 @@ const ModalDeleteItem: FC<Props> = () => {
 
   const onDelete = async () => {
     if (modalDeleteItem?.idDoc && firebaseData) {
-      await deleteItemHandler(modalDeleteItem.idDoc)
+      await deleteItemHandler(modalDeleteItem)
       onCancelHandler()
     }
   }

@@ -13,7 +13,7 @@ import { useCards } from './useCards'
 
 type IContext = {
   isFilterActive: boolean
-  allItems: IItem[]
+  allItems: Record<number, IItem> | null
   loadMoreItems: () => void
   counts: {
     ALL: number
@@ -23,11 +23,13 @@ type IContext = {
   isLoading: boolean
   page: React.MutableRefObject<number>
   setLastVisible: React.Dispatch<any>
-  setAllItems: React.Dispatch<React.SetStateAction<IItem[]>>
+  setAllItems: React.Dispatch<
+    React.SetStateAction<Record<number, IItem> | null>
+  >
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
   updateItemHandler: (itemEdit: IItem) => Promise<void> | undefined
   addItemHandler: (item: IItem) => Promise<void> | undefined
-  deleteItemHandler: (idDoc: string) => Promise<void> | undefined
+  deleteItemHandler: (item: IItem) => Promise<void> | undefined
 }
 
 const CardContext = createContext<IContext>({} as IContext)
@@ -38,9 +40,7 @@ type CardsProviderType = {
 
 export const CardProvider: FC<CardsProviderType> = ({ children }) => {
   const { isAuth } = useAppSelector((store) => store.app)
-  const { filterByStatus, search, items } = useAppSelector(
-    (store) => store.items
-  )
+  const { filterByStatus, search } = useAppSelector((store) => store.items)
 
   const {
     debouncedSearch,
@@ -71,12 +71,18 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
 
   // первый запрос для главного экрана
   useEffect(() => {
-    if (!allItems.length && isAuth && firebaseData) {
+    if (allItems && !Object.keys(allItems).length && isAuth && firebaseData) {
       setIsLoading(true)
       getItemsHandler(1)
         .then((res) => {
           if (res?.data?.items) {
-            setAllItems(res?.data.items)
+            const obj: Record<number, IItem> = {}
+
+            res.data?.items.forEach((it) => {
+              obj[it.id] = it
+            })
+
+            setAllItems(obj)
             setLastVisible(res.data.lastVisible)
           }
         })
@@ -97,7 +103,13 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
     getItemsHandler(1)
       .then((res) => {
         if (res?.data?.items) {
-          setAllItems(res?.data.items)
+          const obj: Record<number, IItem> = {}
+
+          res.data?.items.forEach((it) => {
+            obj[it.id] = it
+          })
+
+          setAllItems(obj)
           setLastVisible(res.data.lastVisible)
         }
       })

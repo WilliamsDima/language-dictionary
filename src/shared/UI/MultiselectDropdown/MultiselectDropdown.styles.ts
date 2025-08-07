@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
     marginTop: -10,
     borderWidth: 0,
+    maxHeight: '80%',
   },
 
   placeholderStyle: {

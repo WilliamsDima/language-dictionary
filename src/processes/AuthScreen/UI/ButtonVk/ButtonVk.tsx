@@ -8,7 +8,7 @@ import VKLogin from 'react-native-vkontakte-login'
 import { useActions } from '@/shared/hooks/useActions'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
-import { IFirebaseData } from '@/shared/store/slice/userSlice'
+import { IFirebaseData, IUserActivity } from '@/shared/store/slice/userSlice'
 import { db, getUserData } from '@/shared/firebase/api'
 import { doc, setDoc } from 'firebase/firestore/lite'
 import { useAppSelector } from '@/shared/hooks/useStore'
@@ -23,6 +23,10 @@ const ButtonVk: FC<Props> = () => {
   const { getUserVk } = useUserVk()
 
   const handleVKLogin = async () => {
+    // await VKLogin.logout()
+
+    // return
+
     const auth = await VKLogin.login(['email'])
 
     // Запрос на получение данных пользователя
@@ -39,6 +43,33 @@ const ButtonVk: FC<Props> = () => {
 
       const isUser = await getUserData(user.id.toString())
 
+      console.log('isUser', isUser)
+
+      let activity: IUserActivity | undefined = isUser?.activity
+
+      // активностей ещё не было
+      if (!activity) {
+        const year = new Date().getFullYear()
+        const month = new Date().getMonth()
+
+        activity = {
+          year: {
+            [year]: {
+              [month]: {
+                activeDays: [],
+                addedCards: 0,
+                openApp: 0,
+                repeatCard: 0,
+                startTraningCards: 0,
+                studiedCard: 0,
+                totalTimeSpent: 0,
+                viewedAds: 0,
+              },
+            },
+          },
+        }
+      }
+
       const userData: IFirebaseData = {
         name: user?.first_name + ' ' + user?.last_name,
         uid: user.id.toString(),
@@ -51,6 +82,7 @@ const ButtonVk: FC<Props> = () => {
         languages: isUser?.languages || [],
         native_language: isUser?.native_language || null,
         image: user.photo_200 || '',
+        activity,
       }
 
       await setDoc(doc(db, 'users', user.id.toString()), userData)

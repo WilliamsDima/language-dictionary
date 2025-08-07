@@ -55,7 +55,7 @@ const Layout: FC<Props> = (props) => {
     ...headerProps
   } = props
 
-  const { theme } = useAppSelector((store) => store.app)
+  const { theme, hiddenTabBar } = useAppSelector((store) => store.app)
 
   const backgroundStyle = useMemo(() => {
     return theme === 'dark' ? COLORS.gray_bg : COLORS.white
@@ -69,8 +69,9 @@ const Layout: FC<Props> = (props) => {
       paddingScreen && styles.padding,
       safeAreaStyles,
       { backgroundColor: backgroundStyle },
+      hiddenTabBar && styles.safeAreaHiddenTabBar,
     ]
-  }, [safeAreaStyles, backgroundStyle])
+  }, [safeAreaStyles, backgroundStyle, hiddenTabBar])
 
   const overStylesScrollView = useMemo(() => {
     return [scrollViewStyles]

@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   container: {
     height: height,
+    maxHeight: height,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -14,7 +15,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: height,
-    position: 'absolute',
+    maxHeight: height,
+    //position: 'absolute',
     zIndex: 100,
     backgroundColor: 'transparent',
   },
@@ -22,7 +24,7 @@ export const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     zIndex: 1000,
-    top: scaleWidth(10),
+    top: scaleWidth(0),
   },
   count: {
     fontSize: scaleFontSize(14),
@@ -50,7 +52,7 @@ export const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     zIndex: 1000,
-    bottom: scaleWidth(40),
+    bottom: scaleWidth(110),
   },
   btns: {
     flexDirection: 'row',
