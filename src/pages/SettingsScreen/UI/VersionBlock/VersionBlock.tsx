@@ -14,21 +14,25 @@ const VersionBlock: FC = () => {
     openInBrowser(GOOGLE_PLAY)
   }
 
-  const checkVersion = useMemo(() => {
+  const version = useMemo(() => {
     const currentVersion = DeviceInfo.getVersion()
 
-    if (currentVersion === aplication?.version || !aplication?.version) {
+    return currentVersion
+  }, [aplication])
+
+  const checkVersion = useMemo(() => {
+    if (version === aplication?.version || !aplication?.version) {
       return ''
     }
 
-    if (currentVersion !== aplication?.version) {
+    if (version !== aplication?.version) {
       return 'Ваша версия приложения устарела'
     }
-  }, [aplication])
+  }, [aplication, version])
 
   return (
     <View style={styles.container}>
-      <Text style={styles.version}>Версия: {aplication?.version}</Text>
+      <Text style={styles.version}>Версия: {version}</Text>
       {/* <Text style={styles.version}>Версия appcenter: 1.0.6</Text> */}
 
       {!!checkVersion && (
