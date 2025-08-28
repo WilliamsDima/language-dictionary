@@ -57,6 +57,8 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
     isLoading,
     counts,
     firebaseData,
+    isInit,
+    setIsInit,
     updateItemHandler,
   } = useCards()
 
@@ -71,8 +73,15 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
 
   // первый запрос для главного экрана
   useEffect(() => {
-    if (allItems && !Object.keys(allItems).length && isAuth && firebaseData) {
+    if (
+      allItems &&
+      !Object.keys(allItems).length &&
+      isAuth &&
+      firebaseData &&
+      !isInit
+    ) {
       setIsLoading(true)
+      setIsInit(true)
       getItemsHandler(1)
         .then((res) => {
           if (res?.data?.items) {
@@ -90,7 +99,7 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
           setIsLoading(false)
         })
     }
-  }, [allItems, isAuth, firebaseData])
+  }, [allItems, isAuth, firebaseData, isInit])
 
   // Обновляем значение дебаунса при изменении search
   useEffect(() => {

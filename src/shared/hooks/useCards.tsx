@@ -24,6 +24,7 @@ export const useCards = () => {
   const [allItems, setAllItems] = useState<Record<number, IItem> | null>(null) // для хранения всех элементов
   const [lastVisible, setLastVisible] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
+  const [isInit, setIsInit] = useState(false)
   // Локальное состояние для дебаунсированного поиска
   const [debouncedSearch, setDebouncedSearch] = useState(search)
 
@@ -293,6 +294,8 @@ export const useCards = () => {
     counts,
     isLoading,
     firebaseData,
+    isInit,
+    setIsInit,
     setDebouncedSearch,
     getItemsHandler,
     deleteItemHandler,
