@@ -1,4 +1,4 @@
-import { SelectOption } from '../UI/Select/Select'
+import { SelectOption } from '../UI/types'
 
 export interface ILanguage {
   id: number

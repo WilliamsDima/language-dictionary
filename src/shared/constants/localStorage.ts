@@ -3,4 +3,5 @@ export enum LOCAL_KEYS {
   vk_token = 'vk_token',
   vk_id_user = 'vk_id_user',
   timeSpent = 'timeSpent',
+  watchYearResult = 'watchYearResult',
 }

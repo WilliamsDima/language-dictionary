@@ -1,7 +1,7 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { FirebaseAuthTypes } from '@react-native-firebase/auth'
-import { ILanguage } from '@/shared/json/languages'
-import { IItem } from '@/entities/Item/model/item'
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
+import type { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import type { ILanguage } from '@/shared/json/languages'
+import type { IItem } from '@/entities/Item/model/item'
 
 export type IUser = FirebaseAuthTypes.User
 
@@ -9,6 +9,7 @@ export type ShowVariantListVale =
   | 'translate_only'
   | 'word_only'
   | 'word_and_translate'
+
 export type ShowVariantList = {
   label: string
   value: ShowVariantListVale
@@ -56,7 +57,7 @@ export interface IFirebaseData {
   languages: ILanguage[]
   native_language: ILanguage | null
   image: string
-  activity: IUserActivity
+  activity?: IUserActivity
 }
 
 type InitialState = {

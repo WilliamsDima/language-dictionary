@@ -41,6 +41,7 @@ export interface IAplication {
 type InitialState = {
   theme: ThemeApp
   isAuth: boolean
+  showYearResult: boolean
   aplication: null | IAplication
   tooltip: TooltipType | null
   hiddenTabBar: boolean
@@ -56,6 +57,7 @@ const initialState: InitialState = {
   hiddenTabBar: false,
   isWatchSplash: false,
   showUpdateModal: false,
+  showYearResult: false,
 }
 
 export const appSlice = createSlice({
@@ -70,6 +72,9 @@ export const appSlice = createSlice({
     },
     setIsAuth: (state, { payload }: PayloadAction<boolean>) => {
       state.isAuth = payload
+    },
+    setShowYearResult: (state, { payload }: PayloadAction<boolean>) => {
+      state.showYearResult = payload
     },
     setTooltip: (state, { payload }: PayloadAction<TooltipType | null>) => {
       state.tooltip = payload

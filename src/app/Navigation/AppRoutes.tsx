@@ -10,6 +10,7 @@ import { useAsyncLocal } from '@/shared/hooks/useAsyncLocal'
 import Tooltip from '@/entities/Tooltip/UI/Tooltip'
 import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
 import { useAdsOpenApp } from '@/shared/hooks/useAdsOpenApp'
+import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 
 export type AppParamsList = {
   [RoutesNames.start]: undefined
@@ -44,6 +45,7 @@ const Routes = () => {
 
       <Tooltip />
       <ModalUpdateApp />
+      <ModalYearResult />
     </>
   )
 }

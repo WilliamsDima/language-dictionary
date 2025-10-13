@@ -9,8 +9,11 @@ import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
+import { isShowModalYearResult } from '@/shared/constants/app'
+import { useActions } from '@/shared/hooks/useActions'
 
 const ProfileScreen: FC = () => {
+  const { setShowYearResult } = useActions()
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
   const [modalCards, setModalCards] = useState(false)
@@ -23,6 +26,10 @@ const ProfileScreen: FC = () => {
 
   const showModalDelete = () => {
     setModalDelete(true)
+  }
+
+  const onShowModalYearResult = () => {
+    setShowYearResult(true)
   }
 
   const startRepeat = () => {
@@ -46,6 +53,15 @@ const ProfileScreen: FC = () => {
             onPress={startRepeat}
           >
             начать повторение
+          </Button>
+        )}
+
+        {isShowModalYearResult && (
+          <Button
+            classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
+            onPress={onShowModalYearResult}
+          >
+            Посмотреть итоги {new Date().getFullYear()} года 🎉
           </Button>
         )}
 

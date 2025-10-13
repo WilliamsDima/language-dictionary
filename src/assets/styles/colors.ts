@@ -17,4 +17,5 @@ export enum COLORS {
   item = '#1A2B23',
   item_study = '#B8860B',
   item_ready = '#228B22',
+  gold = '#ffde0aff',
 }
