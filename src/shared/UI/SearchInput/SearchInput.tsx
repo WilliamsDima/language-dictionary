@@ -4,6 +4,7 @@ import Input, { InputProps } from '../Input/Input'
 import SearchIcon from '@/assets/icons/UI/search.svg'
 import ClearIcon from '@/assets/icons/UI/close-red-64.svg'
 import { TouchableOpacity } from 'react-native'
+import { useTranslation } from '@/shared/i18n/types'
 
 interface Props extends InputProps {
   showIcon?: boolean
@@ -17,10 +18,11 @@ interface Props extends InputProps {
 
 const SearchInput: FC<Props> = (props) => {
   const { showIcon = true, ...rest } = props
+  const { t } = useTranslation()
 
   return (
     <Input
-      placeholder={'Поиск'}
+      placeholder={t('ui.search')}
       {...rest}
       rightIcon={
         showIcon && !rest.value?.trim().length ? (

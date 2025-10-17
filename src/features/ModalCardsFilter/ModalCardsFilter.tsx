@@ -1,4 +1,4 @@
-import React, { FC, memo, useState } from 'react'
+import React, { FC, memo, useMemo, useState } from 'react'
 import { styles } from './ModalCardsFilter.styles'
 import { View, Animated, TouchableOpacity } from 'react-native'
 import Modal from '@/shared/UI/Modal/Modal'
@@ -10,21 +10,12 @@ import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { tabsWords } from '@/shared/helpers/tabsWord'
 import { useActions } from '@/shared/hooks/useActions'
 import { StatusItem } from '@/entities/Item/model/item'
-import { languagesOptions } from '@/shared/json/languages'
 import { ShowVariantListVale } from '@/shared/store/slice/userSlice'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
 import { SelectOption } from '@/shared/UI/types'
-
-const showVariantListOptions: SelectOption[] = [
-  {
-    label: 'Сначала слово, потом перевод',
-    value: 'word_only',
-  },
-  {
-    label: 'Сначала перевод, потом слово',
-    value: 'translate_only',
-  },
-]
+import { useTranslation } from '@/shared/i18n/types'
+import { useAppSelector } from '@/shared/hooks/useStore'
+import type { AppLanguageType } from '@/shared/store/slice/appSlice'
 
 type Props = {
   visible: boolean
@@ -34,18 +25,40 @@ type Props = {
 const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
   const { setFilterCardsModal } = useActions()
   const { navigate } = useAppNavigation()
+  const { t } = useTranslation()
 
   const { getAnimationStyles } = useScaleAnim({
     active: visible,
   })
 
-  const [languages, setLanguages] = useState<SelectOption[]>([])
+  const { aplication, appLanguage } = useAppSelector((store) => store.app)
+
+  const [languages, setLanguages] = useState<AppLanguageType[]>([])
   const [statusSelect, setStatusSelect] = useState<StatusItem>('STUDY')
+
+  const showVariantListOptions: SelectOption[] = useMemo(() => {
+    return [
+      {
+        label: t('modal.modalCardsFilter.word_only'),
+        value: 'word_only',
+      },
+      {
+        label: t('modal.modalCardsFilter.translate_only'),
+        value: 'translate_only',
+      },
+    ]
+  }, [appLanguage, t])
 
   const [showVariantSelect, setShowVariantSelect] =
     useState<SelectOption | null>(() => showVariantListOptions[0])
 
-  const onSelectLanguages = (value: SelectOption[]) => {
+  const languagesOptions = useMemo(() => {
+    return aplication?.appLanguages
+      ? Object.values(aplication?.appLanguages)
+      : []
+  }, [aplication])
+
+  const onSelectLanguages = (value: AppLanguageType[]) => {
     setLanguages(value)
   }
 
@@ -63,7 +76,7 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
   const confirm = () => {
     setFilterCardsModal({
       status: statusSelect,
-      languages: languages.map((it) => +it.value),
+      languages: languages.map((it) => it.code),
       showVariant: showVariantSelect?.value as ShowVariantListVale,
     })
 
@@ -85,10 +98,12 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>Выберите карточки для повторения</Text>
+            <Text style={styles.title}>
+              {t('modal.modalCardsFilter.title')}
+            </Text>
 
             <View style={styles.selects}>
-              {tabsWords.map((it) => {
+              {tabsWords(t).map((it) => {
                 const active = statusSelect === it.status
 
                 return (
@@ -109,7 +124,9 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
             </View>
 
             <View>
-              <Text style={styles.selectBtnText}>Вариант показа:</Text>
+              <Text style={styles.selectBtnText}>
+                {t('modal.modalCardsFilter.show_variants')}
+              </Text>
 
               {showVariantListOptions.map((it) => {
                 const active = it.value === showVariantSelect?.value
@@ -131,10 +148,12 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
             </View>
 
             <MultiselectDropdown
-              title="Язык"
+              title={t('ui.language')}
               selects={languages}
               onSelects={onSelectLanguages}
               options={languagesOptions}
+              labelField="nativeName"
+              valueField="code"
               classes={{
                 title: styles.titleSelect,
               }}
@@ -149,7 +168,7 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
                 }}
                 onPress={onCancelHandler}
               >
-                Отмена
+                {t('ui.cancel')}
               </Button>
 
               <Button
@@ -159,7 +178,7 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
                 }}
                 onPress={confirm}
               >
-                Начать
+                {t('ui.start')}
               </Button>
             </View>
           </TouchableOpacity>

@@ -23,6 +23,53 @@ export interface IAbout {
   blocks: IBlock[]
 }
 
+export type TranslationKeys =
+  | 'ru'
+  | 'uk'
+  | 'be'
+  | 'ka'
+  | 'uz'
+  | 'az'
+  | 'tg'
+  | 'en'
+  | 'de'
+  | 'fr'
+  | 'es'
+  | 'it'
+  | 'pt'
+  | 'nl'
+  | 'sv'
+  | 'no'
+  | 'fi'
+  | 'da'
+  | 'pl'
+  | 'cs'
+  | 'hu'
+  | 'tr'
+  | 'ar'
+  | 'he'
+  | 'zh'
+  | 'ja'
+  | 'ko'
+  | 'hi'
+  | 'bn'
+  | 'pa'
+  | 'vi'
+  | 'th'
+  | 'id'
+  | 'ms'
+  | 'fa'
+  | 'sw'
+  | 'ro'
+export type TranslationsType = Record<TranslationKeys, string>
+
+export type AppLanguageType = {
+  name: string
+  nativeName: string
+  code: TranslationKeys
+}
+export type AppLanguagesType = Record<TranslationKeys, AppLanguageType>
+
 export interface IAplication {
   about: IAbout
   appName: string
@@ -36,6 +83,8 @@ export interface IAplication {
   showVariantsList: SelectOption[]
   privacy_policy_link: string
   showVKAuth: boolean
+  translations: TranslationsType
+  appLanguages: AppLanguagesType
 }
 
 type InitialState = {
@@ -47,6 +96,7 @@ type InitialState = {
   hiddenTabBar: boolean
   isWatchSplash: boolean
   showUpdateModal: boolean
+  appLanguage: AppLanguageType | null
 }
 
 const initialState: InitialState = {
@@ -58,6 +108,7 @@ const initialState: InitialState = {
   isWatchSplash: false,
   showUpdateModal: false,
   showYearResult: false,
+  appLanguage: null,
 }
 
 export const appSlice = createSlice({
@@ -87,6 +138,12 @@ export const appSlice = createSlice({
     },
     setShowUpdateModal: (state, { payload }: PayloadAction<boolean>) => {
       state.showUpdateModal = payload
+    },
+    setAppLanguage: (
+      state,
+      { payload }: PayloadAction<AppLanguageType | null>
+    ) => {
+      state.appLanguage = payload
     },
   },
 })

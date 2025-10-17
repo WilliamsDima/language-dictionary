@@ -5,7 +5,7 @@ import { ShowVariantListVale } from './userSlice'
 
 export type FilterCardsModal = {
   status: StatusItem
-  languages: number[]
+  languages: string[]
   showVariant: ShowVariantListVale | null
 }
 

@@ -8,11 +8,13 @@ import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {} & PropsSlideYearResult
 
 const YearResultSlide9: FC<Props> = ({ index, currentSlide }) => {
   const { setShowYearResult } = useActions()
+  const { t } = useTranslation()
   const date = new Date()
 
   const onEnd = () => {
@@ -23,10 +25,12 @@ const YearResultSlide9: FC<Props> = ({ index, currentSlide }) => {
   return (
     <View style={styles.slide}>
       <View style={styles.titles}>
-        <Text style={styles.title}>🌟 Это был твой год в языке.</Text>
-        <Text style={styles.title}>Ты растёшь, учишься и не сдаёшься.</Text>
+        <Text style={styles.title}>{t('yearsResult.last_slide_title_1')}</Text>
+        <Text style={styles.title}>{t('yearsResult.last_slide_title_2')}</Text>
         <Text style={styles.title}>
-          В {date.getFullYear() + 1} будет ещё больше достижений! 🚀
+          {t('yearsResult.last_slide_title_3', {
+            date: date.getFullYear() + 1,
+          })}
         </Text>
       </View>
 
@@ -51,7 +55,7 @@ const YearResultSlide9: FC<Props> = ({ index, currentSlide }) => {
           isText
           classes={{ btn: styles.btn, textBtn: styles.textBtn }}
         >
-          завершить
+          {t('ui.finish')}
         </Button>
       </View>
     </View>

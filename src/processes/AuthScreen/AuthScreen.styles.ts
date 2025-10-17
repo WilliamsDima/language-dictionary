@@ -29,4 +29,17 @@ export const styles = StyleSheet.create({
     gap: scaleWidth(20),
     width: '100%',
   },
+  lang: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: '100%',
+  },
+  langIcon: {
+    flex: 1,
+    fontSize: 25,
+  },
+  wrapperSelect: {
+    flex: 1,
+    minWidth: '70%',
+  },
 })

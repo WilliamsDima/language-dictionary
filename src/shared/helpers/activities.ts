@@ -1,3 +1,4 @@
+import type { I18t } from '../i18n/types'
 import type { IActivityMonth, IFirebaseData } from '../store/slice/userSlice'
 
 export const getActiveDaysInYear = (user: IFirebaseData, year: number) => {
@@ -127,20 +128,27 @@ export const getYearRepeatCardsStats = (user: IFirebaseData, year: number) => {
   return { total, topMonth, topMonthValue }
 }
 
-export const formatTime = (seconds: number) => {
+export const formatTime = (seconds: number, t: I18t) => {
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const secs = Math.floor(seconds % 60)
 
-  if (hours > 0) return `${hours} ч ${minutes} мин`
-  if (minutes > 0) return `${minutes} мин ${secs} сек`
-  return `${secs} сек`
+  if (hours > 0)
+    return `${hours} ${t('time.hours')} ${minutes} ${t('time.minutes')}`
+  if (minutes > 0)
+    return `${minutes} ${t('time.minutes')} ${secs} ${t('time.secs')}`
+  return `${secs} ${t('time.secs')}`
 }
 
-export const getYearTotalTime = (user: IFirebaseData, year: number) => {
+export const getYearTotalTime = (
+  user: IFirebaseData,
+  year: number,
+  t: I18t
+) => {
   const activityYear = user.activity?.year?.[year]
 
-  if (!activityYear) return { totalSeconds: 0, formatted: '0 сек' }
+  if (!activityYear)
+    return { totalSeconds: 0, formatted: `0 ${t('time.secs')}` }
 
   let totalSeconds = 0
 
@@ -152,7 +160,7 @@ export const getYearTotalTime = (user: IFirebaseData, year: number) => {
 
   return {
     totalSeconds,
-    formatted: formatTime(totalSeconds),
+    formatted: formatTime(totalSeconds, t),
   }
 }
 

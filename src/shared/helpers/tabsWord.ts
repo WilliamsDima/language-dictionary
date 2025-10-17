@@ -1,5 +1,6 @@
 import { COLORS } from '@/assets/styles/colors'
-import { StatusItem } from '@/entities/Item/model/item'
+import type { StatusItem } from '@/entities/Item/model/item'
+import type { I18t } from '../i18n/types'
 
 export type TabWord = {
   status: StatusItem
@@ -7,20 +8,20 @@ export type TabWord = {
   color: string
 }
 
-export const tabsWords: TabWord[] = [
+export const tabsWords: (t: I18t) => TabWord[] = (t) => [
   {
     status: 'ALL',
-    label: 'Все',
+    label: t('ui.all'),
     color: COLORS.white,
   },
   {
     status: 'STUDY',
-    label: 'В изучении',
+    label: t('ui.in_study'),
     color: COLORS.item_study,
   },
   {
     status: 'READY',
-    label: 'Изучено',
+    label: t('ui.study'),
     color: COLORS.item_ready,
   },
 ]

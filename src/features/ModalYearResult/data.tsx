@@ -27,9 +27,8 @@ export type DataYearsResultType = {
 export const dataYearsResult: DataYearsResultType[] = [
   {
     id: 0,
-    title: `Это твой языковой год ${date.getFullYear()}`,
-    subtitle:
-      'Это был огромный путь — давай посмотрим, сколько всего ты успел!',
+    title: ``,
+    subtitle: '',
     slide: (props: PropsSlideYearResult) => <YearResultSlide1 {...props} />,
   },
   {

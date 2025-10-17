@@ -3,18 +3,17 @@ import { styles } from './YearResultSlide6.styles'
 import { View } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import {
-  getYearRepeatCardsStats,
-  getYearStartTraningCardsStats,
-} from '@/shared/helpers/activities'
+import { getYearStartTraningCardsStats } from '@/shared/helpers/activities'
 import LottieView from 'lottie-react-native'
 import { AnimatedCounter } from '@/shared/UI/AnimatedCounter/AnimatedCounter'
 import type { PropsSlideYearResult } from '../../data'
 import { declOfNum } from '@/shared/helpers/textFormat'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {} & PropsSlideYearResult
 
 const YearResultSlide6: FC<Props> = ({ index, currentSlide }) => {
+  const { t } = useTranslation()
   const date = new Date()
 
   const { firebaseData } = useAppSelector((store) => store.user)
@@ -30,21 +29,25 @@ const YearResultSlide6: FC<Props> = ({ index, currentSlide }) => {
       <View style={styles.titles}>
         <View>
           <Text style={styles.title}>
-            🧠 За этот год ты запускал тренировки карточек
+            {t('yearsResult.launched_card_training_title')}
           </Text>
           <AnimatedCounter
             start={index === currentSlide}
             value={active?.total || 0}
           />
           <Text style={styles.title}>
-            {declOfNum(active?.total || 0, ['раз', 'раза', 'раз'])}
+            {declOfNum(active?.total || 0, [
+              t('time.once_1'),
+              t('time.once_2'),
+              t('time.once_1'),
+            ])}
           </Text>
         </View>
 
         {!!active?.topMonth && (
           <View>
             <Text style={styles.title}>
-              Самый активный месяц {active?.topMonth}
+              {t('yearsResult.most_active_month')} {active?.topMonth}
             </Text>
             <AnimatedCounter
               start={index === currentSlide}
@@ -54,7 +57,7 @@ const YearResultSlide6: FC<Props> = ({ index, currentSlide }) => {
         )}
 
         <Text style={styles.title}>
-          Не каждый день, но стабильно — мозг работал на полную!
+          {t('yearsResult.launched_card_training_text')}
         </Text>
       </View>
 

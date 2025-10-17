@@ -6,21 +6,20 @@ import LottieView from 'lottie-react-native'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import UserAvatart from '@/shared/UI/UserAvatart/UserAvatart'
 import type { PropsSlideYearResult } from '../../data'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {} & PropsSlideYearResult
 
 const YearResultSlide1: FC<Props> = ({}) => {
-  const date = new Date()
+  const { t } = useTranslation()
 
   const { firebaseData } = useAppSelector((store) => store.user)
-
-  console.log('firebaseData', firebaseData)
 
   return (
     <View style={styles.slide}>
       <View style={styles.titles}>
-        <Text style={styles.title}>твой</Text>
-        <Text style={styles.title}>языковой год</Text>
+        <Text style={styles.title}>{t('yearsResult.your')}</Text>
+        <Text style={styles.title}>{t('yearsResult.language_year')}</Text>
 
         <LottieView
           style={styles.welcome}

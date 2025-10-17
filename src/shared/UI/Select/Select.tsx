@@ -1,58 +1,71 @@
-import React, { FC, memo, useEffect, useState } from 'react'
-import { StyleProp, TextStyle, View } from 'react-native'
+import React, { FC, memo } from 'react'
+import {
+  ActivityIndicator,
+  StyleProp,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native'
 import Text from '../Text/Text'
 import { Dropdown } from 'react-native-element-dropdown'
 import { styles } from './Select.styles'
-import { SelectOption } from '../types'
+import { COLORS } from '@/assets/styles/colors'
+import { useTranslation } from '@/shared/i18n/types'
 
 interface Props {
-  options?: SelectOption[]
-  select?: SelectOption | null
-  onSelect?: (value: SelectOption) => void
+  options?: any[]
+  select?: any | null
+  onSelect?: (value: any) => void
   placeholder?: string
+  labelField?: string
+  valueField?: string
+  loading?: boolean
   title?: string
   classes?: {
     title?: StyleProp<TextStyle>
+    wrapper?: StyleProp<ViewStyle>
+    dropdown?: StyleProp<ViewStyle>
   }
+  maxHeight?: number
 }
 
 const Select: FC<Props> = (props) => {
   const {
     select,
-    placeholder = 'не выбрано',
+    placeholder,
     title,
     onSelect,
     options,
     classes,
+    labelField = 'label',
+    valueField = 'value',
+    maxHeight = 300,
+    loading,
   } = props
-
-  const [selected, setSelected] = useState<string>('')
-
-  useEffect(() => {
-    if (!selected && select) {
-      setSelected(select.value as string)
-    }
-  }, [selected, select])
+  const { t } = useTranslation()
 
   return (
-    <View>
+    <View style={classes?.wrapper}>
       {!!title && <Text style={[styles.title, classes?.title]}>{title}</Text>}
 
+      {!!loading && (
+        <ActivityIndicator color={COLORS.primery} style={styles.loader} />
+      )}
+
       <Dropdown
-        style={[styles.dropdown]}
+        style={[styles.dropdown, classes?.dropdown]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         containerStyle={styles.containerStyle}
         iconStyle={styles.iconStyle}
         data={options || []}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
-        value={selected}
+        maxHeight={maxHeight}
+        labelField={labelField}
+        valueField={valueField}
+        placeholder={placeholder || t('ui.select_placeholder')}
+        value={select}
         onChange={(item) => {
-          setSelected(item.value)
           onSelect?.(item)
         }}
       />

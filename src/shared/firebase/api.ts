@@ -61,7 +61,7 @@ export const getAplicationData = async (): Promise<
 
 export type FilterMain = {
   sortDate?: 'asc' | 'desc'
-  languages?: number[]
+  languages?: string[]
 }
 
 export type FilterItems = {
@@ -103,8 +103,8 @@ export const getItems = async ({
 
       // Фильтрация по языкам, если указаны
       if (filter?.filter?.languages && filter?.filter.languages?.length > 0) {
-        const languageIds = filter.filter.languages.map((lang) => lang)
-        filters.push(where('language.id', 'in', languageIds))
+        const languageCode = filter.filter.languages.map((lang) => lang)
+        filters.push(where('language.code', 'in', languageCode))
       }
 
       // Добавляем сортировку по дате, если задано sortOrder

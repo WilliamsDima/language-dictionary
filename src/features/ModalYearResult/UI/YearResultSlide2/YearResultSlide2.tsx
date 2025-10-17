@@ -10,10 +10,13 @@ import {
 import LottieView from 'lottie-react-native'
 import { AnimatedCounter } from '@/shared/UI/AnimatedCounter/AnimatedCounter'
 import type { PropsSlideYearResult } from '../../data'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {} & PropsSlideYearResult
 
 const YearResultSlide2: FC<Props> = ({ index, currentSlide }) => {
+  const { t } = useTranslation()
+
   const date = new Date()
 
   const { firebaseData } = useAppSelector((store) => store.user)
@@ -38,19 +41,21 @@ const YearResultSlide2: FC<Props> = ({ index, currentSlide }) => {
     <View style={styles.slide}>
       <View style={styles.titles}>
         <View>
-          <Text style={styles.title}>Активных дней</Text>
+          <Text style={styles.title}>{t('yearsResult.active_days')}</Text>
           <AnimatedCounter start={index === currentSlide} value={activeDays} />
         </View>
 
         <Text style={styles.title}>
-          А это — почти <Text style={styles.count}>{percent}</Text> % всего
-          года! <Text style={styles.emojy}>💪</Text>
+          {t('yearsResult.percent_1')}{' '}
+          <Text style={styles.count}>{percent}</Text> %{' '}
+          {t('yearsResult.percent_2')} <Text style={styles.emojy}>💪</Text>
         </Text>
 
         {!!bestActivityMonth && (
           <View>
             <Text style={styles.title}>
-              Самый активный месяц {bestActivityMonth?.mostActiveMonth}
+              {t('yearsResult.most_active_month')}{' '}
+              {bestActivityMonth?.mostActiveMonth}
             </Text>
             <AnimatedCounter
               start={index === currentSlide}

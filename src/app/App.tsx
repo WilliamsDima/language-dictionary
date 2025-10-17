@@ -20,8 +20,9 @@ GoogleSignin.configure({
   offlineAccess: true,
   scopes: ['profile', 'email'],
 })
-
-VKLogin?.initialize(VK_APP)
+;(() => {
+  VKLogin?.initialize(VK_APP)
+})()
 
 LogBox.ignoreLogs(['Remote debugger'])
 

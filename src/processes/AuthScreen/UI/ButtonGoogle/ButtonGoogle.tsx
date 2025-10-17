@@ -7,10 +7,12 @@ import { Alert, View } from 'react-native'
 import auth from '@react-native-firebase/auth'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useActions } from '@/shared/hooks/useActions'
+import { useTranslation } from '@/shared/i18n/types'
 
 interface Props {}
 
 const ButtonGoogle: FC<Props> = (props) => {
+  const { t } = useTranslation()
   const { setIsAuth } = useActions()
   // Handle user state changes
   const onAuthStateChanged = useCallback(
@@ -62,7 +64,7 @@ const ButtonGoogle: FC<Props> = (props) => {
       onPress={onGoogleButtonPress}
     >
       <View style={styles.content}>
-        <Text style={styles.text}>Войти с помощью Google</Text>
+        <Text style={styles.text}>{t('auth.googleBtn')}</Text>
         <GoogleIcon />
       </View>
     </Button>

@@ -8,12 +8,15 @@ import { useActions } from '@/shared/hooks/useActions'
 import { tabsWords } from '@/shared/helpers/tabsWord'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
-import { IItem, StatusItem } from '@/entities/Item/model/item'
+import type { IItem, StatusItem } from '@/entities/Item/model/item'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
 const TabsWords: FC<Props> = (props) => {
   const { setFilterByStatus } = useActions()
+  const { t } = useTranslation()
+
   const { firebaseData } = useAppSelector((store) => store.user)
   const { filterByStatus, filterMain } = useAppSelector((store) => store.items)
 
@@ -62,7 +65,7 @@ const TabsWords: FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      {tabsWords.map((it) => {
+      {tabsWords(t).map((it) => {
         return (
           <Button
             key={it.status}

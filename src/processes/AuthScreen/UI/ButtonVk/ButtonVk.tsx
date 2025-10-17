@@ -13,10 +13,12 @@ import { db, getUserData } from '@/shared/firebase/api'
 import { doc, setDoc } from 'firebase/firestore/lite'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useUserVk } from '@/shared/API/getUserVk'
+import { useTranslation } from '@/shared/i18n/types'
 
 interface Props {}
 
 const ButtonVk: FC<Props> = () => {
+  const { t } = useTranslation()
   const { setFirebaseData, setIsVkLogin, setIsAuth } = useActions()
   const { aplication } = useAppSelector((store) => store.app)
 
@@ -110,7 +112,7 @@ const ButtonVk: FC<Props> = () => {
         onPress={handleVKLogin}
       >
         <View style={styles.content}>
-          <Text style={styles.text}>Войти с помощью ВКонтакте</Text>
+          <Text style={styles.text}>{t('auth.vkBtn')}</Text>
           <VkIcon width={24} height={24} />
         </View>
       </Button>

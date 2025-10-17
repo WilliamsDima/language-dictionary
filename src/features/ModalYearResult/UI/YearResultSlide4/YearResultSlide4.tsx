@@ -8,10 +8,12 @@ import LottieView from 'lottie-react-native'
 import { AnimatedCounter } from '@/shared/UI/AnimatedCounter/AnimatedCounter'
 import type { PropsSlideYearResult } from '../../data'
 import { declOfNum } from '@/shared/helpers/textFormat'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {} & PropsSlideYearResult
 
 const YearResultSlide4: FC<Props> = ({ index, currentSlide }) => {
+  const { t } = useTranslation()
   const date = new Date()
 
   const { firebaseData } = useAppSelector((store) => store.user)
@@ -26,16 +28,18 @@ const YearResultSlide4: FC<Props> = ({ index, currentSlide }) => {
     <View style={styles.slide}>
       <View style={styles.titles}>
         <View>
-          <Text style={styles.title}>📚 За этот год ты выучил</Text>
+          <Text style={styles.title}>
+            {t('yearsResult.you_have_learned_this_year')}
+          </Text>
           <AnimatedCounter
             start={index === currentSlide}
             value={active?.total || 0}
           />
           <Text style={styles.title}>
             {declOfNum(active?.total || 0, [
-              'карточку',
-              'карточки',
-              'карточек',
+              t('cards.card_1'),
+              t('cards.card_2'),
+              t('cards.card_3'),
             ])}
           </Text>
         </View>
@@ -43,7 +47,7 @@ const YearResultSlide4: FC<Props> = ({ index, currentSlide }) => {
         {!!active?.topMonth && (
           <View>
             <Text style={styles.title}>
-              Самый активный месяц {active?.topMonth}
+              {t('yearsResult.most_active_month')} {active?.topMonth}
             </Text>
             <AnimatedCounter
               start={index === currentSlide}
@@ -53,7 +57,7 @@ const YearResultSlide4: FC<Props> = ({ index, currentSlide }) => {
         )}
 
         <Text style={styles.title}>
-          Теперь ты можешь сказать больше, чем когда-либо!
+          {t('yearsResult.now_you_can_say_more_than_ever')}
         </Text>
       </View>
 

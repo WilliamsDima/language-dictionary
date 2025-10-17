@@ -101,4 +101,12 @@ export const styles = StyleSheet.create({
     fontSize: scaleFontSize(16),
     color: COLORS.white,
   },
+  loader: {
+    position: 'absolute',
+    zIndex: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: COLORS.bg_modal,
+    borderRadius: 12,
+  },
 })

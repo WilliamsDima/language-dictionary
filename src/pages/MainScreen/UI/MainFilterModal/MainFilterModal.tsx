@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { styles } from './MainFilterModal.styles'
 import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
 import Modal from '@/shared/UI/Modal/Modal'
@@ -7,29 +7,36 @@ import { useActions } from '@/shared/hooks/useActions'
 import Close from '@/assets/icons/UI/close-red-64.svg'
 import Select from '@/shared/UI/Select/Select'
 import Button from '@/shared/UI/Button/Button'
-import { languagesOptions } from '@/shared/json/languages'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
-import { SelectOption } from '@/shared/UI/types'
+import type { SelectOption } from '@/shared/UI/types'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { COLORS } from '@/assets/styles/colors'
-import { IItem } from '@/entities/Item/model/item'
+import type { IItem } from '@/entities/Item/model/item'
+import { useTranslation } from '@/shared/i18n/types'
+import type { AppLanguageType } from '@/shared/store/slice/appSlice'
 
 interface Props {}
 
-const sortByDate: SelectOption[] = [
-  {
-    label: 'По убыванию',
-    value: 'desc',
-  },
-  {
-    label: 'По возрастанию',
-    value: 'asc',
-  },
-]
-
 const MainFilterModal: FC<Props> = () => {
   const { setShowFilterMain, setFilterMain } = useActions()
+  const { t } = useTranslation()
+
+  const { appLanguage, aplication } = useAppSelector((store) => store.app)
+
+  const sortByDate: SelectOption[] = useMemo(() => {
+    return [
+      {
+        label: t('ui.desc'),
+        value: 'desc',
+      },
+      {
+        label: t('ui.asc'),
+        value: 'asc',
+      },
+    ]
+  }, [appLanguage, t])
+
   const { showFilterMain, filterMain, filterByStatus } = useAppSelector(
     (store) => store.items
   )
@@ -39,7 +46,13 @@ const MainFilterModal: FC<Props> = () => {
   const [sortDateValue, setSortDateValue] = useState<SelectOption>(
     sortByDate[1]
   )
-  const [languages, setLanguages] = useState<SelectOption[]>([])
+  const [languages, setLanguages] = useState<AppLanguageType[]>([])
+
+  const languagesOptions = useMemo(() => {
+    return aplication?.appLanguages
+      ? Object.values(aplication?.appLanguages)
+      : []
+  }, [aplication])
 
   const { page, isLoading, setAllItems, setLastVisible, setIsLoading } =
     useCardsContext()
@@ -51,7 +64,7 @@ const MainFilterModal: FC<Props> = () => {
   }
 
   const onCancel = () => {
-    setSortDateValue({ label: 'По возрастанию', value: 'asc' })
+    setSortDateValue(sortByDate[1])
     setLanguages([])
   }
 
@@ -59,7 +72,7 @@ const MainFilterModal: FC<Props> = () => {
     setSortDateValue(value)
   }
 
-  const onSelectLanguages = (value: SelectOption[]) => {
+  const onSelectLanguages = (value: AppLanguageType[]) => {
     setLanguages(value)
   }
 
@@ -72,7 +85,7 @@ const MainFilterModal: FC<Props> = () => {
           status: filterByStatus,
           filter: {
             sortDate: sortDateValue?.value as any,
-            languages: languages.map((it) => +it.value),
+            languages: languages.map((it) => it.code),
           },
         },
         limitCount: 10,
@@ -101,7 +114,7 @@ const MainFilterModal: FC<Props> = () => {
 
             setFilterMain({
               sortDate: sortDateValue?.value as any,
-              languages: languages.map((it) => +it.value),
+              languages: languages.map((it) => it.code),
             })
           }
         })
@@ -119,7 +132,7 @@ const MainFilterModal: FC<Props> = () => {
       dateValue && setSortDateValue(dateValue)
 
       const langs = languagesOptions?.filter((it) => {
-        return filterMain?.languages?.includes(+it?.value)
+        return filterMain?.languages?.includes(it?.code)
       })
 
       setLanguages(langs)
@@ -142,18 +155,20 @@ const MainFilterModal: FC<Props> = () => {
 
           <View style={styles.options}>
             <Select
-              title="Сортировка по дате"
+              title={t('ui.sort_by_date')}
               select={sortDateValue}
               options={sortByDate}
               onSelect={onSelectSortDate}
             />
 
             <MultiselectDropdown
-              title="Язык"
+              title={t('ui.language')}
               selects={languages}
+              labelField="nativeName"
+              valueField="code"
               onSelects={onSelectLanguages}
               options={languagesOptions}
-              placeholder="Выбор языка"
+              placeholder={t('ui.language_selection')}
             />
           </View>
 
@@ -162,13 +177,13 @@ const MainFilterModal: FC<Props> = () => {
               classes={{ btn: [styles.btn, styles.btnCancel] }}
               onPress={onCancel}
             >
-              Сбросить
+              {t('ui.reset')}
             </Button>
             <Button classes={{ btn: styles.btn }} onPress={onSubmit}>
               {isLoading ? (
                 <ActivityIndicator size={'small'} color={COLORS.white} />
               ) : (
-                'Применить'
+                t('ui.apply')
               )}
             </Button>
           </View>

@@ -9,36 +9,42 @@ import {
 import Text from '../Text/Text'
 import { MultiSelect } from 'react-native-element-dropdown'
 import { styles } from './MultiselectDropdown.styles'
-import { SelectOption } from '../types'
+import { useTranslation } from '@/shared/i18n/types'
 
 interface Props {
-  options?: SelectOption[]
-  selects?: SelectOption[]
-  onSelects?: (value: SelectOption[]) => void
+  options?: any[]
+  selects?: any[]
+  onSelects?: (value: any[]) => void
   placeholder?: string
   title?: string
   classes?: {
     title?: StyleProp<TextStyle>
   }
+  labelField: string
+  valueField: string
 }
 
 const MultiselectDropdown: FC<Props> = (props) => {
   const {
     selects,
-    placeholder = 'не выбрано',
+    placeholder,
     onSelects,
     title,
     options,
     classes,
+    labelField = 'label',
+    valueField = 'value',
   } = props
+
+  const { t } = useTranslation()
 
   const [multiselectSelected, setMultiselect] = useState<string[]>([])
 
   useEffect(() => {
     if (selects) {
-      setMultiselect(selects.map((it) => it.value as string))
+      setMultiselect(selects.map((it) => it[valueField] as string))
     }
-  }, [selects])
+  }, [selects, valueField])
 
   return (
     <View>
@@ -52,19 +58,19 @@ const MultiselectDropdown: FC<Props> = (props) => {
         iconStyle={styles.iconStyle}
         containerStyle={styles.containerStyle}
         data={options || []}
-        labelField="label"
-        valueField="value"
-        placeholder={placeholder}
+        labelField={labelField}
+        valueField={valueField}
+        placeholder={placeholder || t('ui.select_placeholder')}
         value={multiselectSelected}
         search
-        searchPlaceholder="Поиск..."
+        searchPlaceholder={t('ui.search') + '...'}
         onChange={(item) => {
           setMultiselect(item)
           onSelects?.(
-            options?.filter((it) => item.includes(it.value as any)) || []
+            options?.filter((it) => item.includes(it[valueField] as any)) || []
           )
         }}
-        renderItem={(item: SelectOption, active) => {
+        renderItem={(item, active) => {
           return (
             <View style={[styles.item, active && styles.itemActive]}>
               {!!item.iconUrl && (
@@ -77,7 +83,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
                   active && styles.selectedTextStyleActive,
                 ]}
               >
-                {item.label}
+                {item[labelField]}
               </Text>
             </View>
           )
@@ -85,7 +91,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
         renderSelectedItem={(item, unSelect) => (
           <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
             <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
+              <Text style={styles.textSelectedStyle}>{item[labelField]}</Text>
             </View>
           </TouchableOpacity>
         )}

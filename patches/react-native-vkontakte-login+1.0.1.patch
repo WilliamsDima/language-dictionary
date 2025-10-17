@@ -182,11 +182,11 @@ new file mode 100644
 index 0000000..e69de29
 diff --git a/node_modules/react-native-vkontakte-login/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/react-native-vkontakte-login/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
 new file mode 100644
-index 0000000..f87abf5
+index 0000000..b6e773a
 --- /dev/null
 +++ b/node_modules/react-native-vkontakte-login/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
 @@ -0,0 +1 @@
-+#Tue Aug 05 12:34:55 MSK 2025
++#Fri Oct 17 12:54:16 MSK 2025
 diff --git a/node_modules/react-native-vkontakte-login/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/react-native-vkontakte-login/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
 new file mode 100644
 index 0000000..ed8047d
@@ -398,7 +398,7 @@ index 0000000..a71f320
 Binary files /dev/null and b/node_modules/react-native-vkontakte-login/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/VKAuthModule$2.class.uniqueId1 differ
 diff --git a/node_modules/react-native-vkontakte-login/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/VKAuthModule.class.uniqueId2 b/node_modules/react-native-vkontakte-login/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/VKAuthModule.class.uniqueId2
 new file mode 100644
-index 0000000..c2c2ff8
+index 0000000..828ea48
 Binary files /dev/null and b/node_modules/react-native-vkontakte-login/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/VKAuthModule.class.uniqueId2 differ
 diff --git a/node_modules/react-native-vkontakte-login/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/VKAuthPackage.class.uniqueId3 b/node_modules/react-native-vkontakte-login/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/VKAuthPackage.class.uniqueId3
 new file mode 100644

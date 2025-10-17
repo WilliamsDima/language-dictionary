@@ -3,19 +3,17 @@ import { styles } from './YearResultSlide7.styles'
 import { View } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import {
-  getYearRepeatCardsStats,
-  getYearStartTraningCardsStats,
-  getYearTotaltOpenApp,
-} from '@/shared/helpers/activities'
+import { getYearTotaltOpenApp } from '@/shared/helpers/activities'
 import LottieView from 'lottie-react-native'
 import { AnimatedCounter } from '@/shared/UI/AnimatedCounter/AnimatedCounter'
 import type { PropsSlideYearResult } from '../../data'
 import { declOfNum } from '@/shared/helpers/textFormat'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {} & PropsSlideYearResult
 
 const YearResultSlide7: FC<Props> = ({ index, currentSlide }) => {
+  const { t } = useTranslation()
   const date = new Date()
 
   const { firebaseData } = useAppSelector((store) => store.user)
@@ -30,17 +28,17 @@ const YearResultSlide7: FC<Props> = ({ index, currentSlide }) => {
     <View style={styles.slide}>
       <View style={styles.titles}>
         <View>
-          <Text style={styles.title}>
-            🚀 За этот год ты заходил в приложение
-          </Text>
+          <Text style={styles.title}>{t('yearsResult.open_app_title')}</Text>
           <AnimatedCounter start={index === currentSlide} value={active || 0} />
           <Text style={styles.title}>
-            {declOfNum(active || 0, ['раз', 'раза', 'раз'])}
+            {declOfNum(active || 0, [
+              t('time.once_1'),
+              t('time.once_2'),
+              t('time.once_1'),
+            ])}
           </Text>
         </View>
-        <Text style={styles.title}>
-          Иногда по привычке, иногда с целью — но всегда к знаниям.
-        </Text>
+        <Text style={styles.title}>{t('yearsResult.open_app_text')}</Text>
       </View>
 
       <View style={styles.footer}>
