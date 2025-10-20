@@ -1,7 +1,6 @@
-import { isSmallDevices } from './../../helpers/ScaleUtils'
-import { TooltipType } from '@/entities/Tooltip/model/Tooltip'
-import { SelectOption } from '@/shared/UI/types'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import type { TooltipType } from '@/entities/Tooltip/model/Tooltip'
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
+import type { ShowVariantList } from './userSlice'
 
 export type ThemeApp = 'dark' | 'light'
 
@@ -80,7 +79,7 @@ export interface IAplication {
   }
   socials: ISocial[]
   version: string
-  showVariantsList: SelectOption[]
+  showVariantsList: ShowVariantList[]
   privacy_policy_link: string
   showVKAuth: boolean
   translations: TranslationsType

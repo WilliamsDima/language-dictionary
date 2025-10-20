@@ -12,6 +12,11 @@
   "settingsScreen": {
     "privacy_policy": "политика конфиденциальности",
     "show_varian": "Вариант показа",
+    "showVariantsList": {
+      "translate_only": "Только перевод",
+      "word_only": "Слово без перевода",
+      "word_and_translate": "Слово и перевод"
+    },
     "update_is_available": "Доступно обновление",
     "save_json": "Сохранить карточки как JSON файл",
     "about": {

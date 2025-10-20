@@ -2,6 +2,7 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import type { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import type { ILanguage } from '@/shared/json/languages'
 import type { IItem } from '@/entities/Item/model/item'
+import type { I18NKeys } from '@/shared/i18n/types'
 
 export type IUser = FirebaseAuthTypes.User
 
@@ -13,6 +14,7 @@ export type ShowVariantListVale =
 export type ShowVariantList = {
   label: string
   value: ShowVariantListVale
+  keyTranslate: I18NKeys
 }
 
 export interface IActivityMonth {
