@@ -11,9 +11,12 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
 import { isShowModalYearResult } from '@/shared/constants/app'
 import { useActions } from '@/shared/hooks/useActions'
+import { useTranslation } from '@/shared/i18n/types'
 
 const ProfileScreen: FC = () => {
+  const { t } = useTranslation()
   const { setShowYearResult } = useActions()
+
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
   const [modalCards, setModalCards] = useState(false)
@@ -52,7 +55,7 @@ const ProfileScreen: FC = () => {
             classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
             onPress={startRepeat}
           >
-            начать повторение
+            {t('profileScreen.start_repeating')}
           </Button>
         )}
 
@@ -61,7 +64,9 @@ const ProfileScreen: FC = () => {
             classes={{ btn: styles.repeatBtn, textBtn: styles.logoutText }}
             onPress={onShowModalYearResult}
           >
-            Посмотреть итоги {new Date().getFullYear()} года 🎉
+            {t('profileScreen.show_year_result', {
+              date: new Date().getFullYear(),
+            })}
           </Button>
         )}
 
@@ -69,7 +74,7 @@ const ProfileScreen: FC = () => {
           classes={{ btn: styles.logout, textBtn: styles.logoutText }}
           onPress={showModalLogout}
         >
-          выйти из аккаунта
+          {t('profileScreen.logout')}
         </Button>
 
         <Button
@@ -77,7 +82,7 @@ const ProfileScreen: FC = () => {
           onPress={showModalDelete}
           type="BORDER-TRANSPARENT"
         >
-          удалить аккаунт
+          {t('profileScreen.delete_account')}
         </Button>
       </View>
       <ModalDeleteAccaunt visible={modalDelete} setVisible={setModalDelete} />

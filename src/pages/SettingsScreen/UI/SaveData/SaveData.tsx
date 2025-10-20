@@ -11,8 +11,10 @@ import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
+import { useTranslation } from '@/shared/i18n/types'
 
 const SaveData: FC = () => {
+  const { t } = useTranslation()
   const { setLastSaveData, setTooltip } = useActions()
 
   const { lastSaveData, items } = useAppSelector((store) => store.items)
@@ -57,7 +59,7 @@ const SaveData: FC = () => {
   return !!Object.keys(items)?.length ? (
     <View style={styles.container}>
       <Button isText={false} classes={{ btn: styles.btn }} onPress={toSave}>
-        <Text style={styles.btnText}>Сохранить карточки как JSON файл</Text>
+        <Text style={styles.btnText}>{t('settingsScreen.save_json')}</Text>
         <SaveIcon width={30} height={30} />
       </Button>
 

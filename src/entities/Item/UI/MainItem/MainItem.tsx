@@ -15,12 +15,14 @@ import { useActions } from '@/shared/hooks/useActions'
 import { useUserActivity } from '@/shared/hooks/useUserActivity'
 import { useCards } from '@/shared/hooks/useCards'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   item: IItem
 }
 
 const MainItem: FC<Props> = ({ item }) => {
+  const { t } = useTranslation()
   const { setModalDeleteItem, setItemEdit, setShowAddModal } = useActions()
   const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
@@ -136,7 +138,9 @@ const MainItem: FC<Props> = ({ item }) => {
                   },
                 ]}
               >
-                {item.status === 'READY' ? 'учить' : 'изучено'}
+                {item.status === 'READY'
+                  ? t('cards.study')
+                  : t('cards.studied')}
               </Text>
             </TouchableOpacity>
           )}

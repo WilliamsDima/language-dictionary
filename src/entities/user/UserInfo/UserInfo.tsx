@@ -5,6 +5,7 @@ import UserAvatart from '@/shared/UI/UserAvatart/UserAvatart'
 import Text from '@/shared/UI/Text/Text'
 import { dateFormat } from '@/shared/helpers/dateFormat'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import { useTranslation } from '@/shared/i18n/types'
 
 /**
  * информация о пользователе
@@ -15,6 +16,7 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 type Props = {}
 
 const UserInfo: FC<Props> = (props) => {
+  const { t } = useTranslation()
   const { firebaseData } = useAppSelector((store) => store.user)
 
   return (
@@ -27,7 +29,7 @@ const UserInfo: FC<Props> = (props) => {
       <View style={styles.info}>
         <Text style={styles.name}>{firebaseData?.name}</Text>
         <Text style={styles.date}>
-          Дата регистрации:{' '}
+          {t('profileScreen.date_registration')}
           {dateFormat({ date: firebaseData?.dateRegistration, type: 'FULL' })}
         </Text>
       </View>

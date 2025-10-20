@@ -10,8 +10,11 @@ import ModalDeleteItem from '@/features/ModalDeleteItem/ModalDeleteItem'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import Button from '@/shared/UI/Button/Button'
+import { useTranslation } from '@/shared/i18n/types'
 
 const MainList: FC = () => {
+  const { t } = useTranslation()
+
   const { filterByStatus } = useAppSelector((store) => store.items)
   const { allItems, counts, isLoading, isFilterActive, loadMoreItems } =
     useCardsContext()
@@ -54,7 +57,7 @@ const MainList: FC = () => {
             data={Object.values(allItems)}
             ListHeaderComponent={
               <Text style={styles.count}>
-                Всего найдено: {counts[filterByStatus]}
+                {t('main.list_count')} {counts[filterByStatus]}
               </Text>
             }
             showsVerticalScrollIndicator={false}
@@ -90,8 +93,8 @@ const MainList: FC = () => {
           />
           <Text style={styles.emptyText}>
             {isFilterActive
-              ? 'Ничего не найдено'
-              : 'Добавьте слова для изучения'}
+              ? t('main.filter_not_found')
+              : t('main.added_words')}
           </Text>
         </View>
       )}

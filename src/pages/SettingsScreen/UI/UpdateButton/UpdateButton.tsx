@@ -3,9 +3,11 @@ import { View } from 'react-native'
 import { styles } from './UpdateButton.styles'
 import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
+import { useTranslation } from '@/shared/i18n/types'
 // import CodePush from 'react-native-code-push'
 
 const UpdateButton: FC = () => {
+  const { t } = useTranslation()
   const { setShowUpdateModal } = useActions()
 
   const [updateAvailable, setUpdateAvailable] = useState(false)
@@ -30,7 +32,7 @@ const UpdateButton: FC = () => {
         classes={{ btn: styles.btn, textBtn: styles.btnText }}
         onPress={startUpdate}
       >
-        Доступно обновление
+        {t('settingsScreen.update_is_available')}
       </Button>
     </View>
   ) : (

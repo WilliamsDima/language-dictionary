@@ -14,6 +14,7 @@ import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
 import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
 import DoneIcon from '@/assets/icons/UI/done-white-64.svg'
 import { ILanguage, languages } from '@/shared/json/languages'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   visible: boolean
@@ -30,6 +31,8 @@ const ModalAddLanguages: FC<Props> = ({
   setVisible,
   onConfirm,
 }) => {
+  const { t } = useTranslation()
+
   const { getAnimationStyles } = useScaleAnim({
     active: visible,
   })
@@ -78,7 +81,9 @@ const ModalAddLanguages: FC<Props> = ({
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>Список языков:</Text>
+            <Text style={styles.title}>
+              {t('modal.modalAddLanguages.title')}
+            </Text>
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={styles.scroll}

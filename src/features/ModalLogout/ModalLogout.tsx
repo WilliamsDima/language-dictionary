@@ -6,6 +6,7 @@ import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import { useAuth } from '@/shared/hooks/useAuth'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   visible: boolean
@@ -19,6 +20,7 @@ type Props = {
  */
 
 const ModalLogout: FC<Props> = ({ visible, setVisible }) => {
+  const { t } = useTranslation()
   const { logoutHandler } = useAuth()
 
   const { getAnimationStyles } = useScaleAnim({
@@ -43,7 +45,7 @@ const ModalLogout: FC<Props> = ({ visible, setVisible }) => {
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>Хотите выйти из аккаунта?</Text>
+            <Text style={styles.title}>{t('modal.modalLogout.title')}</Text>
 
             <View style={styles.btns}>
               <Button
@@ -54,7 +56,7 @@ const ModalLogout: FC<Props> = ({ visible, setVisible }) => {
                 }}
                 onPress={onCancelHandler}
               >
-                Отмена
+                {t('ui.cancel')}
               </Button>
 
               <Button
@@ -64,7 +66,7 @@ const ModalLogout: FC<Props> = ({ visible, setVisible }) => {
                 }}
                 onPress={logoutHandler}
               >
-                Выйти
+                {t('ui.exit')}
               </Button>
             </View>
           </TouchableOpacity>

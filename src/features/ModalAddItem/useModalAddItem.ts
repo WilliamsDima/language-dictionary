@@ -78,18 +78,18 @@ export const useModalAddItem = () => {
   }
 
   const onConfirm = async () => {
-    console.log('onConfirm', firebaseData)
-    console.log('onConfirm', profile)
+    // console.log('onConfirm', firebaseData)
+    // console.log('onConfirm', profile)
 
     if (firebaseData && profile) {
       const itemsError = items.some(
         (it) => !it.word.trim() || !it.translate.trim()
       )
 
-      console.log('items', items)
-      console.log('itemsError', itemsError)
-      console.log('language', language)
-      console.log('itemEdit', itemEdit)
+      // console.log('items', items)
+      // console.log('itemsError', itemsError)
+      // console.log('language', language)
+      // console.log('itemEdit', itemEdit)
 
       const error = !language || itemsError
 
@@ -105,7 +105,6 @@ export const useModalAddItem = () => {
 
       if (itemEdit?.idDoc) {
         setIsLoading(true)
-        console.log(1111)
 
         await updateItemHandler({ ...itemEdit, items, description, language })
         setIsLoading(false)

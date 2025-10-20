@@ -4,13 +4,17 @@ import React, { FC } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 import { styles } from './DeveloperInfo.styles'
 import openInBrowser from '@/shared/helpers/openInBrowser'
+import { useTranslation } from '@/shared/i18n/types'
 
 const DeveloperInfo: FC = () => {
+  const { t } = useTranslation()
   const { aplication } = useAppSelector((store) => store.app)
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Информация о авторе.</Text>
+      <Text style={styles.title}>
+        {t('settingsScreen.developerInfo.title')}
+      </Text>
 
       {!!aplication?.developer && (
         <TouchableOpacity
@@ -21,13 +25,17 @@ const DeveloperInfo: FC = () => {
             style={styles.googleplay}
             source={{ uri: aplication.developer.icon }}
           />
-          <Text style={styles.developerText}>{aplication.developer.text}</Text>
+          <Text style={styles.developerText}>
+            {t('settingsScreen.developerInfo.googlePlayLink')}
+          </Text>
         </TouchableOpacity>
       )}
 
       {!!aplication?.socials && (
         <>
-          <Text style={styles.subtitle}>Связь:</Text>
+          <Text style={styles.subtitle}>
+            {t('settingsScreen.developerInfo.socials.title')}
+          </Text>
 
           {aplication?.socials.map((item) => {
             return (

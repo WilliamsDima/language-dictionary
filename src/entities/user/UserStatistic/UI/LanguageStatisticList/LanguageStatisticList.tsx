@@ -7,6 +7,7 @@ import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import LanguageStatisticItem from '../LanguageStatisticItem/LanguageStatisticItem'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   setShowModalLanguages: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,6 +18,7 @@ const LanguageStatisticList: FC<Props> = ({
   setIsNativeLanguage,
   setShowModalLanguages,
 }) => {
+  const { t } = useTranslation()
   const { firebaseData } = useAppSelector((store) => store.user)
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
@@ -24,7 +26,9 @@ const LanguageStatisticList: FC<Props> = ({
     <>
       {profile?.languages?.length ? (
         <View style={styles.languages}>
-          <Text style={styles.itemText}>Изучаемые языки:</Text>
+          <Text style={styles.itemText}>
+            {t('profileScreen.languages_studied')}
+          </Text>
           {profile?.languages.map((item) => {
             return <LanguageStatisticItem key={item.id} item={item} />
           })}
@@ -41,9 +45,11 @@ const LanguageStatisticList: FC<Props> = ({
         </View>
       ) : (
         <>
-          <Text style={styles.itemText}>Изучаемые языки: </Text>
+          <Text style={styles.itemText}>
+            {t('profileScreen.languages_studied')}
+          </Text>
           <Text style={[styles.languagesText, styles.languagesTextEmpty]}>
-            не выбраны
+            {t('profileScreen.languages_studied_not_select')}
           </Text>
 
           <TouchableOpacity

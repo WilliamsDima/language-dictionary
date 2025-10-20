@@ -11,6 +11,7 @@ import {
 import Modal from '@/shared/UI/Modal/Modal'
 import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import { ILanguage, languages } from '@/shared/json/languages'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   visible: boolean
@@ -31,6 +32,8 @@ const ModalLanguagesList: FC<Props> = ({
   onSelect,
   language,
 }) => {
+  const { t } = useTranslation()
+
   const { getAnimationStyles } = useScaleAnim({
     active: visible,
   })
@@ -55,7 +58,7 @@ const ModalLanguagesList: FC<Props> = ({
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>Выбор языка:</Text>
+            <Text style={styles.title}>{t('ui.language_selection')}:</Text>
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={styles.scroll}

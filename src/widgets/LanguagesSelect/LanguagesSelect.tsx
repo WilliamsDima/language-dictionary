@@ -6,6 +6,7 @@ import EarthIcon from '@/assets/icons/UI/earth.svg'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
 import { ILanguage } from '@/shared/json/languages'
 import { COLORS } from '@/assets/styles/colors'
+import { useTranslation } from '@/shared/i18n/types'
 
 /**
  * UI select language
@@ -23,6 +24,8 @@ type Props = {
 }
 
 const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
+  const { t } = useTranslation()
+
   const [showModal, setShowModal] = useState(false)
 
   const openModal = () => {
@@ -45,7 +48,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         onPress={openModal}
       >
         <Text style={styles.title}>
-          {language ? language.full_name : 'Выбор языка'}
+          {language ? language.full_name : t('ui.language_selection')}
         </Text>
 
         {language ? (
@@ -55,7 +58,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         )}
       </TouchableOpacity>
 
-      {error && <Text style={styles.error}>Язык не выбран</Text>}
+      {error && <Text style={styles.error}>{t('ui.language_not_select')}</Text>}
 
       <ModalLanguagesList
         setVisible={setShowModal}

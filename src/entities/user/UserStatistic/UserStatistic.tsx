@@ -13,6 +13,7 @@ import LanguageStatisticList from './UI/LanguageStatisticList/LanguageStatisticL
 import LanguageNativeStatistic from './UI/LanguageNativeStatistic/LanguageNativeStatistic'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
 import Loader from '@/shared/UI/Loader/Loader'
+import { useTranslation } from '@/shared/i18n/types'
 
 /**
  * информация о пользователе
@@ -23,6 +24,7 @@ import Loader from '@/shared/UI/Loader/Loader'
 type Props = {}
 
 const UserStatistic: FC<Props> = (props) => {
+  const { t } = useTranslation()
   const { firebaseData } = useAppSelector((store) => store.user)
   const { items } = useAppSelector((store) => store.items)
 
@@ -88,26 +90,31 @@ const UserStatistic: FC<Props> = (props) => {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.statistic}>Статистика:</Text>
+        <Text style={styles.statistic}>{t('profileScreen.statistic')}</Text>
 
         <View style={styles.item}>
           <Text style={styles.itemText}>
-            Всего слов/правил/предложений: {allWordsCount}
+            {t('profileScreen.all_count')} {allWordsCount}
           </Text>
         </View>
 
         <View style={styles.item}>
           <Text style={styles.itemText}>
-            Всего карочек: {Object.keys(items)?.length || 0}
+            {t('profileScreen.all_count_cards')}{' '}
+            {Object.keys(items)?.length || 0}
           </Text>
         </View>
 
         <View style={styles.item}>
-          <Text style={styles.itemText}>Изучено: {allWordsReady}</Text>
+          <Text style={styles.itemText}>
+            {t('profileScreen.studied_count')} {allWordsReady}
+          </Text>
         </View>
 
         <View style={styles.item}>
-          <Text style={styles.itemText}>В изучении: {allWordsStady}</Text>
+          <Text style={styles.itemText}>
+            {t('profileScreen.progress_count')} {allWordsStady}
+          </Text>
         </View>
 
         <View style={styles.item}>

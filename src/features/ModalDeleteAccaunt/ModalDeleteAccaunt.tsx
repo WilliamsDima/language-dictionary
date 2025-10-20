@@ -6,6 +6,7 @@ import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import { useAuth } from '@/shared/hooks/useAuth'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   visible: boolean
@@ -19,6 +20,7 @@ type Props = {
  */
 
 const ModalDeleteAccaunt: FC<Props> = ({ visible, setVisible }) => {
+  const { t } = useTranslation()
   const { deleteAccaunt } = useAuth()
 
   const { getAnimationStyles } = useScaleAnim({
@@ -44,12 +46,11 @@ const ModalDeleteAccaunt: FC<Props> = ({ visible, setVisible }) => {
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
             <Text style={styles.title}>
-              Вы уверены что хотите удалить аккаунт?
+              {t('modal.modalDeleteAccaunt.title')}
             </Text>
 
             <Text style={styles.text}>
-              Вы не сможите восстановить данные аккаунта после удаления, ваши
-              данные будут удалены навсегда.
+              {t('modal.modalDeleteAccaunt.text')}
             </Text>
 
             <View style={styles.btns}>
@@ -61,7 +62,7 @@ const ModalDeleteAccaunt: FC<Props> = ({ visible, setVisible }) => {
                 }}
                 onPress={onCancelHandler}
               >
-                Отмена
+                {t('ui.cancel')}
               </Button>
 
               <Button
@@ -71,7 +72,7 @@ const ModalDeleteAccaunt: FC<Props> = ({ visible, setVisible }) => {
                 }}
                 onPress={deleteAccaunt}
               >
-                удалить
+                {t('ui.delete')}
               </Button>
             </View>
           </TouchableOpacity>

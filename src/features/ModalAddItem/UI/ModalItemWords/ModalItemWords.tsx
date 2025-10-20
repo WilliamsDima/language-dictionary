@@ -6,6 +6,7 @@ import { AddItemWords } from '../../Model/items'
 import Text from '@/shared/UI/Text/Text'
 import TrashIcon from '@/assets/icons/UI/trash-red-64.svg'
 import { COLORS } from '@/assets/styles/colors'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   item: AddItemWords
@@ -22,6 +23,8 @@ const ModalItemWords: FC<Props> = ({
   setItems,
   setErrorItems,
 }) => {
+  const { t } = useTranslation()
+
   const isErrorWord = useMemo(() => {
     if (errorItems) {
       return !item.word.trim()
@@ -76,8 +79,8 @@ const ModalItemWords: FC<Props> = ({
     <View style={[styles.inputs]}>
       <Text style={styles.index}>{index + 1}.</Text>
       <Input
-        title="Слово для перевода"
-        placeholder="введите слово"
+        title={t('modal.modalAddItem.word_for_translate')}
+        placeholder={t('modal.modalAddItem.word_for_translate_placeholder')}
         multiline
         value={item.word}
         onChangeText={onChangeWord}
@@ -90,8 +93,8 @@ const ModalItemWords: FC<Props> = ({
       />
 
       <Input
-        title="Перевод"
-        placeholder="введите перевод для слова"
+        title={t('modal.modalAddItem.translate')}
+        placeholder={t('modal.modalAddItem.translate_placeholder')}
         multiline
         value={item.translate}
         onChangeText={onChangeTranslate}

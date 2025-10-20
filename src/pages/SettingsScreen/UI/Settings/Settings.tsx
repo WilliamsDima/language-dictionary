@@ -10,8 +10,10 @@ import {
 import SaveData from '../SaveData/SaveData'
 import UpdateButton from '../UpdateButton/UpdateButton'
 import { SelectOption } from '@/shared/UI/types'
+import { useTranslation } from '@/shared/i18n/types'
 
 const Settings: FC = () => {
+  const { t } = useTranslation()
   const { aplication } = useAppSelector((store) => store.app)
   const { firebaseData } = useAppSelector((store) => store.user)
 
@@ -40,7 +42,7 @@ const Settings: FC = () => {
   return (
     <View style={styles.container}>
       <Select
-        title="Вариант показа"
+        title={t('settingsScreen.show_varian')}
         select={showVariantSelect}
         onSelect={onSelectShowVariant}
         options={aplication?.showVariantsList}

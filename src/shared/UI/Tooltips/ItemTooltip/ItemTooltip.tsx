@@ -5,6 +5,8 @@ import Text from '@/shared/UI/Text/Text'
 import DoneIcon from '@/assets/icons/UI/done-primery-64.svg'
 import DeleteIcon from '@/assets/icons/UI/trash-red-64.svg'
 import ErrorIcon from '@/assets/icons/UI/error-circle-red-64.svg'
+import { useTranslation } from '@/shared/i18n/types'
+import { useAppSelector } from '@/shared/hooks/useStore'
 
 type Props = {
   type: 'UPDATE' | 'DELETE' | 'ADD' | 'ERROR'
@@ -12,24 +14,27 @@ type Props = {
 }
 
 const ItemTooltip: FC<Props> = ({ type, text }) => {
+  const { t } = useTranslation()
+  const { appLanguage } = useAppSelector((store) => store.app)
+
   const textHadler = useMemo(() => {
     switch (type) {
       case 'ADD':
-        return text || 'Карточка добавлена!'
+        return text || t('itemTooltip.ADD')
 
       case 'UPDATE':
-        return text || 'Карточка обновлена!'
+        return text || t('itemTooltip.UPDATE')
 
       case 'DELETE':
-        return text || 'Карточка удалена!'
+        return text || t('itemTooltip.DELETE')
 
       case 'ERROR':
-        return text || 'Что-то пошло не так...'
+        return text || t('itemTooltip.ERROR')
 
       default:
-        return 'error text'
+        return t('itemTooltip.default')
     }
-  }, [type, text])
+  }, [type, text, appLanguage, t])
 
   const icon = useMemo(() => {
     switch (type) {

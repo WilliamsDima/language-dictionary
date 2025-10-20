@@ -9,8 +9,11 @@ import DeveloperInfo from './UI/DeveloperInfo/DeveloperInfo'
 import Button from '@/shared/UI/Button/Button'
 import openInBrowser from '@/shared/helpers/openInBrowser'
 import Settings from './UI/Settings/Settings'
+import { useTranslation } from '@/shared/i18n/types'
 
 const SettingsScreen: FC = () => {
+  const { t } = useTranslation()
+
   const { aplication } = useAppSelector((store) => store.app)
 
   const toPrivacyPolicy = () => {
@@ -33,7 +36,7 @@ const SettingsScreen: FC = () => {
           }}
           onPress={toPrivacyPolicy}
         >
-          политика конфиденциальности
+          {t('settingsScreen.privacy_policy')}
         </Button>
       </View>
     </Layout>

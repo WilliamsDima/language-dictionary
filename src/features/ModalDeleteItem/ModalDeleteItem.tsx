@@ -8,10 +8,12 @@ import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useCards } from '@/shared/hooks/useCards'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
 const ModalDeleteItem: FC<Props> = () => {
+  const { t } = useTranslation()
   const { setModalDeleteItem } = useActions()
   const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
@@ -47,12 +49,10 @@ const ModalDeleteItem: FC<Props> = () => {
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>
-              Вы уверены что хотите удалить карточку?
-            </Text>
+            <Text style={styles.title}>{t('modal.modalDeleteItem.title')}</Text>
 
             <Text style={styles.text}>
-              Вы не сможите восстановить её после удаления.
+              {t('modal.modalDeleteItem.warning')}
             </Text>
 
             <View style={styles.btns}>
@@ -64,7 +64,7 @@ const ModalDeleteItem: FC<Props> = () => {
                 }}
                 onPress={onCancelHandler}
               >
-                Отмена
+                {t('ui.cancel')}
               </Button>
 
               <Button
@@ -74,7 +74,7 @@ const ModalDeleteItem: FC<Props> = () => {
                 }}
                 onPress={onDelete}
               >
-                удалить
+                {t('ui.delete')}
               </Button>
             </View>
           </TouchableOpacity>

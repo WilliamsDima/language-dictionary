@@ -6,8 +6,10 @@ import { styles } from './VersionBlock.styles'
 import openInBrowser from '@/shared/helpers/openInBrowser'
 import { GOOGLE_PLAY } from '@/shared/constants/app'
 import DeviceInfo from 'react-native-device-info'
+import { useTranslation } from '@/shared/i18n/types'
 
 const VersionBlock: FC = () => {
+  const { t } = useTranslation()
   const { aplication } = useAppSelector((store) => store.app)
 
   const toUpdate = () => {
@@ -26,20 +28,24 @@ const VersionBlock: FC = () => {
     }
 
     if (version !== aplication?.version) {
-      return 'Ваша версия приложения устарела'
+      return t('settingsScreen.version_faild')
     }
   }, [aplication, version])
 
   return (
     <View style={styles.container}>
-      <Text style={styles.version}>Версия: {version}</Text>
+      <Text style={styles.version}>
+        {t('settingsScreen.version')} {version}
+      </Text>
       {/* <Text style={styles.version}>Версия appcenter: 1.0.6</Text> */}
 
       {!!checkVersion && (
         <>
           <Text style={styles.versionInvalid}>{checkVersion}</Text>
           <TouchableOpacity onPress={toUpdate}>
-            <Text style={styles.versionUpdate}>Обновить</Text>
+            <Text style={styles.versionUpdate}>
+              {t('settingsScreen.update')}
+            </Text>
           </TouchableOpacity>
         </>
       )}

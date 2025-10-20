@@ -19,6 +19,7 @@ import LanguagesSelect from '@/widgets/LanguagesSelect/LanguagesSelect'
 import ModalItemWords from './UI/ModalItemWords/ModalItemWords'
 import { COLORS } from '@/assets/styles/colors'
 import { useModalAddItem } from './useModalAddItem'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
@@ -49,6 +50,8 @@ const ModalAddItem: FC<Props> = () => {
     errorItems,
   } = useModalAddItem()
 
+  const { t } = useTranslation()
+
   return (
     <Modal
       visible={showAddModal}
@@ -73,7 +76,9 @@ const ModalAddItem: FC<Props> = () => {
                   paddingBottom: isOpen ? 150 : 0,
                 }}
               >
-                <Text style={styles.title}>Создание карточки</Text>
+                <Text style={styles.title}>
+                  {t('modal.modalAddItem.title')}
+                </Text>
 
                 {items.map((it, i) => {
                   return (
@@ -96,8 +101,10 @@ const ModalAddItem: FC<Props> = () => {
 
                 <View style={[styles.footer]}>
                   <Input
-                    title="Описание (не обязательно)"
-                    placeholder="введите описание если требуется"
+                    title={t('modal.modalAddItem.description')}
+                    placeholder={t(
+                      'modal.modalAddItem.description_placeholder'
+                    )}
                     multiline
                     value={description}
                     onChangeText={setDescription}
