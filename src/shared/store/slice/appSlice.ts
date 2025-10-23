@@ -66,6 +66,9 @@ export type AppLanguageType = {
   name: string
   nativeName: string
   code: TranslationKeys
+  emoji: string
+  id: number
+  ruName: string
 }
 export type AppLanguagesType = Record<TranslationKeys, AppLanguageType>
 

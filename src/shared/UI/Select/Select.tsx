@@ -19,8 +19,10 @@ interface Props {
   placeholder?: string
   labelField?: string
   valueField?: string
+  iconField?: string
   loading?: boolean
   title?: string
+  showRenderLeftIcon?: boolean
   classes?: {
     title?: StyleProp<TextStyle>
     wrapper?: StyleProp<ViewStyle>
@@ -39,8 +41,10 @@ const Select: FC<Props> = (props) => {
     classes,
     labelField = 'label',
     valueField = 'value',
+    iconField,
     maxHeight = 300,
     loading,
+    showRenderLeftIcon,
   } = props
   const { t } = useTranslation()
 
@@ -55,10 +59,26 @@ const Select: FC<Props> = (props) => {
       <Dropdown
         style={[styles.dropdown, classes?.dropdown]}
         placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
+        // selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         containerStyle={styles.containerStyle}
         iconStyle={styles.iconStyle}
+        selectedTextStyle={styles.label}
+        renderLeftIcon={() =>
+          iconField && showRenderLeftIcon ? (
+            <View style={styles.iconValue}>{select?.[iconField]}</View>
+          ) : (
+            <></>
+          )
+        }
+        renderItem={(item, isSelected) => {
+          return (
+            <View style={styles.item}>
+              {iconField && item[iconField]}
+              <Text style={styles.selectedTextStyle}>{item[labelField]}</Text>
+            </View>
+          )
+        }}
         data={options || []}
         maxHeight={maxHeight}
         labelField={labelField}

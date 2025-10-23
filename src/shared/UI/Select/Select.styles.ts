@@ -52,20 +52,21 @@ export const styles = StyleSheet.create({
     width: scaleWidth(20),
     height: scaleWidth(20),
   },
+  iconValue: {
+    marginRight: 10,
+  },
 
   item: {
     padding: scaleWidth(10),
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
   },
   itemActive: {
     backgroundColor: COLORS.primery,
   },
 
-  label: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.white,
-  },
+  label: {},
 
   optionContainer: {
     position: 'absolute',

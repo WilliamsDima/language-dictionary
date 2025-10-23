@@ -11,6 +11,7 @@ import Select from '@/shared/UI/Select/Select'
 import { useActions } from '@/shared/hooks/useActions'
 import type { AppLanguageType } from '@/shared/store/slice/appSlice'
 import { changeLanguage } from '@/shared/i18n'
+import CountryFlag from 'react-native-country-flag'
 
 const AuthScreen: FC = () => {
   const { setAppLanguage } = useActions()
@@ -23,6 +24,20 @@ const AuthScreen: FC = () => {
   const languages = useMemo(() => {
     return aplication?.appLanguages
       ? Object.values(aplication?.appLanguages)
+          .sort((a, b) => a.id - b.id)
+          .map((it) => {
+            return {
+              ...it,
+              icon: (
+                <View style={styles.icon}>
+                  <CountryFlag
+                    isoCode={it.emoji.toLocaleLowerCase()}
+                    size={20}
+                  />
+                </View>
+              ),
+            }
+          })
       : []
   }, [aplication])
 
@@ -52,12 +67,24 @@ const AuthScreen: FC = () => {
 
         <View style={styles.btns}>
           <View style={styles.lang}>
-            <Text style={styles.langIcon}>🌍</Text>
+            <Text style={styles.langIcon}>
+              {appLanguage ? (
+                <View style={styles.iconSelect}>
+                  <CountryFlag
+                    isoCode={appLanguage.emoji.toLocaleLowerCase()}
+                    size={40}
+                  />
+                </View>
+              ) : (
+                '🌍'
+              )}
+            </Text>
             <Select
               classes={{ wrapper: styles.wrapperSelect }}
               options={languages}
               labelField="nativeName"
               valueField="code"
+              iconField="icon"
               onSelect={onSelectLanguage}
               select={appLanguage}
               loading={loading}
