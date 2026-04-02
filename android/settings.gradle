@@ -4,12 +4,4 @@ extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autoli
 rootProject.name = 'wordcards'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
-// code push
-include ':app', ':react-native-code-push'
-project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-code-push/android/app')
-// vk
-include ':react-native-vkontakte-login'
-project(':react-native-vkontakte-login').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vkontakte-login/android')
-include ':react-native-splash-screen'   
-project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android')
 

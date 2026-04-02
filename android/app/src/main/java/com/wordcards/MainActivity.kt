@@ -39,6 +39,6 @@ class MainActivity : ReactActivity() {
           Crashes::class.java
       )
 
-      super.onCreate(savedInstanceState)
+      super.onCreate(null)
   }
 }
