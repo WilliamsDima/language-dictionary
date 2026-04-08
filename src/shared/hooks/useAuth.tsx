@@ -8,7 +8,6 @@ import React, {
   useCallback,
 } from 'react'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
-import VKLogin from 'react-native-vkontakte-login'
 import { useActions } from './useActions'
 import { useAppDispatch, useAppSelector } from './useStore'
 import { IFirebaseData, IUserActivity } from '../store/slice/userSlice'
@@ -23,7 +22,6 @@ import {
 import { baseApi } from '../API/baseApi'
 import { removeAsyncLocal } from '../helpers/asyncStorage'
 import { LOCAL_KEYS } from '../constants/localStorage'
-import { useUserVk } from '../API/getUserVk'
 
 type IContext = {
   logoutHandler: () => Promise<void>
@@ -38,8 +36,6 @@ type AuthProviderType = {
 }
 
 export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
-  useUserVk()
-
   const { setIsAuth, setFirebaseData, setIsVkLogin } = useActions()
 
   const dispatch = useAppDispatch()
@@ -112,7 +108,7 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     setIsVkLogin(false)
     await removeAsyncLocal(LOCAL_KEYS.vk_token)
     await removeAsyncLocal(LOCAL_KEYS.vk_id_user)
-    return VKLogin.logout()
+    // return VKLogin.logout()
   }, [setIsVkLogin])
 
   const logoutHandler = useCallback(async () => {

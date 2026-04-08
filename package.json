@@ -58,7 +58,6 @@
     "react-native-svg": "^15.10.1",
     "react-native-svg-transformer": "^1.5.0",
     "react-native-tts": "^4.1.1",
-    "react-native-vkontakte-login": "^1.0.1",
     "react-redux": "^9.2.0",
     "yandex-mobile-ads": "^7.8.0"
   },

@@ -1,4 +1,3 @@
-import VKLogin from 'react-native-vkontakte-login'
 import { getUserData } from '../firebase/api'
 import { useActions } from '../hooks/useActions'
 import { useEffect } from 'react'

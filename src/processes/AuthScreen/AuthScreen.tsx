@@ -4,7 +4,6 @@ import { Image, View } from 'react-native'
 import ButtonGoogle from './UI/ButtonGoogle/ButtonGoogle'
 import { styles } from './AuthScreen.styles'
 import Text from '@/shared/UI/Text/Text'
-import ButtonVk from './UI/ButtonVk/ButtonVk'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useTranslation } from '@/shared/i18n/types'
 import Select from '@/shared/UI/Select/Select'
@@ -93,8 +92,6 @@ const AuthScreen: FC = () => {
           </View>
 
           <ButtonGoogle />
-
-          {!!aplication?.showVKAuth && <ButtonVk />}
         </View>
       </View>
     </Layout>
