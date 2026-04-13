@@ -84,6 +84,17 @@
     "typescript": "^5.8.3"
   },
   "engines": {
-    "node": ">= 22.11.0"
+    "node": ">= 22.2.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml}": "prettier --write"
   }
 }
