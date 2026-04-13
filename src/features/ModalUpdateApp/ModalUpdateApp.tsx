@@ -1,9 +1,8 @@
-import React, { FC, memo, useEffect, useRef } from 'react'
+import React, { FC, memo, useRef } from 'react'
 import { styles } from './ModalUpdateApp.styles'
-import { Alert, View } from 'react-native'
+import { View } from 'react-native'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-// import CodePush from 'react-native-code-push'
 import Modal from 'react-native-modal'
 import { COLORS } from '@/assets/styles/colors'
 import Text from '@/shared/UI/Text/Text'
@@ -13,9 +12,7 @@ type Props = {}
 
 const ModalUpdateApp: FC<Props> = () => {
   const { setShowUpdateModal } = useActions()
-  const { showUpdateModal, isWatchSplash } = useAppSelector(
-    (store) => store.app
-  )
+  const { showUpdateModal } = useAppSelector((store) => store.app)
 
   const scrollViewRef = useRef<any>(null)
 
@@ -25,42 +22,12 @@ const ModalUpdateApp: FC<Props> = () => {
     }
   }
 
-  const startUpdate = () => {
-    // CodePush.sync({
-    //   installMode: CodePush.InstallMode.IMMEDIATE,
-    //   updateDialog: {
-    //     appendReleaseDescription: true,
-    //     optionalUpdateMessage: 'Новое обновление доступно!',
-    //     optionalIgnoreButtonLabel: 'Игнорировать',
-    //     optionalInstallButtonLabel: 'Установить',
-    //   },
-    // }).then((status) => {
-    //   if (status === CodePush.SyncStatus.UPDATE_INSTALLED) {
-    //     Alert.alert(
-    //       'Обновление установлено',
-    //       'Новое обновление успешно применено! Перезапустите приложение.'
-    //     )
-    //   }
-    // })
-  }
+  const startUpdate = () => {}
 
   const onCancelHandler = () => {
     setShowUpdateModal(false)
   }
 
-  useEffect(() => {
-    // if (isWatchSplash) {
-    //   CodePush.checkForUpdate().then((update) => {
-    //     console.log('checkForUpdate update:', update)
-    //     if (update) {
-    //       console.log('Обновление доступно:', update)
-    //       setShowUpdateModal(true)
-    //     } else {
-    //       console.log('Обновлений нет.')
-    //     }
-    //   })
-    // }
-  }, [isWatchSplash])
   return (
     <Modal
       isVisible={showUpdateModal}

@@ -9,7 +9,6 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import com.microsoft.codepush.react.CodePush
 
 class MainApplication : Application(), ReactApplication {
 
@@ -19,10 +18,6 @@ class MainApplication : Application(), ReactApplication {
                 PackageList(this).packages.apply {}
 
             override fun getJSMainModuleName(): String = "index"
-
-            override fun getJSBundleFile(): String? {
-                return CodePush.getJSBundleFile()
-            }
 
             override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
