@@ -22,7 +22,6 @@ module.exports = {
         },
       },
     ],
-    'react-native-reanimated/plugin',
     [
       'module:react-native-dotenv',
       {
@@ -34,5 +33,6 @@ module.exports = {
         allowUndefined: true,
       },
     ],
+    'react-native-worklets/plugin',
   ],
 }

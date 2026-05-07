@@ -4,8 +4,8 @@ import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-import org.devio.rn.splashscreen.SplashScreen
 import android.os.Bundle
+import com.zoontek.rnbootsplash.RNBootSplash
 
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
@@ -27,7 +27,7 @@ class MainActivity : ReactActivity() {
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-      SplashScreen.show(this, R.style.SplashScreenTheme, true)
+      RNBootSplash.init(this, R.style.BootTheme)
 
       val appCenterSecret = BuildConfig.APP_CENTER_SECRET
 

@@ -5,28 +5,22 @@ import { LogBox } from 'react-native'
 import { EventProvider } from 'react-native-outside-press'
 import { Provider } from 'react-redux'
 import Routes from './Navigation/AppRoutes'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AuthProvider } from '@/shared/hooks/useAuth'
-import { GOOGLE_WEB_CLIENT_ID, VK_APP } from '@env'
-import SplashScreen from 'react-native-splash-screen'
-import { MobileAds } from 'yandex-mobile-ads'
-
-GoogleSignin.configure({
-  webClientId: GOOGLE_WEB_CLIENT_ID,
-  offlineAccess: true,
-  scopes: ['profile', 'email'],
-})
+import BootSplash from 'react-native-bootsplash'
+import { initI18n } from '@/shared/i18n'
 
 LogBox.ignoreLogs(['Remote debugger'])
 
 const App: FC = () => {
   useEffect(() => {
     helloApp()
+    initI18n()
 
-    setTimeout(SplashScreen.hide, 500)
-    ;(async () => {
-      await MobileAds.initialize()
-    })()
+    const splashTimeout = setTimeout(() => {
+      BootSplash.hide({ fade: true })
+    }, 500)
+
+    return () => clearTimeout(splashTimeout)
   }, [])
 
   return (

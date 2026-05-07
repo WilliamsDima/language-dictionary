@@ -5,11 +5,8 @@ import { RoutesNames } from './RoutesNames'
 import StartRoutes from './Stacks/StartStack'
 import TabNavigation from './TabRoutes'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGlobalData } from '@/shared/hooks/useGlobalData'
-import { useAsyncLocal } from '@/shared/hooks/useAsyncLocal'
 import Tooltip from '@/entities/Tooltip/UI/Tooltip'
 import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
-import { useAdsOpenApp } from '@/shared/hooks/useAdsOpenApp'
 import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 
 export type AppParamsList = {
@@ -19,10 +16,6 @@ export type AppParamsList = {
 const Stack = createStackNavigator<AppParamsList>()
 
 const Routes = () => {
-  useAsyncLocal()
-  useGlobalData()
-  useAdsOpenApp() // реклама при открытии
-
   const { isAuth } = useAppSelector((store) => store.app)
 
   return (

@@ -1,6 +1,7 @@
 import type { TooltipType } from '@/entities/Tooltip/model/Tooltip'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import type { ShowVariantList } from './userSlice'
+import { mockAppData, mockAppLanguage } from '@/shared/mock/appData'
 
 export type ThemeApp = 'dark' | 'light'
 
@@ -103,14 +104,14 @@ type InitialState = {
 
 const initialState: InitialState = {
   theme: 'dark',
-  isAuth: false,
-  aplication: null,
+  isAuth: true,
+  aplication: mockAppData,
   tooltip: null,
   hiddenTabBar: false,
-  isWatchSplash: false,
+  isWatchSplash: true,
   showUpdateModal: false,
   showYearResult: false,
-  appLanguage: null,
+  appLanguage: mockAppLanguage,
 }
 
 export const appSlice = createSlice({

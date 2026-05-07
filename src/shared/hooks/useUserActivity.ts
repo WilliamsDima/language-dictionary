@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { getUserData, updateUserProfile } from '../firebase/api'
 import { IActivityMonth } from '../store/slice/userSlice'
 import { useActions } from './useActions'
 import { useAppSelector } from './useStore'
@@ -35,8 +34,7 @@ export const useUserActivity = () => {
         repeatCard,
       } = data
 
-      const user = await getUserData(firebaseData?.uid)
-      const activityData = user?.activity
+      const activityData = firebaseData?.activity
 
       if (!firebaseData?.uid || !activityData) return
 
@@ -115,7 +113,6 @@ export const useUserActivity = () => {
 
       // console.log('month', activity.year[year][month])
 
-      await updateUserProfile(firebaseData.uid, { activity })
       setFirebaseData({
         ...firebaseData,
         activity,

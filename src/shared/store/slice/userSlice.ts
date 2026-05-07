@@ -1,10 +1,15 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import type { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import type { ILanguage } from '@/shared/json/languages'
 import type { IItem } from '@/entities/Item/model/item'
 import type { I18NKeys } from '@/shared/i18n/types'
+import { mockFirebaseData } from '@/shared/mock/appData'
 
-export type IUser = FirebaseAuthTypes.User
+export type IUser = {
+  uid: string
+  displayName?: string | null
+  email?: string | null
+  photoURL?: string | null
+}
 
 export type ShowVariantListVale =
   | 'translate_only'
@@ -27,8 +32,6 @@ export interface IActivityMonth {
   studiedCard: number // количество изученных карточек за месяц ✅
   repeatCard: number // количество повторений карточек за месяц ✅
 }
-
-// api для запросов на получение примера использования слова, но работает только для английского https://www.wordsapi.com/
 
 // A1 (Beginner)	500 - 1000 слов
 // A2 (Elementary)	1000 - 2000 слов
@@ -70,7 +73,7 @@ type InitialState = {
 }
 
 const initialState: InitialState = {
-  firebaseData: null,
+  firebaseData: mockFirebaseData,
   showAddModal: false,
   itemEdit: null,
   isVkLogin: false,

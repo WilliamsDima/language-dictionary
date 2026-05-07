@@ -1,13 +1,11 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import axios from 'axios'
-import { Base64 } from 'js-base64'
 
-import { GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN } from '@env'
 import type { TranslationKeys } from '../store/slice/appSlice'
 import type { IJSONLanguage, JsonData } from './types'
 import { setAsyncLocal } from '../helpers/asyncStorage'
 import { LOCAL_KEYS } from '../constants/localStorage'
+import ru from './ru.json'
 
 const cache: Record<string, IJSONLanguage> = {}
 
@@ -18,23 +16,12 @@ export const getLanguageJson = async (path: string) => {
         json: cache[path],
       }
     }
-    const res = await axios.get(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`,
-      {
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
-      }
-    )
 
-    const content = Base64.decode(res.data.content)
-    const json = JSON.parse(content)
-    const sha = res.data.sha
+    const json = ru
 
     cache[path] = json
 
-    return { json, sha } as JsonData
+    return { json, sha: 'local' } as JsonData
   } catch (error) {
     console.log('getLanguageJson error', error)
     return { error: true }
@@ -42,23 +29,29 @@ export const getLanguageJson = async (path: string) => {
 }
 
 export const initI18n = () => {
+  if (i18n.isInitialized) return
+
   i18n.use(initReactI18next).init({
     compatibilityJSON: 'v4',
-    lng: 'en', // стартовый язык
-    fallbackLng: 'en',
-    resources: {},
+    lng: 'ru',
+    fallbackLng: 'ru',
+    resources: {
+      ru: {
+        translation: ru,
+      },
+    },
     interpolation: { escapeValue: false },
   })
 }
+
+initI18n()
 
 export const changeLanguage = async (lang: TranslationKeys, path: string) => {
   const data = await getLanguageJson(path)
   if ('error' in data) return
 
-  // Добавляем перевод
   i18n.addResourceBundle(lang, 'translation', data.json, true, true)
 
-  // Меняем язык
   await i18n.changeLanguage(lang)
   await setAsyncLocal(LOCAL_KEYS.appLanguage, lang)
 }

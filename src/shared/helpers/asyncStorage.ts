@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { appStorage } from '../storage/mmkv.storage'
 
 export async function getAsyncLocal(
   key: string,
@@ -9,12 +9,12 @@ export async function getAsyncLocal(
   }
 
   if (skipError) {
-    const res = await AsyncStorage.getItem(key)
+    const res = appStorage.getString(key)
     return res ? JSON.parse(res) : undefined
   } else {
     try {
-      const res = await AsyncStorage.getItem(key)
-      if (res === null) {
+      const res = appStorage.getString(key)
+      if (!res) {
         throw new Error(`There is no such key as ${key}`)
       }
 
@@ -38,7 +38,7 @@ export async function setAsyncLocal(
 ): Promise<void | undefined> {
   try {
     const serialized = JSON.stringify(value)
-    return await AsyncStorage.setItem(key, serialized)
+    appStorage.setString(key, serialized)
   } catch (e) {
     console.log('LOCAL CLIENT set ERROR', e)
   }
@@ -46,7 +46,7 @@ export async function setAsyncLocal(
 
 export async function clearAsyncLocal(): Promise<void | undefined> {
   try {
-    return await AsyncStorage.clear()
+    appStorage.clearAll()
   } catch (e) {
     console.log('LOCAL CLIENT clear ERROR', e)
   }
@@ -54,7 +54,7 @@ export async function clearAsyncLocal(): Promise<void | undefined> {
 
 export async function removeAsyncLocal(key: string): Promise<void | undefined> {
   try {
-    return await AsyncStorage.removeItem(key)
+    appStorage.delete(key)
   } catch (e) {
     console.log('LOCAL CLIENT remove ERROR', e)
   }

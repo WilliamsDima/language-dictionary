@@ -7,7 +7,6 @@ import {
   deleteItemAPI,
   GetItemsParams,
 } from '@/shared/firebase/api'
-import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore/lite'
 
 export type AddItemParams = {
   uid: string
@@ -31,7 +30,7 @@ export type GetItemsCountParams = {
 
 export type GetItemsRequest = {
   items: IItem[]
-  lastVisible?: QueryDocumentSnapshot<DocumentData, DocumentData>
+  lastVisible?: unknown
 }
 
 export const cardsServices = baseApi.injectEndpoints({
@@ -49,7 +48,6 @@ export const cardsServices = baseApi.injectEndpoints({
           return {
             data: { items: items?.items, lastVisible: items?.lastVisible },
             error: items?.error,
-            meta: {},
           }
         } catch (error: any) {
           console.log('Error getItems', error?.message)
@@ -62,7 +60,7 @@ export const cardsServices = baseApi.injectEndpoints({
     addItem: build.mutation<IItem, AddItemParams>({
       async queryFn({ item, uid }) {
         const items = await addItemAPI(uid, item)
-        return { data: items, error: items?.error, meta: {} }
+        return { data: items, error: items?.error }
       },
       invalidatesTags: ['items'],
     }),

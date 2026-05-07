@@ -4,21 +4,12 @@ import React, {
   createContext,
   useContext,
   ReactNode,
-  useEffect,
   useCallback,
 } from 'react'
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { useActions } from './useActions'
 import { useAppDispatch, useAppSelector } from './useStore'
-import { IFirebaseData, IUserActivity } from '../store/slice/userSlice'
-import { deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
-import {
-  db,
-  deleteAllItems,
-  deleteProfile,
-  getUserData,
-  logout,
-} from '../firebase/api'
+import { IFirebaseData } from '../store/slice/userSlice'
+import { deleteAllItems, deleteProfile, logout } from '../firebase/api'
 import { baseApi } from '../API/baseApi'
 import { removeAsyncLocal } from '../helpers/asyncStorage'
 import { LOCAL_KEYS } from '../constants/localStorage'
@@ -41,66 +32,6 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   const dispatch = useAppDispatch()
 
   const { firebaseData, isVkLogin } = useAppSelector((store) => store.user)
-  const { aplication } = useAppSelector((store) => store.app)
-
-  const onAuthStateChanged = useCallback(
-    async (user?: FirebaseAuthTypes.User) => {
-      // console.log('onAuthStateChanged user', user)
-      if (!user) return
-
-      setIsAuth(!!user)
-
-      const isUser = await getUserData(user.uid)
-
-      // console.log('onAuthStateChanged isUser', isUser)
-
-      let activity: IUserActivity | undefined = isUser?.activity
-
-      // активностей ещё не было
-      if (!activity) {
-        const year = new Date().getFullYear()
-        const month = new Date().getMonth()
-
-        activity = {
-          year: {
-            [year]: {
-              [month]: {
-                activeDays: [],
-                addedCards: 0,
-                openApp: 0,
-                repeatCard: 0,
-                startTraningCards: 0,
-                studiedCard: 0,
-                totalTimeSpent: 0,
-                viewedAds: 0,
-              },
-            },
-          },
-        }
-      }
-
-      const userData: IFirebaseData = {
-        name: user.displayName || '',
-        uid: isUser?.uid ? isUser.uid : user.uid,
-        email: user?.email || '',
-        dateRegistration: isUser?.dateRegistration
-          ? isUser?.dateRegistration
-          : +new Date(),
-        showVariantList:
-          isUser?.showVariantList || aplication?.showVariantsList?.[1] || null,
-        languages: isUser?.languages || [],
-        native_language: isUser?.native_language || null,
-        image: user.photoURL || '',
-        activity,
-      }
-
-      // console.log('onAuthStateChanged userData', userData)
-
-      await setDoc(doc(db, 'users', user.uid), userData)
-      setFirebaseData(userData as any)
-    },
-    [aplication?.showVariantsList, setFirebaseData, setIsAuth]
-  )
 
   const logoutVk = useCallback(async () => {
     console.log('logoutVk')
@@ -108,7 +39,6 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     setIsVkLogin(false)
     await removeAsyncLocal(LOCAL_KEYS.vk_token)
     await removeAsyncLocal(LOCAL_KEYS.vk_id_user)
-    // return VKLogin.logout()
   }, [setIsVkLogin])
 
   const logoutHandler = useCallback(async () => {
@@ -151,11 +81,6 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     }
   }, [firebaseData, isVkLogin, logoutHandler])
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged as any)
-    return subscriber // unsubscribe on unmount
-  }, [onAuthStateChanged])
-
   const value = useMemo(() => {
     return {
       logoutHandler,
@@ -172,9 +97,5 @@ export const useAuth = () => {
 }
 
 export const deleteUserAPI = async (id: string) => {
-  try {
-    await deleteDoc(doc(db, 'users', id))
-  } catch (error) {
-    console.log('deleteUserAPI error', error)
-  }
+  console.log('deleteUserAPI skipped without Firebase', id)
 }

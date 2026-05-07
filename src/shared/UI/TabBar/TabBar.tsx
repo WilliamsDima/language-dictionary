@@ -11,7 +11,6 @@ import { Shadow } from 'react-native-shadow-2'
 import ButtonTabBar from '../ButtonTabBar/ButtonTabBar'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { COLORS } from '@/assets/styles/colors'
-import changeNavigationBarColor from 'react-native-navigation-bar-color'
 
 type Props = {
   state: TabNavigationState<ParamListBase>
@@ -35,22 +34,6 @@ const TabBar: FC<Props> = (props) => {
   const tabTitles = useMemo(() => {
     return ['Слова', 'Настройки', 'Профиль']
   }, [])
-
-  const setColorForNavigationBar = async (isChange: boolean) => {
-    try {
-      await changeNavigationBarColor(
-        isChange ? COLORS.black : COLORS.tab_bar_dark,
-        false,
-        false
-      )
-    } catch (e) {
-      console.log('error setColorForNavigationBar', e)
-    }
-  }
-
-  useEffect(() => {
-    setColorForNavigationBar(hiddenTabBar)
-  }, [hiddenTabBar])
 
   return !hiddenTabBar ? (
     <Shadow

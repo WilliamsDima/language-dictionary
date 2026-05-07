@@ -10,7 +10,7 @@ export type UpdateUserProfileParams = {
 export const userServices = baseApi.injectEndpoints({
   endpoints: (build) => ({
     // получение пользователя
-    getUserProfile: build.query<IFirebaseData, string | undefined>({
+    getUserProfile: build.query<IFirebaseData | null, string | undefined>({
       async queryFn(uid) {
         try {
           if (!uid) {
@@ -18,11 +18,11 @@ export const userServices = baseApi.injectEndpoints({
             return { data: null }
           }
 
-          const user = uid ? await getUserData(uid) : ''
+          const user = uid ? await getUserData(uid) : null
 
           //console.log('getUserProfile user', user)
 
-          return { data: user }
+          return { data: user || null }
         } catch (error: any) {
           console.log('Error getUserProfile', error?.message)
           return { error: error.message }
