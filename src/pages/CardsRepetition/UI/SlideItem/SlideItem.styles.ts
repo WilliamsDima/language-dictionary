@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     //height: 'auto',
     //height: scaleWidth(40),
     zIndex: 100,
-    marginTop: scaleWidth(30),
+    marginTop: scaleWidth(54),
   },
   press: {
     justifyContent: 'center',
@@ -60,9 +60,11 @@ export const styles = StyleSheet.create({
     height: height / 1.8,
     justifyContent: 'center',
     alignItems: 'center',
-    backfaceVisibility: 'hidden', // Скрыть обратную сторону
-    backgroundColor: COLORS.white,
-    borderRadius: 10,
+    backfaceVisibility: 'hidden',
+    backgroundColor: 'rgba(245, 251, 255, 0.98)',
+    borderRadius: 28,
+    borderWidth: 4,
+    borderColor: COLORS.surface_light,
   },
   cardBack: {
     position: 'absolute',
@@ -74,6 +76,7 @@ export const styles = StyleSheet.create({
     bottom: scaleWidth(50),
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   description: {
     color: COLORS.gray_text,
@@ -89,6 +92,7 @@ export const styles = StyleSheet.create({
     //backgroundColor: 'red',
     maxHeight: height / 1.38,
     minHeight: height / 1.38,
+    width: width - APP_PADDING * 2 - scaleWidth(20),
   },
   contentContainerStyle: {
     flexDirection: 'column',
@@ -119,14 +123,15 @@ export const styles = StyleSheet.create({
   itemWord: {
     justifyContent: 'center',
     alignItems: 'center',
-
-    padding: scaleWidth(10),
-    borderRadius: scaleWidth(10),
+    paddingVertical: scaleWidth(18),
+    paddingHorizontal: scaleWidth(14),
+    borderRadius: scaleWidth(18),
     flex: 1,
+    backgroundColor: 'rgba(8, 17, 31, 0.04)',
   },
   itemWordBorder: {
     borderBottomWidth: scaleWidth(1),
-    borderBottomColor: COLORS.black,
+    borderBottomColor: 'rgba(4, 7, 13, 0.08)',
   },
 
   wrapperText: {
@@ -139,22 +144,26 @@ export const styles = StyleSheet.create({
   text: {
     color: COLORS.black,
     textAlign: 'center',
-    fontSize: scaleFontSize(20),
+    fontSize: scaleFontSize(24),
     fontStyle: 'normal',
     fontWeight: '600',
     paddingBottom: scaleWidth(5),
+    fontFamily: 'Mulish-ExtraBold',
   },
   text2: {
-    color: COLORS.primery,
+    color: COLORS.blue,
   },
 
   btn: {
-    padding: scaleWidth(10),
+    minWidth: scaleWidth(176),
+    paddingVertical: scaleWidth(16),
+    backgroundColor: COLORS.surface,
   },
   btnText: {
     textAlign: 'center',
     fontSize: scaleFontSize(16),
     fontStyle: 'normal',
     fontWeight: '600',
+    color: COLORS.white,
   },
 })

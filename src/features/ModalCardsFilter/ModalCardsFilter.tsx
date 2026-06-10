@@ -98,11 +98,19 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>
-              {t('modal.modalCardsFilter.title')}
-            </Text>
+            <View style={styles.drag} />
+            <View style={styles.top}>
+              <Text style={styles.title}>
+                {t('modal.modalCardsFilter.title')}
+              </Text>
+              <Text style={styles.subtitle}>
+                Настрой режим повторения перед стартом
+              </Text>
+            </View>
 
-            <View style={styles.selects}>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Статус карточек</Text>
+              <View style={styles.selects}>
               {tabsWords(t).map((it) => {
                 const active = statusSelect === it.status
 
@@ -121,10 +129,11 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
                   </TouchableOpacity>
                 )
               })}
+              </View>
             </View>
 
-            <View>
-              <Text style={styles.selectBtnText}>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
                 {t('modal.modalCardsFilter.show_variants')}
               </Text>
 

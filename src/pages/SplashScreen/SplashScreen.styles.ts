@@ -7,7 +7,20 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.gray_text,
+    backgroundColor: 'transparent',
+  },
+  title: {
+    color: COLORS.white,
+    fontSize: scaleWidth(24),
+    fontFamily: 'Mulish-ExtraBold',
+    marginBottom: scaleWidth(8),
+  },
+  subtitle: {
+    color: COLORS.gray_text,
+    fontSize: scaleWidth(14),
+    textAlign: 'center',
+    marginBottom: scaleWidth(12),
+    maxWidth: '74%',
   },
 
   words: {

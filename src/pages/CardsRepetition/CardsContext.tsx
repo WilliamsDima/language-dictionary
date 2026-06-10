@@ -34,7 +34,7 @@ export type CardSlideType = {
 
 type IContext = {
   data: CardSlideType[]
-  flatList: RefObject<FlatList>
+  flatList: RefObject<FlatList | null>
   currentSlide: number
   scrollX: Animated.Value
   isLoading: boolean
@@ -158,7 +158,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
         Object.values(items)
           .filter((it) =>
             filterCardsModal.languages.length
-              ? filterCardsModal.languages.includes(it.language.id)
+              ? filterCardsModal.languages.includes(it.language.short_name)
               : true && filterCardsModal.status === it.status
           )
           .map((it, index) => {

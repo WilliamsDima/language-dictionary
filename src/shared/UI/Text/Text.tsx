@@ -21,7 +21,11 @@ const Text: FC<Props> = (props) => {
     return theme === 'dark' ? COLORS.white : COLORS.black
   }, [theme])
 
-  return <TextRN style={[styles.text, { color }, style]} {...rest}></TextRN>
+  return (
+    <TextRN style={[styles.text, { color }, style]} {...rest}>
+      {props.children}
+    </TextRN>
+  )
 }
 
 export default Text

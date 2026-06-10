@@ -12,17 +12,21 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: scaleWidth(10),
-    borderRadius: scaleWidth(5),
-    backgroundColor: COLORS.primery,
+    paddingHorizontal: scaleWidth(14),
+    paddingVertical: scaleWidth(12),
+    borderRadius: scaleWidth(16),
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   title: {
     color: COLORS.white,
-    fontSize: scaleFontSize(16),
+    fontSize: scaleFontSize(14),
   },
   error: {
     color: COLORS.red,
-    fontSize: scaleFontSize(14),
+    fontSize: scaleFontSize(12),
+    marginTop: scaleWidth(6),
   },
 
   flag: {

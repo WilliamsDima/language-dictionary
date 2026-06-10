@@ -13,7 +13,8 @@ import { Vibration } from 'react-native'
 import { useUserActivity } from './useUserActivity'
 
 export const useCards = () => {
-  const { addItemAC, deleteItemAC, updateItemAC, setTooltip } = useActions()
+  const { addItemAC, deleteItemAC, updateItemAC, setItems, setTooltip } =
+    useActions()
 
   const { firebaseData } = useAppSelector((store) => store.user)
   const { filterByStatus, search, filterMain, filterCardsModal, items } =
@@ -34,6 +35,13 @@ export const useCards = () => {
   const [addItemAPI] = useAddItemMutation()
   const [updateItem] = useUpdateItemMutation()
   const [deleteItem] = useDeleteItemMutation()
+
+  const mapItemsToRecord = useCallback((nextItems: IItem[]) => {
+    return nextItems.reduce<Record<number, IItem>>((acc, item) => {
+      acc[item.id] = item
+      return acc
+    }, {})
+  }, [])
 
   const counts = useMemo(() => {
     const values = Object.values(items)
@@ -194,10 +202,14 @@ export const useCards = () => {
         if (res?.data?.items) {
           setLastVisible(res.data.lastVisible)
           setAllItems((prevItems) => {
-            return {
+            const nextItems = {
               ...prevItems,
-              ...res.data?.items!,
+              ...mapItemsToRecord(res.data?.items || []),
             }
+
+            setItems(nextItems)
+
+            return nextItems
           })
         }
       })
@@ -230,13 +242,9 @@ export const useCards = () => {
           setLastVisible(res.data.lastVisible)
 
           if (res.data?.items) {
-            const obj: Record<number, IItem> = {}
-
-            res.data?.items.forEach((it) => {
-              obj[it.id] = it
-            })
-
+            const obj = mapItemsToRecord(res.data.items)
             setAllItems(obj)
+            setItems(obj)
           }
         }
       })
@@ -273,9 +281,11 @@ export const useCards = () => {
             } else {
               obj = {
                 ...prevItems,
-                ...res.data?.items!,
+                ...mapItemsToRecord(res.data?.items || []),
               }
             }
+
+            setItems(obj)
 
             return obj
           })
@@ -285,7 +295,15 @@ export const useCards = () => {
         setIsLoading(false)
         page.current = page.current + 1
       })
-  }, [firebaseData, isLoading, lastVisible, debouncedSearch])
+  }, [
+    debouncedSearch,
+    firebaseData,
+    getItemsHandler,
+    isLoading,
+    lastVisible,
+    mapItemsToRecord,
+    setItems,
+  ])
 
   return {
     debouncedSearch,

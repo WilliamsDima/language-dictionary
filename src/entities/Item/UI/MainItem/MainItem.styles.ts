@@ -5,9 +5,11 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   item: {
     width: '100%',
-    backgroundColor: COLORS.item,
-    padding: scaleWidth(10),
-    borderRadius: scaleWidth(5),
+    backgroundColor: 'rgba(16, 34, 56, 0.92)',
+    padding: scaleWidth(14),
+    borderRadius: scaleWidth(24),
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   itemDeleteActive: {
     backgroundColor: COLORS.red_opacity_1,
@@ -16,13 +18,13 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: scaleWidth(5),
+    marginBottom: scaleWidth(12),
     alignItems: 'center',
   },
   status: {
-    width: scaleWidth(15),
-    height: scaleWidth(15),
-    borderRadius: scaleWidth(15 / 2),
+    width: scaleWidth(12),
+    height: scaleWidth(12),
+    borderRadius: scaleWidth(12 / 2),
   },
 
   flagWrapper: {
@@ -33,15 +35,16 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flag: {
-    width: scaleWidth(15),
-    height: scaleWidth(15),
-    borderRadius: scaleWidth(15 / 2),
+    width: scaleWidth(20),
+    height: scaleWidth(20),
+    borderRadius: scaleWidth(20 / 2),
     resizeMode: 'cover',
   },
 
   date: {
     fontSize: scaleFontSize(12),
     color: COLORS.gray_text,
+    fontFamily: 'Mulish-Bold',
   },
 
   content: {
@@ -58,30 +61,33 @@ export const styles = StyleSheet.create({
   descriptionBlock: {
     marginTop: scaleWidth(10),
     borderTopWidth: scaleWidth(1),
-    borderTopColor: COLORS.white,
-    paddingTop: scaleWidth(5),
+    borderTopColor: COLORS.border,
+    paddingTop: scaleWidth(10),
   },
   description: {
-    fontSize: scaleFontSize(16),
+    fontSize: scaleFontSize(14),
+    color: COLORS.gray_text,
   },
 
   showFooterBtn: {
     width: '100%',
-    paddingVertical: scaleWidth(7),
+    paddingVertical: scaleWidth(10),
     marginTop: scaleWidth(10),
     alignItems: 'center',
     backgroundColor: COLORS.bg_modal_light,
-    borderRadius: scaleWidth(2),
+    borderRadius: scaleWidth(14),
   },
   statusText: {
     fontSize: scaleFontSize(14),
     textTransform: 'uppercase',
+    fontFamily: 'Mulish-Bold',
   },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     justifyContent: 'space-between',
-    marginTop: scaleWidth(10),
+    marginTop: scaleWidth(12),
+    paddingHorizontal: scaleWidth(6),
   },
 })

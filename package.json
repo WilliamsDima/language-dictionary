@@ -7,7 +7,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
-    "start": "react-native start",
+    "start": "watchman watch-del $(pwd) && watchman watch-project $(pwd) && react-native start --reset-cache --client-logs",
     "test": "jest",
     "clean": "cd android && .\\gradlew clean",
     "icons:svg:gen": "svgr --config-file src/assets/icons/svg/.svgrrc.cjs --out-dir src/assets/icons/svg/components --no-index src/assets/icons/svg/src",

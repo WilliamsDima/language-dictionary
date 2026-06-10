@@ -4,48 +4,54 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: scaleWidth(20),
-    backgroundColor: COLORS.gray_bg_btn,
+    minHeight: scaleWidth(48),
+    paddingHorizontal: scaleWidth(18),
+    backgroundColor: COLORS.surface,
     borderRadius: scaleWidth(16),
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    overflow: 'hidden',
   },
   innerShadow: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 15, // Высота внутренней тени
-    // borderBottomLeftRadius: 16,
-    // borderBottomRightRadius: 16,
+    height: 18,
   },
   btnText: {
     color: COLORS.white,
-    fontFamily: 'Mulish',
-    fontSize: scaleFontSize(16),
+    fontFamily: 'Mulish-Bold',
+    fontSize: scaleFontSize(14),
   },
   disabled: {
-    // backgroundColor: COLORS.primary_light,
+    opacity: 0.45,
   },
 
   TRANSPARENT: {
     backgroundColor: 'transparent',
+    borderColor: 'transparent',
   },
   ['TRANSPARENT-TEXT']: {
-    color: COLORS.black,
+    color: COLORS.gray_text,
   },
 
   ['BORDER-TRANSPARENT']: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderWidth: scaleWidth(1),
-    // borderColor: COLORS.primary,
+    borderColor: COLORS.border,
   },
   ['BORDER-TRANSPARENT-TEXT']: {
-    // color: COLORS.primary,
+    color: COLORS.white,
   },
 
   PRIMERY: {
-    // backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primery,
+    borderColor: 'transparent',
   },
-  ['PRIMERY-TEXT']: {},
+  ['PRIMERY-TEXT']: {
+    color: COLORS.black,
+  },
 })

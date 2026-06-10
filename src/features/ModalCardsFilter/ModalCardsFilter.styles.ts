@@ -5,18 +5,23 @@ import { StyleSheet, NativeModules } from 'react-native'
 export const styles = StyleSheet.create({
   wrapper: {
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: COLORS.bg_modal,
     width: '100%',
   },
   container: {
-    maxWidth: '90%',
-    minWidth: '90%',
     width: '100%',
-    backgroundColor: COLORS.white,
-    padding: scaleWidth(20),
-    borderRadius: scaleWidth(10),
+    backgroundColor: COLORS.tab_bar_dark,
+    paddingHorizontal: scaleWidth(18),
+    paddingTop: scaleWidth(14),
+    paddingBottom: scaleWidth(24),
+    borderTopLeftRadius: scaleWidth(28),
+    borderTopRightRadius: scaleWidth(28),
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.border,
   },
 
   wrapperContainer: {
@@ -24,46 +29,73 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  drag: {
+    alignSelf: 'center',
+    width: scaleWidth(44),
+    height: scaleWidth(5),
+    borderRadius: scaleWidth(999),
+    backgroundColor: COLORS.border,
+    marginBottom: scaleWidth(14),
+  },
+  top: {
+    marginBottom: scaleWidth(14),
+  },
 
   title: {
-    color: COLORS.black,
-    fontSize: scaleFontSize(20),
-    fontWeight: '600',
+    color: COLORS.white,
+    fontSize: scaleFontSize(18),
+    fontFamily: 'Mulish-ExtraBold',
+    marginBottom: scaleWidth(4),
+  },
+  subtitle: {
+    color: COLORS.gray_text,
+    fontSize: scaleFontSize(12),
   },
 
   selects: {
     flexDirection: 'column',
-    gap: scaleWidth(5),
-    marginVertical: scaleWidth(20),
+    gap: scaleWidth(8),
+  },
+  section: {
+    marginBottom: scaleWidth(16),
+  },
+  sectionTitle: {
+    color: COLORS.gray_text,
+    fontSize: scaleFontSize(13),
+    fontFamily: 'Mulish-Bold',
+    marginBottom: scaleWidth(8),
+    textTransform: 'uppercase',
   },
   selectBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: scaleWidth(10),
-    paddingVertical: scaleWidth(5),
+    paddingVertical: scaleWidth(8),
   },
   circle: {
     width: scaleWidth(15),
     height: scaleWidth(15),
     borderRadius: scaleWidth(15 / 2),
     borderWidth: scaleWidth(1),
-    borderColor: COLORS.black,
+    borderColor: COLORS.border,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
   },
   circleActive: {
-    borderColor: COLORS.primery,
-    backgroundColor: COLORS.green,
+    borderColor: 'rgba(124, 255, 107, 0.36)',
+    backgroundColor: COLORS.primery,
   },
 
   selectBtnText: {
-    color: COLORS.black,
-    fontSize: scaleFontSize(16),
+    color: COLORS.white,
+    fontSize: scaleFontSize(14),
     fontWeight: '600',
   },
 
   titleSelect: {
-    color: COLORS.black,
-    fontSize: scaleFontSize(16),
-    fontWeight: '600',
+    color: COLORS.gray_text,
+    fontSize: scaleFontSize(13),
+    fontFamily: 'Mulish-Bold',
+    textTransform: 'uppercase',
   },
   scrollSelect: {
     height: scaleWidth(200),
@@ -74,27 +106,32 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: scaleWidth(20),
+    gap: scaleWidth(12),
   },
 
   btn: {
-    padding: scaleWidth(15),
+    paddingVertical: scaleWidth(12),
     minWidth: '45%',
+    flex: 1,
+    borderRadius: scaleWidth(16),
   },
   cancel: {
-    borderColor: COLORS.black,
+    borderColor: COLORS.border,
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
   },
   cancelText: {
-    color: COLORS.black,
-    fontSize: scaleFontSize(14),
+    color: COLORS.white,
+    fontSize: scaleFontSize(13),
     textTransform: 'uppercase',
   },
 
   confirm: {
     backgroundColor: COLORS.primery,
+    borderColor: 'transparent',
   },
   confirmText: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(14),
+    color: COLORS.black,
+    fontSize: scaleFontSize(13),
     textTransform: 'uppercase',
   },
 })

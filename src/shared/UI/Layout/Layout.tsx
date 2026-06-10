@@ -1,7 +1,8 @@
 import React, { useMemo, FC, ReactNode, memo } from 'react'
 import {
+  Animated,
   ColorValue,
-  ScrollView,
+  StyleProp,
   StatusBarProps,
   StatusBarStyle,
   ViewStyle,
@@ -14,6 +15,8 @@ import Header, { HeaderProps } from '@/widgets/Header/Header'
 import VariableSafeAreaView from '../VariableSafeAreaView/VariableSafeAreaView'
 import { DismissKeyboardView } from '../DismissKeyboardHOC/DismissKeyboardHOC'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import ScreenBackground from './ScreenBackground'
+import { View } from 'react-native'
 
 interface Props extends HeaderProps {
   children: ReactNode
@@ -21,8 +24,8 @@ interface Props extends HeaderProps {
   statusBarStyle?: StatusBarStyle
   statusBarBackgroundColor?: ColorValue
   statusBarProps?: StatusBarProps
-  safeAreaStyles?: ViewStyle
-  scrollViewStyles?: ViewStyle
+  safeAreaStyles?: StyleProp<ViewStyle>
+  scrollViewStyles?: StyleProp<ViewStyle>
   paddingScreen?: boolean
   dismissKeyboard?: boolean
   showHeader?: boolean
@@ -79,34 +82,37 @@ const Layout: FC<Props> = (props) => {
 
   return (
     <VariableSafeAreaView isSafeArea={!!isSafeArea} style={overStylesSafeArea}>
-      {showHeader && <Header {...headerProps} />}
-      {header}
+      <ScreenBackground />
+      <View style={styles.content}>
+        {showHeader && <Header {...headerProps} />}
+        {header}
 
-      {dismissKeyboard ? (
-        <DismissKeyboardView>
-          {isScroll ? (
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={overStylesScrollView}
-              {...scrollViewProps}
-            >
-              {children}
-            </ScrollView>
-          ) : (
-            children
-          )}
-        </DismissKeyboardView>
-      ) : isScroll ? (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={overStylesScrollView}
-          {...scrollViewProps}
-        >
-          {children}
-        </ScrollView>
-      ) : (
-        children
-      )}
+        {dismissKeyboard ? (
+          <DismissKeyboardView style={styles.content}>
+            {isScroll ? (
+              <Animated.ScrollView
+                showsVerticalScrollIndicator={false}
+                style={overStylesScrollView}
+                {...scrollViewProps}
+              >
+                {children}
+              </Animated.ScrollView>
+            ) : (
+              children
+            )}
+          </DismissKeyboardView>
+        ) : isScroll ? (
+          <Animated.ScrollView
+            showsVerticalScrollIndicator={false}
+            style={overStylesScrollView}
+            {...scrollViewProps}
+          >
+            {children}
+          </Animated.ScrollView>
+        ) : (
+          children
+        )}
+      </View>
     </VariableSafeAreaView>
   )
 }

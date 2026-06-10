@@ -1,18 +1,13 @@
-import React, { useEffect } from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import { screenOptions, stackOptions } from '../config'
-import { RoutesNames } from '../RoutesNames'
+import React from 'react'
+import {createStackNavigator} from '@react-navigation/stack'
+import {screenOptions, stackOptions} from '../config'
+import {RoutesNames} from '../RoutesNames'
 import AuthScreen from '@/processes/AuthScreen/AuthScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import { COLORS } from '@/assets/styles/colors'
+import {useAppSelector} from '@/shared/hooks/useStore'
+import type {StartStackParams} from '../params'
 
-export type StartParamsList = {
-  [RoutesNames.auth]: undefined
-  [RoutesNames.splash]: undefined
-}
-
-const StartStack = createStackNavigator<StartParamsList>()
+const StartStack = createStackNavigator<StartStackParams>()
 
 /**
  * Экраны: Онбродинг, Авторизация, Код из СМС, Регистрация 1 - 4 шаги

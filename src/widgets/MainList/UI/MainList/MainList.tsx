@@ -22,8 +22,6 @@ const MainList: FC = () => {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const flatListRef = useRef<FlatList>(null)
   const scrollY = useRef(new Animated.Value(0)).current
-
-  // Обработчик скролла
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
     {
@@ -68,6 +66,7 @@ const MainList: FC = () => {
             renderItem={({ item }) => <MainItem item={item} />}
             onScroll={handleScroll}
             scrollEventThrottle={16}
+            keyboardShouldPersistTaps="handled"
           />
 
           {/* Кнопка наверх */}
@@ -84,18 +83,20 @@ const MainList: FC = () => {
           )}
         </>
       ) : (
-        <View style={styles.empty}>
-          <LottieView
-            source={require('../../model/empty-list-lottie.json')}
-            style={styles.anim}
-            autoPlay
-            loop
-          />
-          <Text style={styles.emptyText}>
-            {isFilterActive
-              ? t('main.filter_not_found')
-              : t('main.added_words')}
-          </Text>
+        <View style={styles.emptyWrapper}>
+          <View style={styles.empty}>
+            <LottieView
+              source={require('../../model/empty-list-lottie.json')}
+              style={styles.anim}
+              autoPlay
+              loop
+            />
+            <Text style={styles.emptyText}>
+              {isFilterActive
+                ? t('main.filter_not_found')
+                : t('main.added_words')}
+            </Text>
+          </View>
         </View>
       )}
 

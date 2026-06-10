@@ -50,7 +50,7 @@ const TabBar: FC<Props> = (props) => {
             canPreventDefault: true,
           })
 
-          if (!isFocused && !event.defaultPrevented) {
+          if (!isFocused && !(event as {defaultPrevented?: boolean}).defaultPrevented) {
             navigation.navigate(route.name)
           }
         }

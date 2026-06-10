@@ -42,7 +42,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
       <TouchableOpacity
         style={[
           styles.select,
-          error && { backgroundColor: COLORS.red },
+          error && { borderColor: COLORS.red, borderWidth: 1 },
           classes?.select,
         ]}
         onPress={openModal}

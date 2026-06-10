@@ -15,10 +15,12 @@ export const styles = StyleSheet.create({
     minWidth: '90%',
     maxHeight: '90%',
     minHeight: '90%',
-    backgroundColor: COLORS.white,
-    paddingTop: scaleWidth(10),
-    borderRadius: scaleWidth(10),
+    backgroundColor: COLORS.tab_bar_dark,
+    paddingTop: scaleWidth(14),
+    borderRadius: scaleWidth(28),
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
 
   wrapperContainer: {
@@ -30,30 +32,44 @@ export const styles = StyleSheet.create({
   scroll: {
     maxHeight: '95%',
     minWidth: '100%',
+    paddingHorizontal: scaleWidth(16),
   },
 
   title: {
     color: COLORS.primery,
-    fontSize: scaleFontSize(16),
+    fontSize: scaleFontSize(20),
     textAlign: 'center',
-    marginBottom: scaleWidth(20),
+    marginBottom: scaleWidth(18),
     textTransform: 'uppercase',
+    fontFamily: 'Mulish-ExtraBold',
+  },
+  subtitle: {
+    fontSize: scaleFontSize(12),
+    color: COLORS.gray_text,
+    textAlign: 'center',
+    marginBottom: scaleWidth(18),
   },
   btnWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginTop: scaleWidth(20),
+    marginTop: scaleWidth(16),
   },
   btnAddItem: {
-    width: '100%',
+    width: scaleWidth(56),
+    height: scaleWidth(56),
+    borderRadius: scaleWidth(28),
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.surface_light,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
 
   input: {
     maxHeight: scaleWidth(100),
     height: 'auto',
-    backgroundColor: COLORS.gray_text,
-    color: COLORS.black,
+    backgroundColor: COLORS.surface,
+    color: COLORS.white,
   },
 
   btns: {
@@ -63,19 +79,36 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: scaleWidth(20),
-    marginTop: scaleWidth(10),
+    marginTop: scaleWidth(8),
     marginBottom: scaleWidth(20),
+  },
+  actionBtn: {
+    width: scaleWidth(52),
+    height: scaleWidth(52),
+    borderRadius: scaleWidth(26),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.surface_light,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  actionBtnPrimary: {
+    backgroundColor: 'rgba(124, 255, 107, 0.14)',
+    borderColor: 'rgba(124, 255, 107, 0.34)',
+  },
+  actionBtnDanger: {
+    backgroundColor: 'rgba(255, 89, 89, 0.12)',
+    borderColor: 'rgba(255, 89, 89, 0.24)',
   },
 
   footer: {
-    marginTop: scaleWidth(20),
-    paddingHorizontal: scaleWidth(10),
-    paddingTop: scaleWidth(20),
+    marginTop: scaleWidth(18),
+    paddingTop: scaleWidth(18),
     borderTopWidth: scaleWidth(1),
-    borderTopColor: COLORS.gray_text,
+    borderTopColor: COLORS.border,
   },
 
   selectLang: {
-    marginTop: scaleWidth(10),
+    marginTop: scaleWidth(12),
   },
 })

@@ -23,7 +23,7 @@ const CardsRepetition: FC = () => {
     <CardsProvider>
       <Layout isSafeArea>
         <StatusBar
-          backgroundColor={COLORS.gray_bg}
+          backgroundColor={COLORS.black}
           translucent
           barStyle={'light-content'}
         />

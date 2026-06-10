@@ -12,6 +12,7 @@ import { changeLanguage, initI18n } from '@/shared/i18n'
 import { getAsyncLocal, setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import type { TranslationKeys } from '@/shared/store/slice/appSlice'
+import Text from '@/shared/UI/Text/Text'
 
 const SplashScreen: FC = () => {
   useHiddenTabBar()
@@ -60,6 +61,10 @@ const SplashScreen: FC = () => {
   return (
     <Layout>
       <View style={styles.screen}>
+        <Text style={styles.title}>Language Dictionary</Text>
+        <Text style={styles.subtitle}>
+          Прокачиваем словарный запас через живые карточки
+        </Text>
         <LottieView
           style={styles.words}
           source={require('./anim-words.json')}

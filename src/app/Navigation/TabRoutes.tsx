@@ -1,18 +1,12 @@
 import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import MainTabRoutes from './TabStacks/MainTabRoutes'
-import { RoutesNames } from './RoutesNames'
+import {RoutesNames} from './RoutesNames'
 import TabBar from '@/shared/UI/TabBar/TabBar'
 import SettingsTabRoutes from './TabStacks/SettingsTabRoutes'
 import ProfileTabRoutes from './TabStacks/ProfileTabRoutes'
-import { useTimeTracker } from '@/shared/hooks/useTimeTracker'
-import { useAdsOpenApp } from '@/shared/hooks/useAdsOpenApp'
-
-export type TabParamsList = {
-  [RoutesNames.mainStack]: undefined
-  [RoutesNames.settingsStack]: undefined
-  [RoutesNames.profileStack]: undefined
-}
+import {useTimeTracker} from '@/shared/hooks/useTimeTracker'
+import type {TabParamsList} from './params'
 
 const Tab = createBottomTabNavigator<TabParamsList>()
 

@@ -79,6 +79,9 @@ const ModalAddItem: FC<Props> = () => {
                 <Text style={styles.title}>
                   {t('modal.modalAddItem.title')}
                 </Text>
+                <Text style={styles.subtitle}>
+                  Собери карточку в удобном формате и сразу отправь ее в тренировку.
+                </Text>
 
                 {items.map((it, i) => {
                   return (
@@ -135,10 +138,14 @@ const ModalAddItem: FC<Props> = () => {
                 ) : (
                   <>
                     <TouchableOpacity onPress={onCancelHandler}>
+                      <View style={[styles.actionBtn, styles.actionBtnDanger]}>
                       <CloseIcon width={30} height={30} />
+                      </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={onConfirm}>
+                      <View style={[styles.actionBtn, styles.actionBtnPrimary]}>
                       <ReadyIcon width={30} height={30} />
+                      </View>
                     </TouchableOpacity>
                   </>
                 )}

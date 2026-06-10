@@ -6,5 +6,5 @@ export type SelectOption = {
   value: SelectOptionValue
   label: string
   iconUrl?: string
-  keyTranslate: I18NKeys
+  keyTranslate?: I18NKeys
 }

@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.gray_bg,
     paddingTop: HEADER_HEIGHT - 30,
   },
   safeAreaHiddenTabBar: {},
@@ -18,5 +18,8 @@ export const styles = StyleSheet.create({
   },
   padding: {
     paddingHorizontal: APP_PADDING,
+  },
+  content: {
+    flex: 1,
   },
 })

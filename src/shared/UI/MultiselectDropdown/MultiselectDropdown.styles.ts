@@ -5,40 +5,35 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   title: {
     fontSize: scaleFontSize(14),
-    marginBottom: scaleWidth(5),
+    marginBottom: scaleWidth(8),
+    color: COLORS.gray_text,
   },
 
   dropdown: {
     height: 50,
-    backgroundColor: COLORS.gray_text,
-    borderRadius: 12,
+    backgroundColor: COLORS.surface,
+    borderRadius: 16,
     padding: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
 
   containerStyle: {
-    backgroundColor: COLORS.gray_text,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    marginTop: -10,
-    borderWidth: 0,
+    backgroundColor: COLORS.surface_light,
+    borderRadius: 16,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     maxHeight: '80%',
   },
 
   placeholderStyle: {
     fontSize: scaleFontSize(16),
-    color: COLORS.black,
+    color: COLORS.dark_placeholder,
   },
   selectedTextStyle: {
     fontSize: scaleFontSize(14),
-    color: COLORS.black,
+    color: COLORS.white,
   },
   selectedTextStyleActive: {
     color: COLORS.white,
@@ -46,8 +41,10 @@ export const styles = StyleSheet.create({
   inputSearchStyle: {
     height: scaleWidth(40),
     fontSize: scaleFontSize(16),
-    borderColor: COLORS.black,
+    borderColor: COLORS.border,
     borderRadius: scaleWidth(5),
+    color: COLORS.white,
+    backgroundColor: COLORS.gray_bg_btn,
   },
   iconStyle: {
     width: scaleWidth(20),
@@ -55,7 +52,7 @@ export const styles = StyleSheet.create({
   },
 
   item: {
-    padding: scaleWidth(10),
+    padding: scaleWidth(12),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -100,23 +97,16 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 14,
-    backgroundColor: COLORS.primery,
-    shadowColor: '#000',
+    backgroundColor: COLORS.surface_light,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     marginTop: 8,
     marginRight: 12,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
   },
   textSelectedStyle: {
-    fontSize: scaleFontSize(16),
+    fontSize: scaleFontSize(14),
     color: COLORS.white,
   },
 })

@@ -10,11 +10,10 @@ import {
 import Modal from '@/shared/UI/Modal/Modal'
 import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import Text from '@/shared/UI/Text/Text'
-import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
-import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
 import DoneIcon from '@/assets/icons/UI/done-white-64.svg'
 import { ILanguage, languages } from '@/shared/json/languages'
 import { useTranslation } from '@/shared/i18n/types'
+import Button from '@/shared/UI/Button/Button'
 
 type Props = {
   visible: boolean
@@ -81,9 +80,17 @@ const ModalAddLanguages: FC<Props> = ({
       >
         <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
           <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <Text style={styles.title}>
-              {t('modal.modalAddLanguages.title')}
-            </Text>
+            <View style={styles.drag} />
+            <View style={styles.top}>
+              <Text style={styles.title}>
+                {t('modal.modalAddLanguages.title')}
+              </Text>
+              <Text style={styles.subtitle}>
+                {multiselect
+                  ? 'Выбери несколько языков для статистики и подбора карточек'
+                  : 'Выбери один основной язык профиля'}
+              </Text>
+            </View>
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={styles.scroll}
@@ -140,18 +147,29 @@ const ModalAddLanguages: FC<Props> = ({
             </ScrollView>
 
             <View style={styles.btns}>
-              <TouchableOpacity onPress={onCancelHandler}>
-                <CloseIcon width={24} height={24} />
-              </TouchableOpacity>
+              <Button
+                type="BORDER-TRANSPARENT"
+                classes={{
+                  btn: [styles.actionBtn, styles.actionBtnCancel],
+                  textBtn: styles.actionTextCancel,
+                }}
+                onPress={onCancelHandler}
+              >
+                {t('ui.cancel')}
+              </Button>
 
-              <TouchableOpacity
+              <Button
+                classes={{
+                  btn: [styles.actionBtn, styles.actionBtnConfirm],
+                  textBtn: styles.actionTextConfirm,
+                }}
                 onPress={() => {
                   onConfirm(languagesSelects)
                   onCancelHandler()
                 }}
               >
-                <ReadyIcon width={24} height={24} />
-              </TouchableOpacity>
+                {t('ui.apply')}
+              </Button>
             </View>
           </TouchableOpacity>
         </Animated.View>

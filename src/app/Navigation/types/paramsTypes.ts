@@ -1,12 +1,5 @@
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RoutesNames } from '../RoutesNames'
+import type {StackNavigationProp} from '@react-navigation/stack'
+import type {RootParams} from '../params'
 
-export type AppNavigationParams = {
-  [RoutesNames.auth]?: void
-  [RoutesNames.main]?: void
-  [RoutesNames.cardsRepetition]?: void
-}
-
-export type ScreensAppNavigation = keyof AppNavigationParams
-
-export type NavigateStack = NativeStackNavigationProp<AppNavigationParams>
+export type ScreensAppNavigation = keyof RootParams
+export type NavigateStack = StackNavigationProp<RootParams>

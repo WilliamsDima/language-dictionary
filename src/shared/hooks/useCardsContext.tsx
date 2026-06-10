@@ -10,6 +10,7 @@ import { useAppSelector } from './useStore'
 import { IItem } from '@/entities/Item/model/item'
 import { useCallbackDebounce } from './useDebounce'
 import { useCards } from './useCards'
+import { useActions } from './useActions'
 
 type IContext = {
   isFilterActive: boolean
@@ -39,6 +40,7 @@ type CardsProviderType = {
 }
 
 export const CardProvider: FC<CardsProviderType> = ({ children }) => {
+  const { setItems } = useActions()
   const { isAuth } = useAppSelector((store) => store.app)
   const { filterByStatus, search } = useAppSelector((store) => store.items)
 
@@ -92,6 +94,7 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
             })
 
             setAllItems(obj)
+            setItems(obj)
             setLastVisible(res.data.lastVisible)
           }
         })
@@ -119,6 +122,7 @@ export const CardProvider: FC<CardsProviderType> = ({ children }) => {
           })
 
           setAllItems(obj)
+          setItems(obj)
           setLastVisible(res.data.lastVisible)
         }
       })

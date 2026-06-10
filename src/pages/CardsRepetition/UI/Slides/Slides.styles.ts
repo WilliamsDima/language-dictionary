@@ -24,11 +24,18 @@ export const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     zIndex: 1000,
-    top: scaleWidth(0),
+    top: scaleWidth(16),
+    paddingHorizontal: scaleWidth(14),
+    paddingVertical: scaleWidth(8),
+    borderRadius: scaleWidth(999),
+    backgroundColor: 'rgba(17, 39, 65, 0.88)',
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   count: {
     fontSize: scaleFontSize(14),
     fontWeight: '600',
+    color: COLORS.white,
   },
 
   empty: {
@@ -53,6 +60,8 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1000,
     bottom: scaleWidth(110),
+    width: '100%',
+    alignItems: 'center',
   },
   btns: {
     flexDirection: 'row',
@@ -60,17 +69,22 @@ export const styles = StyleSheet.create({
     marginBottom: scaleWidth(20),
   },
   btnGroup: {
-    //backgroundColor: 'transparent',
+    minWidth: scaleWidth(74),
+    minHeight: scaleWidth(74),
     padding: scaleWidth(10),
+    borderRadius: scaleWidth(24),
   },
   btn: {
-    padding: scaleWidth(10),
+    minWidth: scaleWidth(180),
+    paddingVertical: scaleWidth(16),
     backgroundColor: COLORS.primery,
+    borderColor: 'transparent',
   },
   textBtn: {
     textTransform: 'uppercase',
     fontSize: scaleFontSize(16),
     fontWeight: '600',
+    color: COLORS.black,
   },
   contentContainerStyle: {
     justifyContent: 'center',

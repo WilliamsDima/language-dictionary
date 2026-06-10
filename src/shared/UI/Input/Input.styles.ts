@@ -10,25 +10,24 @@ export const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    color: COLORS.black,
-    fontSize: scaleFontSize(16),
-    fontWeight: '600',
-    marginBottom: scaleWidth(6),
-
-    fontFamily: 'Mulish',
+    color: COLORS.gray_text,
+    fontSize: scaleFontSize(14),
+    fontWeight: '700',
+    marginBottom: scaleWidth(8),
+    fontFamily: 'Mulish-Bold',
   },
 
   input: {
     height: scaleWidth(50),
-    fontSize: scaleFontSize(16),
+    fontSize: scaleFontSize(15),
     color: COLORS.white,
     textDecorationColor: 'transparent',
-    borderWidth: scaleWidth(0),
-    borderColor: COLORS.white,
-    borderRadius: scaleWidth(13),
-    paddingHorizontal: scaleWidth(22),
-    backgroundColor: COLORS.gray_bg_btn,
-    fontFamily: 'Mulish',
+    borderWidth: scaleWidth(1),
+    borderColor: COLORS.border,
+    borderRadius: scaleWidth(16),
+    paddingHorizontal: scaleWidth(18),
+    backgroundColor: 'rgba(17, 39, 65, 0.92)',
+    fontFamily: 'Mulish-SemiBold',
   },
   paddingRight: {
     paddingRight: scaleWidth(48),
@@ -37,6 +36,7 @@ export const styles = StyleSheet.create({
   focus: {
     borderColor: COLORS.primery,
     borderWidth: scaleWidth(1),
+    backgroundColor: COLORS.surface_light,
   },
 
   rightIcon: {
@@ -47,6 +47,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   placeholder: {
-    color: COLORS.gray_bg_btn,
+    color: COLORS.dark_placeholder,
   },
 })

@@ -15,11 +15,12 @@ import { COLORS } from '@/assets/styles/colors'
 import type { IItem } from '@/entities/Item/model/item'
 import { useTranslation } from '@/shared/i18n/types'
 import type { AppLanguageType } from '@/shared/store/slice/appSlice'
+import Text from '@/shared/UI/Text/Text'
 
 interface Props {}
 
 const MainFilterModal: FC<Props> = () => {
-  const { setShowFilterMain, setFilterMain } = useActions()
+  const { setShowFilterMain, setFilterMain, setItems } = useActions()
   const { t } = useTranslation()
 
   const { appLanguage, aplication } = useAppSelector((store) => store.app)
@@ -103,6 +104,7 @@ const MainFilterModal: FC<Props> = () => {
               })
 
               setAllItems(obj)
+              setItems(obj)
             }
 
             setLastVisible(res.data?.lastVisible)
@@ -141,14 +143,23 @@ const MainFilterModal: FC<Props> = () => {
 
   return (
     <Modal visible={showFilterMain} onRequestClose={onClose} transparent>
-      <TouchableOpacity
+        <TouchableOpacity
         style={styles.wrapper}
         activeOpacity={1}
         onPress={onClose}
       >
         <TouchableOpacity style={styles.content} activeOpacity={1}>
+          <View style={styles.drag} />
+
           <View style={styles.top}>
-            <TouchableOpacity onPress={onClose}>
+            <View>
+              <Text style={styles.title}>Фильтр карточек</Text>
+              <Text style={styles.subtitle}>
+                Подбери карточки под текущую сессию
+              </Text>
+            </View>
+
+            <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
               <Close width={25} height={25} />
             </TouchableOpacity>
           </View>
@@ -174,12 +185,18 @@ const MainFilterModal: FC<Props> = () => {
 
           <View style={styles.bottom}>
             <Button
-              classes={{ btn: [styles.btn, styles.btnCancel] }}
+              classes={{
+                btn: [styles.btn, styles.btnCancel],
+                textBtn: styles.btnCancelText,
+              }}
               onPress={onCancel}
             >
               {t('ui.reset')}
             </Button>
-            <Button classes={{ btn: styles.btn }} onPress={onSubmit}>
+            <Button
+              classes={{ btn: styles.btn, textBtn: styles.btnSubmitText }}
+              onPress={onSubmit}
+            >
               {isLoading ? (
                 <ActivityIndicator size={'small'} color={COLORS.white} />
               ) : (

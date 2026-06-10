@@ -1,10 +1,10 @@
-import { View, Text, ViewStyle } from 'react-native'
+import {View, type StyleProp, type ViewStyle} from 'react-native'
 import React from 'react'
-import { SafeAreaView, SafeAreaViewProps } from 'react-native-safe-area-context'
+import {SafeAreaView, type SafeAreaViewProps} from 'react-native-safe-area-context'
 
 type Props = SafeAreaViewProps & {
   children: React.ReactNode
-  style: ViewStyle
+  style: StyleProp<ViewStyle>
   isSafeArea: boolean
 }
 

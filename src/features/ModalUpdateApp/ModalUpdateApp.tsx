@@ -41,12 +41,16 @@ const ModalUpdateApp: FC<Props> = () => {
       style={styles.modal}
     >
       <View style={styles.content}>
+        <View style={styles.drag} />
         <Text style={styles.title}>Доступно новое обновление.</Text>
+        <Text style={styles.subtitle}>
+          Установи свежую версию, чтобы получить последние улучшения и исправления.
+        </Text>
 
         <View style={styles.btns}>
           <Button
             style={[styles.btn, styles.btnCancel]}
-            classes={{ textBtn: styles.textBtn }}
+            classes={{ textBtn: styles.textBtnCancel }}
             onPress={onCancelHandler}
           >
             Отмена
@@ -54,7 +58,7 @@ const ModalUpdateApp: FC<Props> = () => {
           <Button
             onPress={startUpdate}
             style={styles.btn}
-            classes={{ textBtn: styles.textBtn }}
+            classes={{ textBtn: styles.textBtnConfirm }}
           >
             Обновить
           </Button>

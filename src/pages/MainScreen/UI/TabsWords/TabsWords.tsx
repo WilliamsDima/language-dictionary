@@ -14,7 +14,7 @@ import { useTranslation } from '@/shared/i18n/types'
 type Props = {}
 
 const TabsWords: FC<Props> = (props) => {
-  const { setFilterByStatus } = useActions()
+  const { setFilterByStatus, setItems } = useActions()
   const { t } = useTranslation()
 
   const { firebaseData } = useAppSelector((store) => store.user)
@@ -51,6 +51,7 @@ const TabsWords: FC<Props> = (props) => {
               })
 
               setAllItems(obj)
+              setItems(obj)
             }
 
             setLastVisible(res.data?.lastVisible)
