@@ -10,6 +10,9 @@
     "start": "react-native start",
     "test": "jest",
     "clean": "cd android && .\\gradlew clean",
+    "icons:svg:gen": "svgr --config-file src/assets/icons/svg/.svgrrc.cjs --out-dir src/assets/icons/svg/components --no-index src/assets/icons/svg/src",
+    "icons:svg:register": "node scripts/generate-icon-registry.js",
+    "icons:svg": "yarn icons:svg:gen && yarn icons:svg:register",
     "postinstall": "patch-package",
     "android-bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
@@ -68,6 +71,7 @@
     "@react-native/eslint-config": "0.84.1",
     "@react-native/metro-config": "0.84.1",
     "@react-native/typescript-config": "0.84.1",
+    "@svgr/cli": "^8.1.0",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
