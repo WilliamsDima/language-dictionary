@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -9,6 +8,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.size.s24,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
+    overflow: 'hidden',
     variants: {
       isDeleteActive: {
         true: {
@@ -17,12 +17,39 @@ export const styles = StyleSheet.create((theme) => ({
       },
     },
   },
-
+  glowOrb: {
+    position: 'absolute',
+    top: -theme.size.s36,
+    right: -theme.size.s18,
+    width: theme.size.s96,
+    height: theme.size.s96,
+    borderRadius: theme.size.s96 / 2,
+    backgroundColor: theme.colors.palette.success_alpha_16,
+  },
   header: {
+    width: '100%',
+    marginBottom: theme.size.s12,
+    gap: theme.size.s10,
+  },
+  headerMain: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: theme.size.s12,
     alignItems: 'center',
+    gap: theme.size.s10,
+  },
+  metaGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.size.s8,
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: theme.size.s10,
+    paddingVertical: theme.size.s7,
+    borderRadius: theme.size.s999,
+    backgroundColor: theme.colors.palette.bg_modal_light,
   },
   status: {
     width: theme.size.s12,
@@ -39,13 +66,37 @@ export const styles = StyleSheet.create((theme) => ({
       },
     },
   },
-
+  statusBadgeText: {
+    marginLeft: theme.size.s6,
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.white,
+    fontFamily: theme.fonts.bold,
+    textTransform: 'uppercase',
+    letterSpacing: theme.letterSpacing.s08,
+  },
+  wordsBadge: {
+    paddingHorizontal: theme.size.s10,
+    paddingVertical: theme.size.s7,
+    borderRadius: theme.size.s999,
+    backgroundColor: theme.colors.palette.white_alpha_05,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_06,
+  },
+  wordsBadgeText: {
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
+    fontFamily: theme.fonts.bold,
+  },
   flagWrapper: {
-    width: '100%',
-    position: 'absolute',
-    zIndex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    width: theme.size.s30,
+    height: theme.size.s30,
+    borderRadius: theme.size.s999,
+    //backgroundColor: theme.colors.palette.white_alpha_05,
+    backgroundColor: 'red',
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_06,
   },
   flag: {
     width: theme.size.s20,
@@ -57,20 +108,57 @@ export const styles = StyleSheet.create((theme) => ({
   date: {
     fontSize: theme.fontSize.s12,
     color: theme.colors.palette.gray_text,
-    fontFamily: 'Mulish-Bold',
+    fontFamily: theme.fonts.bold,
   },
 
   content: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     width: '100%',
     justifyContent: 'space-between',
+    gap: theme.size.s12,
   },
-
+  translateAction: {
+    position: 'relative',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
   btnTranslate: {
-    padding: theme.size.s5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: theme.size.s50,
+    height: theme.size.s50,
+    gap: theme.size.s6,
+    borderRadius: theme.radius.sm,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.success_alpha_22,
+    zIndex: 1,
+  },
+  translateGlow: {
+    position: 'absolute',
+    top: theme.size.s4,
+    right: theme.size.s6,
+    left: theme.size.s6,
+    bottom: theme.size.s4,
+    borderRadius: theme.size.s18,
+    backgroundColor: theme.colors.palette.success_alpha_16,
   },
 
+  tapHint: {
+    marginTop: theme.size.s10,
+    paddingVertical: theme.size.s10,
+    paddingHorizontal: theme.size.s12,
+    borderRadius: theme.size.s16,
+    backgroundColor: theme.colors.palette.success_alpha_12,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.success_alpha_22,
+  },
+  tapHintText: {
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.white,
+    fontFamily: theme.fonts.bold,
+  },
   descriptionBlock: {
     marginTop: theme.size.s10,
     borderTopWidth: theme.size.s1,
@@ -81,19 +169,28 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s14,
     color: theme.colors.palette.gray_text,
   },
-
   showFooterBtn: {
     width: '100%',
+    flexDirection: 'row',
     paddingVertical: theme.size.s10,
     marginTop: theme.size.s10,
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.size.s8,
     backgroundColor: theme.colors.palette.bg_modal_light,
     borderRadius: theme.size.s14,
+  },
+  showFooterText: {
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
+    textTransform: 'uppercase',
+    fontFamily: theme.fonts.bold,
+    letterSpacing: theme.letterSpacing.s08,
   },
   statusText: {
     fontSize: theme.fontSize.s14,
     textTransform: 'uppercase',
-    fontFamily: 'Mulish-Bold',
+    fontFamily: theme.fonts.bold,
     variants: {
       statusTone: {
         study: {
@@ -111,6 +208,28 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     justifyContent: 'space-between',
     marginTop: theme.size.s12,
-    paddingHorizontal: theme.size.s6,
+    gap: theme.size.s8,
+  },
+  footerAction: {
+    flex: 1,
+    minHeight: theme.size.s42,
+    paddingHorizontal: theme.size.s8,
+    borderRadius: theme.size.s16,
+    backgroundColor: theme.colors.palette.white_alpha_03,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_06,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.size.s4,
+  },
+  footerActionText: {
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.white,
+    fontFamily: theme.fonts.bold,
+  },
+  footerDeleteText: {
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.red,
+    fontFamily: theme.fonts.bold,
   },
 }))
