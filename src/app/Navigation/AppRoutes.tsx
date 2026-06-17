@@ -1,8 +1,8 @@
 import React from 'react'
 import {NavigationContainer} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import StartRoutes from './Stacks/StartStack'
-import TabNavigation from './TabRoutes'
+import TabNavigation from './TabRoutes/TabRoutes'
 import {useAppSelector} from '@/shared/hooks/useStore'
 import Tooltip from '@/entities/Tooltip/UI/Tooltip'
 import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
@@ -10,9 +10,10 @@ import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 import {RoutesNames} from './RoutesNames'
 import {navigationRef} from './ref'
 import {useNavTheme} from './hooks/useNavTheme'
-import type {RootParams} from './params'
+import type {RootStackParams} from './params'
+import { rootStackScreenOptions } from './config'
 
-const Stack = createStackNavigator<RootParams>()
+const Stack = createNativeStackNavigator<RootStackParams>()
 
 const Routes = () => {
   const { isAuth } = useAppSelector((store) => store.app)
@@ -24,11 +25,8 @@ const Routes = () => {
         {isAuth ? (
           <TabNavigation />
         ) : (
-          <Stack.Navigator>
+          <Stack.Navigator screenOptions={rootStackScreenOptions}>
             <Stack.Screen
-              options={{
-                headerShown: false,
-              }}
               name={RoutesNames.start}
               component={StartRoutes}
             />

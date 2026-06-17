@@ -1,21 +1,17 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import { screenOptions, stackOptions } from '../config'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { stackScreenOptions, tabStackScreenOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import SettingsScreen from '@/pages/SettingsScreen/SettingsScreen'
+import type { SettingsStackParams } from '../params'
 
-const SettingsStack = createStackNavigator()
+const SettingsStack = createNativeStackNavigator<SettingsStackParams>()
 
 const SettingsTabRoutes = () => {
   return (
-    <SettingsStack.Navigator
-      screenOptions={{
-        ...screenOptions,
-        headerShown: false,
-      }}
-    >
+    <SettingsStack.Navigator screenOptions={tabStackScreenOptions}>
       <SettingsStack.Screen
-        options={stackOptions}
+        options={stackScreenOptions}
         name={RoutesNames.settings}
         component={SettingsScreen}
       />

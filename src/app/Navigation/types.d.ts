@@ -1,8 +1,8 @@
-import type {RootParams} from './params'
+import type {AppRouteParams} from './params'
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootParams {}
+    interface RootParamList extends AppRouteParams {}
   }
 }
 

@@ -1,22 +1,21 @@
-export type TabsKeys = 'mainStack'
+export const RoutesNames = {
+  start: 'start',
+  auth: 'auth',
+  splash: 'splash',
+  mainStack: 'mainStack',
+  main: 'main',
+  settingsStack: 'settingsStack',
+  settings: 'settings',
+  profileStack: 'profileStack',
+  profile: 'profile',
+  cardsRepetition: 'cardsRepetition',
+} as const
 
-export enum RoutesNames {
-  // start stack
-  start = 'start',
-  auth = 'auth',
-  splash = 'splash',
+export type RouteName = (typeof RoutesNames)[keyof typeof RoutesNames]
 
-  // tabs stacks
-  mainStack = 'mainStack',
-  main = 'main',
+export type TabsKeys =
+  | typeof RoutesNames.mainStack
+  | typeof RoutesNames.settingsStack
+  | typeof RoutesNames.profileStack
 
-  settingsStack = 'settingsStack',
-  settings = 'settings',
-
-  profileStack = 'profileStack',
-  profile = 'profile',
-  cardsRepetition = 'cardsRepetition',
-}
-
-let RoutesKeys: keyof typeof RoutesNames
-export type RoutesTitle = typeof RoutesKeys
+export type RoutesTitle = RouteName

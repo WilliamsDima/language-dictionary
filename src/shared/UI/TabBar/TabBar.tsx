@@ -1,24 +1,14 @@
-import React, { FC, memo, useEffect, useMemo } from 'react'
+import React, { FC, memo, useMemo } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 
-import {
-  NavigationHelpers,
-  ParamListBase,
-  TabNavigationState,
-} from '@react-navigation/native'
+import { type BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { styles } from './TabBar.styles'
 import { TabsKeys } from '@/app/Navigation/RoutesNames'
 import { Shadow } from 'react-native-shadow-2'
 import ButtonTabBar from '../ButtonTabBar/ButtonTabBar'
 import { useAppSelector } from '@/shared/hooks/useStore'
 
-type Props = {
-  state: TabNavigationState<ParamListBase>
-  descriptors: any
-  navigation: NavigationHelpers<ParamListBase, any>
-}
-
-const TabBar: FC<Props> = (props) => {
+const TabBar: FC<BottomTabBarProps> = (props) => {
   const { state, navigation } = props
 
   const { hiddenTabBar } = useAppSelector((store) => store.app)
@@ -36,8 +26,12 @@ const TabBar: FC<Props> = (props) => {
       : theme.colors.palette.white
   }, [rt.themeName, theme.colors.palette.tab_bar_dark, theme.colors.palette.white])
 
-  const tabTitles = useMemo(() => {
-    return ['Слова', 'Настройки', 'Профиль']
+  const tabTitles = useMemo<Record<TabsKeys, string>>(() => {
+    return {
+      mainStack: 'Слова',
+      settingsStack: 'Настройки',
+      profileStack: 'Профиль',
+    }
   }, [])
 
   return !hiddenTabBar ? (
@@ -65,7 +59,7 @@ const TabBar: FC<Props> = (props) => {
             key={index}
             onPress={onPress}
             isFocused={isFocused}
-            assetNames={tabTitles[index]}
+            assetNames={tabTitles[route.name as TabsKeys]}
             routeName={route.name as TabsKeys}
           />
         )

@@ -1,38 +1,37 @@
+import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
 import { appThemes } from '@/shared/styles/unistyles'
 
-export const screenOptions = {
+export const nativeStackScreenOptions: NativeStackNavigationOptions = {
   headerStyle: {
-    borderBottomWidth: appThemes.light.size.s0,
-    // android
-    elevation: appThemes.light.size.s0,
-    // ios
-    shadowOpacity: appThemes.light.opacity.o0,
     backgroundColor: appThemes.light.colors.palette.white,
   },
+  headerShadowVisible: false,
 }
 
-export const hidenTabBarOption = { tabBarStyle: { display: 'none' } }
-
-const horizontalAnimation = {
-  cardStyleInterpolator: ({ current, layouts }: any) => {
-    return {
-      cardStyle: {
-        transform: [
-          {
-            translateX: current.progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [layouts.screen.width, 0],
-            }),
-          },
-        ],
-      },
-    }
-  },
+export const tabScreenOptions: BottomTabNavigationOptions = {
+  headerShown: false,
 }
 
-export const stackOptions: any = {
-  ...horizontalAnimation,
-  // presentation: 'transparentModal',
-  animationTypeForReplace: 'push',
+export const rootStackScreenOptions: NativeStackNavigationOptions = {
+  headerShown: false,
+}
+
+export const tabStackScreenOptions: NativeStackNavigationOptions = {
+  ...nativeStackScreenOptions,
+  headerShown: false,
+}
+
+export const startStackScreenOptions: NativeStackNavigationOptions = {
+  ...tabStackScreenOptions,
+  gestureEnabled: true,
+}
+
+export const hidenTabBarOption: BottomTabNavigationOptions = {
+  tabBarStyle: { display: 'none' },
+}
+
+export const stackScreenOptions: NativeStackNavigationOptions = {
+  ...nativeStackScreenOptions,
   animation: 'slide_from_left',
 }

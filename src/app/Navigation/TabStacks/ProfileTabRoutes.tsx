@@ -1,28 +1,24 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import { screenOptions, stackOptions } from '../config'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { stackScreenOptions, tabStackScreenOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import ProfileScreen from '@/pages/ProfileScreen/ProfileScreen'
 import CardsRepetition from '@/pages/CardsRepetition/CardsRepetition'
+import type { ProfileStackParams } from '../params'
 
-const ProfileStack = createStackNavigator()
+const ProfileStack = createNativeStackNavigator<ProfileStackParams>()
 
 const ProfileTabRoutes = () => {
   return (
-    <ProfileStack.Navigator
-      screenOptions={{
-        ...screenOptions,
-        headerShown: false,
-      }}
-    >
+    <ProfileStack.Navigator screenOptions={tabStackScreenOptions}>
       <ProfileStack.Screen
-        options={stackOptions}
+        options={stackScreenOptions}
         name={RoutesNames.profile}
         component={ProfileScreen}
       />
 
       <ProfileStack.Screen
-        options={stackOptions}
+        options={stackScreenOptions}
         name={RoutesNames.cardsRepetition}
         component={CardsRepetition}
       />

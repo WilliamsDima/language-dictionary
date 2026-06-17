@@ -1,5 +1,5 @@
-import type {StackNavigationProp} from '@react-navigation/stack'
-import type {RootParams} from '../params'
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack'
+import type {AppRouteParams} from '../params'
 
-export type ScreensAppNavigation = keyof RootParams
-export type NavigateStack = StackNavigationProp<RootParams>
+export type ScreensAppNavigation = keyof AppRouteParams
+export type NavigateStack = NativeStackNavigationProp<AppRouteParams>

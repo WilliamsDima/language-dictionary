@@ -25,10 +25,14 @@ export type TabParamsList = {
   [RoutesNames.profileStack]: undefined
 }
 
-export type RootParams = StartStackParams &
+export type AppRouteParams = StartStackParams &
   MainStackParams &
   SettingsStackParams &
   ProfileStackParams &
   TabParamsList & {
     [RoutesNames.start]: undefined
   }
+
+export type RootStackParams = {
+  [RoutesNames.start]: undefined
+}

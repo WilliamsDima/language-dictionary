@@ -44,8 +44,8 @@ const Header: FC<HeaderProps> = (props) => {
 
   const backHandler = useCallback(() => {
     goBack()
-    onBack && onBack()
-  }, [])
+    onBack?.()
+  }, [goBack, onBack])
 
   const titleRoute = useRoutesTitle(name as RoutesTitle)
 
@@ -55,7 +55,7 @@ const Header: FC<HeaderProps> = (props) => {
 
   const overStyleHeader = useMemo(() => {
     return [styles.header, classes?.header, style]
-  }, [classes?.header])
+  }, [classes?.header, style])
 
   const overStyleBackBtn = useMemo(() => {
     return StyleSheet.flatten([styles.backBtn, classes?.backBtn])
