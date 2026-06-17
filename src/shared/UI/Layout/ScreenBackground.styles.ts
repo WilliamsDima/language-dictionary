@@ -9,8 +9,8 @@ export const styles = StyleSheet.create((theme) => ({
   },
   topGlow: {
     position: 'absolute',
-    top: -120,
-    right: -40,
+    top: 0,
+    left: 0,
     width: theme.size.s260,
     height: theme.size.s260,
     borderRadius: theme.size.s260 / 2,
@@ -18,8 +18,8 @@ export const styles = StyleSheet.create((theme) => ({
   },
   sideGlow: {
     position: 'absolute',
-    top: theme.size.s160,
-    left: -100,
+    top: 0,
+    left: 0,
     width: theme.size.s220,
     height: theme.size.s220,
     borderRadius: theme.size.s220 / 2,
@@ -27,8 +27,8 @@ export const styles = StyleSheet.create((theme) => ({
   },
   bottomGlow: {
     position: 'absolute',
-    bottom: -120,
-    right: -40,
+    top: 0,
+    left: 0,
     width: theme.size.s260,
     height: theme.size.s260,
     borderRadius: theme.size.s260 / 2,

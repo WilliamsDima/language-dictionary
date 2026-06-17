@@ -17,24 +17,6 @@ export const styles = StyleSheet.create((theme) => ({
       },
     },
   },
-  glowOrb: {
-    position: 'absolute',
-    top: -theme.size.s36,
-    right: -theme.size.s18,
-    width: theme.size.s96,
-    height: theme.size.s96,
-    borderRadius: theme.size.s96 / 2,
-    backgroundColor: theme.colors.palette.success_alpha_16,
-  },
-  glowOrbSmall: {
-    position: 'absolute',
-    top: theme.size.s14,
-    right: theme.size.s54,
-    width: theme.size.s32,
-    height: theme.size.s32,
-    borderRadius: theme.size.s32 / 2,
-    backgroundColor: theme.colors.palette.info_alpha_16,
-  },
   header: {
     width: '100%',
     marginBottom: theme.size.s12,
@@ -46,42 +28,20 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: theme.size.s10,
   },
+  statusOrb: {
+    position: 'absolute',
+    top: -theme.size.s22,
+    left: -theme.size.s22,
+    width: theme.size.s50,
+    height: theme.size.s50,
+    borderRadius: theme.size.s999,
+    borderWidth: theme.size.s3,
+    borderColor: theme.colors.palette.white_alpha_06,
+  },
   metaGroup: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.size.s8,
-  },
-  statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: theme.size.s10,
-    paddingVertical: theme.size.s7,
-    borderRadius: theme.size.s999,
-    backgroundColor: theme.colors.palette.bg_modal_light,
-  },
-  status: {
-    width: theme.size.s12,
-    height: theme.size.s12,
-    borderRadius: theme.size.s12 / 2,
-    variants: {
-      statusTone: {
-        study: {
-          backgroundColor: theme.colors.palette.item_study,
-        },
-        ready: {
-          backgroundColor: theme.colors.palette.item_ready,
-        },
-      },
-    },
-  },
-  statusBadgeText: {
-    marginLeft: theme.size.s6,
-    fontSize: theme.fontSize.s12,
-    color: theme.colors.palette.white,
-    fontFamily: theme.fonts.bold,
-    textTransform: 'uppercase',
-    letterSpacing: theme.letterSpacing.s08,
   },
   wordsBadge: {
     paddingHorizontal: theme.size.s10,
