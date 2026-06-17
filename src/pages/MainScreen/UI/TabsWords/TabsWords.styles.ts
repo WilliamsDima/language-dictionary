@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -17,6 +16,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: theme.size.s0,
+    minHeight: theme.size.s40,
     paddingHorizontal: theme.size.s8,
     paddingVertical: theme.size.s10,
     borderRadius: theme.size.s16,

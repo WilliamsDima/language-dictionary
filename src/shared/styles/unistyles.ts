@@ -231,8 +231,8 @@ const fonts = {
 } as const
 
 const layout = {
-  appPadding: size.s18,
-  smallAppPadding: size.s14,
+  appPadding: size.s12,
+  smallAppPadding: size.s10,
 } as const
 
 const sizes = {

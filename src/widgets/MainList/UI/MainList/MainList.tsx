@@ -41,11 +41,17 @@ const MainList: FC = () => {
 
   return (
     <View style={styles.listWrapper}>
-      {isLoading && (
+      {isLoading ? (
         <View style={styles.loader}>
           <Loader lottieStyles={styles.animLoader} />
         </View>
+      ) : (
+        <></>
       )}
+
+      <Text style={styles.count}>
+        {t('main.list_count')} {counts[filterByStatus]}
+      </Text>
 
       {!!allItems && !!Object.keys(allItems)?.length ? (
         <>
@@ -53,11 +59,6 @@ const MainList: FC = () => {
             ref={flatListRef}
             keyExtractor={(item) => item.id.toString()}
             data={Object.values(allItems)}
-            ListHeaderComponent={
-              <Text style={styles.count}>
-                {t('main.list_count')} {counts[filterByStatus]}
-              </Text>
-            }
             showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={styles.columnWrapperStyle}

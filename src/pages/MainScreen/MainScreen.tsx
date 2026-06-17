@@ -20,22 +20,6 @@ const MainScreen: FC = () => {
     <Layout dismissKeyboard>
       <View style={styles.screen}>
         <View style={styles.topSection}>
-          <View style={styles.hero}>
-            <View style={styles.heroTextBlock}>
-              <Text style={styles.kicker}>Ежедневная серия</Text>
-              <Text style={styles.title}>Твоя личная колода слов</Text>
-              <Text style={styles.subtitle}>
-                Добавляй карточки, прокачивай повторение и держи темп каждый
-                день.
-              </Text>
-            </View>
-
-            <View style={styles.heroPlaceholder}>
-              {/* PLACEHOLDER: здесь хочется видеть маскота/иллюстрацию в духе Duo с эмоцией "готов к практике" */}
-              <Text style={styles.heroPlaceholderText}>MASCOT</Text>
-            </View>
-          </View>
-
           <View style={styles.controls}>
             <SearchWords />
             <MainFilter onPress={presentSheetFilter} />

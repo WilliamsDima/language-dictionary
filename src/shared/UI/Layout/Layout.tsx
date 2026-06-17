@@ -11,14 +11,13 @@ import {
 import { useUnistyles } from 'react-native-unistyles'
 
 import { styles } from './Layout.styles'
-import Header, { HeaderProps } from '@/widgets/Header/Header'
 import VariableSafeAreaView from '../VariableSafeAreaView/VariableSafeAreaView'
 import { DismissKeyboardView } from '../DismissKeyboardHOC/DismissKeyboardHOC'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import ScreenBackground from './ScreenBackground'
 import { View } from 'react-native'
 
-interface Props extends HeaderProps {
+interface Props {
   children: ReactNode
   isScroll?: boolean
   statusBarStyle?: StatusBarStyle
@@ -28,7 +27,6 @@ interface Props extends HeaderProps {
   scrollViewStyles?: StyleProp<ViewStyle>
   paddingScreen?: boolean
   dismissKeyboard?: boolean
-  showHeader?: boolean
   isSafeArea?: boolean
   header?: ReactNode
   scrollViewProps?: ScrollViewProps
@@ -48,7 +46,6 @@ const Layout: FC<Props> = (props) => {
     paddingScreen,
     scrollViewStyles,
     dismissKeyboard,
-    showHeader,
     header,
     isSafeArea,
     scrollViewProps,
@@ -59,7 +56,7 @@ const Layout: FC<Props> = (props) => {
   const { theme } = useUnistyles()
 
   styles.useVariants({
-    headerSpacing: showHeader ? (isScroll ? 'scroll' : 'top') : 'none',
+    headerSpacing: isScroll ? 'scroll' : 'top',
     paddingScreen,
     hiddenTabBar,
   })
@@ -80,7 +77,6 @@ const Layout: FC<Props> = (props) => {
     <VariableSafeAreaView isSafeArea={!!isSafeArea} style={overStylesSafeArea}>
       <ScreenBackground />
       <View style={styles.content}>
-        {showHeader && <Header {...headerProps} />}
         {header}
 
         {dismissKeyboard ? (
