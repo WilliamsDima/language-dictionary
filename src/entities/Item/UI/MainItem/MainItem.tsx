@@ -47,10 +47,12 @@ const MainItem: FC<Props> = ({ item }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const pressScale = useRef(new Animated.Value(1)).current
+  const orbPulse = useRef(new Animated.Value(0)).current
   const translateGlow = useRef(
     new Animated.Value(hiddenTranslate ? 1 : 0)
   ).current
   const translateGlowLoopRef = useRef<Animated.CompositeAnimation | null>(null)
+  const orbPulseLoopRef = useRef<Animated.CompositeAnimation | null>(null)
 
   styles.useVariants({
     isDeleteActive: item.id === modalDeleteItem?.id,
@@ -112,6 +114,63 @@ const MainItem: FC<Props> = ({ item }) => {
       ],
     }
   }, [theme.opacity.o100, translateGlow])
+
+  const glowOrbStyle = useMemo(() => {
+    return {
+      opacity: orbPulse.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0.45, 0.9],
+      }),
+      transform: [
+        {
+          scale: orbPulse.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0.94, 1.08],
+          }),
+        },
+      ],
+    }
+  }, [orbPulse])
+
+  const glowOrbSmallStyle = useMemo(() => {
+    return {
+      opacity: orbPulse.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0.35, 0.75],
+      }),
+      transform: [
+        {
+          scale: orbPulse.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0.9, 1.12],
+          }),
+        },
+      ],
+    }
+  }, [orbPulse])
+
+  useEffect(() => {
+    orbPulseLoopRef.current?.stop()
+    orbPulseLoopRef.current = Animated.loop(
+      Animated.sequence([
+        Animated.timing(orbPulse, {
+          toValue: 1,
+          duration: 2200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(orbPulse, {
+          toValue: 0,
+          duration: 2200,
+          useNativeDriver: true,
+        }),
+      ])
+    )
+    orbPulseLoopRef.current.start()
+
+    return () => {
+      orbPulseLoopRef.current?.stop()
+    }
+  }, [orbPulse])
 
   useEffect(() => {
     if (hiddenTranslate) {
@@ -204,7 +263,8 @@ const MainItem: FC<Props> = ({ item }) => {
         onPressIn={animatePressIn}
         onPressOut={animatePressOut}
       >
-        <View style={styles.glowOrb} />
+        <Animated.View style={[styles.glowOrb, glowOrbStyle]} />
+        <Animated.View style={[styles.glowOrbSmall, glowOrbSmallStyle]} />
 
         <View style={styles.header}>
           <View style={styles.headerMain}>

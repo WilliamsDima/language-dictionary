@@ -26,6 +26,15 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.size.s96 / 2,
     backgroundColor: theme.colors.palette.success_alpha_16,
   },
+  glowOrbSmall: {
+    position: 'absolute',
+    top: theme.size.s14,
+    right: theme.size.s54,
+    width: theme.size.s32,
+    height: theme.size.s32,
+    borderRadius: theme.size.s32 / 2,
+    backgroundColor: theme.colors.palette.info_alpha_16,
+  },
   header: {
     width: '100%',
     marginBottom: theme.size.s12,
