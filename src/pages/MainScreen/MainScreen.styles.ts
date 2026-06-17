@@ -28,4 +28,8 @@ export const styles = StyleSheet.create((theme) => ({
     minHeight: theme.size.s0,
     width: '100%',
   },
+  slide: {
+    flex: 1,
+    minHeight: theme.size.s0,
+  },
 }))

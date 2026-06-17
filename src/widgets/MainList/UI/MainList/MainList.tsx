@@ -6,18 +6,26 @@ import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
 import TopArrow from '@/assets/icons/UI/arrow-top-white-64.svg'
 import Loader from '@/shared/UI/Loader/Loader'
-import ModalDeleteItem from '@/features/ModalDeleteItem/ModalDeleteItem'
-import { useCardsContext } from '@/shared/hooks/useCardsContext'
-import { useAppSelector } from '@/shared/hooks/useStore'
 import Button from '@/shared/UI/Button/Button'
 import { useTranslation } from '@/shared/i18n/types'
+import type { IItem } from '@/entities/Item/model/item'
 
-const MainList: FC = () => {
+type Props = {
+  count: number
+  isFilterActive: boolean
+  isLoading: boolean
+  items: Record<number, IItem> | null
+  loadMoreItems: () => void
+}
+
+const MainList: FC<Props> = ({
+  count,
+  isFilterActive,
+  isLoading,
+  items,
+  loadMoreItems,
+}) => {
   const { t } = useTranslation()
-
-  const { filterByStatus } = useAppSelector((store) => store.items)
-  const { allItems, counts, isLoading, isFilterActive, loadMoreItems } =
-    useCardsContext()
 
   const [showScrollTop, setShowScrollTop] = useState(false)
   const flatListRef = useRef<FlatList>(null)
@@ -50,15 +58,15 @@ const MainList: FC = () => {
       )}
 
       <Text style={styles.count}>
-        {t('main.list_count')} {counts[filterByStatus]}
+        {t('main.list_count')} {count}
       </Text>
 
-      {!!allItems && !!Object.keys(allItems)?.length ? (
+      {!!items && !!Object.keys(items)?.length ? (
         <>
           <FlatList
             ref={flatListRef}
             keyExtractor={(item) => item.id.toString()}
-            data={Object.values(allItems)}
+            data={Object.values(items)}
             showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={styles.columnWrapperStyle}
@@ -100,8 +108,6 @@ const MainList: FC = () => {
           </View>
         </View>
       )}
-
-      <ModalDeleteItem />
     </View>
   )
 }

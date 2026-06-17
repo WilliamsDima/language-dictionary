@@ -13,6 +13,7 @@ import { isShowModalYearResult } from '@/shared/constants/app'
 import { useActions } from '@/shared/hooks/useActions'
 import { useTranslation } from '@/shared/i18n/types'
 import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
+import { useGetItems } from '@/shared/hooks/useGetItems'
 
 const ProfileScreen: FC = () => {
   const { t } = useTranslation()
@@ -21,6 +22,7 @@ const ProfileScreen: FC = () => {
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
   const [cardsSheetRef, presentCardsSheet, dismissCardsSheet] = useBottomSheet()
+  useGetItems()
 
   const { items } = useAppSelector((store) => store.items)
 

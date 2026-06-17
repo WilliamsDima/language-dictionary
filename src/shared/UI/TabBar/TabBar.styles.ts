@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -15,8 +14,6 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: theme.colors.palette.tab_bar_alpha_94,
-    borderTopLeftRadius: theme.size.s22,
-    borderTopRightRadius: theme.size.s22,
     overflow: 'hidden',
     width: '100%',
     borderTopWidth: theme.size.s1,

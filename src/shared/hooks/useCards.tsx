@@ -52,22 +52,33 @@ export const useCards = () => {
     }
   }, [items])
 
-  const getItemsHandler = (page: number) => {
-    return getItems({
-      uid: firebaseData?.uid,
-      filter: {
-        status: filterByStatus,
-        search: debouncedSearch,
+  const getItemsHandler = useCallback(
+    (page: number) => {
+      return getItems({
+        uid: firebaseData?.uid,
         filter: {
-          sortDate: filterMain?.sortDate || 'asc',
-          languages: filterMain?.languages,
+          status: filterByStatus,
+          search: debouncedSearch,
+          filter: {
+            sortDate: filterMain?.sortDate || 'asc',
+            languages: filterMain?.languages,
+          },
         },
-      },
-      limitCount: 10,
-      page,
+        limitCount: 10,
+        page,
+        lastVisible,
+      })
+    },
+    [
+      debouncedSearch,
+      filterByStatus,
+      filterMain?.languages,
+      filterMain?.sortDate,
+      firebaseData?.uid,
+      getItems,
       lastVisible,
-    })
-  }
+    ]
+  )
 
   // обновление карточки
   const updateItemHandler = async (itemEdit: IItem) => {

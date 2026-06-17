@@ -13,6 +13,7 @@ type InitialState = {
   modalDeleteItem: IItem | null
   lastSaveData: Date | null | undefined
   filterByStatus: StatusItem
+  itemsRevision: number
   search: string
   showFilterMain: boolean
   filterMain: FilterMain | null
@@ -24,6 +25,7 @@ const initialState: InitialState = {
   modalDeleteItem: null,
   lastSaveData: null,
   filterByStatus: 'ALL',
+  itemsRevision: 0,
   search: '',
   showFilterMain: false,
   filterMain: {
@@ -43,19 +45,21 @@ export const itemsSlice = createSlice({
   reducers: {
     setItems: (state, { payload }: PayloadAction<Record<number, IItem>>) => {
       state.items = payload ? payload : state.items
+      state.itemsRevision += 1
     },
     addItemAC: (state, { payload }: PayloadAction<IItem>) => {
       state.items[payload.id] = payload
+      state.itemsRevision += 1
     },
     updateItemAC: (state, { payload }: PayloadAction<IItem>) => {
-      if (state.items[payload.id]) {
-        state.items[payload.id] = payload
-      }
+      state.items[payload.id] = payload
+      state.itemsRevision += 1
     },
     deleteItemAC: (state, { payload }: PayloadAction<IItem>) => {
       if (state.items[payload.id]) {
         delete state.items[payload.id]
       }
+      state.itemsRevision += 1
     },
     setModalDeleteItem: (state, { payload }: PayloadAction<IItem | null>) => {
       state.modalDeleteItem = payload

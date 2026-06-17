@@ -1,111 +1,109 @@
-import React, { FC } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './TabsWords.styles'
-import { View } from 'react-native'
-import Button from '@/shared/UI/Button/Button'
+import { Animated, TouchableOpacity, View } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import { useActions } from '@/shared/hooks/useActions'
 import { tabsWords } from '@/shared/helpers/tabsWord'
-import { useCardsContext } from '@/shared/hooks/useCardsContext'
-import { useLazyGetItemsQuery } from '../../api/cardsServices'
-import type { IItem, StatusItem } from '@/entities/Item/model/item'
+import type { StatusItem } from '@/entities/Item/model/item'
 import { useTranslation } from '@/shared/i18n/types'
 
-type Props = {}
+type Props = {
+  activeStatus: StatusItem
+  onChange: (status: StatusItem) => void
+  scrollX: Animated.Value
+  sliderWidth: number
+}
 
 type StatusTabProps = {
-  active: boolean
   color: string
   label: string
   onPress: () => void
 }
 
-const StatusTab = ({ active, color, label, onPress }: StatusTabProps) => {
-  styles.useVariants({
-    active,
-  })
+const StatusTab = ({ color, label, onPress }: StatusTabProps) => {
+  const circleStyle = useMemo(() => {
+    return [styles.circle, { backgroundColor: color }]
+  }, [color])
 
   return (
-    <Button
-      isText={false}
-      onPress={onPress}
-      classes={{
-        btn: styles.btn,
-      }}
-    >
-      <View style={[styles.circle, { backgroundColor: color }]} />
+    <TouchableOpacity onPress={onPress} style={styles.btn} activeOpacity={0.9}>
+      <View style={circleStyle} />
       <Text numberOfLines={1} style={styles.label}>
         {label}
       </Text>
-    </Button>
+    </TouchableOpacity>
   )
 }
 
-const TabsWords: FC<Props> = (props) => {
-  const { setFilterByStatus, setItems } = useActions()
+const TabsWords: FC<Props> = ({
+  activeStatus,
+  onChange,
+  scrollX,
+  sliderWidth,
+}) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
+  const [containerWidth, setContainerWidth] = useState(0)
 
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { filterByStatus, filterMain } = useAppSelector((store) => store.items)
-
-  const { page, setAllItems, setLastVisible, setIsLoading } = useCardsContext()
-
-  const [getItems] = useLazyGetItemsQuery()
-
-  const onPresHandler = (status: StatusItem) => {
-    if (firebaseData) {
-      setFilterByStatus(status)
-      setIsLoading(true)
-      getItems({
-        uid: firebaseData?.uid,
-        filter: {
-          status,
-          search: '',
-          filter: {
-            sortDate: filterMain?.sortDate,
-            languages: filterMain?.languages,
-          },
-        },
-        limitCount: 10,
-        page: 1,
-      })
-        .then((res) => {
-          if (res?.data?.items) {
-            if (res.data?.items) {
-              const obj: Record<number, IItem> = {}
-
-              res.data?.items.forEach((it) => {
-                obj[it.id] = it
-              })
-
-              setAllItems(obj)
-              setItems(obj)
-            }
-
-            setLastVisible(res.data?.lastVisible)
-          }
-        })
-        .finally(() => {
-          setIsLoading(false)
-          page.current = page.current + 1
-        })
+  const tabs = useMemo(() => tabsWords(t, theme), [t, theme])
+  const indicatorWidth = useMemo(() => {
+    if (!containerWidth) {
+      return 0
     }
-  }
+
+    return (
+      (containerWidth - theme.size.s8 - theme.size.s6 * (tabs.length - 1)) /
+      tabs.length
+    )
+  }, [containerWidth, tabs.length, theme.size.s6, theme.size.s8])
+
+  const indicatorStyle = useMemo(() => {
+    return {
+      width: indicatorWidth,
+      transform: [
+        {
+          translateX: scrollX.interpolate({
+            inputRange: tabs.map((_, index) => index * sliderWidth),
+            outputRange: tabs.map(
+              (_, index) =>
+                theme.size.s4 + index * (indicatorWidth + theme.size.s6)
+            ),
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
+    }
+  }, [indicatorWidth, scrollX, sliderWidth, tabs, theme.size.s4, theme.size.s6])
+
+  const onPressHandler = useCallback(
+    (status: StatusItem) => {
+      if (status !== activeStatus) {
+        onChange(status)
+      }
+    },
+    [activeStatus, onChange]
+  )
 
   return (
-    <View style={styles.container}>
-      {tabsWords(t, theme).map((it) => {
+    <View
+      style={styles.container}
+      onLayout={(event) => {
+        setContainerWidth(event.nativeEvent.layout.width)
+      }}
+    >
+      {indicatorWidth ? (
+        <Animated.View style={[styles.activeBg, indicatorStyle]} />
+      ) : (
+        <></>
+      )}
+
+      {tabs.map((it) => {
         return (
           <StatusTab
             key={it.status}
-            active={filterByStatus === it.status}
             color={it.color}
             label={it.label}
-            onPress={() => {
-              onPresHandler(it.status)
-            }}
+            onPress={() => onPressHandler(it.status)}
           />
         )
       })}
