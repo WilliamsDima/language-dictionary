@@ -24,6 +24,25 @@ interface Props {
   valueField: string
 }
 
+type DropdownItemProps = {
+  active: boolean
+  iconUrl?: string
+  label: string
+}
+
+const DropdownItem = memo(({ active, iconUrl, label }: DropdownItemProps) => {
+  styles.useVariants({
+    active,
+  })
+
+  return (
+    <View style={styles.item}>
+      {!!iconUrl && <Image source={{ uri: iconUrl }} style={styles.icon} />}
+      <Text style={styles.selectedTextStyle}>{label}</Text>
+    </View>
+  )
+})
+
 const MultiselectDropdown: FC<Props> = (props) => {
   const {
     selects,
@@ -72,20 +91,11 @@ const MultiselectDropdown: FC<Props> = (props) => {
         }}
         renderItem={(item, active) => {
           return (
-            <View style={[styles.item, active && styles.itemActive]}>
-              {!!item.iconUrl && (
-                <Image source={{ uri: item.iconUrl }} style={styles.icon} />
-              )}
-
-              <Text
-                style={[
-                  styles.selectedTextStyle,
-                  active && styles.selectedTextStyleActive,
-                ]}
-              >
-                {item[labelField]}
-              </Text>
-            </View>
+            <DropdownItem
+              active={!!active}
+              iconUrl={item.iconUrl}
+              label={item[labelField]}
+            />
           )
         }}
         renderSelectedItem={(item, unSelect) => (

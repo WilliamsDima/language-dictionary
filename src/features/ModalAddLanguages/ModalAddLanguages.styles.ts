@@ -1,12 +1,12 @@
-import { COLORS } from '@/assets/styles/colors'
-import { height, scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet, NativeModules } from 'react-native'
+import { height } from '@/shared/helpers/ScaleUtils'
+import { NativeModules } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: COLORS.bg_modal,
+    backgroundColor: theme.colors.palette.bg_modal,
     width: '100%',
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
   },
@@ -20,99 +20,118 @@ export const styles = StyleSheet.create({
   container: {
     width: '100%',
     maxHeight: '82%',
-    backgroundColor: COLORS.tab_bar_dark,
-    paddingTop: scaleWidth(14),
-    paddingBottom: scaleWidth(24),
-    borderTopLeftRadius: scaleWidth(28),
-    borderTopRightRadius: scaleWidth(28),
+    backgroundColor: theme.colors.palette.tab_bar_dark,
+    paddingTop: theme.size.s14,
+    paddingBottom: theme.size.s24,
+    borderTopLeftRadius: theme.size.s28,
+    borderTopRightRadius: theme.size.s28,
     overflow: 'hidden',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: COLORS.border,
+    borderTopWidth: theme.size.s1,
+    borderLeftWidth: theme.size.s1,
+    borderRightWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
   drag: {
     alignSelf: 'center',
-    width: scaleWidth(44),
-    height: scaleWidth(5),
-    borderRadius: scaleWidth(999),
-    backgroundColor: COLORS.border,
-    marginBottom: scaleWidth(14),
+    width: theme.size.s44,
+    height: theme.size.s5,
+    borderRadius: theme.size.s999,
+    backgroundColor: theme.colors.palette.border,
+    marginBottom: theme.size.s14,
   },
   top: {
     width: '100%',
-    paddingHorizontal: scaleWidth(18),
-    marginBottom: scaleWidth(12),
+    paddingHorizontal: theme.size.s18,
+    marginBottom: theme.size.s12,
   },
 
   scroll: {
     maxHeight: height - 300,
     width: '100%',
-    paddingHorizontal: scaleWidth(18),
+    paddingHorizontal: theme.size.s18,
   },
   scrollContainer: {
-    gap: scaleWidth(10),
+    gap: theme.size.s10,
     width: '100%',
-    paddingBottom: scaleWidth(8),
+    paddingBottom: theme.size.s8,
   },
 
   title: {
-    color: COLORS.primery,
-    fontSize: scaleFontSize(18),
-    marginBottom: scaleWidth(4),
+    color: theme.colors.palette.primery,
+    fontSize: theme.fontSize.s18,
+    marginBottom: theme.size.s4,
     fontFamily: 'Mulish-ExtraBold',
   },
   subtitle: {
-    fontSize: scaleFontSize(12),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
   },
 
   item: {
     flexDirection: 'row',
     alignItems: 'center',
 
-    paddingHorizontal: scaleWidth(14),
-    paddingVertical: scaleWidth(12),
-    borderRadius: scaleWidth(16),
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
-  },
-  itemActive: {
-    borderColor: 'rgba(124, 255, 107, 0.36)',
-  },
-  itemActiveSingle: {
-    backgroundColor: 'rgba(124, 255, 107, 0.12)',
+    paddingHorizontal: theme.size.s14,
+    paddingVertical: theme.size.s12,
+    borderRadius: theme.size.s16,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    backgroundColor: theme.colors.palette.surface,
+    variants: {
+      isLast: {
+        true: {
+          marginBottom: theme.size.s50,
+        },
+      },
+      itemState: {
+        default: {},
+        activeMulti: {
+          borderColor: theme.colors.palette.success_alpha_36,
+        },
+        activeSingle: {
+          borderColor: theme.colors.palette.success_alpha_36,
+          backgroundColor: theme.colors.palette.success_alpha_12,
+        },
+      },
+    },
   },
   done: {
-    width: scaleWidth(20),
-    height: scaleWidth(20),
-    borderRadius: scaleWidth(6),
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.border,
+    width: theme.size.s20,
+    height: theme.size.s20,
+    borderRadius: theme.size.s6,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: scaleWidth(10),
-  },
-  doneActive: {
-    borderColor: 'rgba(124, 255, 107, 0.36)',
-    backgroundColor: COLORS.primery,
+    marginRight: theme.size.s10,
+    variants: {
+      doneActive: {
+        true: {
+          borderColor: theme.colors.palette.success_alpha_36,
+          backgroundColor: theme.colors.palette.primery,
+        },
+      },
+    },
   },
   full_name: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(14),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s14,
     textAlign: 'left',
-  },
-  full_nameActive: {
-    color: COLORS.primery,
+    variants: {
+      textActive: {
+        true: {
+          color: theme.colors.palette.primery,
+        },
+      },
+    },
   },
   flag: {
-    width: scaleWidth(28),
-    height: scaleWidth(28),
-    borderRadius: scaleWidth(14),
+    width: theme.size.s28,
+    height: theme.size.s28,
+    borderRadius: theme.size.s14,
     resizeMode: 'cover',
-    marginRight: scaleWidth(8),
+    marginRight: theme.size.s8,
   },
 
   btns: {
@@ -120,38 +139,38 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: scaleWidth(18),
-    paddingTop: scaleWidth(14),
-    gap: scaleWidth(12),
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    paddingHorizontal: theme.size.s18,
+    paddingTop: theme.size.s14,
+    gap: theme.size.s12,
+    borderTopWidth: theme.size.s1,
+    borderTopColor: theme.colors.palette.border,
   },
   actionBtn: {
     flex: 1,
-    minHeight: scaleWidth(48),
-    borderRadius: scaleWidth(16),
+    minHeight: theme.size.s48,
+    borderRadius: theme.size.s16,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: theme.size.s1,
   },
   actionBtnCancel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.white_alpha_04,
+    borderColor: theme.colors.palette.border,
   },
   actionBtnConfirm: {
-    backgroundColor: 'rgba(124, 255, 107, 0.14)',
-    borderColor: 'rgba(124, 255, 107, 0.36)',
+    backgroundColor: theme.colors.palette.success_alpha_14,
+    borderColor: theme.colors.palette.success_alpha_36,
   },
   actionTextCancel: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s13,
     fontFamily: 'Mulish-Bold',
     textTransform: 'uppercase',
   },
   actionTextConfirm: {
-    color: COLORS.primery,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.primery,
+    fontSize: theme.fontSize.s13,
     fontFamily: 'Mulish-Bold',
     textTransform: 'uppercase',
   },
-})
+}))

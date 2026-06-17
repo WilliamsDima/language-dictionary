@@ -1,37 +1,31 @@
-import { COLORS } from '@/assets/styles/colors'
-import {
-  APP_PADDING,
-  scaleFontSize,
-  scaleWidth,
-  width,
-} from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
+import { width } from '@/shared/helpers/ScaleUtils'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   select: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: scaleWidth(14),
-    paddingVertical: scaleWidth(12),
-    borderRadius: scaleWidth(16),
-    backgroundColor: COLORS.surface,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    paddingHorizontal: theme.size.s14,
+    paddingVertical: theme.size.s12,
+    borderRadius: theme.size.s16,
+    backgroundColor: theme.colors.palette.surface,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
   title: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(14),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s14,
   },
   error: {
-    color: COLORS.red,
-    fontSize: scaleFontSize(12),
-    marginTop: scaleWidth(6),
+    color: theme.colors.palette.red,
+    fontSize: theme.fontSize.s12,
+    marginTop: theme.size.s6,
   },
 
   flag: {
-    width: scaleWidth(25),
-    height: scaleWidth(25),
+    width: theme.size.s25,
+    height: theme.size.s25,
     resizeMode: 'cover',
   },
-})
+}))

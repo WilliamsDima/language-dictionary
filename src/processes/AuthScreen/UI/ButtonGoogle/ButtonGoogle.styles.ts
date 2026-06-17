@@ -1,14 +1,13 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   btn: {
     width: '100%',
-    paddingVertical: scaleWidth(16),
+    paddingVertical: theme.size.s16,
     alignItems: 'center',
-    backgroundColor: COLORS.primery,
-    borderColor: 'transparent',
+    backgroundColor: theme.colors.palette.primery,
+    borderColor: theme.colors.palette.transparent,
   },
   content: {
     flexDirection: 'row',
@@ -16,9 +15,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontSize: scaleFontSize(16),
-    marginRight: scaleWidth(15),
-    color: COLORS.black,
+    fontSize: theme.fontSize.s16,
+    marginRight: theme.size.s15,
+    color: theme.colors.palette.black,
     fontFamily: 'Mulish-ExtraBold',
   },
-})
+}))

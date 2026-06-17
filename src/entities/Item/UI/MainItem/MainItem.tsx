@@ -1,5 +1,6 @@
 import React, { FC, memo, useState } from 'react'
 import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './MainItem.styles'
 import Text from '@/shared/UI/Text/Text'
 import { IItem } from '../../model/item'
@@ -8,7 +9,6 @@ import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import TranslateIcon from '@/assets/icons/UI/translate-primery-64.svg'
 import DotsVerticalIcon from '@/assets/icons/UI/dots-vertical-white-64.svg'
 import { useExpandAnim } from '@/shared/hooks/useExpandAnim'
-import { COLORS } from '@/assets/styles/colors'
 import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
@@ -23,6 +23,7 @@ type Props = {
 
 const MainItem: FC<Props> = ({ item }) => {
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
   const { setModalDeleteItem, setItemEdit, setShowAddModal } = useActions()
   const { firebaseData } = useAppSelector((store) => store.user)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
@@ -31,6 +32,11 @@ const MainItem: FC<Props> = ({ item }) => {
   const { hidden: hiddenTranslate, toggle: toggleTranslate } = useExpandAnim()
 
   const [isLoading, setIsLoading] = useState(false)
+
+  styles.useVariants({
+    isDeleteActive: item.id === modalDeleteItem?.id,
+    statusTone: item.status === 'READY' ? 'ready' : 'study',
+  })
 
   const { updateItemHandler } = useCardsContext()
 
@@ -61,23 +67,9 @@ const MainItem: FC<Props> = ({ item }) => {
   }
 
   return (
-    <TouchableOpacity
-      style={[
-        styles.item,
-        item.id === modalDeleteItem?.id && styles.itemDeleteActive,
-      ]}
-      activeOpacity={1}
-    >
+    <TouchableOpacity style={styles.item} activeOpacity={1}>
       <View style={styles.header}>
-        <View
-          style={[
-            styles.status,
-            {
-              backgroundColor:
-                item.status === 'READY' ? COLORS.item_ready : COLORS.item_study,
-            },
-          ]}
-        />
+        <View style={styles.status} />
         {!!item.language.country && (
           <View style={styles.flagWrapper}>
             <Image
@@ -122,22 +114,14 @@ const MainItem: FC<Props> = ({ item }) => {
             <ActivityIndicator
               size={'small'}
               color={
-                item.status === 'READY' ? COLORS.item_ready : COLORS.item_study
+                item.status === 'READY'
+                  ? theme.colors.palette.item_ready
+                  : theme.colors.palette.item_study
               }
             />
           ) : (
             <TouchableOpacity onPress={updateStatus}>
-              <Text
-                style={[
-                  styles.statusText,
-                  {
-                    color:
-                      item.status === 'READY'
-                        ? COLORS.item_ready
-                        : COLORS.item_study,
-                  },
-                ]}
-              >
+              <Text style={styles.statusText}>
                 {item.status === 'READY'
                   ? t('cards.study')
                   : t('cards.studied')}

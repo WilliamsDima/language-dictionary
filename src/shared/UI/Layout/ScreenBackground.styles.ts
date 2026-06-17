@@ -1,7 +1,6 @@
-import { COLORS } from '@/assets/styles/colors'
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   background: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -12,38 +11,38 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: -120,
     right: -40,
-    width: 260,
-    height: 260,
-    borderRadius: 260 / 2,
-    backgroundColor: 'rgba(124, 255, 107, 0.12)',
+    width: theme.size.s260,
+    height: theme.size.s260,
+    borderRadius: theme.size.s260 / 2,
+    backgroundColor: theme.colors.palette.success_alpha_12,
   },
   sideGlow: {
     position: 'absolute',
-    top: 160,
+    top: theme.size.s160,
     left: -100,
-    width: 220,
-    height: 220,
-    borderRadius: 220 / 2,
-    backgroundColor: 'rgba(89, 184, 255, 0.16)',
+    width: theme.size.s220,
+    height: theme.size.s220,
+    borderRadius: theme.size.s220 / 2,
+    backgroundColor: theme.colors.palette.info_alpha_16,
   },
   bottomGlow: {
     position: 'absolute',
     bottom: -120,
     right: -40,
-    width: 260,
-    height: 260,
-    borderRadius: 260 / 2,
-    backgroundColor: 'rgba(255, 111, 174, 0.12)',
+    width: theme.size.s260,
+    height: theme.size.s260,
+    borderRadius: theme.size.s260 / 2,
+    backgroundColor: theme.colors.palette.pink_alpha_12,
   },
   grid: {
     ...StyleSheet.absoluteFillObject,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.015)',
-    opacity: 0.6,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_015,
+    opacity: theme.opacity.o60,
   },
   vignette: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: COLORS.bg_modal,
-    opacity: 0.18,
+    backgroundColor: theme.colors.palette.bg_modal,
+    opacity: theme.opacity.o18,
   },
-})
+}))

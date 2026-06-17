@@ -5,6 +5,27 @@ import { View } from 'react-native'
 import { styles } from './AboutBlock.styles'
 import { useTranslation } from '@/shared/i18n/types'
 
+type AboutWordProps = {
+  children: React.ReactNode
+  isAppName: boolean
+}
+
+const AboutTitle: FC<AboutWordProps> = ({ children, isAppName }) => {
+  styles.useVariants({
+    isAppName,
+  })
+
+  return <Text style={styles.title}>{children}</Text>
+}
+
+const AboutWord: FC<AboutWordProps> = ({ children, isAppName }) => {
+  styles.useVariants({
+    isAppName,
+  })
+
+  return <Text style={styles.text}>{children}</Text>
+}
+
 const AboutBlock: FC = () => {
   const { t } = useTranslation()
   const { aplication } = useAppSelector((store) => store.app)
@@ -13,9 +34,9 @@ const AboutBlock: FC = () => {
     <View style={styles.container}>
       <View style={styles.item}>
         <View style={styles.blockName}>
-          <Text style={[styles.title, styles.appName]}>
+          <AboutTitle isAppName>
             {t('settingsScreen.about.1.blockName')}
-          </Text>
+          </AboutTitle>
         </View>
       </View>
 
@@ -33,12 +54,9 @@ const AboutBlock: FC = () => {
               const isAppName = aplication.appName === t
 
               return (
-                <Text
-                  key={i}
-                  style={[styles.text, isAppName && styles.appName]}
-                >
+                <AboutWord key={i} isAppName={isAppName}>
                   {t}{' '}
-                </Text>
+                </AboutWord>
               )
             })}
         </View>
@@ -69,12 +87,9 @@ const AboutBlock: FC = () => {
               const isAppName = aplication.appName === t
 
               return (
-                <Text
-                  key={i}
-                  style={[styles.text, isAppName && styles.appName]}
-                >
+                <AboutWord key={i} isAppName={isAppName}>
                   {t}{' '}
-                </Text>
+                </AboutWord>
               )
             })}
         </View>

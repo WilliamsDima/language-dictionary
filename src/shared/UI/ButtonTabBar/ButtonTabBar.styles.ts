@@ -1,30 +1,37 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   button: {
-    minWidth: scaleWidth(80),
-    minHeight: scaleWidth(50),
-    paddingHorizontal: scaleWidth(10),
-    paddingVertical: scaleWidth(6),
-    borderRadius: scaleWidth(18),
+    minWidth: theme.size.s80,
+    minHeight: theme.size.s50,
+    paddingHorizontal: theme.size.s10,
+    paddingVertical: theme.size.s6,
+    borderRadius: theme.size.s18,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  activeButton: {
-    backgroundColor: 'rgba(124, 255, 107, 0.16)',
-    borderWidth: 1,
-    borderColor: 'rgba(124, 255, 107, 0.34)',
+    variants: {
+      isFocused: {
+        true: {
+          backgroundColor: theme.colors.palette.success_alpha_16,
+          borderWidth: theme.size.s1,
+          borderColor: theme.colors.palette.success_alpha_34,
+        },
+      },
+    },
   },
 
   title: {
-    fontSize: scaleFontSize(10),
-    marginTop: scaleWidth(4),
+    fontSize: theme.fontSize.s10,
+    marginTop: theme.size.s4,
     textAlign: 'center',
-    color: COLORS.gray_text,
+    color: theme.colors.palette.gray_text,
+    variants: {
+      isFocused: {
+        true: {
+          color: theme.colors.palette.white,
+        },
+      },
+    },
   },
-  activeText: {
-    color: COLORS.white,
-  },
-})
+}))

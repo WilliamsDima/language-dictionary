@@ -7,8 +7,8 @@ import {
   TouchableOpacityProps,
   Pressable,
   StyleProp,
-  StyleSheet,
 } from 'react-native'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import { styles } from './Button.styles'
 import Text from '../Text/Text'
 import LinearGradient from 'react-native-linear-gradient'
@@ -47,9 +47,12 @@ const Button: FC<Props> = (props) => {
     ...rest
   } = props
 
+  const { theme } = useUnistyles()
+
   const stylesType = useMemo(() => {
     if (type) {
       const text = type + '-TEXT'
+
       return {
         btn: [styles[type]],
         text: [styles[text as never]],
@@ -69,11 +72,11 @@ const Button: FC<Props> = (props) => {
       stylesDisabled,
       style,
     ])
-  }, [stylesDisabled, styles, isPreseble, classes?.btn, stylesType, style])
+  }, [stylesDisabled, isPreseble, classes?.btn, stylesType, style])
 
   const stylesText = useMemo(() => {
     return [styles.btnText, stylesType?.text, classes?.textBtn]
-  }, [classes?.textBtn])
+  }, [classes?.textBtn, stylesType?.text])
 
   return isPreseble ? (
     <Pressable
@@ -91,11 +94,11 @@ const Button: FC<Props> = (props) => {
     >
       <LinearGradient
         colors={[
-          'transparent',
-          'rgba(0, 0, 0, 0.05)',
-          'rgba(0, 0, 0, 0.1)',
-          'rgba(0, 0, 0, 0.2)',
-          'rgba(0, 0, 0, 0.3)',
+          theme.colors.palette.transparent,
+          theme.colors.palette.dark_alpha_05,
+          theme.colors.palette.dark_alpha_10,
+          theme.colors.palette.dark_alpha_20,
+          theme.colors.palette.dark_alpha_30,
         ]}
         locations={[0, 0.3, 0.6, 0.8, 1]} // Плавный градиент
         style={[
@@ -121,11 +124,11 @@ const Button: FC<Props> = (props) => {
     >
       <LinearGradient
         colors={[
-          'transparent',
-          'rgba(0, 0, 0, 0.05)',
-          'rgba(0, 0, 0, 0.1)',
-          'rgba(0, 0, 0, 0.2)',
-          'rgba(0, 0, 0, 0.3)',
+          theme.colors.palette.transparent,
+          theme.colors.palette.dark_alpha_05,
+          theme.colors.palette.dark_alpha_10,
+          theme.colors.palette.dark_alpha_20,
+          theme.colors.palette.dark_alpha_30,
         ]}
         locations={[0, 0.3, 0.6, 0.8, 1]} // Плавный градиент
         style={[

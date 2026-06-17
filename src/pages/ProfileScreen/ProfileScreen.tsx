@@ -13,6 +13,7 @@ import { isShowModalYearResult } from '@/shared/constants/app'
 import { useActions } from '@/shared/hooks/useActions'
 import { useTranslation } from '@/shared/i18n/types'
 import Text from '@/shared/UI/Text/Text'
+import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 
 const ProfileScreen: FC = () => {
   const { t } = useTranslation()
@@ -20,8 +21,8 @@ const ProfileScreen: FC = () => {
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
-  const [modalCards, setModalCards] = useState(false)
   const scrollY = useRef(new Animated.Value(0)).current
+  const [cardsSheetRef, presentCardsSheet, dismissCardsSheet] = useBottomSheet()
 
   const { items } = useAppSelector((store) => store.items)
 
@@ -63,7 +64,7 @@ const ProfileScreen: FC = () => {
   }
 
   const startRepeat = () => {
-    setModalCards(true)
+    presentCardsSheet()
   }
 
   return (
@@ -136,7 +137,7 @@ const ProfileScreen: FC = () => {
       <ModalDeleteAccaunt visible={modalDelete} setVisible={setModalDelete} />
       <ModalLogout visible={modalLogout} setVisible={setModalLogout} />
 
-      <ModalCardsFilter visible={modalCards} setVisible={setModalCards} />
+      <ModalCardsFilter sheetRef={cardsSheetRef} onClose={dismissCardsSheet} />
     </Layout>
   )
 }

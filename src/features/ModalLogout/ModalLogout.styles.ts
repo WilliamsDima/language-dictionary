@@ -1,24 +1,24 @@
-import { COLORS } from '@/assets/styles/colors'
-import { height, scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet, NativeModules } from 'react-native'
+import { height } from '@/shared/helpers/ScaleUtils'
+import { NativeModules } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.bg_modal,
+    backgroundColor: theme.colors.palette.bg_modal,
     width: '100%',
   },
   container: {
     maxWidth: '88%',
     minWidth: '88%',
     width: '100%',
-    backgroundColor: COLORS.tab_bar_dark,
-    padding: scaleWidth(18),
-    borderRadius: scaleWidth(24),
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.tab_bar_dark,
+    padding: theme.size.s18,
+    borderRadius: theme.size.s24,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   wrapperContainer: {
@@ -28,8 +28,8 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(20),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s20,
     fontFamily: 'Mulish-ExtraBold',
   },
 
@@ -37,33 +37,33 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: scaleWidth(18),
-    gap: scaleWidth(12),
+    marginTop: theme.size.s18,
+    gap: theme.size.s12,
   },
 
   btn: {
-    paddingVertical: scaleWidth(12),
+    paddingVertical: theme.size.s12,
     minWidth: '45%',
     flex: 1,
-    borderRadius: scaleWidth(16),
+    borderRadius: theme.size.s16,
   },
   cancel: {
-    borderColor: COLORS.border,
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    borderColor: theme.colors.palette.border,
+    backgroundColor: theme.colors.palette.white_alpha_04,
   },
   cancelText: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },
 
   logout: {
-    backgroundColor: COLORS.red,
-    borderColor: 'transparent',
+    backgroundColor: theme.colors.palette.red,
+    borderColor: theme.colors.palette.transparent,
   },
   logoutText: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },
-})
+}))

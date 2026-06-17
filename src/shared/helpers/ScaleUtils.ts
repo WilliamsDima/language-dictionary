@@ -1,61 +1,10 @@
-import { Dimensions, Platform, TextStyle } from 'react-native'
+import { Dimensions, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 
 export const { width, height } = Dimensions.get('window')
 
-const baseWidth = 347
-const baseHeight = 812
-
-const baseWidthRatio = width / baseWidth
-const baseHeightRatio = height / baseHeight
-
-export const APP_PADDING = scaleWidth(20)
-export const SMALL_APP_PADDING = scaleWidth(10)
-
 const PLATFORM_OS = Platform.OS
 export const IS_IOS = PLATFORM_OS === 'ios'
-
-const availableFontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900]
-
-export function scaleWidth(size: number, float?: boolean): number {
-  const result = baseWidthRatio * size
-
-  if (float) {
-    return result
-  }
-
-  return Math.floor(result)
-}
-
-export function scaleHeight(size: number, float?: boolean): number {
-  const result = baseHeightRatio * size
-
-  if (float) {
-    return result
-  }
-
-  return Math.floor(result)
-}
-
-export function scaleFontSize(size: number, module = 0): number {
-  const ratio = IS_IOS ? baseWidthRatio : baseWidthRatio - module / size
-
-  return Math.floor(ratio * size)
-}
-
-export function scaleFontWeight(size: number): TextStyle['fontWeight'] {
-  const ratio = IS_IOS ? baseWidthRatio : baseWidthRatio - baseWidthRatio / size
-
-  const weight = IS_IOS ? size : Math.floor((ratio * size) / 100) * 100 - 100
-
-  return weight < 100
-    ? '100'
-    : weight > 900
-    ? '900'
-    : availableFontWeights.indexOf(weight) < 0
-    ? '400'
-    : (`${weight}` as TextStyle['fontWeight'])
-}
 
 export const isSmallDevices = width < 370 && height < 640
 

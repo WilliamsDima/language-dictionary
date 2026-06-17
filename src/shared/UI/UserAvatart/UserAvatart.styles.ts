@@ -1,30 +1,29 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
-    width: scaleWidth(82),
-    height: scaleWidth(82),
-    borderRadius: scaleWidth(82 / 2),
-    backgroundColor: COLORS.surface_light,
-    borderWidth: 3,
-    borderColor: 'rgba(124, 255, 107, 0.34)',
+    width: theme.size.s82,
+    height: theme.size.s82,
+    borderRadius: theme.size.s82 / 2,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s3,
+    borderColor: theme.colors.palette.success_alpha_34,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   avatar: {
-    width: scaleWidth(76),
-    height: scaleWidth(76),
-    borderRadius: scaleWidth(76 / 2),
+    width: theme.size.s76,
+    height: theme.size.s76,
+    borderRadius: theme.size.s76 / 2,
     resizeMode: 'cover',
   },
 
   name: {
-    fontSize: scaleFontSize(24),
+    fontSize: theme.fontSize.s24,
     textTransform: 'uppercase',
     fontWeight: '600',
-    color: COLORS.white,
+    color: theme.colors.palette.white,
   },
-})
+}))

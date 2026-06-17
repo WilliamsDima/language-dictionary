@@ -1,40 +1,81 @@
-import React, { FC, memo, useEffect, useState } from 'react'
+import React, { FC, memo, RefObject, useEffect, useState } from 'react'
 import { styles } from './ModalAddLanguages.styles'
 import {
   View,
-  Animated,
   TouchableOpacity,
   ScrollView,
   Image,
 } from 'react-native'
-import Modal from '@/shared/UI/Modal/Modal'
-import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import Text from '@/shared/UI/Text/Text'
 import DoneIcon from '@/assets/icons/UI/done-white-64.svg'
 import { ILanguage, languages } from '@/shared/json/languages'
 import { useTranslation } from '@/shared/i18n/types'
 import Button from '@/shared/UI/Button/Button'
+import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 type Props = {
-  visible: boolean
+  sheetRef: RefObject<BottomSheetModal | null>
   selects?: ILanguage[]
   multiselect?: boolean
   onConfirm: (langs: ILanguage[]) => void
-  setVisible: (v: boolean) => void
+  onClose: () => void
 }
 
+type LanguageOptionProps = {
+  itemState: 'default' | 'activeMulti' | 'activeSingle'
+  isLast: boolean
+  iconIsError: boolean
+  item: ILanguage
+  onPress: () => void
+  onImageError: () => void
+}
+
+const LanguageOption = memo(
+  ({
+    itemState,
+    isLast,
+    iconIsError,
+    item,
+    onPress,
+    onImageError,
+  }: LanguageOptionProps) => {
+    styles.useVariants({
+      itemState: itemState === 'default' ? undefined : itemState,
+      doneActive: itemState === 'activeMulti',
+      textActive: itemState === 'activeSingle',
+      isLast,
+    })
+
+    return (
+      <TouchableOpacity style={styles.item} onPress={onPress}>
+        {itemState !== 'activeSingle' && (
+          <View style={styles.done}>
+            {itemState === 'activeMulti' && <DoneIcon width={15} height={15} />}
+          </View>
+        )}
+
+        {!!item.country.flag && !iconIsError && (
+          <Image
+            source={{ uri: item.country.flag }}
+            style={styles.flag}
+            onError={onImageError}
+          />
+        )}
+        <Text style={styles.full_name}>{item.full_name}</Text>
+      </TouchableOpacity>
+    )
+  },
+)
+
 const ModalAddLanguages: FC<Props> = ({
-  visible,
+  sheetRef,
   selects,
   multiselect = true,
-  setVisible,
+  onClose,
   onConfirm,
 }) => {
   const { t } = useTranslation()
-
-  const { getAnimationStyles } = useScaleAnim({
-    active: visible,
-  })
 
   const [languagesSelects, setLanguagesSelects] = useState<ILanguage[]>([])
   const [isonsError, setIsonsError] = useState<number[]>([])
@@ -56,125 +97,90 @@ const ModalAddLanguages: FC<Props> = ({
   }
 
   const onCancelHandler = () => {
-    setVisible(false)
+    onClose()
     setLanguagesSelects([])
   }
 
   useEffect(() => {
-    if (selects?.length && visible) {
+    if (selects?.length) {
       setLanguagesSelects(selects)
     }
-  }, [selects, visible])
+  }, [selects])
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      onRequestClose={onCancelHandler}
-      animationType="fade"
+    <BottomSheet
+      sheetRef={sheetRef}
+      onClose={onCancelHandler}
+      title={t('modal.modalAddLanguages.title')}
+      subtitle={
+        multiselect
+          ? 'Выбери несколько языков для статистики и подбора карточек'
+          : 'Выбери один основной язык профиля'
+      }
+      dynamicSizing={false}
+      snapPoints={['82%']}
+      footer={
+        <View style={styles.btns}>
+          <Button
+            type="BORDER-TRANSPARENT"
+            classes={{
+              btn: [styles.actionBtn, styles.actionBtnCancel],
+              textBtn: styles.actionTextCancel,
+            }}
+            onPress={onCancelHandler}
+          >
+            {t('ui.cancel')}
+          </Button>
+
+          <Button
+            classes={{
+              btn: [styles.actionBtn, styles.actionBtnConfirm],
+              textBtn: styles.actionTextConfirm,
+            }}
+            onPress={() => {
+              onConfirm(languagesSelects)
+              onCancelHandler()
+            }}
+          >
+            {t('ui.apply')}
+          </Button>
+        </View>
+      }
     >
-      <TouchableOpacity
-        style={styles.wrapper}
-        activeOpacity={1}
-        onPress={onCancelHandler}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContainer}
       >
-        <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
-          <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <View style={styles.drag} />
-            <View style={styles.top}>
-              <Text style={styles.title}>
-                {t('modal.modalAddLanguages.title')}
-              </Text>
-              <Text style={styles.subtitle}>
-                {multiselect
-                  ? 'Выбери несколько языков для статистики и подбора карточек'
-                  : 'Выбери один основной язык профиля'}
-              </Text>
-            </View>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={styles.scroll}
-              contentContainerStyle={styles.scrollContainer}
-            >
-              {languages.map((it, i) => {
-                const active = languagesSelects.some(
-                  (item) => item.id === it.id
-                )
+        {languages.map((it, i) => {
+          const active = languagesSelects.some((item) => item.id === it.id)
+          const isLast = i === languages.length - 1
+          const iconIsError = isonsError.includes(it.id)
+          const itemState =
+            active && multiselect
+              ? 'activeMulti'
+              : active
+                ? 'activeSingle'
+                : 'default'
 
-                const isLast = i === languages.length - 1
-
-                const iconIsError = isonsError.includes(it.id)
-
-                return (
-                  <TouchableOpacity
-                    key={it.id}
-                    style={[
-                      styles.item,
-                      active && !multiselect && styles.itemActiveSingle,
-                      active && styles.itemActive,
-                      isLast && { marginBottom: 50 },
-                    ]}
-                    onPress={() => {
-                      onSelectLanguages(it)
-                    }}
-                  >
-                    {multiselect && (
-                      <View style={[styles.done, active && styles.doneActive]}>
-                        {active && <DoneIcon width={15} height={15} />}
-                      </View>
-                    )}
-
-                    {!!it.country.flag && !iconIsError && (
-                      <Image
-                        source={{ uri: it.country.flag }}
-                        style={styles.flag}
-                        onError={(error) => {
-                          setIsonsError((prev) => [...prev, it.id])
-                        }}
-                      />
-                    )}
-                    <Text
-                      style={[
-                        styles.full_name,
-                        active && !multiselect && styles.full_nameActive,
-                      ]}
-                    >
-                      {it.full_name}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              })}
-            </ScrollView>
-
-            <View style={styles.btns}>
-              <Button
-                type="BORDER-TRANSPARENT"
-                classes={{
-                  btn: [styles.actionBtn, styles.actionBtnCancel],
-                  textBtn: styles.actionTextCancel,
-                }}
-                onPress={onCancelHandler}
-              >
-                {t('ui.cancel')}
-              </Button>
-
-              <Button
-                classes={{
-                  btn: [styles.actionBtn, styles.actionBtnConfirm],
-                  textBtn: styles.actionTextConfirm,
-                }}
-                onPress={() => {
-                  onConfirm(languagesSelects)
-                  onCancelHandler()
-                }}
-              >
-                {t('ui.apply')}
-              </Button>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      </TouchableOpacity>
-    </Modal>
+          return (
+            <LanguageOption
+              key={it.id}
+              itemState={itemState}
+              isLast={isLast}
+              iconIsError={iconIsError}
+              item={it}
+              onPress={() => {
+                onSelectLanguages(it)
+              }}
+              onImageError={() => {
+                setIsonsError((prev) => [...prev, it.id])
+              }}
+            />
+          )
+        })}
+      </ScrollView>
+    </BottomSheet>
   )
 }
 

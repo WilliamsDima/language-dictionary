@@ -1,7 +1,6 @@
-import { COLORS } from '@/assets/styles/colors'
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   slide: {
     flex: 1,
     justifyContent: 'center',
@@ -9,17 +8,33 @@ export const styles = StyleSheet.create({
   },
   titles: {
     position: 'absolute',
-    top: 100,
+    top: theme.size.s100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
-    color: COLORS.white,
+    color: theme.colors.palette.white,
     textTransform: 'uppercase',
     fontWeight: '800',
-    fontSize: 40,
+    fontSize: theme.fontSize.s40,
     fontStyle: 'italic',
     textAlign: 'center',
+  },
+  emojiLeft: {
+    position: 'absolute',
+    left: theme.size.s30,
+    top: theme.size.s50,
+    opacity: theme.opacity.o100,
+    transform: [{ rotate: '-100deg' }],
+    fontSize: theme.fontSize.s40,
+  },
+  emojiRight: {
+    position: 'absolute',
+    right: theme.size.s30,
+    top: theme.size.s50,
+    opacity: theme.opacity.o100,
+    transform: [{ rotate: '10deg' }],
+    fontSize: theme.fontSize.s40,
   },
 
   user: {
@@ -29,27 +44,27 @@ export const styles = StyleSheet.create({
   },
   imageWrapper: {
     zIndex: 11,
-    width: 200,
-    height: 200,
-    borderRadius: 200 / 2,
-    backgroundColor: 'transparent',
+    width: theme.size.s200,
+    height: theme.size.s200,
+    borderRadius: theme.size.s200 / 2,
+    backgroundColor: theme.colors.palette.transparent,
   },
   image: {
-    width: 200,
-    height: 200,
-    borderRadius: 200 / 2,
+    width: theme.size.s200,
+    height: theme.size.s200,
+    borderRadius: theme.size.s200 / 2,
   },
   fireworksWrapper: {
     position: 'absolute',
     width: '100%',
-    left: 0,
+    left: theme.size.s0,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
   },
   fireworks: {
     width: '100%',
-    height: 800,
+    height: theme.size.s800,
 
     justifyContent: 'center',
     alignItems: 'center',
@@ -58,30 +73,30 @@ export const styles = StyleSheet.create({
   footer: {
     width: '100%',
     position: 'absolute',
-    bottom: 50,
+    bottom: theme.size.s50,
     justifyContent: 'center',
     alignItems: 'center',
   },
   scrollLeft: {
-    width: 100,
-    height: 100,
+    width: theme.size.s100,
+    height: theme.size.s100,
     position: 'absolute',
-    left: 0,
-    opacity: 0.5,
+    left: theme.size.s0,
+    opacity: theme.opacity.o50,
   },
   scrollRight: {
-    width: 100,
-    height: 100,
+    width: theme.size.s100,
+    height: theme.size.s100,
     position: 'absolute',
-    right: 0,
-    opacity: 0.5,
+    right: theme.size.s0,
+    opacity: theme.opacity.o50,
   },
   years: {
-    width: 200,
-    height: 200,
+    width: theme.size.s200,
+    height: theme.size.s200,
   },
   welcome: {
-    width: 200,
-    height: 50,
+    width: theme.size.s200,
+    height: theme.size.s50,
   },
-})
+}))

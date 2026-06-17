@@ -1,15 +1,8 @@
-import { COLORS } from '@/assets/styles/colors'
-import {
-  APP_PADDING,
-  height,
-  scaleFontSize,
-  scaleWidth,
-  width,
-} from '@/shared/helpers/ScaleUtils'
+import { height, width } from '@/shared/helpers/ScaleUtils'
 
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     // backgroundColor: 'red',
     minHeight: '100%',
@@ -25,16 +18,16 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   item: {
-    paddingHorizontal: APP_PADDING,
+    paddingHorizontal: theme.layout.appPadding,
     width: width,
     height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'column',
     //height: 'auto',
-    //height: scaleWidth(40),
+    //height: theme.size.s40,
     zIndex: 100,
-    marginTop: scaleWidth(54),
+    marginTop: theme.size.s54,
   },
   press: {
     justifyContent: 'center',
@@ -42,15 +35,15 @@ export const styles = StyleSheet.create({
     //backgroundColor: 'white',
   },
   img: {
-    // width: scaleWidth(256),
-    // height: scaleWidth(256),
-    // marginBottom: scaleWidth(24),
+    // width: theme.size.s256,
+    // height: theme.size.s256,
+    // marginBottom: theme.size.s24,
   },
 
   title: {
-    color: COLORS.red,
+    color: theme.colors.palette.red,
     textAlign: 'center',
-    fontSize: scaleFontSize(17),
+    fontSize: theme.fontSize.s17,
     fontStyle: 'normal',
     fontWeight: '600',
   },
@@ -61,42 +54,42 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backfaceVisibility: 'hidden',
-    backgroundColor: 'rgba(245, 251, 255, 0.98)',
-    borderRadius: 28,
-    borderWidth: 4,
-    borderColor: COLORS.surface_light,
+    backgroundColor: theme.colors.palette.white_surface_98,
+    borderRadius: theme.size.s28,
+    borderWidth: theme.size.s4,
+    borderColor: theme.colors.palette.surface_light,
   },
   cardBack: {
     position: 'absolute',
-    top: 0,
+    top: theme.size.s0,
   },
 
   footer: {
     position: 'absolute',
-    bottom: scaleWidth(50),
+    bottom: theme.size.s50,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
   description: {
-    color: COLORS.gray_text,
-    fontSize: scaleFontSize(14),
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.fontSize.s14,
     fontStyle: 'normal',
     fontWeight: '600',
-    marginBottom: scaleWidth(20),
+    marginBottom: theme.size.s20,
   },
 
   itemWords: {
     // flexDirection: 'column',
-    // gap: scaleWidth(10),
+    // gap: theme.size.s10,
     //backgroundColor: 'red',
     maxHeight: height / 1.38,
     minHeight: height / 1.38,
-    width: width - APP_PADDING * 2 - scaleWidth(20),
+    width: width - theme.layout.appPadding * 2 - theme.size.s20,
   },
   contentContainerStyle: {
     flexDirection: 'column',
-    gap: scaleWidth(10),
+    gap: theme.size.s10,
   },
 
   itemWordWrapper: {
@@ -104,34 +97,38 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: '100%',
     maxWidth: '100%',
-    gap: scaleWidth(10),
+    gap: theme.size.s10,
     position: 'relative',
   },
   innerShadowTop: {
     position: 'absolute',
     top: -10,
-    left: 0,
-    right: 0,
+    left: theme.size.s0,
+    right: theme.size.s0,
     height: '30%',
   },
   innerShadowBottom: {
     position: 'absolute',
-    bottom: 0,
+    bottom: theme.size.s0,
     height: '30%',
   },
 
   itemWord: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: scaleWidth(18),
-    paddingHorizontal: scaleWidth(14),
-    borderRadius: scaleWidth(18),
+    paddingVertical: theme.size.s18,
+    paddingHorizontal: theme.size.s14,
+    borderRadius: theme.size.s18,
     flex: 1,
-    backgroundColor: 'rgba(8, 17, 31, 0.04)',
-  },
-  itemWordBorder: {
-    borderBottomWidth: scaleWidth(1),
-    borderBottomColor: 'rgba(4, 7, 13, 0.08)',
+    backgroundColor: theme.colors.palette.ink_alpha_04,
+    variants: {
+      hasBorder: {
+        true: {
+          borderBottomWidth: theme.size.s1,
+          borderBottomColor: theme.colors.palette.ink_alpha_08,
+        },
+      },
+    },
   },
 
   wrapperText: {
@@ -142,28 +139,32 @@ export const styles = StyleSheet.create({
   },
 
   text: {
-    color: COLORS.black,
+    color: theme.colors.palette.black,
     textAlign: 'center',
-    fontSize: scaleFontSize(24),
+    fontSize: theme.fontSize.s24,
     fontStyle: 'normal',
     fontWeight: '600',
-    paddingBottom: scaleWidth(5),
+    paddingBottom: theme.size.s5,
     fontFamily: 'Mulish-ExtraBold',
-  },
-  text2: {
-    color: COLORS.blue,
+    variants: {
+      isFlipped: {
+        true: {
+          color: theme.colors.palette.blue,
+        },
+      },
+    },
   },
 
   btn: {
-    minWidth: scaleWidth(176),
-    paddingVertical: scaleWidth(16),
-    backgroundColor: COLORS.surface,
+    minWidth: theme.size.s176,
+    paddingVertical: theme.size.s16,
+    backgroundColor: theme.colors.palette.surface,
   },
   btnText: {
     textAlign: 'center',
-    fontSize: scaleFontSize(16),
+    fontSize: theme.fontSize.s16,
     fontStyle: 'normal',
     fontWeight: '600',
-    color: COLORS.white,
+    color: theme.colors.palette.white,
   },
-})
+}))

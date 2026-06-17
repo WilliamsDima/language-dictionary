@@ -1,31 +1,30 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   containerStyle: {
-    backgroundColor: 'transparent',
+    backgroundColor: theme.colors.palette.transparent,
   },
   tab: {
     position: 'relative',
     zIndex: 10,
     justifyContent: 'space-between',
-    paddingHorizontal: scaleWidth(14),
-    paddingTop: scaleWidth(10),
-    paddingBottom: 28,
+    paddingHorizontal: theme.size.s14,
+    paddingTop: theme.size.s10,
+    paddingBottom: theme.size.s28,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(13, 26, 43, 0.94)',
-    borderTopLeftRadius: scaleWidth(22),
-    borderTopRightRadius: scaleWidth(22),
+    backgroundColor: theme.colors.palette.tab_bar_alpha_94,
+    borderTopLeftRadius: theme.size.s22,
+    borderTopRightRadius: theme.size.s22,
     overflow: 'hidden',
     width: '100%',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: COLORS.border,
+    borderTopWidth: theme.size.s1,
+    borderLeftWidth: theme.size.s1,
+    borderRightWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
   hidden: {
     display: 'none',
   },
-})
+}))

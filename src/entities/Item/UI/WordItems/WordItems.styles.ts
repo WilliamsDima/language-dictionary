@@ -1,10 +1,10 @@
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   items: {
     flex: 1,
-    gap: scaleWidth(5),
-    marginRight: scaleWidth(5),
+    gap: theme.size.s5,
+    marginRight: theme.size.s5,
   },
-})
+}))

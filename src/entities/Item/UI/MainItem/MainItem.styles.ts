@@ -1,30 +1,43 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   item: {
     width: '100%',
-    backgroundColor: 'rgba(16, 34, 56, 0.92)',
-    padding: scaleWidth(14),
-    borderRadius: scaleWidth(24),
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-  itemDeleteActive: {
-    backgroundColor: COLORS.red_opacity_1,
+    backgroundColor: theme.colors.palette.item_alpha_92,
+    padding: theme.size.s14,
+    borderRadius: theme.size.s24,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    variants: {
+      isDeleteActive: {
+        true: {
+          backgroundColor: theme.colors.palette.red_opacity_1,
+        },
+      },
+    },
   },
 
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: scaleWidth(12),
+    marginBottom: theme.size.s12,
     alignItems: 'center',
   },
   status: {
-    width: scaleWidth(12),
-    height: scaleWidth(12),
-    borderRadius: scaleWidth(12 / 2),
+    width: theme.size.s12,
+    height: theme.size.s12,
+    borderRadius: theme.size.s12 / 2,
+    variants: {
+      statusTone: {
+        study: {
+          backgroundColor: theme.colors.palette.item_study,
+        },
+        ready: {
+          backgroundColor: theme.colors.palette.item_ready,
+        },
+      },
+    },
   },
 
   flagWrapper: {
@@ -35,15 +48,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flag: {
-    width: scaleWidth(20),
-    height: scaleWidth(20),
-    borderRadius: scaleWidth(20 / 2),
+    width: theme.size.s20,
+    height: theme.size.s20,
+    borderRadius: theme.size.s20 / 2,
     resizeMode: 'cover',
   },
 
   date: {
-    fontSize: scaleFontSize(12),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
     fontFamily: 'Mulish-Bold',
   },
 
@@ -55,39 +68,49 @@ export const styles = StyleSheet.create({
   },
 
   btnTranslate: {
-    padding: scaleWidth(5),
+    padding: theme.size.s5,
   },
 
   descriptionBlock: {
-    marginTop: scaleWidth(10),
-    borderTopWidth: scaleWidth(1),
-    borderTopColor: COLORS.border,
-    paddingTop: scaleWidth(10),
+    marginTop: theme.size.s10,
+    borderTopWidth: theme.size.s1,
+    borderTopColor: theme.colors.palette.border,
+    paddingTop: theme.size.s10,
   },
   description: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.gray_text,
   },
 
   showFooterBtn: {
     width: '100%',
-    paddingVertical: scaleWidth(10),
-    marginTop: scaleWidth(10),
+    paddingVertical: theme.size.s10,
+    marginTop: theme.size.s10,
     alignItems: 'center',
-    backgroundColor: COLORS.bg_modal_light,
-    borderRadius: scaleWidth(14),
+    backgroundColor: theme.colors.palette.bg_modal_light,
+    borderRadius: theme.size.s14,
   },
   statusText: {
-    fontSize: scaleFontSize(14),
+    fontSize: theme.fontSize.s14,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-Bold',
+    variants: {
+      statusTone: {
+        study: {
+          color: theme.colors.palette.item_study,
+        },
+        ready: {
+          color: theme.colors.palette.item_ready,
+        },
+      },
+    },
   },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     justifyContent: 'space-between',
-    marginTop: scaleWidth(12),
-    paddingHorizontal: scaleWidth(6),
+    marginTop: theme.size.s12,
+    paddingHorizontal: theme.size.s6,
   },
-})
+}))

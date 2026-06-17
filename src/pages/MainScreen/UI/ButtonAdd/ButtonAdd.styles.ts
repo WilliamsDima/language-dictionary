@@ -1,39 +1,38 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'absolute',
-    bottom: scaleWidth(102),
-    right: scaleWidth(10),
+    bottom: theme.size.s102,
+    right: theme.size.s14,
     zIndex: 50,
-    width: scaleWidth(58),
-    height: scaleWidth(58),
+    width: theme.size.s58,
+    height: theme.size.s58,
     alignItems: 'center',
     justifyContent: 'center',
   },
   halo: {
     position: 'absolute',
-    width: scaleWidth(58),
-    height: scaleWidth(58),
-    borderRadius: scaleWidth(58 / 2),
-    backgroundColor: 'rgba(124, 255, 107, 0.22)',
+    width: theme.size.s58,
+    height: theme.size.s58,
+    borderRadius: theme.size.s58 / 2,
+    backgroundColor: theme.colors.palette.success_alpha_22,
   },
   btn: {
-    width: scaleWidth(58),
-    height: scaleWidth(58),
-    borderRadius: scaleWidth(58 / 2),
-    backgroundColor: COLORS.primery,
+    width: theme.size.s58,
+    height: theme.size.s58,
+    borderRadius: theme.size.s58 / 2,
+    backgroundColor: theme.colors.palette.primery,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: COLORS.primery,
-    shadowOpacity: 0.35,
-    shadowRadius: 14,
+    shadowColor: theme.colors.palette.primery,
+    shadowOpacity: theme.opacity.o35,
+    shadowRadius: theme.size.s14,
     shadowOffset: {
-      width: 0,
-      height: 12,
+      width: theme.size.s0,
+      height: theme.size.s12,
     },
-    elevation: 16,
+    elevation: theme.size.s16,
   },
-})
+}))

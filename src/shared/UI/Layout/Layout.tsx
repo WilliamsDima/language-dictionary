@@ -8,9 +8,9 @@ import {
   ViewStyle,
   ScrollViewProps,
 } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 
 import { styles } from './Layout.styles'
-import { COLORS } from '@/assets/styles/colors'
 import Header, { HeaderProps } from '@/widgets/Header/Header'
 import VariableSafeAreaView from '../VariableSafeAreaView/VariableSafeAreaView'
 import { DismissKeyboardView } from '../DismissKeyboardHOC/DismissKeyboardHOC'
@@ -44,9 +44,6 @@ const Layout: FC<Props> = (props) => {
   const {
     children,
     isScroll,
-    statusBarStyle,
-    statusBarBackgroundColor,
-    statusBarProps,
     safeAreaStyles,
     paddingScreen,
     scrollViewStyles,
@@ -58,23 +55,22 @@ const Layout: FC<Props> = (props) => {
     ...headerProps
   } = props
 
-  const { theme, hiddenTabBar } = useAppSelector((store) => store.app)
+  const { hiddenTabBar } = useAppSelector((store) => store.app)
+  const { theme } = useUnistyles()
 
-  const backgroundStyle = useMemo(() => {
-    return theme === 'dark' ? COLORS.gray_bg : COLORS.white
-  }, [theme])
+  styles.useVariants({
+    headerSpacing: showHeader ? (isScroll ? 'scroll' : 'top') : 'none',
+    paddingScreen,
+    hiddenTabBar,
+  })
 
   const overStylesSafeArea = useMemo(() => {
     return [
       styles.safeArea,
-      showHeader && !isScroll && styles.showHeader,
-      showHeader && isScroll && styles.showHeaderWithScroll,
-      paddingScreen && styles.padding,
       safeAreaStyles,
-      { backgroundColor: backgroundStyle },
-      hiddenTabBar && styles.safeAreaHiddenTabBar,
+      { backgroundColor: theme.colors.background.screen },
     ]
-  }, [safeAreaStyles, backgroundStyle, hiddenTabBar])
+  }, [safeAreaStyles, theme.colors.background.screen])
 
   const overStylesScrollView = useMemo(() => {
     return [scrollViewStyles]

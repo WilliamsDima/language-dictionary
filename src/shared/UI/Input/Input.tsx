@@ -16,9 +16,9 @@ import {
   ColorValue,
   TextStyle,
 } from 'react-native'
+import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
 import { styles } from './Input.styles'
-import { COLORS } from '@/assets/styles/colors'
 
 export interface InputProps extends TextInputProps {
   classes?: {
@@ -61,7 +61,13 @@ const Input: FC<InputProps> = (props) => {
     ...rest
   } = props
 
+  const { theme } = useUnistyles()
   const [focus, setFocus] = useState(false)
+
+  styles.useVariants({
+    focus,
+    hasRightIcon: !!rightIcon,
+  })
 
   const handleFocus = useCallback(() => {
     setFocus(true)
@@ -94,18 +100,8 @@ const Input: FC<InputProps> = (props) => {
   }
 
   const stylesHandler = useMemo(() => {
-    return [
-      styles.input,
-      focus && styles.focus,
-      !!rightIcon && styles.paddingRight,
-      classes?.input,
-      style,
-    ]
-  }, [classes?.input, focus])
-
-  const stylesCustomPlaceholder = useMemo(() => {
-    return [styles.placeholder, classes?.customPlaceholder]
-  }, [styles, classes?.customPlaceholder])
+    return StyleSheet.flatten([styles.input, classes?.input, style])
+  }, [classes?.input, style])
 
   const stylesTitle = useMemo(() => {
     return [styles.title, classes?.titleStyle]
@@ -134,7 +130,9 @@ const Input: FC<InputProps> = (props) => {
           // value={value}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholderTextColor={placeholderTextColor || COLORS.dark_placeholder}
+          placeholderTextColor={
+            placeholderTextColor || theme.colors.palette.dark_placeholder
+          }
           style={stylesHandler}
           {...rest}
           onChangeText={onHandleChangeText}

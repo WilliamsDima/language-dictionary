@@ -1,24 +1,65 @@
-import React, { FC, memo, useState } from 'react'
+import React, { FC, memo, RefObject, useState } from 'react'
 import { styles } from './ModalLanguagesList.styles'
 import {
-  Animated,
   Image,
   ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native'
-import Modal from '@/shared/UI/Modal/Modal'
-import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import { ILanguage, languages } from '@/shared/json/languages'
 import { useTranslation } from '@/shared/i18n/types'
 import Text from '@/shared/UI/Text/Text'
+import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 type Props = {
-  visible: boolean
-  setVisible: (visible: boolean) => void
+  sheetRef: RefObject<BottomSheetModal | null>
+  onClose: () => void
   onSelect?: (visible: ILanguage) => void
   language?: ILanguage
 }
+
+type LanguageRowProps = {
+  isActive: boolean
+  isLast: boolean
+  iconIsError: boolean
+  item: ILanguage
+  onPress: () => void
+  onImageError: () => void
+}
+
+const LanguageRow = memo(
+  ({
+    isActive,
+    isLast,
+    iconIsError,
+    item,
+    onPress,
+    onImageError,
+  }: LanguageRowProps) => {
+    styles.useVariants({
+      isActive,
+      isLast,
+    })
+
+    return (
+      <TouchableOpacity style={styles.item} onPress={onPress}>
+        <View style={styles.languageInfo}>
+          <Text style={styles.name}>{item.full_name}</Text>
+          <Text style={styles.code}>{item.short_name.toUpperCase()}</Text>
+        </View>
+
+        {!iconIsError && (
+          <Image
+            source={{ uri: item.country.flag }}
+            style={styles.icon}
+            onError={onImageError}
+          />
+        )}
+      </TouchableOpacity>
+    )
+  },
+)
 
 /**
  * модалка выбора языка
@@ -27,94 +68,50 @@ type Props = {
  */
 
 const ModalLanguagesList: FC<Props> = ({
-  visible,
-  setVisible,
+  sheetRef,
+  onClose,
   onSelect,
   language,
 }) => {
   const { t } = useTranslation()
 
-  const { getAnimationStyles } = useScaleAnim({
-    active: visible,
-  })
-
   const [isonsError, setIsonsError] = useState<number[]>([])
 
-  const onCancelHandler = () => {
-    setVisible(false)
-  }
-
   return (
-    <Modal
-      visible={visible}
-      transparent
-      onRequestClose={onCancelHandler}
-      animationType="fade"
+    <BottomSheet
+      sheetRef={sheetRef}
+      onClose={onClose}
+      title={t('ui.language_selection')}
+      subtitle="Выбери язык карточки для нового набора"
+      dynamicSizing={false}
+      snapPoints={['72%']}
     >
-      <TouchableOpacity
-        style={styles.wrapper}
-        activeOpacity={1}
-        onPress={onCancelHandler}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scroll}
+        contentContainerStyle={styles.list}
       >
-        <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
-          <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <View style={styles.drag} />
-            <View style={styles.top}>
-              <View>
-                <Text style={styles.title}>{t('ui.language_selection')}</Text>
-                <Text style={styles.subtitle}>
-                  Выбери язык карточки для нового набора
-                </Text>
-              </View>
-            </View>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={styles.scroll}
-              contentContainerStyle={styles.list}
-            >
-              {languages.map((it, i) => {
-                const iconIsError = isonsError.includes(it.id)
-                return (
-                  <TouchableOpacity
-                    style={[
-                      styles.item,
-                      language?.id === it.id && styles.active,
-                      i === languages.length - 1 && styles.isLast,
-                    ]}
-                    key={it.id}
-                    onPress={() => {
-                      onSelect && onSelect(it)
-                    }}
-                  >
-                    <View style={styles.languageInfo}>
-                      <Text
-                        style={[
-                          styles.name,
-                          language?.id === it.id && styles.nameActive,
-                        ]}
-                      >
-                        {it.full_name}
-                      </Text>
-                      <Text style={styles.code}>{it.short_name.toUpperCase()}</Text>
-                    </View>
-
-                    {!iconIsError && (
-                      <Image
-                        source={{ uri: it.country.flag }}
-                        style={styles.icon}
-                        onError={() => {
-                          setIsonsError((prev) => [...prev, it.id])
-                        }}
-                      />
-                    )}
-                  </TouchableOpacity>
-                )
-              })}
-            </ScrollView>
-          </TouchableOpacity>
-        </Animated.View>
-      </TouchableOpacity>
-    </Modal>
+        {languages.map((it, i) => {
+          const iconIsError = isonsError.includes(it.id)
+          return (
+            <LanguageRow
+              key={it.id}
+              item={it}
+              isActive={language?.id === it.id}
+              isLast={i === languages.length - 1}
+              iconIsError={iconIsError}
+              onPress={() => {
+                onSelect && onSelect(it)
+                onClose()
+              }}
+              onImageError={() => {
+                setIsonsError((prev) => [...prev, it.id])
+              }}
+            />
+          )
+        })}
+      </ScrollView>
+    </BottomSheet>
   )
 }
 

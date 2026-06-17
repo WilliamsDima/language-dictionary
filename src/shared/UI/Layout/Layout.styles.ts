@@ -1,25 +1,31 @@
 import { HEADER_HEIGHT } from '@/widgets/Header/Header.styles'
-import { COLORS } from '@/assets/styles/colors'
-import { APP_PADDING, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.gray_bg,
     paddingTop: HEADER_HEIGHT - 30,
-  },
-  safeAreaHiddenTabBar: {},
-  showHeader: {
-    paddingTop: scaleWidth(20),
-  },
-  showHeaderWithScroll: {
-    paddingTop: HEADER_HEIGHT,
-  },
-  padding: {
-    paddingHorizontal: APP_PADDING,
+    variants: {
+      hiddenTabBar: {
+        true: {},
+      },
+      paddingScreen: {
+        true: {
+          paddingHorizontal: theme.layout.appPadding,
+        },
+      },
+      headerSpacing: {
+        none: {},
+        top: {
+          paddingTop: theme.size.s20,
+        },
+        scroll: {
+          paddingTop: HEADER_HEIGHT,
+        },
+      },
+    },
   },
   content: {
     flex: 1,
   },
-})
+}))

@@ -1,11 +1,11 @@
 import React, { FC, memo, useMemo } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalItemWords.styles'
 import { TouchableOpacity, View } from 'react-native'
 import Input from '@/shared/UI/Input/Input'
 import { AddItemWords } from '../../Model/items'
 import Text from '@/shared/UI/Text/Text'
 import TrashIcon from '@/assets/icons/UI/trash-red-64.svg'
-import { COLORS } from '@/assets/styles/colors'
 import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
@@ -24,6 +24,7 @@ const ModalItemWords: FC<Props> = ({
   setErrorItems,
 }) => {
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   const isErrorWord = useMemo(() => {
     if (errorItems) {
@@ -40,6 +41,34 @@ const ModalItemWords: FC<Props> = ({
 
     return false
   }, [errorItems, item])
+
+  const wordInputStyles = useMemo(() => {
+    return [
+      styles.input,
+      ...(isErrorWord
+        ? [
+            {
+              borderColor: theme.colors.palette.red,
+              borderWidth: theme.size.s1,
+            },
+          ]
+        : []),
+    ]
+  }, [isErrorWord, theme.colors.palette.red])
+
+  const translateInputStyles = useMemo(() => {
+    return [
+      styles.input,
+      ...(isErrorTranslate
+        ? [
+            {
+              borderColor: theme.colors.palette.red,
+              borderWidth: theme.size.s1,
+            },
+          ]
+        : []),
+    ]
+  }, [isErrorTranslate, theme.colors.palette.red])
 
   const deleteItem = () => {
     setItems((prev) => {
@@ -85,10 +114,7 @@ const ModalItemWords: FC<Props> = ({
         value={item.word}
         onChangeText={onChangeWord}
         classes={{
-          input: [
-            styles.input,
-            isErrorWord ? { borderColor: COLORS.red, borderWidth: 1 } : {},
-          ],
+          input: wordInputStyles,
         }}
       />
 
@@ -99,10 +125,7 @@ const ModalItemWords: FC<Props> = ({
         value={item.translate}
         onChangeText={onChangeTranslate}
         classes={{
-          input: [
-            styles.input,
-            isErrorTranslate ? { borderColor: COLORS.red, borderWidth: 1 } : {},
-          ],
+          input: translateInputStyles,
         }}
       />
 

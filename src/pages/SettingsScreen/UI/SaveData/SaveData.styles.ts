@@ -1,26 +1,25 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
-    marginTop: scaleWidth(20),
+    marginTop: theme.size.s20,
     alignItems: 'center',
   },
   btn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: scaleWidth(10),
+    paddingVertical: theme.size.s10,
   },
   btnText: {
     flex: 1,
-    fontSize: scaleFontSize(16),
-    color: COLORS.primery,
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.primery,
   },
   saveData: {
-    fontSize: scaleFontSize(13),
-    color: COLORS.gray_text,
-    marginTop: scaleWidth(5),
+    fontSize: theme.fontSize.s13,
+    color: theme.colors.palette.gray_text,
+    marginTop: theme.size.s5,
   },
-})
+}))

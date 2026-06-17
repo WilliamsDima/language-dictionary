@@ -1,57 +1,53 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   button: {
-    minHeight: scaleWidth(48),
-    paddingHorizontal: scaleWidth(18),
-    backgroundColor: COLORS.surface,
-    borderRadius: scaleWidth(16),
+    minHeight: theme.size.s48,
+    paddingHorizontal: theme.size.s18,
+    backgroundColor: theme.colors.palette.surface,
+    borderRadius: theme.size.s16,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
     overflow: 'hidden',
   },
   innerShadow: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 18,
+    bottom: theme.size.s0,
+    left: theme.size.s0,
+    right: theme.size.s0,
+    height: theme.size.s18,
   },
   btnText: {
-    color: COLORS.white,
+    color: theme.colors.palette.white,
     fontFamily: 'Mulish-Bold',
-    fontSize: scaleFontSize(14),
+    fontSize: theme.fontSize.s14,
   },
   disabled: {
-    opacity: 0.45,
+    opacity: theme.opacity.o45,
   },
-
   TRANSPARENT: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
+    backgroundColor: theme.colors.palette.transparent,
+    borderColor: theme.colors.palette.transparent,
   },
   ['TRANSPARENT-TEXT']: {
-    color: COLORS.gray_text,
+    color: theme.colors.palette.gray_text,
   },
-
   ['BORDER-TRANSPARENT']: {
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.white_alpha_03,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
   ['BORDER-TRANSPARENT-TEXT']: {
-    color: COLORS.white,
+    color: theme.colors.palette.white,
   },
-
   PRIMERY: {
-    backgroundColor: COLORS.primery,
-    borderColor: 'transparent',
+    backgroundColor: theme.colors.palette.primery,
+    borderColor: theme.colors.palette.transparent,
   },
   ['PRIMERY-TEXT']: {
-    color: COLORS.black,
+    color: theme.colors.palette.black,
   },
-})
+}))

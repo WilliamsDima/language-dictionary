@@ -1,10 +1,10 @@
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   btn: {
     width: '100%',
-    paddingVertical: scaleWidth(15),
+    paddingVertical: theme.size.s15,
     alignItems: 'center',
   },
   content: {
@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontSize: scaleFontSize(16),
-    marginRight: scaleWidth(15),
+    fontSize: theme.fontSize.s16,
+    marginRight: theme.size.s15,
   },
-})
+}))

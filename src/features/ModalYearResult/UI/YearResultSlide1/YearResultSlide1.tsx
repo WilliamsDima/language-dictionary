@@ -30,26 +30,12 @@ const YearResultSlide1: FC<Props> = ({}) => {
       </View>
 
       <Text
-        style={{
-          position: 'absolute',
-          left: 30,
-          top: 50,
-          opacity: 1,
-          transform: [{ rotate: `${-100}deg` }],
-          fontSize: 40,
-        }}
+        style={styles.emojiLeft}
       >
         🎉
       </Text>
       <Text
-        style={{
-          position: 'absolute',
-          right: 30,
-          top: 50,
-          opacity: 1,
-          transform: [{ rotate: `${10}deg` }],
-          fontSize: 40,
-        }}
+        style={styles.emojiRight}
       >
         🎉
       </Text>

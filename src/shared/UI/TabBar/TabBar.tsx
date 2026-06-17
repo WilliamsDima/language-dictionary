@@ -1,4 +1,5 @@
 import React, { FC, memo, useEffect, useMemo } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 
 import {
   NavigationHelpers,
@@ -10,7 +11,6 @@ import { TabsKeys } from '@/app/Navigation/RoutesNames'
 import { Shadow } from 'react-native-shadow-2'
 import ButtonTabBar from '../ButtonTabBar/ButtonTabBar'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { COLORS } from '@/assets/styles/colors'
 
 type Props = {
   state: TabNavigationState<ParamListBase>
@@ -21,15 +21,20 @@ type Props = {
 const TabBar: FC<Props> = (props) => {
   const { state, navigation } = props
 
-  const { theme, hiddenTabBar } = useAppSelector((store) => store.app)
+  const { hiddenTabBar } = useAppSelector((store) => store.app)
+  const { theme, rt } = useUnistyles()
 
   const colorShdow = useMemo(() => {
-    return theme === 'dark' ? COLORS.gray_bg : COLORS.white
-  }, [theme])
+    return rt.themeName === 'dark'
+      ? theme.colors.palette.gray_bg
+      : theme.colors.palette.white
+  }, [rt.themeName, theme.colors.palette.gray_bg, theme.colors.palette.white])
 
   const backgroundColor = useMemo(() => {
-    return theme === 'dark' ? COLORS.tab_bar_dark : COLORS.white
-  }, [theme])
+    return rt.themeName === 'dark'
+      ? theme.colors.palette.tab_bar_dark
+      : theme.colors.palette.white
+  }, [rt.themeName, theme.colors.palette.tab_bar_dark, theme.colors.palette.white])
 
   const tabTitles = useMemo(() => {
     return ['Слова', 'Настройки', 'Профиль']

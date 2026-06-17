@@ -1,9 +1,11 @@
 import React, { FC, memo, useEffect, useRef } from 'react'
 import { Animated, Easing, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 import LinearGradient from 'react-native-linear-gradient'
 import { styles } from './ScreenBackground.styles'
 
 const ScreenBackground: FC = () => {
+  const { theme } = useUnistyles()
   const floatAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -33,7 +35,12 @@ const ScreenBackground: FC = () => {
   return (
     <View pointerEvents="none" style={styles.background}>
       <LinearGradient
-        colors={['#08111F', '#0B1628', '#102238', '#0A1422']}
+        colors={[
+          theme.colors.palette.gray_bg,
+          theme.colors.palette.blue_navy_soft,
+          theme.colors.palette.item,
+          theme.colors.palette.blue_navy,
+        ]}
         locations={[0, 0.35, 0.7, 1]}
         style={styles.gradient}
       />

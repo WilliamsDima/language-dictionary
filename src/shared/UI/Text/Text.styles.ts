@@ -1,12 +1,11 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   text: {
-    color: COLORS.white,
+    color: theme.colors.text.primary,
     fontFamily: 'Mulish',
-    fontSize: scaleFontSize(14),
+    fontSize: theme.fontSize.s14,
     fontWeight: '500',
   },
-})
+}))

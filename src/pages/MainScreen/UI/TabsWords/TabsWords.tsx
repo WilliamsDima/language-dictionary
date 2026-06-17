@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './TabsWords.styles'
 import { View } from 'react-native'
 import Button from '@/shared/UI/Button/Button'
@@ -13,9 +14,38 @@ import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
+type StatusTabProps = {
+  active: boolean
+  color: string
+  label: string
+  onPress: () => void
+}
+
+const StatusTab = ({ active, color, label, onPress }: StatusTabProps) => {
+  styles.useVariants({
+    active,
+  })
+
+  return (
+    <Button
+      isText={false}
+      onPress={onPress}
+      classes={{
+        btn: styles.btn,
+      }}
+    >
+      <View style={[styles.circle, { backgroundColor: color }]} />
+      <Text numberOfLines={1} style={styles.label}>
+        {label}
+      </Text>
+    </Button>
+  )
+}
+
 const TabsWords: FC<Props> = (props) => {
   const { setFilterByStatus, setItems } = useActions()
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   const { firebaseData } = useAppSelector((store) => store.user)
   const { filterByStatus, filterMain } = useAppSelector((store) => store.items)
@@ -66,26 +96,17 @@ const TabsWords: FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      {tabsWords(t).map((it) => {
+      {tabsWords(t, theme).map((it) => {
         return (
-          <Button
+          <StatusTab
             key={it.status}
-            isText={false}
+            active={filterByStatus === it.status}
+            color={it.color}
+            label={it.label}
             onPress={() => {
               onPresHandler(it.status)
             }}
-            classes={{
-              btn: [
-                styles.btn,
-                filterByStatus === it.status && styles.btnActive,
-              ],
-            }}
-          >
-            <View style={[styles.circle, { backgroundColor: it.color }]} />
-            <Text numberOfLines={1} style={styles.label}>
-              {it.label}
-            </Text>
-          </Button>
+          />
         )
       })}
     </View>

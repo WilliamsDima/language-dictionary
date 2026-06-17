@@ -1,19 +1,18 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
     width: '100%',
-    padding: scaleWidth(18),
-    borderRadius: scaleWidth(24),
-    backgroundColor: 'rgba(17, 39, 65, 0.9)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    padding: theme.size.s18,
+    borderRadius: theme.size.s24,
+    backgroundColor: theme.colors.palette.card_alpha_90,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   item: {
-    marginBottom: scaleWidth(14),
+    marginBottom: theme.size.s14,
     width: '100%',
   },
 
@@ -22,14 +21,18 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   title: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.white,
-    marginBottom: scaleWidth(5),
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.white,
+    marginBottom: theme.size.s5,
     fontWeight: '700',
     fontFamily: 'Mulish-Bold',
-  },
-  appName: {
-    color: COLORS.primery,
+    variants: {
+      isAppName: {
+        true: {
+          color: theme.colors.palette.primery,
+        },
+      },
+    },
   },
 
   textBlock: {
@@ -37,9 +40,16 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   text: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.gray_text,
-    lineHeight: scaleFontSize(20),
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.gray_text,
+    lineHeight: theme.fontSize.s20,
+    variants: {
+      isAppName: {
+        true: {
+          color: theme.colors.palette.primery,
+        },
+      },
+    },
   },
 
   punktsBlock: {
@@ -47,8 +57,8 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   punkt: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.gray_text,
-    marginVertical: scaleWidth(5),
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.gray_text,
+    marginVertical: theme.size.s5,
   },
-})
+}))

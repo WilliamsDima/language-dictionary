@@ -1,27 +1,27 @@
-import { COLORS } from '@/assets/styles/colors'
-import { height, scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet, NativeModules } from 'react-native'
+import { height } from '@/shared/helpers/ScaleUtils'
+import { NativeModules } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: COLORS.bg_modal,
+    backgroundColor: theme.colors.palette.bg_modal,
     width: '100%',
   },
   container: {
     width: '100%',
-    backgroundColor: COLORS.tab_bar_dark,
-    paddingHorizontal: scaleWidth(18),
-    paddingTop: scaleWidth(14),
-    paddingBottom: scaleWidth(24),
-    borderTopLeftRadius: scaleWidth(28),
-    borderTopRightRadius: scaleWidth(28),
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.tab_bar_dark,
+    paddingHorizontal: theme.size.s18,
+    paddingTop: theme.size.s14,
+    paddingBottom: theme.size.s24,
+    borderTopLeftRadius: theme.size.s28,
+    borderTopRightRadius: theme.size.s28,
+    borderTopWidth: theme.size.s1,
+    borderLeftWidth: theme.size.s1,
+    borderRightWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   wrapperContainer: {
@@ -31,107 +31,114 @@ export const styles = StyleSheet.create({
   },
   drag: {
     alignSelf: 'center',
-    width: scaleWidth(44),
-    height: scaleWidth(5),
-    borderRadius: scaleWidth(999),
-    backgroundColor: COLORS.border,
-    marginBottom: scaleWidth(14),
+    width: theme.size.s44,
+    height: theme.size.s5,
+    borderRadius: theme.size.s999,
+    backgroundColor: theme.colors.palette.border,
+    marginBottom: theme.size.s14,
   },
   top: {
-    marginBottom: scaleWidth(14),
+    marginBottom: theme.size.s14,
   },
 
   title: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(18),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s18,
     fontFamily: 'Mulish-ExtraBold',
-    marginBottom: scaleWidth(4),
+    marginBottom: theme.size.s4,
   },
   subtitle: {
-    color: COLORS.gray_text,
-    fontSize: scaleFontSize(12),
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.fontSize.s12,
   },
 
   selects: {
     flexDirection: 'column',
-    gap: scaleWidth(8),
+    gap: theme.size.s8,
   },
   section: {
-    marginBottom: scaleWidth(16),
+    marginBottom: theme.size.s16,
   },
   sectionTitle: {
-    color: COLORS.gray_text,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.fontSize.s13,
     fontFamily: 'Mulish-Bold',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
     textTransform: 'uppercase',
   },
   selectBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scaleWidth(10),
-    paddingVertical: scaleWidth(8),
+    gap: theme.size.s10,
+    paddingVertical: theme.size.s8,
   },
   circle: {
-    width: scaleWidth(15),
-    height: scaleWidth(15),
-    borderRadius: scaleWidth(15 / 2),
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.border,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-  },
-  circleActive: {
-    borderColor: 'rgba(124, 255, 107, 0.36)',
-    backgroundColor: COLORS.primery,
+    width: theme.size.s15,
+    height: theme.size.s15,
+    borderRadius: theme.size.s15 / 2,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    backgroundColor: theme.colors.palette.white_alpha_03,
+    variants: {
+      circleActive: {
+        true: {
+          borderColor: theme.colors.palette.success_alpha_36,
+          backgroundColor: theme.colors.palette.primery,
+        },
+      },
+    },
   },
 
   selectBtnText: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(14),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s14,
     fontWeight: '600',
   },
 
   titleSelect: {
-    color: COLORS.gray_text,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.fontSize.s13,
     fontFamily: 'Mulish-Bold',
     textTransform: 'uppercase',
   },
   scrollSelect: {
-    height: scaleWidth(200),
+    height: theme.size.s200,
+  },
+  scrollContent: {
+    paddingBottom: theme.size.s12,
   },
 
   btns: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: scaleWidth(20),
-    gap: scaleWidth(12),
+    marginTop: theme.size.s20,
+    gap: theme.size.s12,
   },
 
   btn: {
-    paddingVertical: scaleWidth(12),
+    paddingVertical: theme.size.s12,
     minWidth: '45%',
     flex: 1,
-    borderRadius: scaleWidth(16),
+    borderRadius: theme.size.s16,
   },
   cancel: {
-    borderColor: COLORS.border,
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    borderColor: theme.colors.palette.border,
+    backgroundColor: theme.colors.palette.white_alpha_04,
   },
   cancelText: {
-    color: COLORS.white,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },
 
   confirm: {
-    backgroundColor: COLORS.primery,
-    borderColor: 'transparent',
+    backgroundColor: theme.colors.palette.primery,
+    borderColor: theme.colors.palette.transparent,
   },
   confirmText: {
-    color: COLORS.black,
-    fontSize: scaleFontSize(13),
+    color: theme.colors.palette.black,
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },
-})
+}))

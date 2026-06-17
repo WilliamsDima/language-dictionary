@@ -1,14 +1,14 @@
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   input: {
     width: '100%',
-    height: scaleWidth(50),
+    height: theme.size.s50,
   },
   wrapper: {
-    height: scaleWidth(50),
+    height: theme.size.s50,
     flex: 1,
-    marginRight: scaleWidth(10),
+    marginRight: theme.size.s10,
   },
-})
+}))

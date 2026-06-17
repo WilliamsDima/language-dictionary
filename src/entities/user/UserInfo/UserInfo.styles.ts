@@ -1,34 +1,33 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: scaleWidth(14),
-    borderRadius: scaleWidth(20),
-    backgroundColor: 'rgba(17, 39, 65, 0.9)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    padding: theme.size.s14,
+    borderRadius: theme.size.s20,
+    backgroundColor: theme.colors.palette.card_alpha_90,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   avatar: {},
 
   info: {
-    marginLeft: scaleWidth(12),
+    marginLeft: theme.size.s12,
     flex: 1,
   },
 
   name: {
-    fontSize: scaleFontSize(18),
-    color: COLORS.white,
-    marginBottom: scaleWidth(4),
+    fontSize: theme.fontSize.s18,
+    color: theme.colors.palette.white,
+    marginBottom: theme.size.s4,
     fontFamily: 'Mulish-ExtraBold',
   },
   date: {
-    fontSize: scaleFontSize(12),
-    color: COLORS.gray_text,
-    lineHeight: scaleFontSize(16),
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
+    lineHeight: theme.fontSize.s16,
   },
-})
+}))

@@ -1,8 +1,8 @@
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   clear: {
-    padding: scaleWidth(5),
+    padding: theme.size.s5,
   },
-})
+}))

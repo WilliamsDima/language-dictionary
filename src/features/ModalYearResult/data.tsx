@@ -8,6 +8,7 @@ import YearResultSlide6 from './UI/YearResultSlide6/YearResultSlide6'
 import YearResultSlide7 from './UI/YearResultSlide7/YearResultSlide7'
 import YearResultSlide8 from './UI/YearResultSlide8/YearResultSlide8'
 import YearResultSlide9 from './UI/YearResultSlide9/YearResultSlide9'
+import { palette } from '@/shared/styles/unistyles'
 
 const date = new Date()
 
@@ -84,7 +85,7 @@ export const dataYearsResult: DataYearsResultType[] = [
 export const SLIDE_GRADIENTS = [
   {
     // 1. Приветствие — праздничный, с золотистыми оттенками
-    colors: ['#FEE140', '#fdadc5ff'],
+    colors: [palette.gradient_yellow, palette.gradient_pink],
     start: {
       x: 0,
       y: 0,
@@ -95,7 +96,7 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#fdadc5ff', '#92FE9D'],
+    colors: [palette.gradient_pink, palette.gradient_green],
     start: {
       x: 1,
       y: 0,
@@ -106,18 +107,7 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#92FE9D', '#FAFFD1'],
-    start: {
-      x: 0,
-      y: 0,
-    },
-    end: {
-      x: 1,
-      y: 1,
-    },
-  },
-  {
-    colors: ['#FAFFD1', '#191654'],
+    colors: [palette.gradient_green, palette.gradient_cream],
     start: {
       x: 0,
       y: 0,
@@ -128,7 +118,7 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#191654', '#DD2476'],
+    colors: [palette.gradient_cream, palette.gradient_violet],
     start: {
       x: 0,
       y: 0,
@@ -139,7 +129,7 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#DD2476', '#2948ff'],
+    colors: [palette.gradient_violet, palette.gradient_magenta],
     start: {
       x: 0,
       y: 0,
@@ -150,7 +140,7 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#2948ff', '#E100FF'],
+    colors: [palette.gradient_magenta, palette.gradient_blue],
     start: {
       x: 0,
       y: 0,
@@ -161,7 +151,7 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#E100FF', '#FFD200'],
+    colors: [palette.gradient_blue, palette.gradient_purple],
     start: {
       x: 0,
       y: 0,
@@ -172,7 +162,18 @@ export const SLIDE_GRADIENTS = [
     },
   },
   {
-    colors: ['#FFD200', '#3a7bd5'],
+    colors: [palette.gradient_purple, palette.gradient_gold],
+    start: {
+      x: 0,
+      y: 0,
+    },
+    end: {
+      x: 1,
+      y: 1,
+    },
+  },
+  {
+    colors: [palette.gradient_gold, palette.gradient_sky],
     start: {
       x: 0,
       y: 0,
@@ -184,7 +185,7 @@ export const SLIDE_GRADIENTS = [
   },
 
   {
-    colors: ['#3a7bd5', '#B5FFFC'],
+    colors: [palette.gradient_sky, palette.gradient_mint],
     start: {
       x: 0,
       y: 0,

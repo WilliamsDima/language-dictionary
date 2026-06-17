@@ -1,36 +1,35 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: scaleWidth(20),
-    padding: scaleWidth(18),
-    borderRadius: scaleWidth(24),
-    backgroundColor: 'rgba(17, 39, 65, 0.9)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    marginTop: theme.size.s20,
+    padding: theme.size.s18,
+    borderRadius: theme.size.s24,
+    backgroundColor: theme.colors.palette.card_alpha_90,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   version: {
-    fontSize: scaleFontSize(15),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s15,
+    color: theme.colors.palette.gray_text,
     textAlign: 'center',
   },
 
   versionInvalid: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.red,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.red,
     textAlign: 'center',
   },
 
   versionUpdate: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.primery,
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.primery,
     textAlign: 'center',
     textTransform: 'uppercase',
-    marginTop: scaleWidth(5),
+    marginTop: theme.size.s5,
   },
-})
+}))

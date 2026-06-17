@@ -1,35 +1,34 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   screen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: theme.colors.palette.transparent,
   },
   title: {
-    color: COLORS.white,
-    fontSize: scaleWidth(24),
+    color: theme.colors.palette.white,
+    fontSize: theme.size.s24,
     fontFamily: 'Mulish-ExtraBold',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
   },
   subtitle: {
-    color: COLORS.gray_text,
-    fontSize: scaleWidth(14),
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.size.s14,
     textAlign: 'center',
-    marginBottom: scaleWidth(12),
+    marginBottom: theme.size.s12,
     maxWidth: '74%',
   },
 
   words: {
     width: '50%',
-    height: scaleWidth(200),
+    height: theme.size.s200,
   },
   planet: {
     width: '80%',
-    height: scaleWidth(300),
+    height: theme.size.s300,
     marginTop: -50,
   },
-})
+}))

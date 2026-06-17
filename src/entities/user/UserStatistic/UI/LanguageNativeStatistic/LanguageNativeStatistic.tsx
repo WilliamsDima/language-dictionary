@@ -9,13 +9,13 @@ import LanguageStatisticItem from '../LanguageStatisticItem/LanguageStatisticIte
 import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
-  setShowModalLanguages: React.Dispatch<React.SetStateAction<boolean>>
+  onOpenLanguages: () => void
   setIsNativeLanguage: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const LanguageNativeStatistic: FC<Props> = ({
   setIsNativeLanguage,
-  setShowModalLanguages,
+  onOpenLanguages,
 }) => {
   const { t } = useTranslation()
   const { firebaseData } = useAppSelector((store) => store.user)
@@ -37,7 +37,7 @@ const LanguageNativeStatistic: FC<Props> = ({
         style={styles.editBtn}
         onPress={() => {
           setIsNativeLanguage(true)
-          setShowModalLanguages(true)
+          onOpenLanguages()
         }}
       >
         <EditIcon width={20} height={20} />

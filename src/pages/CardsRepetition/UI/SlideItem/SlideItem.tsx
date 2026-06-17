@@ -1,4 +1,5 @@
 import React, { FC, useMemo, useRef, useState } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import {
   Animated,
   ScrollView,
@@ -17,6 +18,35 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 type Props = {
   item: CardSlideType
   index: number
+}
+
+type CardWordRowProps = {
+  firstText: string
+  secondText: string
+  isFlipped: boolean
+  hasBorder: boolean
+}
+
+const CardWordRow: FC<CardWordRowProps> = ({
+  firstText,
+  secondText,
+  isFlipped,
+  hasBorder,
+}) => {
+  styles.useVariants({
+    hasBorder,
+    isFlipped,
+  })
+
+  return (
+    <View style={styles.itemWordWrapper}>
+      <View style={styles.itemWord}>
+        <View style={styles.wrapperText}>
+          <Text style={styles.text}>{isFlipped ? secondText : firstText}</Text>
+        </View>
+      </View>
+    </View>
+  )
 }
 
 const CardContent: FC<Props & { isFlipped: boolean }> = ({
@@ -38,30 +68,20 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
       filterCardsModal.showVariant === 'word_only' ? it.translate : it.word
 
     return (
-      <View style={styles.itemWordWrapper} key={it.id}>
-        <View
-          style={[
-            styles.itemWord,
-            currentItem?.items.length > 1 && styles.itemWordBorder,
-          ]}
-        >
-          {!isFlipped ? (
-            <View style={styles.wrapperText}>
-              <Text style={styles.text}>{firstText}</Text>
-            </View>
-          ) : (
-            <View style={styles.wrapperText}>
-              <Text style={[styles.text, styles.text2]}>{secondText}</Text>
-            </View>
-          )}
-        </View>
-      </View>
+      <CardWordRow
+        key={it.id}
+        firstText={firstText}
+        secondText={secondText}
+        isFlipped={isFlipped}
+        hasBorder={currentItem?.items.length > 1}
+      />
     )
   })
 }
 
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
+  const { theme } = useUnistyles()
   const { scrollX, nextSlide, swipeSlide } = useCardsRepetition()
 
   const { items } = useAppSelector((store) => store.items)
@@ -139,11 +159,11 @@ const SlideItem: FC<Props> = (props) => {
                   ]}
                 >
                   <LinearGradient
-                    colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0)']}
+                    colors={[theme.colors.palette.dark_alpha_20, theme.colors.palette.dark_alpha_0]}
                     style={styles.innerShadowTop}
                   />
                   <LinearGradient
-                    colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']}
+                    colors={[theme.colors.palette.dark_alpha_0, theme.colors.palette.dark_alpha_20]}
                     style={styles.innerShadowBottom}
                   />
                   <CardContent isFlipped={isFlipped} {...props} />
@@ -159,11 +179,11 @@ const SlideItem: FC<Props> = (props) => {
                   ]}
                 >
                   <LinearGradient
-                    colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0)']}
+                    colors={[theme.colors.palette.dark_alpha_20, theme.colors.palette.dark_alpha_0]}
                     style={styles.innerShadowTop}
                   />
                   <LinearGradient
-                    colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']}
+                    colors={[theme.colors.palette.dark_alpha_0, theme.colors.palette.dark_alpha_20]}
                     style={styles.innerShadowBottom}
                   />
                   <CardContent isFlipped={isFlipped} {...props} />

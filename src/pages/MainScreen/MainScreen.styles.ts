@@ -1,18 +1,13 @@
-import { COLORS } from '@/assets/styles/colors'
-import {
-  APP_PADDING,
-  scaleFontSize,
-  scaleWidth,
-} from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   screen: {
-    paddingHorizontal: APP_PADDING,
+    paddingHorizontal: theme.layout.appPadding,
     position: 'relative',
     justifyContent: 'flex-start',
-    paddingTop: scaleWidth(12),
-    paddingBottom: scaleWidth(12),
+    paddingTop: theme.size.s12,
+    paddingBottom: theme.size.s12,
     flex: 1,
   },
   topSection: {
@@ -21,67 +16,67 @@ export const styles = StyleSheet.create({
   },
   hero: {
     width: '100%',
-    minHeight: scaleWidth(132),
-    borderRadius: scaleWidth(22),
-    padding: scaleWidth(14),
-    backgroundColor: 'rgba(17, 39, 65, 0.92)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    marginBottom: scaleWidth(12),
+    minHeight: theme.size.s132,
+    borderRadius: theme.size.s22,
+    padding: theme.size.s14,
+    backgroundColor: theme.colors.palette.card_alpha_92,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    marginBottom: theme.size.s12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scaleWidth(10),
+    gap: theme.size.s10,
   },
   heroTextBlock: {
     flex: 1,
   },
   kicker: {
-    color: COLORS.primery,
-    fontSize: scaleFontSize(10),
+    color: theme.colors.palette.primery,
+    fontSize: theme.fontSize.s10,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-Bold',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
   },
   title: {
-    fontSize: scaleFontSize(20),
-    lineHeight: scaleFontSize(24),
+    fontSize: theme.fontSize.s20,
+    lineHeight: theme.fontSize.s24,
     fontFamily: 'Mulish-ExtraBold',
-    marginBottom: scaleWidth(6),
+    marginBottom: theme.size.s6,
   },
   subtitle: {
-    fontSize: scaleFontSize(12),
-    lineHeight: scaleFontSize(17),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s12,
+    lineHeight: theme.fontSize.s17,
+    color: theme.colors.palette.gray_text,
   },
   heroPlaceholder: {
-    width: scaleWidth(78),
-    height: scaleWidth(92),
-    borderRadius: scaleWidth(20),
-    backgroundColor: 'rgba(255, 59, 48, 0.18)',
-    borderWidth: 2,
-    borderColor: COLORS.red_placeholder,
+    width: theme.size.s78,
+    height: theme.size.s92,
+    borderRadius: theme.size.s20,
+    backgroundColor: theme.colors.palette.danger_alpha_18,
+    borderWidth: theme.size.s2,
+    borderColor: theme.colors.palette.red_placeholder,
     alignItems: 'center',
     justifyContent: 'center',
   },
   heroPlaceholderText: {
-    color: COLORS.red_placeholder,
+    color: theme.colors.palette.red_placeholder,
     fontFamily: 'Mulish-ExtraBold',
-    fontSize: scaleFontSize(11),
+    fontSize: theme.fontSize.s11,
   },
   controls: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
   },
   tabsWrapper: {
     width: '100%',
-    marginBottom: scaleWidth(10),
+    marginBottom: theme.size.s10,
   },
   listSection: {
     flex: 1,
-    minHeight: 0,
+    minHeight: theme.size.s0,
     width: '100%',
   },
-})
+}))

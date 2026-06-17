@@ -1,4 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
 import { styles } from './Slides.styles'
@@ -10,7 +11,6 @@ import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import DoneIcon from '@/assets/icons/UI/done-primery-64.svg'
 import RepeatIcon from '@/assets/icons/UI/repeat-64-orange.svg'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { COLORS } from '@/assets/styles/colors'
 import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import LottieView from 'lottie-react-native'
@@ -20,6 +20,7 @@ import { useUserActivity } from '@/shared/hooks/useUserActivity'
 type Props = {}
 
 const Slides: FC<Props> = ({}) => {
+  const { theme } = useUnistyles()
   const { setItemEdit, setShowAddModal } = useActions()
   const {
     data,
@@ -139,7 +140,10 @@ const Slides: FC<Props> = ({}) => {
                 onPress={changeStatus}
               >
                 {isLoading ? (
-                  <ActivityIndicator size={'small'} color={COLORS.primery} />
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.colors.palette.primery}
+                  />
                 ) : (
                   <>
                     {currentItem?.status === 'STUDY' ? (

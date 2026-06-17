@@ -1,41 +1,35 @@
-import { COLORS } from '@/assets/styles/colors'
-import {
-  height,
-  scaleFontSize,
-  scaleWidth,
-  width,
-} from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
+import { height, width } from '@/shared/helpers/ScaleUtils'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   container: {
-    marginTop: scaleWidth(20),
-    padding: scaleWidth(14),
-    borderRadius: scaleWidth(20),
-    backgroundColor: 'rgba(17, 39, 65, 0.9)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    marginTop: theme.size.s20,
+    padding: theme.size.s14,
+    borderRadius: theme.size.s20,
+    backgroundColor: theme.colors.palette.card_alpha_90,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   statistic: {
-    fontSize: scaleFontSize(13),
-    color: COLORS.primery,
+    fontSize: theme.fontSize.s13,
+    color: theme.colors.palette.primery,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-Bold',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
   },
 
   item: {
-    marginVertical: scaleWidth(4),
+    marginVertical: theme.size.s4,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: scaleWidth(6),
+    paddingVertical: theme.size.s6,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    borderBottomColor: theme.colors.palette.white_alpha_05,
   },
   itemText: {
-    fontSize: scaleFontSize(13),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s13,
+    color: theme.colors.palette.white,
   },
 
   loader: {
@@ -47,7 +41,7 @@ export const styles = StyleSheet.create({
     zIndex: 10,
   },
   animLoader: {
-    width: scaleWidth(150),
-    height: scaleWidth(150),
+    width: theme.size.s150,
+    height: theme.size.s150,
   },
-})
+}))

@@ -1,15 +1,11 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useEffect, useRef } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalAddItem.styles'
 import {
   View,
-  Animated,
   TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   ActivityIndicator,
 } from 'react-native'
-import Modal from '@/shared/UI/Modal/Modal'
 import Text from '@/shared/UI/Text/Text'
 import Input from '@/shared/UI/Input/Input'
 import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
@@ -17,9 +13,10 @@ import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
 import PlusIcon from '@/assets/icons/UI/plus-green-64.svg'
 import LanguagesSelect from '@/widgets/LanguagesSelect/LanguagesSelect'
 import ModalItemWords from './UI/ModalItemWords/ModalItemWords'
-import { COLORS } from '@/assets/styles/colors'
 import { useModalAddItem } from './useModalAddItem'
 import { useTranslation } from '@/shared/i18n/types'
+import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
+import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 
 type Props = {}
 
@@ -30,10 +27,10 @@ type Props = {}
  */
 
 const ModalAddItem: FC<Props> = () => {
+  const { theme } = useUnistyles()
   const {
     addItem,
     description,
-    getAnimationStyles,
     isLoading,
     language,
     onConfirm,
@@ -51,110 +48,105 @@ const ModalAddItem: FC<Props> = () => {
   } = useModalAddItem()
 
   const { t } = useTranslation()
+  const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
+  const wasVisibleRef = useRef(false)
+
+  useEffect(() => {
+    if (showAddModal && !wasVisibleRef.current) {
+      presentSheet()
+    }
+
+    if (!showAddModal && wasVisibleRef.current) {
+      dismissSheet()
+    }
+
+    wasVisibleRef.current = showAddModal
+  }, [dismissSheet, presentSheet, showAddModal])
 
   return (
-    <Modal
-      visible={showAddModal}
-      transparent
-      onRequestClose={onCancelHandler}
-      animationType="fade"
-    >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <View style={[styles.wrapper]}>
-          <Animated.View
-            style={[getAnimationStyles(), styles.wrapperContainer]}
-          >
-            <TouchableOpacity style={styles.container} activeOpacity={1}>
-              <ScrollView
-                ref={scrollref}
-                showsVerticalScrollIndicator={false}
-                style={styles.scroll}
-                contentContainerStyle={{
-                  paddingBottom: isOpen ? 150 : 0,
-                }}
-              >
-                <Text style={styles.title}>
-                  {t('modal.modalAddItem.title')}
-                </Text>
-                <Text style={styles.subtitle}>
-                  Собери карточку в удобном формате и сразу отправь ее в тренировку.
-                </Text>
-
-                {items.map((it, i) => {
-                  return (
-                    <ModalItemWords
-                      setErrorItems={setErrorItems}
-                      setItems={setItems}
-                      errorItems={errorItems}
-                      index={i}
-                      key={it.id}
-                      item={it}
-                    />
-                  )
-                })}
-
-                <View style={styles.btnWrapper}>
-                  <TouchableOpacity style={styles.btnAddItem} onPress={addItem}>
-                    <PlusIcon width={30} height={30} />
-                  </TouchableOpacity>
+    <BottomSheet
+      sheetRef={sheetRef}
+      onClose={onCancelHandler}
+      title={t('modal.modalAddItem.title')}
+      subtitle="Собери карточку в удобном формате и сразу отправь ее в тренировку."
+      dynamicSizing={false}
+      snapPoints={['88%']}
+      scrollRef={scrollref}
+      scrollContentStyle={{
+        paddingBottom: isOpen ? 150 : 24,
+      }}
+      footer={
+        <View
+          style={[
+            styles.btns,
+            isLoading
+              ? {
+                  justifyContent: 'center',
+                }
+              : {},
+          ]}
+        >
+          {isLoading ? (
+            <ActivityIndicator
+              size={'large'}
+              color={theme.colors.palette.primery}
+            />
+          ) : (
+            <>
+              <TouchableOpacity onPress={onCancelHandler}>
+                <View style={[styles.actionBtn, styles.actionBtnDanger]}>
+                  <CloseIcon width={30} height={30} />
                 </View>
-
-                <View style={[styles.footer]}>
-                  <Input
-                    title={t('modal.modalAddItem.description')}
-                    placeholder={t(
-                      'modal.modalAddItem.description_placeholder'
-                    )}
-                    multiline
-                    value={description}
-                    onChangeText={setDescription}
-                    classes={{ input: styles.input }}
-                  />
-
-                  <LanguagesSelect
-                    classes={{ select: styles.selectLang }}
-                    onSelect={onSelectLanguage}
-                    language={language}
-                    error={errorLanguage}
-                  />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onConfirm}>
+                <View style={[styles.actionBtn, styles.actionBtnPrimary]}>
+                  <ReadyIcon width={30} height={30} />
                 </View>
-              </ScrollView>
-
-              <View
-                style={[
-                  styles.btns,
-                  isLoading
-                    ? {
-                        justifyContent: 'center',
-                      }
-                    : {},
-                ]}
-              >
-                {isLoading ? (
-                  <ActivityIndicator size={'large'} color={COLORS.primery} />
-                ) : (
-                  <>
-                    <TouchableOpacity onPress={onCancelHandler}>
-                      <View style={[styles.actionBtn, styles.actionBtnDanger]}>
-                      <CloseIcon width={30} height={30} />
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={onConfirm}>
-                      <View style={[styles.actionBtn, styles.actionBtnPrimary]}>
-                      <ReadyIcon width={30} height={30} />
-                      </View>
-                    </TouchableOpacity>
-                  </>
-                )}
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+      }
+    >
+      <View>
+        {items.map((it, i) => {
+          return (
+            <ModalItemWords
+              setErrorItems={setErrorItems}
+              setItems={setItems}
+              errorItems={errorItems}
+              index={i}
+              key={it.id}
+              item={it}
+            />
+          )
+        })}
+
+        <View style={styles.btnWrapper}>
+          <TouchableOpacity style={styles.btnAddItem} onPress={addItem}>
+            <PlusIcon width={30} height={30} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.footer]}>
+          <Input
+            title={t('modal.modalAddItem.description')}
+            placeholder={t('modal.modalAddItem.description_placeholder')}
+            multiline
+            value={description}
+            onChangeText={setDescription}
+            classes={{ input: styles.input }}
+          />
+
+          <LanguagesSelect
+            classes={{ select: styles.selectLang }}
+            onSelect={onSelectLanguage}
+            language={language}
+            error={errorLanguage}
+          />
+        </View>
+      </View>
+    </BottomSheet>
   )
 }
 

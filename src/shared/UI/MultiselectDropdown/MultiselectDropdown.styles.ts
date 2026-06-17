@@ -1,112 +1,119 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   title: {
-    fontSize: scaleFontSize(14),
-    marginBottom: scaleWidth(8),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s14,
+    marginBottom: theme.size.s8,
+    color: theme.colors.palette.gray_text,
   },
 
   dropdown: {
-    height: 50,
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    height: theme.size.s50,
+    backgroundColor: theme.colors.palette.surface,
+    borderRadius: theme.size.s16,
+    padding: theme.size.s12,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   containerStyle: {
-    backgroundColor: COLORS.surface_light,
-    borderRadius: 16,
-    marginTop: 8,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderRadius: theme.size.s16,
+    marginTop: theme.size.s8,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
     maxHeight: '80%',
   },
 
   placeholderStyle: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.dark_placeholder,
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.dark_placeholder,
   },
   selectedTextStyle: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.white,
-  },
-  selectedTextStyleActive: {
-    color: COLORS.white,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.white,
+    variants: {
+      active: {
+        true: {
+          color: theme.colors.palette.white,
+        },
+      },
+    },
   },
   inputSearchStyle: {
-    height: scaleWidth(40),
-    fontSize: scaleFontSize(16),
-    borderColor: COLORS.border,
-    borderRadius: scaleWidth(5),
-    color: COLORS.white,
-    backgroundColor: COLORS.gray_bg_btn,
+    height: theme.size.s40,
+    fontSize: theme.fontSize.s16,
+    borderColor: theme.colors.palette.border,
+    borderRadius: theme.size.s5,
+    color: theme.colors.palette.white,
+    backgroundColor: theme.colors.palette.gray_bg_btn,
   },
   iconStyle: {
-    width: scaleWidth(20),
-    height: scaleWidth(20),
+    width: theme.size.s20,
+    height: theme.size.s20,
   },
 
   item: {
-    padding: scaleWidth(12),
+    padding: theme.size.s12,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  itemActive: {
-    backgroundColor: COLORS.primery,
+    variants: {
+      active: {
+        true: {
+          backgroundColor: theme.colors.palette.primery,
+        },
+      },
+    },
   },
 
   label: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.white,
   },
 
   optionContainer: {
     position: 'absolute',
     zIndex: 100,
-    top: scaleWidth(60),
-    left: 0,
-    backgroundColor: COLORS.dark_placeholder,
+    top: theme.size.s60,
+    left: theme.size.s0,
+    backgroundColor: theme.colors.palette.dark_placeholder,
     width: '100%',
-    borderBottomLeftRadius: scaleWidth(10),
-    borderBottomRightRadius: scaleWidth(10),
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.dark_placeholder,
+    borderBottomLeftRadius: theme.size.s10,
+    borderBottomRightRadius: theme.size.s10,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.dark_placeholder,
   },
 
   selectItem: {
-    padding: scaleWidth(10),
+    padding: theme.size.s10,
     flexDirection: 'row',
     alignItems: 'center',
   },
 
   icon: {
-    width: scaleWidth(15),
-    height: scaleWidth(15),
-    borderRadius: scaleWidth(15 / 2),
+    width: theme.size.s15,
+    height: theme.size.s15,
+    borderRadius: theme.size.s15 / 2,
     resizeMode: 'contain',
-    marginRight: scaleWidth(5),
+    marginRight: theme.size.s5,
   },
 
   selectedStyle: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: COLORS.surface_light,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    marginTop: 8,
-    marginRight: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderRadius: theme.size.s14,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    marginTop: theme.size.s8,
+    marginRight: theme.size.s12,
+    paddingHorizontal: theme.size.s12,
+    paddingVertical: theme.size.s8,
   },
   textSelectedStyle: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.white,
   },
-})
+}))

@@ -14,6 +14,7 @@ import LanguageNativeStatistic from './UI/LanguageNativeStatistic/LanguageNative
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
 import Loader from '@/shared/UI/Loader/Loader'
 import { useTranslation } from '@/shared/i18n/types'
+import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 
 /**
  * информация о пользователе
@@ -28,8 +29,9 @@ const UserStatistic: FC<Props> = (props) => {
   const { firebaseData } = useAppSelector((store) => store.user)
   const { items } = useAppSelector((store) => store.items)
 
-  const [showModalLanguages, setShowModalLanguages] = useState(false)
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
+  const [languagesSheetRef, presentLanguagesSheet, dismissLanguagesSheet] =
+    useBottomSheet()
 
   const { data: profile, isLoading: isLoadingProfile } = useGetUserProfileQuery(
     firebaseData?.uid
@@ -120,21 +122,21 @@ const UserStatistic: FC<Props> = (props) => {
         <View style={styles.item}>
           <LanguageStatisticList
             setIsNativeLanguage={setIsNativeLanguage}
-            setShowModalLanguages={setShowModalLanguages}
+            onOpenLanguages={presentLanguagesSheet}
           />
         </View>
 
         <View style={styles.item}>
           <LanguageNativeStatistic
             setIsNativeLanguage={setIsNativeLanguage}
-            setShowModalLanguages={setShowModalLanguages}
+            onOpenLanguages={presentLanguagesSheet}
           />
         </View>
 
         <ModalAddLanguages
-          setVisible={setShowModalLanguages}
+          sheetRef={languagesSheetRef}
+          onClose={dismissLanguagesSheet}
           onConfirm={onSelectLanguages}
-          visible={showModalLanguages}
           multiselect={!isNativeLanguage}
           selects={
             isNativeLanguage

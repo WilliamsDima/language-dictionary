@@ -1,14 +1,13 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
-    marginBottom: scaleWidth(20),
-    padding: scaleWidth(18),
-    borderRadius: scaleWidth(24),
-    backgroundColor: 'rgba(17, 39, 65, 0.9)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    marginBottom: theme.size.s20,
+    padding: theme.size.s18,
+    borderRadius: theme.size.s24,
+    backgroundColor: theme.colors.palette.card_alpha_90,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
-})
+}))

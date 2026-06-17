@@ -9,8 +9,13 @@ import MainList from '@/widgets/MainList/UI/MainList/MainList'
 import TabsWords from './UI/TabsWords/TabsWords'
 import MainFilter from './UI/MainFilter/MainFilter'
 import Text from '@/shared/UI/Text/Text'
+import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
+import MainFilterModal from './UI/MainFilterModal/MainFilterModal'
 
 const MainScreen: FC = () => {
+  const [sheetFilterRef, presentSheetFilter, dismissSheetFilter] =
+    useBottomSheet()
+
   return (
     <Layout dismissKeyboard>
       <View style={styles.screen}>
@@ -33,7 +38,7 @@ const MainScreen: FC = () => {
 
           <View style={styles.controls}>
             <SearchWords />
-            <MainFilter />
+            <MainFilter onPress={presentSheetFilter} />
           </View>
 
           <View style={styles.tabsWrapper}>
@@ -49,6 +54,7 @@ const MainScreen: FC = () => {
       </View>
 
       <ModalAddItem />
+      <MainFilterModal sheetRef={sheetFilterRef} onClose={dismissSheetFilter} />
     </Layout>
   )
 }

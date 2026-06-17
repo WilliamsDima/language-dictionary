@@ -1,13 +1,13 @@
-import { COLORS } from '@/assets/styles/colors'
-import { height, scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet, NativeModules } from 'react-native'
+import { height } from '@/shared/helpers/ScaleUtils'
+import { NativeModules } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.bg_modal,
+    backgroundColor: theme.colors.palette.bg_modal,
     width: '100%',
   },
   container: {
@@ -15,12 +15,12 @@ export const styles = StyleSheet.create({
     minWidth: '90%',
     maxHeight: '90%',
     minHeight: '90%',
-    backgroundColor: COLORS.tab_bar_dark,
-    paddingTop: scaleWidth(14),
-    borderRadius: scaleWidth(28),
+    backgroundColor: theme.colors.palette.tab_bar_dark,
+    paddingTop: theme.size.s14,
+    borderRadius: theme.size.s28,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   wrapperContainer: {
@@ -32,44 +32,44 @@ export const styles = StyleSheet.create({
   scroll: {
     maxHeight: '95%',
     minWidth: '100%',
-    paddingHorizontal: scaleWidth(16),
+    paddingHorizontal: theme.size.s16,
   },
 
   title: {
-    color: COLORS.primery,
-    fontSize: scaleFontSize(20),
+    color: theme.colors.palette.primery,
+    fontSize: theme.fontSize.s20,
     textAlign: 'center',
-    marginBottom: scaleWidth(18),
+    marginBottom: theme.size.s18,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-ExtraBold',
   },
   subtitle: {
-    fontSize: scaleFontSize(12),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
     textAlign: 'center',
-    marginBottom: scaleWidth(18),
+    marginBottom: theme.size.s18,
   },
   btnWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginTop: scaleWidth(16),
+    marginTop: theme.size.s16,
   },
   btnAddItem: {
-    width: scaleWidth(56),
-    height: scaleWidth(56),
-    borderRadius: scaleWidth(28),
+    width: theme.size.s56,
+    height: theme.size.s56,
+    borderRadius: theme.size.s28,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.surface_light,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   input: {
-    maxHeight: scaleWidth(100),
+    maxHeight: theme.size.s100,
     height: 'auto',
-    backgroundColor: COLORS.surface,
-    color: COLORS.white,
+    backgroundColor: theme.colors.palette.surface,
+    color: theme.colors.palette.white,
   },
 
   btns: {
@@ -78,37 +78,37 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: scaleWidth(20),
-    marginTop: scaleWidth(8),
-    marginBottom: scaleWidth(20),
+    paddingHorizontal: theme.size.s20,
+    marginTop: theme.size.s8,
+    marginBottom: theme.size.s20,
   },
   actionBtn: {
-    width: scaleWidth(52),
-    height: scaleWidth(52),
-    borderRadius: scaleWidth(26),
+    width: theme.size.s52,
+    height: theme.size.s52,
+    borderRadius: theme.size.s26,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.surface_light,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
   actionBtnPrimary: {
-    backgroundColor: 'rgba(124, 255, 107, 0.14)',
-    borderColor: 'rgba(124, 255, 107, 0.34)',
+    backgroundColor: theme.colors.palette.success_alpha_14,
+    borderColor: theme.colors.palette.success_alpha_34,
   },
   actionBtnDanger: {
-    backgroundColor: 'rgba(255, 89, 89, 0.12)',
-    borderColor: 'rgba(255, 89, 89, 0.24)',
+    backgroundColor: theme.colors.palette.danger_alpha_12,
+    borderColor: theme.colors.palette.danger_alpha_24,
   },
 
   footer: {
-    marginTop: scaleWidth(18),
-    paddingTop: scaleWidth(18),
-    borderTopWidth: scaleWidth(1),
-    borderTopColor: COLORS.border,
+    marginTop: theme.size.s18,
+    paddingTop: theme.size.s18,
+    borderTopWidth: theme.size.s1,
+    borderTopColor: theme.colors.palette.border,
   },
 
   selectLang: {
-    marginTop: scaleWidth(12),
+    marginTop: theme.size.s12,
   },
-})
+}))

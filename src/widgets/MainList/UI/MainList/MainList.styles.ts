@@ -1,26 +1,25 @@
-import { COLORS } from '@/assets/styles/colors'
-import { height, scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
+import { height } from '@/shared/helpers/ScaleUtils'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   listWrapper: {
     width: '100%',
     flex: 1,
-    minHeight: 0,
+    minHeight: theme.size.s0,
     alignItems: 'center',
-    marginTop: 0,
+    marginTop: theme.size.s0,
   },
   list: {
     width: '100%',
     flex: 1,
-    minHeight: 0,
+    minHeight: theme.size.s0,
   },
   columnWrapperStyle: {
-    gap: scaleWidth(10),
-    paddingBottom: scaleWidth(120),
+    gap: theme.size.s10,
+    paddingBottom: theme.size.s120,
   },
   loader: {
-    bottom: scaleWidth(100),
+    bottom: theme.size.s100,
     height: '100%',
     width: '100%',
     position: 'absolute',
@@ -29,55 +28,55 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   count: {
-    fontSize: scaleFontSize(12),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
     textAlign: 'left',
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: scaleWidth(12),
+    letterSpacing: theme.letterSpacing.s08,
+    marginBottom: theme.size.s12,
   },
   animLoader: {
-    width: scaleWidth(150),
-    height: scaleWidth(150),
+    width: theme.size.s150,
+    height: theme.size.s150,
   },
   emptyWrapper: {
     flex: 1,
     width: '100%',
     justifyContent: 'flex-start',
-    paddingTop: scaleWidth(12),
-    paddingBottom: scaleWidth(84),
+    paddingTop: theme.size.s12,
+    paddingBottom: theme.size.s84,
   },
   empty: {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: scaleWidth(16),
-    borderRadius: scaleWidth(22),
-    backgroundColor: 'rgba(17, 39, 65, 0.82)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    padding: theme.size.s16,
+    borderRadius: theme.size.s22,
+    backgroundColor: theme.colors.palette.card_alpha_82,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
     overflow: 'hidden',
   },
   emptyText: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.white,
     fontWeight: '700',
     textAlign: 'center',
   },
   anim: {
-    width: scaleWidth(132),
-    height: scaleWidth(132),
+    width: theme.size.s132,
+    height: theme.size.s132,
   },
   scrollToTopBtn: {
     position: 'absolute',
     zIndex: 100,
-    bottom: scaleWidth(126),
-    right: scaleWidth(6),
-    height: 44,
-    width: 44,
-    borderRadius: 14,
-    backgroundColor: COLORS.surface_light,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    bottom: theme.size.s0,
+    right: theme.size.s0,
+    height: theme.size.s42,
+    width: theme.size.s42,
+    borderRadius: theme.size.s14,
+    backgroundColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
-})
+}))

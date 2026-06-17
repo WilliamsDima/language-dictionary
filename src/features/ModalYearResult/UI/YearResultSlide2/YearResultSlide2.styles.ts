@@ -1,7 +1,6 @@
-import { COLORS } from '@/assets/styles/colors'
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   slide: {
     flex: 1,
     justifyContent: 'center',
@@ -9,43 +8,43 @@ export const styles = StyleSheet.create({
   },
   titles: {
     position: 'absolute',
-    top: 50,
+    top: theme.size.s50,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 30,
+    gap: theme.size.s30,
   },
   title: {
-    color: COLORS.white,
+    color: theme.colors.palette.white,
     textTransform: 'uppercase',
     fontWeight: '800',
-    fontSize: 30,
+    fontSize: theme.fontSize.s30,
     fontStyle: 'italic',
     textAlign: 'center',
   },
   count: {
-    color: COLORS.gold,
+    color: theme.colors.palette.gold,
     textTransform: 'uppercase',
     fontWeight: '800',
-    fontSize: 30,
+    fontSize: theme.fontSize.s30,
     fontStyle: 'italic',
     textAlign: 'center',
   },
   emojy: {
-    color: COLORS.gold,
+    color: theme.colors.palette.gold,
     fontWeight: '800',
-    fontSize: 30,
+    fontSize: theme.fontSize.s30,
     fontStyle: 'normal',
     textAlign: 'center',
   },
   footer: {
     position: 'absolute',
-    bottom: 30,
+    bottom: theme.size.s30,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
   lottie: {
-    width: 400,
-    height: 400,
+    width: theme.size.s400,
+    height: theme.size.s400,
   },
-})
+}))

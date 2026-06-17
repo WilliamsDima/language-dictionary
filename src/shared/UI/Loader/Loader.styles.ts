@@ -1,9 +1,9 @@
-import { scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   anim: {
-    width: scaleWidth(50),
-    height: scaleWidth(50),
+    width: theme.size.s50,
+    height: theme.size.s50,
   },
-})
+}))

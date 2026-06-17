@@ -1,13 +1,17 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     display: 'none',
     position: 'absolute',
     zIndex: 100,
-  },
-  visible: {
-    display: 'flex',
+    variants: {
+      visible: {
+        true: {
+          display: 'flex',
+        },
+      },
+    },
   },
   conteiner: {},
-})
+}))

@@ -1,30 +1,29 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   inputs: {
-    gap: scaleWidth(10),
-    paddingHorizontal: scaleWidth(12),
-    borderBottomWidth: scaleWidth(1),
-    borderBottomColor: COLORS.border,
-    paddingVertical: scaleWidth(14),
-    backgroundColor: 'rgba(255, 255, 255, 0.015)',
-    borderRadius: scaleWidth(18),
-    marginBottom: scaleWidth(10),
+    gap: theme.size.s10,
+    paddingHorizontal: theme.size.s12,
+    borderBottomWidth: theme.size.s1,
+    borderBottomColor: theme.colors.palette.border,
+    paddingVertical: theme.size.s14,
+    backgroundColor: theme.colors.palette.white_alpha_015,
+    borderRadius: theme.size.s18,
+    marginBottom: theme.size.s10,
   },
 
   index: {
-    color: COLORS.primery,
+    color: theme.colors.palette.primery,
     textAlign: 'left',
-    fontSize: scaleFontSize(14),
+    fontSize: theme.fontSize.s14,
     fontFamily: 'Mulish-ExtraBold',
   },
   input: {
-    maxHeight: scaleWidth(100),
+    maxHeight: theme.size.s100,
     height: 'auto',
-    backgroundColor: COLORS.surface,
-    color: COLORS.white,
+    backgroundColor: theme.colors.palette.surface,
+    color: theme.colors.palette.white,
   },
 
   footer: {
@@ -32,13 +31,13 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   deleteBtn: {
-    width: scaleWidth(40),
-    height: scaleWidth(40),
-    borderRadius: scaleWidth(20),
+    width: theme.size.s40,
+    height: theme.size.s40,
+    borderRadius: theme.size.s20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 89, 89, 0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 89, 89, 0.24)',
+    backgroundColor: theme.colors.palette.danger_alpha_12,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.danger_alpha_24,
   },
-})
+}))

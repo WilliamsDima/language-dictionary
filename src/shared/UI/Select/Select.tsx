@@ -1,4 +1,5 @@
 import React, { FC, memo } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import {
   ActivityIndicator,
   StyleProp,
@@ -9,7 +10,6 @@ import {
 import Text from '../Text/Text'
 import { Dropdown } from 'react-native-element-dropdown'
 import { styles } from './Select.styles'
-import { COLORS } from '@/assets/styles/colors'
 import { useTranslation } from '@/shared/i18n/types'
 
 interface Props {
@@ -47,13 +47,17 @@ const Select: FC<Props> = (props) => {
     showRenderLeftIcon,
   } = props
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   return (
     <View style={classes?.wrapper}>
       {!!title && <Text style={[styles.title, classes?.title]}>{title}</Text>}
 
       {!!loading && (
-        <ActivityIndicator color={COLORS.primery} style={styles.loader} />
+        <ActivityIndicator
+          color={theme.colors.palette.primery}
+          style={styles.loader}
+        />
       )}
 
       <Dropdown

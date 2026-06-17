@@ -1,8 +1,7 @@
-import React, { FC, memo, useMemo, useState } from 'react'
+import React, { FC, memo, RefObject, useMemo, useState } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalCardsFilter.styles'
-import { View, Animated, TouchableOpacity } from 'react-native'
-import Modal from '@/shared/UI/Modal/Modal'
-import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
+import { View, TouchableOpacity } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
@@ -16,20 +15,40 @@ import { SelectOption } from '@/shared/UI/types'
 import { useTranslation } from '@/shared/i18n/types'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import type { AppLanguageType } from '@/shared/store/slice/appSlice'
+import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 type Props = {
-  visible: boolean
-  setVisible: (visible: boolean) => void
+  sheetRef: RefObject<BottomSheetModal | null>
+  onClose: () => void
 }
 
-const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
+type FilterOptionRowProps = {
+  active: boolean
+  label: string
+  onPress: () => void
+}
+
+const FilterOptionRow = memo(
+  ({ active, label, onPress }: FilterOptionRowProps) => {
+    styles.useVariants({
+      circleActive: active,
+    })
+
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.selectBtn}>
+        <View style={styles.circle} />
+        <Text style={styles.selectBtnText}>{label}</Text>
+      </TouchableOpacity>
+    )
+  },
+)
+
+const ModalCardsFilter: FC<Props> = ({ sheetRef, onClose }) => {
   const { setFilterCardsModal } = useActions()
   const { navigate } = useAppNavigation()
   const { t } = useTranslation()
-
-  const { getAnimationStyles } = useScaleAnim({
-    active: visible,
-  })
+  const { theme } = useUnistyles()
 
   const { aplication, appLanguage } = useAppSelector((store) => store.app)
 
@@ -70,7 +89,7 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
     setLanguages([])
     setStatusSelect('STUDY')
     setShowVariantSelect(showVariantListOptions[0])
-    setVisible(false)
+    onClose()
   }
 
   const confirm = () => {
@@ -85,115 +104,91 @@ const ModalCardsFilter: FC<Props> = ({ visible, setVisible }) => {
   }
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      onRequestClose={onCancelHandler}
-      animationType="fade"
+    <BottomSheet
+      sheetRef={sheetRef}
+      onClose={onCancelHandler}
+      title={t('modal.modalCardsFilter.title')}
+      subtitle="Настрой режим повторения перед стартом"
+      dynamicSizing={false}
+      snapPoints={['90%']}
+      scrollContentStyle={styles.scrollContent}
+      footer={
+        <View style={styles.btns}>
+          <Button
+            type="BORDER-TRANSPARENT"
+            classes={{
+              btn: [styles.btn, styles.cancel],
+              textBtn: styles.cancelText,
+            }}
+            onPress={onCancelHandler}
+          >
+            {t('ui.cancel')}
+          </Button>
+
+          <Button
+            classes={{
+              btn: [styles.btn, styles.confirm],
+              textBtn: styles.confirmText,
+            }}
+            onPress={confirm}
+          >
+            {t('ui.start')}
+          </Button>
+        </View>
+      }
     >
-      <TouchableOpacity
-        style={styles.wrapper}
-        activeOpacity={1}
-        onPress={onCancelHandler}
-      >
-        <Animated.View style={[getAnimationStyles(), styles.wrapperContainer]}>
-          <TouchableOpacity style={styles.container} activeOpacity={1}>
-            <View style={styles.drag} />
-            <View style={styles.top}>
-              <Text style={styles.title}>
-                {t('modal.modalCardsFilter.title')}
-              </Text>
-              <Text style={styles.subtitle}>
-                Настрой режим повторения перед стартом
-              </Text>
-            </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Статус карточек</Text>
+        <View style={styles.selects}>
+          {tabsWords(t, theme).map((it) => {
+            const active = statusSelect === it.status
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Статус карточек</Text>
-              <View style={styles.selects}>
-              {tabsWords(t).map((it) => {
-                const active = statusSelect === it.status
+            return (
+              <FilterOptionRow
+                key={it.status}
+                active={active}
+                label={it.label}
+                onPress={() => {
+                  setStatusSelect(it.status)
+                }}
+              />
+            )
+          })}
+        </View>
+      </View>
 
-                return (
-                  <TouchableOpacity
-                    key={it.status}
-                    onPress={() => {
-                      setStatusSelect(it.status)
-                    }}
-                    style={styles.selectBtn}
-                  >
-                    <View
-                      style={[styles.circle, active && styles.circleActive]}
-                    />
-                    <Text style={styles.selectBtnText}>{it.label}</Text>
-                  </TouchableOpacity>
-                )
-              })}
-              </View>
-            </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>
+          {t('modal.modalCardsFilter.show_variants')}
+        </Text>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>
-                {t('modal.modalCardsFilter.show_variants')}
-              </Text>
-
-              {showVariantListOptions.map((it) => {
-                const active = it.value === showVariantSelect?.value
-                return (
-                  <TouchableOpacity
-                    key={it.value}
-                    onPress={() => {
-                      onSelectShowVariant(it)
-                    }}
-                    style={styles.selectBtn}
-                  >
-                    <View
-                      style={[styles.circle, active && styles.circleActive]}
-                    />
-                    <Text style={styles.selectBtnText}>{it.label}</Text>
-                  </TouchableOpacity>
-                )
-              })}
-            </View>
-
-            <MultiselectDropdown
-              title={t('ui.language')}
-              selects={languages}
-              onSelects={onSelectLanguages}
-              options={languagesOptions}
-              labelField="nativeName"
-              valueField="code"
-              classes={{
-                title: styles.titleSelect,
+        {showVariantListOptions.map((it) => {
+          const active = it.value === showVariantSelect?.value
+          return (
+            <FilterOptionRow
+              key={it.value}
+              active={active}
+              label={it.label}
+              onPress={() => {
+                onSelectShowVariant(it)
               }}
             />
+          )
+        })}
+      </View>
 
-            <View style={styles.btns}>
-              <Button
-                type="BORDER-TRANSPARENT"
-                classes={{
-                  btn: [styles.btn, styles.cancel],
-                  textBtn: styles.cancelText,
-                }}
-                onPress={onCancelHandler}
-              >
-                {t('ui.cancel')}
-              </Button>
-
-              <Button
-                classes={{
-                  btn: [styles.btn, styles.confirm],
-                  textBtn: styles.confirmText,
-                }}
-                onPress={confirm}
-              >
-                {t('ui.start')}
-              </Button>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      </TouchableOpacity>
-    </Modal>
+      <MultiselectDropdown
+        title={t('ui.language')}
+        selects={languages}
+        onSelects={onSelectLanguages}
+        options={languagesOptions}
+        labelField="nativeName"
+        valueField="code"
+        classes={{
+          title: styles.titleSelect,
+        }}
+      />
+    </BottomSheet>
   )
 }
 

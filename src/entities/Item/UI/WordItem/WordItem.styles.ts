@@ -1,17 +1,20 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   item: {
     width: '100%',
-    borderBottomWidth: scaleWidth(1),
-    borderBottomColor: COLORS.dark_placeholder,
-    paddingBottom: scaleWidth(5),
-  },
-  itemLast: {
-    borderBottomWidth: scaleWidth(0),
-    paddingBottom: scaleWidth(0),
+    borderBottomWidth: theme.size.s1,
+    borderBottomColor: theme.colors.palette.dark_placeholder,
+    paddingBottom: theme.size.s5,
+    variants: {
+      isLast: {
+        true: {
+          borderBottomWidth: theme.size.s0,
+          paddingBottom: theme.size.s0,
+        },
+      },
+    },
   },
   wordItem: {
     flexDirection: 'row',
@@ -20,12 +23,12 @@ export const styles = StyleSheet.create({
   },
 
   index: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.primery,
-    marginBottom: scaleWidth(5),
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.primery,
+    marginBottom: theme.size.s5,
   },
   word: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.white,
   },
-})
+}))

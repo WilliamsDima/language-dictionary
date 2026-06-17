@@ -1,8 +1,7 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
     width: '100%',
     justifyContent: 'center',
@@ -10,15 +9,15 @@ export const styles = StyleSheet.create({
   },
 
   tooltip: {
-    backgroundColor: COLORS.white,
-    paddingHorizontal: scaleWidth(20),
-    paddingVertical: scaleWidth(10),
-    borderRadius: scaleWidth(30),
+    backgroundColor: theme.colors.palette.white,
+    paddingHorizontal: theme.size.s20,
+    paddingVertical: theme.size.s10,
+    borderRadius: theme.size.s30,
     justifyContent: 'center',
     alignItems: 'center',
   },
   path: {
-    fontSize: scaleFontSize(10),
-    color: COLORS.black,
+    fontSize: theme.fontSize.s10,
+    color: theme.colors.palette.black,
   },
-})
+}))

@@ -1,27 +1,30 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, RefObject, useEffect, useMemo, useState } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './MainFilterModal.styles'
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
-import Modal from '@/shared/UI/Modal/Modal'
+import { ActivityIndicator, View } from 'react-native'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import Close from '@/assets/icons/UI/close-red-64.svg'
 import Select from '@/shared/UI/Select/Select'
 import Button from '@/shared/UI/Button/Button'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
 import type { SelectOption } from '@/shared/UI/types'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
-import { COLORS } from '@/assets/styles/colors'
 import type { IItem } from '@/entities/Item/model/item'
 import { useTranslation } from '@/shared/i18n/types'
 import type { AppLanguageType } from '@/shared/store/slice/appSlice'
-import Text from '@/shared/UI/Text/Text'
+import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
-interface Props {}
+interface Props {
+  sheetRef: RefObject<BottomSheetModal | null>
+  onClose: () => void
+}
 
-const MainFilterModal: FC<Props> = () => {
-  const { setShowFilterMain, setFilterMain, setItems } = useActions()
+const MainFilterModal: FC<Props> = ({ sheetRef, onClose }) => {
+  const { setFilterMain, setItems } = useActions()
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   const { appLanguage, aplication } = useAppSelector((store) => store.app)
 
@@ -38,9 +41,7 @@ const MainFilterModal: FC<Props> = () => {
     ]
   }, [appLanguage, t])
 
-  const { showFilterMain, filterMain, filterByStatus } = useAppSelector(
-    (store) => store.items
-  )
+  const { filterMain, filterByStatus } = useAppSelector((store) => store.items)
 
   const { firebaseData } = useAppSelector((store) => store.user)
 
@@ -59,10 +60,6 @@ const MainFilterModal: FC<Props> = () => {
     useCardsContext()
 
   const [getItems] = useLazyGetItemsQuery()
-
-  const onClose = () => {
-    setShowFilterMain(false)
-  }
 
   const onCancel = () => {
     setSortDateValue(sortByDate[1])
@@ -112,7 +109,7 @@ const MainFilterModal: FC<Props> = () => {
 
             setSortDateValue(sortByDate[1])
             setLanguages([])
-            setShowFilterMain(false)
+            onClose()
 
             setFilterMain({
               sortDate: sortDateValue?.value as any,
@@ -126,87 +123,60 @@ const MainFilterModal: FC<Props> = () => {
     }
   }
 
-  useEffect(() => {
-    if (filterMain) {
-      const dateValue = sortByDate.find(
-        (it) => it?.value === filterMain?.sortDate
-      )
-      dateValue && setSortDateValue(dateValue)
-
-      const langs = languagesOptions?.filter((it) => {
-        return filterMain?.languages?.includes(it?.code)
-      })
-
-      setLanguages(langs)
-    }
-  }, [filterMain, showFilterMain])
-
   return (
-    <Modal visible={showFilterMain} onRequestClose={onClose} transparent>
-        <TouchableOpacity
-        style={styles.wrapper}
-        activeOpacity={1}
-        onPress={onClose}
-      >
-        <TouchableOpacity style={styles.content} activeOpacity={1}>
-          <View style={styles.drag} />
+    <BottomSheet
+      sheetRef={sheetRef}
+      onClose={onClose}
+      title="Фильтр карточек"
+      subtitle="Подбери карточки под текущую сессию"
+      variant="view"
+      dynamicSizing
+      footer={
+        <View style={styles.bottom}>
+          <Button
+            classes={{
+              btn: [styles.btn, styles.btnCancel],
+              textBtn: styles.btnCancelText,
+            }}
+            onPress={onCancel}
+          >
+            {t('ui.reset')}
+          </Button>
+          <Button
+            classes={{ btn: styles.btn, textBtn: styles.btnSubmitText }}
+            onPress={onSubmit}
+          >
+            {isLoading ? (
+              <ActivityIndicator
+                size={'small'}
+                color={theme.colors.palette.white}
+              />
+            ) : (
+              t('ui.apply')
+            )}
+          </Button>
+        </View>
+      }
+    >
+      <View style={styles.options}>
+        <Select
+          title={t('ui.sort_by_date')}
+          select={sortDateValue}
+          options={sortByDate}
+          onSelect={onSelectSortDate}
+        />
 
-          <View style={styles.top}>
-            <View>
-              <Text style={styles.title}>Фильтр карточек</Text>
-              <Text style={styles.subtitle}>
-                Подбери карточки под текущую сессию
-              </Text>
-            </View>
-
-            <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-              <Close width={25} height={25} />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.options}>
-            <Select
-              title={t('ui.sort_by_date')}
-              select={sortDateValue}
-              options={sortByDate}
-              onSelect={onSelectSortDate}
-            />
-
-            <MultiselectDropdown
-              title={t('ui.language')}
-              selects={languages}
-              labelField="nativeName"
-              valueField="code"
-              onSelects={onSelectLanguages}
-              options={languagesOptions}
-              placeholder={t('ui.language_selection')}
-            />
-          </View>
-
-          <View style={styles.bottom}>
-            <Button
-              classes={{
-                btn: [styles.btn, styles.btnCancel],
-                textBtn: styles.btnCancelText,
-              }}
-              onPress={onCancel}
-            >
-              {t('ui.reset')}
-            </Button>
-            <Button
-              classes={{ btn: styles.btn, textBtn: styles.btnSubmitText }}
-              onPress={onSubmit}
-            >
-              {isLoading ? (
-                <ActivityIndicator size={'small'} color={COLORS.white} />
-              ) : (
-                t('ui.apply')
-              )}
-            </Button>
-          </View>
-        </TouchableOpacity>
-      </TouchableOpacity>
-    </Modal>
+        <MultiselectDropdown
+          title={t('ui.language')}
+          selects={languages}
+          labelField="nativeName"
+          valueField="code"
+          onSelects={onSelectLanguages}
+          options={languagesOptions}
+          placeholder={t('ui.language_selection')}
+        />
+      </View>
+    </BottomSheet>
   )
 }
 

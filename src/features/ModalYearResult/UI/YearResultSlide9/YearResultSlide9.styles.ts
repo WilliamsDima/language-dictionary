@@ -1,7 +1,6 @@
-import { COLORS } from '@/assets/styles/colors'
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   slide: {
     flex: 1,
     justifyContent: 'center',
@@ -9,56 +8,56 @@ export const styles = StyleSheet.create({
   },
   titles: {
     position: 'absolute',
-    top: 100,
+    top: theme.size.s100,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 10,
+    gap: theme.size.s10,
+    paddingHorizontal: theme.size.s10,
   },
   title: {
-    color: COLORS.white,
+    color: theme.colors.palette.white,
     textTransform: 'uppercase',
     fontWeight: '800',
-    fontSize: 25,
+    fontSize: theme.fontSize.s25,
     fontStyle: 'italic',
     textAlign: 'center',
   },
   emojy: {
-    color: COLORS.gold,
+    color: theme.colors.palette.gold,
     fontWeight: '800',
-    fontSize: 30,
+    fontSize: theme.fontSize.s30,
     fontStyle: 'normal',
     textAlign: 'center',
   },
   footer: {
     position: 'absolute',
-    bottom: 170,
+    bottom: theme.size.s170,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
   lottie: {
-    width: 300,
-    height: 300,
+    width: theme.size.s300,
+    height: theme.size.s300,
   },
   confetti: {
-    width: 300,
-    height: 300,
+    width: theme.size.s300,
+    height: theme.size.s300,
     position: 'absolute',
   },
   btnWrapper: {
     position: 'absolute',
-    bottom: 70,
+    bottom: theme.size.s70,
     width: '100%',
-    paddingHorizontal: 50,
+    paddingHorizontal: theme.size.s50,
   },
   btn: {
-    height: 50,
+    height: theme.size.s50,
     width: '100%',
-    backgroundColor: COLORS.live_color,
+    backgroundColor: theme.colors.palette.live_color,
   },
   textBtn: {
     textTransform: 'uppercase',
-    fontSize: 20,
+    fontSize: theme.fontSize.s20,
   },
-})
+}))

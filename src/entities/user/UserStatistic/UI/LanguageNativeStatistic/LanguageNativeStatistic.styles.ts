@@ -1,26 +1,25 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   itemText: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.gray_text,
   },
 
   languages: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scaleWidth(7),
+    gap: theme.size.s7,
     flexWrap: 'wrap',
   },
   languagesText: {
-    color: COLORS.primery,
+    color: theme.colors.palette.primery,
   },
   languagesTextEmpty: {
-    color: COLORS.red,
+    color: theme.colors.palette.red,
   },
   editBtn: {
-    marginLeft: scaleWidth(5),
+    marginLeft: theme.size.s5,
   },
-})
+}))

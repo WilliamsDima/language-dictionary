@@ -1,8 +1,7 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'relative',
   },
@@ -10,43 +9,48 @@ export const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    color: COLORS.gray_text,
-    fontSize: scaleFontSize(14),
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.fontSize.s14,
     fontWeight: '700',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
     fontFamily: 'Mulish-Bold',
   },
 
   input: {
-    height: scaleWidth(50),
-    fontSize: scaleFontSize(15),
-    color: COLORS.white,
+    height: theme.size.s50,
+    fontSize: theme.fontSize.s15,
+    color: theme.colors.palette.white,
     textDecorationColor: 'transparent',
-    borderWidth: scaleWidth(1),
-    borderColor: COLORS.border,
-    borderRadius: scaleWidth(16),
-    paddingHorizontal: scaleWidth(18),
-    backgroundColor: 'rgba(17, 39, 65, 0.92)',
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    borderRadius: theme.size.s16,
+    paddingHorizontal: theme.size.s18,
+    backgroundColor: theme.colors.palette.card_alpha_92,
     fontFamily: 'Mulish-SemiBold',
-  },
-  paddingRight: {
-    paddingRight: scaleWidth(48),
-  },
-
-  focus: {
-    borderColor: COLORS.primery,
-    borderWidth: scaleWidth(1),
-    backgroundColor: COLORS.surface_light,
+    variants: {
+      hasRightIcon: {
+        true: {
+          paddingRight: theme.size.s48,
+        },
+      },
+      focus: {
+        true: {
+          borderColor: theme.colors.palette.primery,
+          borderWidth: theme.size.s1,
+          backgroundColor: theme.colors.palette.surface_light,
+        },
+      },
+    },
   },
 
   rightIcon: {
     position: 'absolute',
-    right: scaleWidth(10),
+    right: theme.size.s10,
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   placeholder: {
-    color: COLORS.dark_placeholder,
+    color: theme.colors.palette.dark_placeholder,
   },
-})
+}))

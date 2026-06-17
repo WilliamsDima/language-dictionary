@@ -1,62 +1,61 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
-    marginTop: scaleWidth(30),
-    padding: scaleWidth(18),
-    borderRadius: scaleWidth(24),
-    backgroundColor: 'rgba(17, 39, 65, 0.9)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    marginTop: theme.size.s30,
+    padding: theme.size.s18,
+    borderRadius: theme.size.s24,
+    backgroundColor: theme.colors.palette.card_alpha_90,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
 
   title: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.white,
     fontWeight: '700',
     fontFamily: 'Mulish-Bold',
   },
   subtitle: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.white,
-    marginTop: scaleWidth(20),
-    marginBottom: scaleWidth(10),
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.white,
+    marginTop: theme.size.s20,
+    marginBottom: theme.size.s10,
     fontFamily: 'Mulish-Bold',
   },
 
   developer: {
-    marginTop: scaleWidth(10),
+    marginTop: theme.size.s10,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: scaleWidth(8),
+    paddingVertical: theme.size.s8,
   },
   developerText: {
-    fontSize: scaleFontSize(14),
-    color: COLORS.primery,
-    marginLeft: scaleWidth(5),
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.primery,
+    marginLeft: theme.size.s5,
   },
   googleplay: {
-    width: scaleWidth(20),
-    height: scaleWidth(20),
+    width: theme.size.s20,
+    height: theme.size.s20,
     resizeMode: 'cover',
   },
 
   social: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: scaleWidth(5),
-    paddingVertical: scaleWidth(6),
+    marginVertical: theme.size.s5,
+    paddingVertical: theme.size.s6,
   },
   socialIcon: {
-    width: scaleWidth(30),
-    height: scaleWidth(30),
+    width: theme.size.s30,
+    height: theme.size.s30,
     resizeMode: 'cover',
-    marginRight: scaleWidth(5),
+    marginRight: theme.size.s5,
   },
   socialText: {
-    fontSize: scaleFontSize(15),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s15,
+    color: theme.colors.palette.gray_text,
   },
-})
+}))

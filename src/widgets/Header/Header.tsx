@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 import { styles } from './Header.styles'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { NavigateStack } from '@/app/Navigation/types/paramsTypes'
@@ -29,12 +30,11 @@ export interface HeaderProps extends ViewProps {
 }
 
 const Header: FC<HeaderProps> = (props) => {
-  const { goBack, navigate } = useNavigation<NavigateStack>()
+  const { goBack } = useNavigation<NavigateStack>()
   const { name } = useRoute()
   const {
     classes,
     style,
-    children,
     showTitle,
     backBtn,
     headerRightContent,
@@ -49,19 +49,16 @@ const Header: FC<HeaderProps> = (props) => {
 
   const titleRoute = useRoutesTitle(name as RoutesTitle)
 
+  styles.useVariants({
+    titleSize: name === RoutesNames.main ? 'main' : 'secondary',
+  })
+
   const overStyleHeader = useMemo(() => {
     return [styles.header, classes?.header, style]
   }, [classes?.header])
 
-  const overStyleTitle = useMemo(() => {
-    if (name === RoutesNames.main) {
-      return [styles.h1]
-    }
-    return [styles.h2]
-  }, [styles])
-
   const overStyleBackBtn = useMemo(() => {
-    return [styles.backBtn, classes?.backBtn]
+    return StyleSheet.flatten([styles.backBtn, classes?.backBtn])
   }, [classes?.backBtn])
 
   return (
@@ -72,7 +69,7 @@ const Header: FC<HeaderProps> = (props) => {
         </TouchableOpacity>
       )}
 
-      {!!showTitle && <Text style={overStyleTitle}>{titleRoute}</Text>}
+      {!!showTitle && <Text style={styles.title}>{titleRoute}</Text>}
 
       {headerRightContent}
     </View>

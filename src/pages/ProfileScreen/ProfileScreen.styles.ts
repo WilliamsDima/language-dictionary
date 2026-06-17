@@ -1,97 +1,92 @@
-import { COLORS } from '@/assets/styles/colors'
-import {
-  APP_PADDING,
-  scaleFontSize,
-  scaleWidth,
-} from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   screen: {
-    paddingHorizontal: APP_PADDING,
+    paddingHorizontal: theme.layout.appPadding,
     position: 'relative',
     justifyContent: 'flex-start',
-    paddingTop: scaleWidth(12),
-    paddingBottom: scaleWidth(24),
+    paddingTop: theme.size.s12,
+    paddingBottom: theme.size.s24,
   },
   hero: {
-    marginBottom: scaleWidth(12),
-    borderRadius: scaleWidth(22),
-    padding: scaleWidth(14),
-    backgroundColor: 'rgba(17, 39, 65, 0.92)',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    marginBottom: theme.size.s12,
+    borderRadius: theme.size.s22,
+    padding: theme.size.s14,
+    backgroundColor: theme.colors.palette.card_alpha_92,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   heroCopy: {
     flex: 1,
-    paddingRight: scaleWidth(12),
+    paddingRight: theme.size.s12,
   },
   heroKicker: {
-    fontSize: scaleFontSize(10),
-    color: COLORS.primery,
+    fontSize: theme.fontSize.s10,
+    color: theme.colors.palette.primery,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-Bold',
-    marginBottom: scaleWidth(8),
+    marginBottom: theme.size.s8,
   },
   heroTitle: {
-    fontSize: scaleFontSize(18),
+    fontSize: theme.fontSize.s18,
     fontFamily: 'Mulish-ExtraBold',
   },
   heroPlaceholder: {
-    width: scaleWidth(68),
-    height: scaleWidth(68),
-    borderRadius: scaleWidth(18),
-    borderWidth: 2,
-    borderColor: COLORS.red_placeholder,
-    backgroundColor: 'rgba(255, 59, 48, 0.16)',
+    width: theme.size.s68,
+    height: theme.size.s68,
+    borderRadius: theme.size.s18,
+    borderWidth: theme.size.s2,
+    borderColor: theme.colors.palette.red_placeholder,
+    backgroundColor: theme.colors.palette.danger_alpha_16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   heroPlaceholderText: {
-    color: COLORS.red_placeholder,
-    fontSize: scaleFontSize(10),
+    color: theme.colors.palette.red_placeholder,
+    fontSize: theme.fontSize.s10,
     fontFamily: 'Mulish-ExtraBold',
   },
 
   logout: {
-    marginTop: scaleWidth(14),
-    padding: scaleWidth(14),
-    backgroundColor: COLORS.red,
-    borderColor: 'transparent',
+    marginTop: theme.size.s14,
+    padding: theme.size.s14,
+    backgroundColor: theme.colors.palette.red,
+    borderColor: theme.colors.palette.transparent,
   },
 
   repeatBtn: {
-    marginTop: scaleWidth(14),
-    padding: scaleWidth(14),
-    backgroundColor: COLORS.primery,
-    borderColor: 'transparent',
+    marginTop: theme.size.s14,
+    padding: theme.size.s14,
+    backgroundColor: theme.colors.palette.primery,
+    borderColor: theme.colors.palette.transparent,
   },
 
   repeatText: {
-    fontSize: scaleFontSize(13),
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-ExtraBold',
-    color: COLORS.black,
+    color: theme.colors.palette.black,
   },
   dangerText: {
-    fontSize: scaleFontSize(13),
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-ExtraBold',
-    color: COLORS.white,
+    color: theme.colors.palette.white,
   },
   deleteText: {
-    fontSize: scaleFontSize(13),
+    fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-ExtraBold',
-    color: COLORS.red,
+    color: theme.colors.palette.red,
   },
 
   delete: {
-    marginTop: scaleWidth(14),
-    padding: scaleWidth(14),
-    borderColor: COLORS.red,
+    marginTop: theme.size.s14,
+    padding: theme.size.s14,
+    borderColor: theme.colors.palette.red,
   },
-})
+}))

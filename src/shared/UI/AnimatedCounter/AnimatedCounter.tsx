@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, View, StyleSheet } from 'react-native'
+import { Animated, View } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 import Text from '../Text/Text'
-import { COLORS } from '@/assets/styles/colors'
 
 interface AnimatedCounterProps {
   value: number
@@ -43,7 +43,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   container: { alignItems: 'center', justifyContent: 'center' },
-  text: { fontSize: 48, fontWeight: 'bold', color: COLORS.gold },
-})
+  text: { fontSize: theme.fontSize.s48, fontWeight: 'bold', color: theme.colors.palette.gold },
+}))

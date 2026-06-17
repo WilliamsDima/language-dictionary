@@ -1,12 +1,12 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'absolute',
     zIndex: 1000,
-    bottom: 100,
+    bottom: theme.size.s100,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-})
+}))

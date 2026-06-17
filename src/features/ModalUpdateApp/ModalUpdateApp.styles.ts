@@ -1,73 +1,72 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   modal: {
     justifyContent: 'flex-end',
-    margin: 0,
+    margin: theme.size.s0,
   },
   content: {
-    backgroundColor: COLORS.tab_bar_dark,
-    borderTopRightRadius: scaleWidth(28),
-    borderTopLeftRadius: scaleWidth(28),
-    paddingHorizontal: scaleWidth(18),
-    paddingTop: scaleWidth(14),
-    paddingBottom: scaleWidth(24),
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.tab_bar_dark,
+    borderTopRightRadius: theme.size.s28,
+    borderTopLeftRadius: theme.size.s28,
+    paddingHorizontal: theme.size.s18,
+    paddingTop: theme.size.s14,
+    paddingBottom: theme.size.s24,
+    borderTopWidth: theme.size.s1,
+    borderLeftWidth: theme.size.s1,
+    borderRightWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
   },
   drag: {
     alignSelf: 'center',
-    width: scaleWidth(44),
-    height: scaleWidth(5),
-    borderRadius: scaleWidth(999),
-    backgroundColor: COLORS.border,
-    marginBottom: scaleWidth(14),
+    width: theme.size.s44,
+    height: theme.size.s5,
+    borderRadius: theme.size.s999,
+    backgroundColor: theme.colors.palette.border,
+    marginBottom: theme.size.s14,
   },
   title: {
-    fontSize: scaleFontSize(18),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s18,
+    color: theme.colors.palette.white,
     fontFamily: 'Mulish-ExtraBold',
-    marginBottom: scaleWidth(4),
+    marginBottom: theme.size.s4,
   },
   subtitle: {
-    fontSize: scaleFontSize(12),
-    color: COLORS.gray_text,
+    fontSize: theme.fontSize.s12,
+    color: theme.colors.palette.gray_text,
   },
 
   btns: {
-    marginTop: scaleWidth(20),
+    marginTop: theme.size.s20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: scaleWidth(12),
+    gap: theme.size.s12,
   },
   btn: {
-    paddingVertical: scaleWidth(12),
+    paddingVertical: theme.size.s12,
     flex: 1,
-    backgroundColor: COLORS.primery,
-    borderColor: 'transparent',
-    borderRadius: scaleWidth(16),
+    backgroundColor: theme.colors.palette.primery,
+    borderColor: theme.colors.palette.transparent,
+    borderRadius: theme.size.s16,
   },
   btnCancel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    borderColor: COLORS.border,
+    backgroundColor: theme.colors.palette.white_alpha_04,
+    borderColor: theme.colors.palette.border,
   },
   textBtn: {
     textTransform: 'uppercase',
-    fontSize: scaleFontSize(13),
+    fontSize: theme.fontSize.s13,
   },
   textBtnCancel: {
     textTransform: 'uppercase',
-    fontSize: scaleFontSize(13),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s13,
+    color: theme.colors.palette.white,
   },
   textBtnConfirm: {
     textTransform: 'uppercase',
-    fontSize: scaleFontSize(13),
-    color: COLORS.black,
+    fontSize: theme.fontSize.s13,
+    color: theme.colors.palette.black,
   },
-})
+}))

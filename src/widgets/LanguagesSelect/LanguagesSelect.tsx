@@ -1,12 +1,13 @@
-import React, { FC, memo, useState } from 'react'
+import React, { FC, memo, useMemo } from 'react'
 import { Image, TouchableOpacity, ViewStyle } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './LanguagesSelect.styles'
 import Text from '@/shared/UI/Text/Text'
 import EarthIcon from '@/assets/icons/UI/earth.svg'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
 import { ILanguage } from '@/shared/json/languages'
-import { COLORS } from '@/assets/styles/colors'
 import { useTranslation } from '@/shared/i18n/types'
+import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 
 /**
  * UI select language
@@ -25,26 +26,35 @@ type Props = {
 
 const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
+  const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
 
-  const [showModal, setShowModal] = useState(false)
+  const selectStyles = useMemo(() => {
+    return [
+      styles.select,
+      error
+        ? {
+            borderColor: theme.colors.palette.red,
+            borderWidth: theme.size.s1,
+          }
+        : null,
+      classes?.select,
+    ]
+  }, [classes?.select, error, theme.colors.palette.red])
 
   const openModal = () => {
-    setShowModal(true)
+    presentSheet()
   }
 
   const onSelectLanguage = (lang: ILanguage) => {
     onSelect && onSelect(lang)
-    setShowModal(false)
+    dismissSheet()
   }
 
   return (
     <>
       <TouchableOpacity
-        style={[
-          styles.select,
-          error && { borderColor: COLORS.red, borderWidth: 1 },
-          classes?.select,
-        ]}
+        style={selectStyles}
         onPress={openModal}
       >
         <Text style={styles.title}>
@@ -61,8 +71,8 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
       {error && <Text style={styles.error}>{t('ui.language_not_select')}</Text>}
 
       <ModalLanguagesList
-        setVisible={setShowModal}
-        visible={showModal}
+        sheetRef={sheetRef}
+        onClose={dismissSheet}
         onSelect={onSelectLanguage}
         language={language}
       />

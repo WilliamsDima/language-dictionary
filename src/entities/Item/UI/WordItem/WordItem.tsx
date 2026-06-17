@@ -38,8 +38,12 @@ const WordItem: FC<Props> = ({
     textToSpeech({ lang: parentItem.language.short_name, text: item.word })
   }
 
+  styles.useVariants({
+    isLast,
+  })
+
   return (
-    <View style={[styles.item, isLast && styles.itemLast]}>
+    <View style={styles.item}>
       <Text style={styles.index}>{index + 1}.</Text>
 
       {(viewTypeItem?.value === 'word_only' ||

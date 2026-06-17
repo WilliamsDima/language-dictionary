@@ -1,13 +1,13 @@
-import { COLORS } from '@/assets/styles/colors'
+import { appThemes } from '@/shared/styles/unistyles'
 
 export const screenOptions = {
   headerStyle: {
-    borderBottomWidth: 0,
+    borderBottomWidth: appThemes.light.size.s0,
     // android
-    elevation: 0,
+    elevation: appThemes.light.size.s0,
     // ios
-    shadowOpacity: 0,
-    backgroundColor: COLORS.white,
+    shadowOpacity: appThemes.light.opacity.o0,
+    backgroundColor: appThemes.light.colors.palette.white,
   },
 }
 

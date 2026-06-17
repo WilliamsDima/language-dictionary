@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 import { styles } from './OutsideView.styles'
 import OutsidePressHandler from 'react-native-outside-press'
 
@@ -27,9 +28,13 @@ interface Props extends TouchableOpacityProps {
 const OutsideView: FC<Props> = (props) => {
   const { style, children, classes, visible, onOutsidePress, ...rest } = props
 
+  styles.useVariants({
+    visible,
+  })
+
   const overStyleWrapper = useMemo(() => {
-    return [styles.wrapper, classes?.wrapper, visible && styles.visible]
-  }, [style, visible, classes?.wrapper])
+    return StyleSheet.flatten([styles.wrapper, classes?.wrapper])
+  }, [classes?.wrapper])
 
   const overStyle = useMemo(() => {
     return [styles.conteiner, classes?.conteiner, style]

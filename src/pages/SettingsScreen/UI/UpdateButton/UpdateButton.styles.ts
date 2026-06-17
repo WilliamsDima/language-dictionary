@@ -1,17 +1,16 @@
-import { COLORS } from '@/assets/styles/colors'
-import { scaleFontSize, scaleWidth } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+import { StyleSheet } from 'react-native-unistyles'
+
+export const styles = StyleSheet.create((theme) => ({
   container: {
-    marginTop: scaleWidth(20),
+    marginTop: theme.size.s20,
   },
   btn: {
-    padding: scaleWidth(10),
-    backgroundColor: COLORS.primery,
+    padding: theme.size.s10,
+    backgroundColor: theme.colors.palette.primery,
   },
   btnText: {
-    fontSize: scaleFontSize(16),
-    color: COLORS.white,
+    fontSize: theme.fontSize.s16,
+    color: theme.colors.palette.white,
   },
-})
+}))

@@ -1,9 +1,9 @@
 import { height, width } from '@/shared/helpers/ScaleUtils'
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create({
+export const styles = StyleSheet.create((theme) => ({
   slide: {
     height: height,
     width: width,
   },
-})
+}))

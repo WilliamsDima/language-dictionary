@@ -12,6 +12,9 @@ import BootSplash from 'react-native-bootsplash'
 import { initI18n } from '@/shared/i18n'
 import {UnistylesRuntime} from 'react-native-unistyles'
 import {useAppSelector} from '@/shared/hooks/useStore'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import {SafeAreaProvider} from 'react-native-safe-area-context'
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet'
 
 LogBox.ignoreLogs(['Remote debugger'])
 
@@ -23,9 +26,15 @@ const AppContent: FC = () => {
   }, [theme])
 
   return (
-    <EventProvider>
-      <Routes />
-    </EventProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <BottomSheetModalProvider>
+          <EventProvider>
+            <Routes />
+          </EventProvider>
+        </BottomSheetModalProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }
 
