@@ -29,7 +29,8 @@ const ProfileScreen: FC = () => {
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
-  const [cardsSheetRef, presentCardsSheet] = useBottomSheet()
+  const [cardsSheetRef, presentCardsSheet, onDismissCardsSheet] =
+    useBottomSheet()
   useGetItems()
 
   const achievementsPreview = useMemo(() => {
@@ -85,8 +86,12 @@ const ProfileScreen: FC = () => {
     <Layout isScroll>
       <View style={styles.screen}>
         <View style={styles.metaCard}>
-          <Text style={styles.metaLabel}>{t('profileScreen.date_registration')}</Text>
-          <Text style={styles.metaValue}>{registrationDate || 'Не указана'}</Text>
+          <Text style={styles.metaLabel}>
+            {t('profileScreen.date_registration')}
+          </Text>
+          <Text style={styles.metaValue}>
+            {registrationDate || 'Не указана'}
+          </Text>
         </View>
 
         <UserStatistic />
@@ -102,7 +107,11 @@ const ProfileScreen: FC = () => {
               onPress={openAchievements}
               isText={false}
             >
-              <TopArrow width={28} height={28} style={styles.achievementsArrow} />
+              <TopArrow
+                width={28}
+                height={28}
+                style={styles.achievementsArrow}
+              />
             </Button>
           </View>
 
@@ -129,7 +138,9 @@ const ProfileScreen: FC = () => {
                       {t('profileScreen.achievements_soon')}
                     </Text>
                   </View>
-                  <Text style={styles.achievementPreviewTitle}>{item.title}</Text>
+                  <Text style={styles.achievementPreviewTitle}>
+                    {item.title}
+                  </Text>
                 </LinearGradient>
               )
             })}
@@ -174,7 +185,10 @@ const ProfileScreen: FC = () => {
       <ModalDeleteAccaunt visible={modalDelete} setVisible={setModalDelete} />
       <ModalLogout visible={modalLogout} setVisible={setModalLogout} />
 
-      <ModalCardsFilter sheetRef={cardsSheetRef} />
+      <ModalCardsFilter
+        sheetRef={cardsSheetRef}
+        onDismiss={onDismissCardsSheet}
+      />
     </Layout>
   )
 }

@@ -7,7 +7,7 @@ import {
   useUpdateUserProfileMutation,
 } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import ModalAddLanguages from '@/features/ModalAddLanguages/ModalAddLanguages'
+import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
 import { ILanguage } from '@/shared/json/languages'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
 import Loader from '@/shared/UI/Loader/Loader'
@@ -68,7 +68,8 @@ const UserStatistic: FC = () => {
   const { items } = useAppSelector((store) => store.items)
 
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
-  const [languagesSheetRef, presentLanguagesSheet] = useBottomSheet()
+  const [languagesSheetRef, presentLanguagesSheet, onDismissLanguagesSheet] =
+    useBottomSheet()
 
   const { data: profile, isLoading: isLoadingProfile } = useGetUserProfileQuery(
     firebaseData?.uid
@@ -171,13 +172,23 @@ const UserStatistic: FC = () => {
 
   const onEditLanguages = useCallback(() => {
     setIsNativeLanguage(false)
-    presentLanguagesSheet()
+    requestAnimationFrame(() => {
+      presentLanguagesSheet()
+    })
   }, [presentLanguagesSheet])
 
   const onEditNativeLanguage = useCallback(() => {
     setIsNativeLanguage(true)
-    presentLanguagesSheet()
+    requestAnimationFrame(() => {
+      presentLanguagesSheet()
+    })
   }, [presentLanguagesSheet])
+
+  const languagesModalSubtitle = useMemo(() => {
+    return isNativeLanguage
+      ? 'Выбери один основной язык профиля'
+      : 'Выбери несколько языков для статистики и подбора карточек'
+  }, [isNativeLanguage])
 
   return (
     <>
@@ -229,11 +240,15 @@ const UserStatistic: FC = () => {
           </LanguageCard>
         </View>
 
-        <ModalAddLanguages
+        <ModalLanguagesList
           sheetRef={languagesSheetRef}
+          onDismiss={onDismissLanguagesSheet}
           onConfirm={onSelectLanguages}
           multiselect={!isNativeLanguage}
           selects={languageSelects}
+          subtitle={languagesModalSubtitle}
+          withFooter={!isNativeLanguage}
+          closeOnSelect={isNativeLanguage}
         />
       </View>
 

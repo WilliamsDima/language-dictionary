@@ -1,4 +1,12 @@
-import React, { FC, memo, RefObject, useMemo, useState } from 'react'
+import React, {
+  FC,
+  memo,
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { styles } from './ModalLanguagesList.styles'
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import { ILanguage, languages } from '@/shared/json/languages'
@@ -6,11 +14,18 @@ import { useTranslation } from '@/shared/i18n/types'
 import Text from '@/shared/UI/Text/Text'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import Button from '@/shared/UI/Button/Button'
 
 type Props = {
   sheetRef: RefObject<BottomSheetModal | null>
-  onSelect?: (visible: ILanguage) => void
-  language?: ILanguage
+  onDismiss: () => void
+  selects?: ILanguage[]
+  multiselect?: boolean
+  title?: string
+  subtitle?: string
+  closeOnSelect?: boolean
+  withFooter?: boolean
+  onConfirm: (langs: ILanguage[]) => void
 }
 
 type LanguageRowProps = {
@@ -50,36 +65,113 @@ const LanguageRow = memo(
           <Text style={styles.code}>{item.short_name.toUpperCase()}</Text>
         </View>
 
-        {!iconIsError && (
+        {!iconIsError ? (
           <Image
             source={{ uri: item.country.flag }}
             style={styles.icon}
             onError={onImageError}
           />
+        ) : (
+          <></>
         )}
       </TouchableOpacity>
     )
   }
 )
 
-/**
- * модалка выбора языка
- *
- * @format
- */
-
-const ModalLanguagesList: FC<Props> = ({ sheetRef, onSelect, language }) => {
+const ModalLanguagesList: FC<Props> = ({
+  sheetRef,
+  selects,
+  multiselect = false,
+  title,
+  subtitle,
+  closeOnSelect = false,
+  withFooter = false,
+  onConfirm,
+  onDismiss,
+}) => {
   const { t } = useTranslation()
 
   const [isonsError, setIsonsError] = useState<number[]>([])
+  const [selectedLanguages, setSelectedLanguages] = useState<ILanguage[]>([])
+
+  const syncSelectedLanguages = useCallback(() => {
+    setSelectedLanguages(selects || [])
+  }, [selects])
+
+  useEffect(() => {
+    syncSelectedLanguages()
+  }, [syncSelectedLanguages])
+
+  const onImageError = useCallback((id: number) => {
+    setIsonsError((prev) => {
+      if (prev.includes(id)) {
+        return prev
+      }
+
+      return [...prev, id]
+    })
+  }, [])
+
+  const onSelectLanguage = useCallback(
+    (language: ILanguage) => {
+      if (closeOnSelect && !multiselect) {
+        setSelectedLanguages([language])
+        onConfirm([language])
+        onDismiss()
+        return
+      }
+
+      if (!multiselect) {
+        setSelectedLanguages([language])
+        return
+      }
+
+      setSelectedLanguages((prev) => {
+        const isSelected = prev.some((item) => item.id === language.id)
+
+        if (isSelected) {
+          return prev.filter((item) => item.id !== language.id)
+        }
+
+        return [...prev, language]
+      })
+    },
+    [closeOnSelect, multiselect, onConfirm]
+  )
+
+  const onApply = useCallback(() => {
+    onConfirm(selectedLanguages)
+    onDismiss()
+  }, [onConfirm, selectedLanguages, sheetRef])
+
+  const footer = withFooter ? (
+    <View style={styles.footer}>
+      <Button
+        type="BORDER-TRANSPARENT"
+        classes={{ btn: styles.footerBtn }}
+        onPress={onDismiss}
+      >
+        {t('ui.cancel')}
+      </Button>
+
+      <Button classes={{ btn: styles.footerBtn }} onPress={onApply}>
+        {t('ui.apply')}
+      </Button>
+    </View>
+  ) : (
+    <></>
+  )
 
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      title={t('ui.language_selection')}
-      subtitle="Выбери язык карточки для нового набора"
+      onDismiss={onDismiss}
+      title={title || t('ui.language_selection')}
+      subtitle={subtitle || 'Выбери язык карточки для нового набора'}
       dynamicSizing={false}
       snapPoints={['72%']}
+      footer={footer}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -88,19 +180,20 @@ const ModalLanguagesList: FC<Props> = ({ sheetRef, onSelect, language }) => {
       >
         {languages.map((it, i) => {
           const iconIsError = isonsError.includes(it.id)
+          const isActive = selectedLanguages.some((item) => item.id === it.id)
+
           return (
             <LanguageRow
               key={it.id}
               item={it}
-              isActive={language?.id === it.id}
+              isActive={isActive}
               isLast={i === languages.length - 1}
               iconIsError={iconIsError}
               onPress={() => {
-                onSelect && onSelect(it)
-                sheetRef.current?.dismiss()
+                onSelectLanguage(it)
               }}
               onImageError={() => {
-                setIsonsError((prev) => [...prev, it.id])
+                onImageError(it.id)
               }}
             />
           )

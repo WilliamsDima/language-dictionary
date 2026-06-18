@@ -20,6 +20,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 type Props = {
   sheetRef: RefObject<BottomSheetModal | null>
+  onDismiss: () => void
 }
 
 type FilterOptionRowProps = {
@@ -39,7 +40,7 @@ const FilterOptionRow = memo(
   }
 )
 
-const ModalCardsFilter: FC<Props> = ({ sheetRef }) => {
+const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
   const { setFilterCardsModal } = useActions()
   const { navigate } = useAppNavigation()
   const { t } = useTranslation()
@@ -86,10 +87,6 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef }) => {
     setShowVariantSelect(showVariantListOptions[0])
   }
 
-  const onCancelHandler = () => {
-    sheetRef.current?.dismiss()
-  }
-
   const confirm = () => {
     setFilterCardsModal({
       status: statusSelect,
@@ -98,7 +95,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef }) => {
     })
 
     navigate(RoutesNames.cardsRepetition)
-    sheetRef.current?.dismiss()
+    onDismiss()
   }
 
   return (
@@ -118,7 +115,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef }) => {
               btn: [styles.btn, styles.cancel],
               textBtn: styles.cancelText,
             }}
-            onPress={onCancelHandler}
+            onPress={onDismiss}
           >
             {t('ui.cancel')}
           </Button>

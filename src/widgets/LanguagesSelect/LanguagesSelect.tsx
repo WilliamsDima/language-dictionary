@@ -1,4 +1,4 @@
-import React, { FC, memo, useMemo } from 'react'
+import React, { FC, memo, useCallback, useMemo } from 'react'
 import { Image, TouchableOpacity, ViewStyle } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './LanguagesSelect.styles'
@@ -50,6 +50,17 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
     onSelect && onSelect(lang)
   }
 
+  const onConfirmLanguage = useCallback(
+    (langs: ILanguage[]) => {
+      const selectedLanguage = langs[0]
+
+      if (selectedLanguage) {
+        onSelectLanguage(selectedLanguage)
+      }
+    },
+    [onSelect]
+  )
+
   return (
     <>
       <TouchableOpacity style={selectStyles} onPress={openModal}>
@@ -68,8 +79,12 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
 
       <ModalLanguagesList
         sheetRef={sheetRef}
-        onSelect={onSelectLanguage}
-        language={language}
+        multiselect={false}
+        closeOnSelect
+        withFooter={false}
+        selects={language ? [language] : []}
+        subtitle="Выбери язык карточки для нового набора"
+        onConfirm={onConfirmLanguage}
       />
     </>
   )
