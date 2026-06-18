@@ -61,6 +61,10 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: theme.size.s10,
   },
+  itemContainer: {
+    borderRadius: theme.size.s14,
+    overflow: 'hidden',
+  },
   itemActive: {
     backgroundColor: theme.colors.palette.primery,
   },

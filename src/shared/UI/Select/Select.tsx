@@ -67,6 +67,8 @@ const Select: FC<Props> = (props) => {
         containerStyle={styles.containerStyle}
         iconStyle={styles.iconStyle}
         selectedTextStyle={styles.selectedTextStyle}
+        activeColor={theme.colors.palette.transparent}
+        itemContainerStyle={styles.itemContainer}
         renderLeftIcon={() =>
           iconField && showRenderLeftIcon ? (
             <View style={styles.iconValue}>{select?.[iconField]}</View>
