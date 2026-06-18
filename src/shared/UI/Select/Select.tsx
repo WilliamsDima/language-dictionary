@@ -63,11 +63,10 @@ const Select: FC<Props> = (props) => {
       <Dropdown
         style={[styles.dropdown, classes?.dropdown]}
         placeholderStyle={styles.placeholderStyle}
-        // selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         containerStyle={styles.containerStyle}
         iconStyle={styles.iconStyle}
-        selectedTextStyle={styles.label}
+        selectedTextStyle={styles.selectedTextStyle}
         renderLeftIcon={() =>
           iconField && showRenderLeftIcon ? (
             <View style={styles.iconValue}>{select?.[iconField]}</View>
@@ -77,7 +76,7 @@ const Select: FC<Props> = (props) => {
         }
         renderItem={(item, isSelected) => {
           return (
-            <View style={styles.item}>
+            <View style={[styles.item, isSelected && styles.itemActive]}>
               {iconField && item[iconField]}
               <Text style={styles.selectedTextStyle}>{item[labelField]}</Text>
             </View>

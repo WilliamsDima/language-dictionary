@@ -82,8 +82,9 @@ const MainFilterModal: FC<Props> = ({ sheetRef, onClose }) => {
       onClose={onClose}
       title="Фильтр карточек"
       subtitle="Подбери карточки под текущую сессию"
-      variant="view"
-      dynamicSizing
+      dynamicSizing={false}
+      snapPoints={['52%']}
+      scrollContentStyle={styles.scrollContent}
       footer={
         <View style={styles.bottom}>
           <Button

@@ -4,11 +4,13 @@ import { useCallback, useRef } from 'react'
 export const useBottomSheet = (): [
   React.RefObject<BottomSheetModal | null>,
   () => void,
-  () => void,
+  () => void
 ] => {
   const sheetRef = useRef<BottomSheetModal>(null)
 
   const present = useCallback(() => {
+    console.log(111)
+
     sheetRef.current?.present()
   }, [])
 

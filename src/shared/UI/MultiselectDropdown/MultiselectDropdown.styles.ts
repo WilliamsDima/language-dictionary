@@ -9,10 +9,11 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   dropdown: {
-    height: theme.size.s50,
+    minHeight: theme.size.s56,
     backgroundColor: theme.colors.palette.surface,
     borderRadius: theme.size.s16,
-    padding: theme.size.s12,
+    paddingHorizontal: theme.size.s16,
+    paddingVertical: theme.size.s14,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
@@ -31,8 +32,9 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.palette.dark_placeholder,
   },
   selectedTextStyle: {
-    fontSize: theme.fontSize.s14,
+    fontSize: theme.fontSize.s16,
     color: theme.colors.palette.white,
+    lineHeight: theme.lineHeights.md,
     variants: {
       active: {
         true: {
@@ -68,7 +70,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   label: {
-    fontSize: theme.fontSize.s14,
+    fontSize: theme.fontSize.s16,
     color: theme.colors.palette.white,
   },
 
@@ -115,5 +117,6 @@ export const styles = StyleSheet.create((theme) => ({
   textSelectedStyle: {
     fontSize: theme.fontSize.s14,
     color: theme.colors.palette.white,
+    lineHeight: theme.lineHeights.sm,
   },
 }))

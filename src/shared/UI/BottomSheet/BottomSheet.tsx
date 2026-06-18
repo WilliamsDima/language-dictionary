@@ -22,7 +22,6 @@ import { styles } from './BottomSheet.styles'
 import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
 
 type Props = {
-  visible?: boolean
   sheetRef?: RefObject<BottomSheetModal | null>
   onClose: () => void
   title?: string
@@ -35,13 +34,9 @@ type Props = {
   variant?: 'scroll' | 'view'
   scrollRef?: RefObject<any>
   scrollContentStyle?: object
-} & Omit<
-  BottomSheetModalProps,
-  'children' | 'snapPoints' | 'onDismiss' | 'ref'
->
+} & Omit<BottomSheetModalProps, 'children' | 'snapPoints' | 'onDismiss' | 'ref'>
 
 const BottomSheet: FC<Props> = ({
-  visible,
   sheetRef,
   onClose,
   title,
@@ -56,22 +51,6 @@ const BottomSheet: FC<Props> = ({
   scrollContentStyle,
   ...rest
 }) => {
-  const innerSheetRef = useRef<BottomSheetModal>(null)
-  const currentSheetRef = sheetRef ?? innerSheetRef
-
-  useEffect(() => {
-    if (typeof visible !== 'boolean') {
-      return
-    }
-
-    if (visible) {
-      currentSheetRef.current?.present()
-      return
-    }
-
-    currentSheetRef.current?.dismiss()
-  }, [currentSheetRef, visible])
-
   const handleDismiss = useCallback(() => {
     onClose()
   }, [onClose])
@@ -115,7 +94,7 @@ const BottomSheet: FC<Props> = ({
 
   return (
     <BottomSheetModal
-      ref={currentSheetRef}
+      ref={sheetRef}
       onDismiss={handleDismiss}
       stackBehavior="push"
       enablePanDownToClose

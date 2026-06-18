@@ -34,6 +34,7 @@ export const styles = StyleSheet.create((theme) => ({
   header: {
     paddingHorizontal: theme.size.s18,
     paddingBottom: theme.size.s12,
+    paddingTop: theme.size.s6,
   },
   headerTop: {
     flexDirection: 'row',
@@ -50,11 +51,13 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s18,
     fontFamily: 'Mulish-ExtraBold',
     paddingTop: theme.size.s4,
+    lineHeight: theme.lineHeights.lg,
   },
   subtitle: {
     color: theme.colors.palette.gray_text,
     fontSize: theme.fontSize.s12,
     marginTop: theme.size.s4,
+    lineHeight: theme.lineHeights.xs,
   },
   closeButton: {
     width: theme.size.s36,

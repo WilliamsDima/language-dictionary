@@ -45,6 +45,9 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'column',
     gap: theme.size.s16,
   },
+  scrollContent: {
+    paddingBottom: theme.size.s12,
+  },
   bottom: {
     marginTop: theme.size.s24,
     flexDirection: 'row',
