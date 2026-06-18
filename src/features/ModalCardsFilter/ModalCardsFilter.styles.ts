@@ -79,14 +79,10 @@ export const styles = StyleSheet.create((theme, rt) => ({
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
     backgroundColor: theme.colors.palette.white_alpha_03,
-    variants: {
-      circleActive: {
-        true: {
-          borderColor: theme.colors.palette.success_alpha_36,
-          backgroundColor: theme.colors.palette.primery,
-        },
-      },
-    },
+  },
+  circleActive: {
+    borderColor: theme.colors.palette.success_alpha_36,
+    backgroundColor: theme.colors.palette.primery,
   },
 
   selectBtnText: {

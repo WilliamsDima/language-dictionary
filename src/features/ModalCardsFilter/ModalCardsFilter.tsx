@@ -30,13 +30,9 @@ type FilterOptionRowProps = {
 
 const FilterOptionRow = memo(
   ({ active, label, onPress }: FilterOptionRowProps) => {
-    styles.useVariants({
-      circleActive: active,
-    })
-
     return (
       <TouchableOpacity onPress={onPress} style={styles.selectBtn}>
-        <View style={styles.circle} />
+        <View style={[styles.circle, active && styles.circleActive]} />
         <Text style={styles.selectBtnText}>{label}</Text>
       </TouchableOpacity>
     )
