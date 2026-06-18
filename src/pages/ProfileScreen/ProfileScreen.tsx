@@ -21,7 +21,7 @@ const ProfileScreen: FC = () => {
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
-  const [cardsSheetRef, presentCardsSheet, dismissCardsSheet] = useBottomSheet()
+  const [cardsSheetRef, presentCardsSheet] = useBottomSheet()
   useGetItems()
 
   const { items } = useAppSelector((store) => store.items)
@@ -91,7 +91,7 @@ const ProfileScreen: FC = () => {
       <ModalDeleteAccaunt visible={modalDelete} setVisible={setModalDelete} />
       <ModalLogout visible={modalLogout} setVisible={setModalLogout} />
 
-      <ModalCardsFilter sheetRef={cardsSheetRef} onClose={dismissCardsSheet} />
+      <ModalCardsFilter sheetRef={cardsSheetRef} />
     </Layout>
   )
 }

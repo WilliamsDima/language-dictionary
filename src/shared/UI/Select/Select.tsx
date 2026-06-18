@@ -78,7 +78,14 @@ const Select: FC<Props> = (props) => {
           return (
             <View style={[styles.item, isSelected && styles.itemActive]}>
               {iconField && item[iconField]}
-              <Text style={styles.selectedTextStyle}>{item[labelField]}</Text>
+              <Text
+                style={[
+                  styles.selectedTextStyle,
+                  isSelected && styles.selectedTextStyleActive,
+                ]}
+              >
+                {item[labelField]}
+              </Text>
             </View>
           )
         }}

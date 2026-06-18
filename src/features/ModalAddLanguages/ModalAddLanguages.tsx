@@ -1,11 +1,6 @@
 import React, { FC, memo, RefObject, useEffect, useState } from 'react'
 import { styles } from './ModalAddLanguages.styles'
-import {
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from 'react-native'
+import { View, TouchableOpacity, ScrollView, Image } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import DoneIcon from '@/assets/icons/UI/done-white-64.svg'
 import { ILanguage, languages } from '@/shared/json/languages'
@@ -19,7 +14,6 @@ type Props = {
   selects?: ILanguage[]
   multiselect?: boolean
   onConfirm: (langs: ILanguage[]) => void
-  onClose: () => void
 }
 
 type LanguageOptionProps = {
@@ -65,14 +59,13 @@ const LanguageOption = memo(
         <Text style={styles.full_name}>{item.full_name}</Text>
       </TouchableOpacity>
     )
-  },
+  }
 )
 
 const ModalAddLanguages: FC<Props> = ({
   sheetRef,
   selects,
   multiselect = true,
-  onClose,
   onConfirm,
 }) => {
   const { t } = useTranslation()
@@ -96,9 +89,12 @@ const ModalAddLanguages: FC<Props> = ({
     }
   }
 
-  const onCancelHandler = () => {
-    onClose()
+  const resetLanguages = () => {
     setLanguagesSelects([])
+  }
+
+  const onCancelHandler = () => {
+    sheetRef.current?.dismiss()
   }
 
   useEffect(() => {
@@ -110,7 +106,7 @@ const ModalAddLanguages: FC<Props> = ({
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      onClose={onCancelHandler}
+      onDismiss={resetLanguages}
       title={t('modal.modalAddLanguages.title')}
       subtitle={
         multiselect
@@ -139,7 +135,7 @@ const ModalAddLanguages: FC<Props> = ({
             }}
             onPress={() => {
               onConfirm(languagesSelects)
-              onCancelHandler()
+              sheetRef.current?.dismiss()
             }}
           >
             {t('ui.apply')}
@@ -160,8 +156,8 @@ const ModalAddLanguages: FC<Props> = ({
             active && multiselect
               ? 'activeMulti'
               : active
-                ? 'activeSingle'
-                : 'default'
+              ? 'activeSingle'
+              : 'default'
 
           return (
             <LanguageOption

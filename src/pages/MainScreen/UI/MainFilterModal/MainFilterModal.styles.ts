@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -50,10 +49,12 @@ export const styles = StyleSheet.create((theme) => ({
   },
   bottom: {
     marginTop: theme.size.s24,
+    paddingBottom: theme.size.s30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: theme.size.s12,
+    paddingHorizontal: theme.size.s12,
   },
 
   btn: {

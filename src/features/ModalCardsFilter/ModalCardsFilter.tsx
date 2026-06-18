@@ -20,7 +20,6 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 type Props = {
   sheetRef: RefObject<BottomSheetModal | null>
-  onClose: () => void
 }
 
 type FilterOptionRowProps = {
@@ -41,10 +40,10 @@ const FilterOptionRow = memo(
         <Text style={styles.selectBtnText}>{label}</Text>
       </TouchableOpacity>
     )
-  },
+  }
 )
 
-const ModalCardsFilter: FC<Props> = ({ sheetRef, onClose }) => {
+const ModalCardsFilter: FC<Props> = ({ sheetRef }) => {
   const { setFilterCardsModal } = useActions()
   const { navigate } = useAppNavigation()
   const { t } = useTranslation()
@@ -85,11 +84,14 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onClose }) => {
     setShowVariantSelect(v)
   }
 
-  const onCancelHandler = () => {
+  const resetFilters = () => {
     setLanguages([])
     setStatusSelect('STUDY')
     setShowVariantSelect(showVariantListOptions[0])
-    onClose()
+  }
+
+  const onCancelHandler = () => {
+    sheetRef.current?.dismiss()
   }
 
   const confirm = () => {
@@ -100,13 +102,13 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onClose }) => {
     })
 
     navigate(RoutesNames.cardsRepetition)
-    onCancelHandler()
+    sheetRef.current?.dismiss()
   }
 
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      onClose={onCancelHandler}
+      onDismiss={resetFilters}
       title={t('modal.modalCardsFilter.title')}
       subtitle="Настрой режим повторения перед стартом"
       dynamicSizing={false}

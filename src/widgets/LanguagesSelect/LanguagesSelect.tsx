@@ -27,7 +27,7 @@ type Props = {
 const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
-  const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
+  const [sheetRef, presentSheet] = useBottomSheet()
 
   const selectStyles = useMemo(() => {
     return [
@@ -48,15 +48,11 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
 
   const onSelectLanguage = (lang: ILanguage) => {
     onSelect && onSelect(lang)
-    dismissSheet()
   }
 
   return (
     <>
-      <TouchableOpacity
-        style={selectStyles}
-        onPress={openModal}
-      >
+      <TouchableOpacity style={selectStyles} onPress={openModal}>
         <Text style={styles.title}>
           {language ? language.full_name : t('ui.language_selection')}
         </Text>
@@ -72,7 +68,6 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
 
       <ModalLanguagesList
         sheetRef={sheetRef}
-        onClose={dismissSheet}
         onSelect={onSelectLanguage}
         language={language}
       />

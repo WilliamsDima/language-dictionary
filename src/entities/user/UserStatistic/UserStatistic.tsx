@@ -30,8 +30,7 @@ const UserStatistic: FC<Props> = (props) => {
   const { items } = useAppSelector((store) => store.items)
 
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
-  const [languagesSheetRef, presentLanguagesSheet, dismissLanguagesSheet] =
-    useBottomSheet()
+  const [languagesSheetRef, presentLanguagesSheet] = useBottomSheet()
 
   const { data: profile, isLoading: isLoadingProfile } = useGetUserProfileQuery(
     firebaseData?.uid
@@ -135,7 +134,6 @@ const UserStatistic: FC<Props> = (props) => {
 
         <ModalAddLanguages
           sheetRef={languagesSheetRef}
-          onClose={dismissLanguagesSheet}
           onConfirm={onSelectLanguages}
           multiselect={!isNativeLanguage}
           selects={

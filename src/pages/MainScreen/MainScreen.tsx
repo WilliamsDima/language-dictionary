@@ -29,8 +29,7 @@ import MainStatusSlide from './UI/MainStatusSlide/MainStatusSlide'
 const MainScreen: FC = () => {
   const { setFilterByStatus } = useActions()
   const { filterByStatus } = useAppSelector((store) => store.items)
-  const [sheetFilterRef, presentSheetFilter, dismissSheetFilter] =
-    useBottomSheet()
+  const [sheetFilterRef, presentSheetFilter] = useBottomSheet()
   const { width } = useWindowDimensions()
   const { t } = useTranslation()
   const { theme } = useUnistyles()
@@ -163,7 +162,7 @@ const MainScreen: FC = () => {
 
       <ModalAddItem />
       <ModalDeleteItem />
-      <MainFilterModal sheetRef={sheetFilterRef} onClose={dismissSheetFilter} />
+      <MainFilterModal sheetRef={sheetFilterRef} />
     </Layout>
   )
 }

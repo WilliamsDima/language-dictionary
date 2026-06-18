@@ -15,10 +15,9 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 interface Props {
   sheetRef: RefObject<BottomSheetModal | null>
-  onClose: () => void
 }
 
-const MainFilterModal: FC<Props> = ({ sheetRef, onClose }) => {
+const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   const { setFilterMain } = useActions()
   const { t } = useTranslation()
   const { theme } = useUnistyles()
@@ -72,14 +71,13 @@ const MainFilterModal: FC<Props> = ({ sheetRef, onClose }) => {
     })
     setSortDateValue(sortByDate[1])
     setLanguages([])
-    onClose()
+    sheetRef.current?.dismiss()
     setIsLoading(false)
   }
 
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      onClose={onClose}
       title="Фильтр карточек"
       subtitle="Подбери карточки под текущую сессию"
       dynamicSizing={false}

@@ -37,7 +37,7 @@ export const styles = StyleSheet.create((theme) => ({
     lineHeight: theme.lineHeights.md,
   },
   selectedTextStyleActive: {
-    color: theme.colors.palette.white,
+    color: theme.colors.palette.black,
   },
   inputSearchStyle: {
     height: theme.size.s40,

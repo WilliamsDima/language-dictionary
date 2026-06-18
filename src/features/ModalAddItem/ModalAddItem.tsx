@@ -1,11 +1,7 @@
 import React, { FC, memo, useEffect, useRef } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalAddItem.styles'
-import {
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import Input from '@/shared/UI/Input/Input'
 import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
@@ -66,7 +62,7 @@ const ModalAddItem: FC<Props> = () => {
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      onClose={onCancelHandler}
+      onDismiss={onCancelHandler}
       title={t('modal.modalAddItem.title')}
       subtitle="Собери карточку в удобном формате и сразу отправь ее в тренировку."
       dynamicSizing={false}

@@ -45,7 +45,7 @@ const ModalUpdateApp: FC<Props> = () => {
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      onClose={onCancelHandler}
+      onDismiss={onCancelHandler}
       title="Доступно новое обновление."
       subtitle="Установи свежую версию, чтобы получить последние улучшения и исправления."
       variant="view"

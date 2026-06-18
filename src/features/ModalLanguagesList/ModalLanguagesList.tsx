@@ -1,11 +1,6 @@
 import React, { FC, memo, RefObject, useState } from 'react'
 import { styles } from './ModalLanguagesList.styles'
-import {
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import { ILanguage, languages } from '@/shared/json/languages'
 import { useTranslation } from '@/shared/i18n/types'
 import Text from '@/shared/UI/Text/Text'
@@ -14,7 +9,6 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 type Props = {
   sheetRef: RefObject<BottomSheetModal | null>
-  onClose: () => void
   onSelect?: (visible: ILanguage) => void
   language?: ILanguage
 }
@@ -58,7 +52,7 @@ const LanguageRow = memo(
         )}
       </TouchableOpacity>
     )
-  },
+  }
 )
 
 /**
@@ -67,12 +61,7 @@ const LanguageRow = memo(
  * @format
  */
 
-const ModalLanguagesList: FC<Props> = ({
-  sheetRef,
-  onClose,
-  onSelect,
-  language,
-}) => {
+const ModalLanguagesList: FC<Props> = ({ sheetRef, onSelect, language }) => {
   const { t } = useTranslation()
 
   const [isonsError, setIsonsError] = useState<number[]>([])
@@ -80,7 +69,6 @@ const ModalLanguagesList: FC<Props> = ({
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      onClose={onClose}
       title={t('ui.language_selection')}
       subtitle="Выбери язык карточки для нового набора"
       dynamicSizing={false}
@@ -102,7 +90,7 @@ const ModalLanguagesList: FC<Props> = ({
               iconIsError={iconIsError}
               onPress={() => {
                 onSelect && onSelect(it)
-                onClose()
+                sheetRef.current?.dismiss()
               }}
               onImageError={() => {
                 setIsonsError((prev) => [...prev, it.id])

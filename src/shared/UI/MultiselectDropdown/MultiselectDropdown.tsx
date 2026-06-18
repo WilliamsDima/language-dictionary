@@ -1,7 +1,9 @@
-import React, { FC, memo, useEffect, useState } from 'react'
+import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 import {
   Image,
   StyleProp,
+  TextInput,
   TextStyle,
   TouchableOpacity,
   View,
@@ -31,14 +33,17 @@ type DropdownItemProps = {
 }
 
 const DropdownItem = memo(({ active, iconUrl, label }: DropdownItemProps) => {
-  styles.useVariants({
-    active,
-  })
-
   return (
-    <View style={styles.item}>
+    <View style={[styles.item, active && styles.itemActive]}>
       {!!iconUrl && <Image source={{ uri: iconUrl }} style={styles.icon} />}
-      <Text style={styles.selectedTextStyle}>{label}</Text>
+      <Text
+        style={[
+          styles.selectedTextStyle,
+          active && styles.selectedTextStyleActive,
+        ]}
+      >
+        {label}
+      </Text>
     </View>
   )
 })
@@ -56,6 +61,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
   } = props
 
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   const [multiselectSelected, setMultiselect] = useState<string[]>([])
 
@@ -65,17 +71,38 @@ const MultiselectDropdown: FC<Props> = (props) => {
     }
   }, [selects, valueField])
 
+  const renderInputSearch = useCallback(
+    (onSearch: (text: string) => void) => {
+      return (
+        <TextInput
+          style={styles.inputSearchStyle}
+          placeholder={t('ui.search') + '...'}
+          placeholderTextColor={theme.colors.palette.dark_placeholder}
+          selectionColor={theme.colors.palette.primery}
+          autoCorrect={false}
+          onChangeText={onSearch}
+        />
+      )
+    },
+    [t, theme.colors.palette.dark_placeholder, theme.colors.palette.primery]
+  )
+
   return (
     <View>
-      {!!title && <Text style={[styles.title, classes?.title]}>{title}</Text>}
+      {!!title ? (
+        <Text style={[styles.title, classes?.title]}>{title}</Text>
+      ) : (
+        <></>
+      )}
 
       <MultiSelect
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         containerStyle={styles.containerStyle}
+        activeColor={theme.colors.palette.transparent}
+        itemContainerStyle={styles.itemContainer}
         data={options || []}
         labelField={labelField}
         valueField={valueField}
@@ -83,6 +110,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
         value={multiselectSelected}
         search
         searchPlaceholder={t('ui.search') + '...'}
+        renderInputSearch={renderInputSearch}
         onChange={(item) => {
           setMultiselect(item)
           onSelects?.(

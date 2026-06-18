@@ -1,12 +1,4 @@
-import React, {
-  FC,
-  ReactNode,
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react'
+import React, { FC, ReactNode, RefObject, useCallback, useMemo } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import {
   BottomSheetBackdrop,
@@ -22,8 +14,8 @@ import { styles } from './BottomSheet.styles'
 import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
 
 type Props = {
-  sheetRef?: RefObject<BottomSheetModal | null>
-  onClose: () => void
+  sheetRef: RefObject<BottomSheetModal | null>
+  onDismiss?: () => void
   title?: string
   subtitle?: string
   showClose?: boolean
@@ -38,7 +30,7 @@ type Props = {
 
 const BottomSheet: FC<Props> = ({
   sheetRef,
-  onClose,
+  onDismiss,
   title,
   subtitle,
   showClose = true,
@@ -49,11 +41,25 @@ const BottomSheet: FC<Props> = ({
   variant = 'scroll',
   scrollRef,
   scrollContentStyle,
+  onChange,
   ...rest
 }) => {
-  const handleDismiss = useCallback(() => {
-    onClose()
-  }, [onClose])
+  const handleChange = useCallback<
+    NonNullable<BottomSheetModalProps['onChange']>
+  >(
+    (index, position, type) => {
+      if (index === -1) {
+        onDismiss?.()
+      }
+
+      onChange?.(index, position, type)
+    },
+    [onChange, onDismiss]
+  )
+
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.dismiss()
+  }, [sheetRef])
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
@@ -83,19 +89,22 @@ const BottomSheet: FC<Props> = ({
           </View>
 
           {showClose && (
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={handleClosePress}
+            >
               <CloseIcon width={22} height={22} />
             </TouchableOpacity>
           )}
         </View>
       </View>
     )
-  }, [onClose, showClose, subtitle, title])
+  }, [handleClosePress, showClose, subtitle, title])
 
   return (
     <BottomSheetModal
       ref={sheetRef}
-      onDismiss={handleDismiss}
+      onChange={handleChange}
       stackBehavior="push"
       enablePanDownToClose
       backdropComponent={renderBackdrop}

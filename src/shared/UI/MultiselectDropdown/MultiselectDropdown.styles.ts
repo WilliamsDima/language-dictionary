@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -20,11 +19,13 @@ export const styles = StyleSheet.create((theme) => ({
 
   containerStyle: {
     backgroundColor: theme.colors.palette.surface_light,
-    borderRadius: theme.size.s16,
+    borderRadius: theme.size.s24,
     marginTop: theme.size.s8,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
     maxHeight: '80%',
+    overflow: 'hidden',
+    padding: theme.size.s8,
   },
 
   placeholderStyle: {
@@ -35,21 +36,22 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s16,
     color: theme.colors.palette.white,
     lineHeight: theme.lineHeights.md,
-    variants: {
-      active: {
-        true: {
-          color: theme.colors.palette.white,
-        },
-      },
-    },
+  },
+  selectedTextStyleActive: {
+    color: theme.colors.palette.black,
   },
   inputSearchStyle: {
-    height: theme.size.s40,
+    height: theme.size.s48,
     fontSize: theme.fontSize.s16,
+    lineHeight: theme.lineHeights.md,
+    borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
-    borderRadius: theme.size.s5,
+    borderRadius: theme.size.s14,
     color: theme.colors.palette.white,
-    backgroundColor: theme.colors.palette.gray_bg_btn,
+    backgroundColor: theme.colors.palette.surface,
+    paddingHorizontal: theme.size.s14,
+    margin: theme.size.s0,
+    marginBottom: theme.size.s10,
   },
   iconStyle: {
     width: theme.size.s20,
@@ -60,13 +62,16 @@ export const styles = StyleSheet.create((theme) => ({
     padding: theme.size.s12,
     flexDirection: 'row',
     alignItems: 'center',
-    variants: {
-      active: {
-        true: {
-          backgroundColor: theme.colors.palette.primery,
-        },
-      },
-    },
+    borderRadius: theme.size.s14,
+  },
+  itemContainer: {
+    borderRadius: theme.size.s14,
+    overflow: 'hidden',
+    marginBottom: theme.size.s6,
+    marginHorizontal: theme.size.s4,
+  },
+  itemActive: {
+    backgroundColor: theme.colors.palette.primery,
   },
 
   label: {
@@ -107,8 +112,6 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     borderRadius: theme.size.s14,
     backgroundColor: theme.colors.palette.surface_light,
-    borderWidth: theme.size.s1,
-    borderColor: theme.colors.palette.border,
     marginTop: theme.size.s8,
     marginRight: theme.size.s12,
     paddingHorizontal: theme.size.s12,

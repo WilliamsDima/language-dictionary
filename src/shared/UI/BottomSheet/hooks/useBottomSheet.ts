@@ -9,8 +9,6 @@ export const useBottomSheet = (): [
   const sheetRef = useRef<BottomSheetModal>(null)
 
   const present = useCallback(() => {
-    console.log(111)
-
     sheetRef.current?.present()
   }, [])
 
