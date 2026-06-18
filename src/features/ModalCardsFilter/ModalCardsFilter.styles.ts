@@ -2,7 +2,7 @@ import { height } from '@/shared/helpers/ScaleUtils'
 import { NativeModules } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme, rt) => ({
   wrapper: {
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'flex-end',
@@ -114,6 +114,8 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'space-between',
     marginTop: theme.size.s20,
     gap: theme.size.s12,
+    paddingHorizontal: theme.size.s12,
+    paddingBottom: rt.insets.bottom + theme.size.s12,
   },
 
   btn: {

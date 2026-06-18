@@ -6,28 +6,28 @@ export const styles = StyleSheet.create((theme) => ({
     marginBottom: theme.size.s8,
     color: theme.colors.palette.gray_text,
   },
-
+  dropdownWrapper: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
   dropdown: {
     minHeight: theme.size.s56,
     backgroundColor: theme.colors.palette.surface,
     borderRadius: theme.size.s16,
-    paddingHorizontal: theme.size.s16,
+    paddingHorizontal: theme.size.s8,
     paddingVertical: theme.size.s14,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
-
   containerStyle: {
     backgroundColor: theme.colors.palette.surface_light,
     borderRadius: theme.size.s24,
     marginTop: theme.size.s8,
-    borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
     maxHeight: '80%',
     overflow: 'hidden',
     padding: theme.size.s8,
   },
-
   placeholderStyle: {
     fontSize: theme.fontSize.s16,
     color: theme.colors.palette.dark_placeholder,
@@ -50,35 +50,33 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.palette.white,
     backgroundColor: theme.colors.palette.surface,
     paddingHorizontal: theme.size.s14,
-    margin: theme.size.s0,
     marginBottom: theme.size.s10,
   },
   iconStyle: {
     width: theme.size.s20,
     height: theme.size.s20,
   },
-
   item: {
     padding: theme.size.s12,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: theme.size.s14,
+    borderWidth: 0,
+    marginBottom: theme.size.s6,
   },
   itemContainer: {
     borderRadius: theme.size.s14,
     overflow: 'hidden',
-    marginBottom: theme.size.s6,
-    marginHorizontal: theme.size.s4,
+    borderWidth: 0,
   },
   itemActive: {
     backgroundColor: theme.colors.palette.primery,
+    borderWidth: 0,
   },
-
   label: {
     fontSize: theme.fontSize.s16,
     color: theme.colors.palette.white,
   },
-
   optionContainer: {
     position: 'absolute',
     zIndex: 100,
@@ -91,13 +89,10 @@ export const styles = StyleSheet.create((theme) => ({
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.dark_placeholder,
   },
-
   selectItem: {
-    padding: theme.size.s10,
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   icon: {
     width: theme.size.s15,
     height: theme.size.s15,
@@ -105,21 +100,32 @@ export const styles = StyleSheet.create((theme) => ({
     resizeMode: 'contain',
     marginRight: theme.size.s5,
   },
-
   selectedStyle: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flexShrink: 0,
+    minHeight: theme.size.s30,
     borderRadius: theme.size.s14,
     backgroundColor: theme.colors.palette.surface_light,
-    marginTop: theme.size.s8,
-    marginRight: theme.size.s12,
-    paddingHorizontal: theme.size.s12,
-    paddingVertical: theme.size.s8,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    marginRight: theme.size.s8,
+    padding: theme.size.s6,
+  },
+  selectedRow: {
+    position: 'absolute',
+    left: theme.size.s8,
+    right: theme.size.s36,
+    top: theme.size.s8,
+    bottom: theme.size.s8,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   textSelectedStyle: {
-    fontSize: theme.fontSize.s14,
+    fontSize: theme.fontSize.s16,
     color: theme.colors.palette.white,
-    lineHeight: theme.lineHeights.sm,
+    lineHeight: theme.lineHeights.md,
   },
 }))

@@ -23,13 +23,99 @@ const showVariantsList: ShowVariantList[] = [
   },
 ]
 
+const mockAppLanguages: AppLanguagesType = {
+  ru: {
+    id: 1,
+    name: 'Russian',
+    nativeName: 'Русский',
+    code: 'ru',
+    emoji: 'ru',
+    ruName: 'Русский',
+  },
+  en: {
+    id: 2,
+    name: 'English',
+    nativeName: 'English',
+    code: 'en',
+    emoji: 'gb',
+    ruName: 'Английский',
+  },
+  de: {
+    id: 3,
+    name: 'German',
+    nativeName: 'Deutsch',
+    code: 'de',
+    emoji: 'de',
+    ruName: 'Немецкий',
+  },
+  fr: {
+    id: 4,
+    name: 'French',
+    nativeName: 'Français',
+    code: 'fr',
+    emoji: 'fr',
+    ruName: 'Французский',
+  },
+  es: {
+    id: 5,
+    name: 'Spanish',
+    nativeName: 'Español',
+    code: 'es',
+    emoji: 'es',
+    ruName: 'Испанский',
+  },
+  it: {
+    id: 6,
+    name: 'Italian',
+    nativeName: 'Italiano',
+    code: 'it',
+    emoji: 'it',
+    ruName: 'Итальянский',
+  },
+  pt: {
+    id: 7,
+    name: 'Portuguese',
+    nativeName: 'Português',
+    code: 'pt',
+    emoji: 'pt',
+    ruName: 'Португальский',
+  },
+  pl: {
+    id: 8,
+    name: 'Polish',
+    nativeName: 'Polski',
+    code: 'pl',
+    emoji: 'pl',
+    ruName: 'Польский',
+  },
+  tr: {
+    id: 9,
+    name: 'Turkish',
+    nativeName: 'Türkçe',
+    code: 'tr',
+    emoji: 'tr',
+    ruName: 'Турецкий',
+  },
+  ja: {
+    id: 10,
+    name: 'Japanese',
+    nativeName: '日本語',
+    code: 'ja',
+    emoji: 'jp',
+    ruName: 'Японский',
+  },
+  zh: {
+    id: 11,
+    name: 'Chinese',
+    nativeName: '中文',
+    code: 'zh',
+    emoji: 'cn',
+    ruName: 'Китайский',
+  },
+}
+
 export const mockAppLanguage: AppLanguageType = {
-  id: 1,
-  name: 'Russian',
-  nativeName: 'Русский',
-  code: 'ru',
-  emoji: 'ru',
-  ruName: 'Русский',
+  ...mockAppLanguages.ru,
 }
 
 export const mockAppData: IAplication = {
@@ -49,10 +135,18 @@ export const mockAppData: IAplication = {
   showVKAuth: false,
   translations: {
     ru: 'local',
+    en: 'local',
+    de: 'local',
+    fr: 'local',
+    es: 'local',
+    it: 'local',
+    pt: 'local',
+    pl: 'local',
+    tr: 'local',
+    ja: 'local',
+    zh: 'local',
   } as IAplication['translations'],
-  appLanguages: {
-    ru: mockAppLanguage,
-  } as AppLanguagesType,
+  appLanguages: mockAppLanguages,
 }
 
 export const mockFirebaseData: IFirebaseData = {

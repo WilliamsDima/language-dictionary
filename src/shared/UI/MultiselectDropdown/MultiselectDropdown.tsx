@@ -1,13 +1,13 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useUnistyles } from 'react-native-unistyles'
-import {
-  Image,
-  StyleProp,
-  TextInput,
-  TextStyle,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, StyleProp, TextInput, TextStyle, View } from 'react-native'
 import Text from '../Text/Text'
 import { MultiSelect } from 'react-native-element-dropdown'
 import { styles } from './MultiselectDropdown.styles'
@@ -65,6 +65,18 @@ const MultiselectDropdown: FC<Props> = (props) => {
 
   const [multiselectSelected, setMultiselect] = useState<string[]>([])
 
+  const selectedOptions = useMemo(() => {
+    if (!options?.length || !multiselectSelected.length) {
+      return []
+    }
+
+    return multiselectSelected
+      .map((selectedValue) =>
+        options.find((it) => (it[valueField] as string) === selectedValue)
+      )
+      .filter(Boolean)
+  }, [multiselectSelected, options, valueField])
+
   useEffect(() => {
     if (selects) {
       setMultiselect(selects.map((it) => it[valueField] as string))
@@ -95,45 +107,63 @@ const MultiselectDropdown: FC<Props> = (props) => {
         <></>
       )}
 
-      <MultiSelect
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={styles.iconStyle}
-        containerStyle={styles.containerStyle}
-        activeColor={theme.colors.palette.transparent}
-        itemContainerStyle={styles.itemContainer}
-        data={options || []}
-        labelField={labelField}
-        valueField={valueField}
-        placeholder={placeholder || t('ui.select_placeholder')}
-        value={multiselectSelected}
-        search
-        searchPlaceholder={t('ui.search') + '...'}
-        renderInputSearch={renderInputSearch}
-        onChange={(item) => {
-          setMultiselect(item)
-          onSelects?.(
-            options?.filter((it) => item.includes(it[valueField] as any)) || []
-          )
-        }}
-        renderItem={(item, active) => {
-          return (
-            <DropdownItem
-              active={!!active}
-              iconUrl={item.iconUrl}
-              label={item[labelField]}
-            />
-          )
-        }}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item[labelField]}</Text>
-            </View>
-          </TouchableOpacity>
+      <View style={styles.dropdownWrapper}>
+        <MultiSelect
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          iconStyle={styles.iconStyle}
+          containerStyle={styles.containerStyle}
+          activeColor={theme.colors.palette.transparent}
+          itemContainerStyle={styles.itemContainer}
+          data={options || []}
+          labelField={labelField}
+          valueField={valueField}
+          placeholder={
+            selectedOptions.length
+              ? ''
+              : placeholder || t('ui.select_placeholder')
+          }
+          value={multiselectSelected}
+          visibleSelectedItem={false}
+          search
+          searchPlaceholder={t('ui.search') + '...'}
+          renderInputSearch={renderInputSearch}
+          onChange={(item) => {
+            setMultiselect(item)
+            onSelects?.(
+              options?.filter((it) => item.includes(it[valueField] as any)) ||
+                []
+            )
+          }}
+          renderItem={(item, active) => {
+            return (
+              <DropdownItem
+                active={!!active}
+                iconUrl={item.iconUrl}
+                label={item[labelField]}
+              />
+            )
+          }}
+        />
+
+        {selectedOptions.length ? (
+          <View style={styles.selectedRow} pointerEvents="none">
+            {selectedOptions.map((item) => (
+              <View
+                key={item[valueField] as string}
+                style={styles.selectedStyle}
+              >
+                <Text numberOfLines={1} style={styles.textSelectedStyle}>
+                  {item[labelField]}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ) : (
+          <></>
         )}
-      />
+      </View>
     </View>
   )
 }
