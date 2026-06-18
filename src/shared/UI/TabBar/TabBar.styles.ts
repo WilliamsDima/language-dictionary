@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
+  wrapper: {
+    position: 'relative',
+  },
   containerStyle: {
     backgroundColor: theme.colors.palette.transparent,
   },
+  practiceContainer: {},
   tab: {
     position: 'relative',
     zIndex: 10,

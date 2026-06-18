@@ -51,6 +51,9 @@
   },
   "profileScreen": {
     "start_repeating": "начать повторение",
+    "practice_cta": "Практиковаться",
+    "practice_badge": "Быстрый старт",
+    "practice_hint": "Выбери карточки и начни тренировку",
     "show_year_result": "Посмотреть итоги {{date}} года 🎉",
     "logout": "выйти из аккаунта",
     "delete_account": "удалить аккаунт",

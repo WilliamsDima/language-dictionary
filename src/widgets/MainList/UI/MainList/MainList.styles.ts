@@ -70,7 +70,7 @@ export const styles = StyleSheet.create((theme) => ({
   scrollToTopBtn: {
     position: 'absolute',
     zIndex: 100,
-    bottom: theme.size.s0,
+    bottom: theme.size.s10,
     right: theme.size.s0,
     height: theme.size.s42,
     width: theme.size.s42,

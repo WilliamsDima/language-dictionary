@@ -7,11 +7,9 @@ import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
 import { isShowModalYearResult } from '@/shared/constants/app'
 import { useActions } from '@/shared/hooks/useActions'
 import { useTranslation } from '@/shared/i18n/types'
-import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 import { useGetItems } from '@/shared/hooks/useGetItems'
 import Text from '@/shared/UI/Text/Text'
 import { dateFormat } from '@/shared/helpers/dateFormat'
@@ -25,12 +23,9 @@ const ProfileScreen: FC = () => {
   const { t } = useTranslation()
   const { setShowYearResult } = useActions()
   const { firebaseData } = useAppSelector((store) => store.user)
-  const { items } = useAppSelector((store) => store.items)
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
-  const [cardsSheetRef, presentCardsSheet, onDismissCardsSheet] =
-    useBottomSheet()
   useGetItems()
 
   const achievementsPreview = useMemo(() => {
@@ -73,10 +68,6 @@ const ProfileScreen: FC = () => {
   const onShowModalYearResult = useCallback(() => {
     setShowYearResult(true)
   }, [setShowYearResult])
-
-  const startRepeat = useCallback(() => {
-    presentCardsSheet()
-  }, [presentCardsSheet])
 
   const openAchievements = useCallback(() => {
     navigate(RoutesNames.achievements)
@@ -147,15 +138,6 @@ const ProfileScreen: FC = () => {
           </ScrollView>
         </View>
 
-        {!!Object.keys(items)?.length && (
-          <Button
-            classes={{ btn: styles.repeatBtn, textBtn: styles.repeatText }}
-            onPress={startRepeat}
-          >
-            {t('profileScreen.start_repeating')}
-          </Button>
-        )}
-
         {isShowModalYearResult && (
           <Button
             classes={{ btn: styles.repeatBtn, textBtn: styles.repeatText }}
@@ -184,11 +166,6 @@ const ProfileScreen: FC = () => {
       </View>
       <ModalDeleteAccaunt visible={modalDelete} setVisible={setModalDelete} />
       <ModalLogout visible={modalLogout} setVisible={setModalLogout} />
-
-      <ModalCardsFilter
-        sheetRef={cardsSheetRef}
-        onDismiss={onDismissCardsSheet}
-      />
     </Layout>
   )
 }
