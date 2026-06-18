@@ -103,9 +103,6 @@ export const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fonts.bold,
   },
   descriptionBlock: {
-    marginTop: theme.size.s10,
-    borderTopWidth: theme.size.s1,
-    borderTopColor: theme.colors.palette.border,
     paddingTop: theme.size.s10,
   },
   description: {

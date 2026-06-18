@@ -61,13 +61,9 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.palette.white,
     fontSize: theme.fontSize.s14,
     fontFamily: 'Mulish-Bold',
-    variants: {
-      isActive: {
-        true: {
-          color: theme.colors.palette.primery,
-        },
-      },
-    },
+  },
+  nameActive: {
+    color: theme.colors.palette.primery,
   },
   code: {
     color: theme.colors.palette.gray_text,
@@ -93,19 +89,13 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: theme.colors.palette.surface,
-    variants: {
-      isLast: {
-        true: {
-          marginBottom: theme.size.s20,
-        },
-      },
-      isActive: {
-        true: {
-          borderColor: theme.colors.palette.success_alpha_36,
-          backgroundColor: theme.colors.palette.success_alpha_12,
-        },
-      },
-    },
+  },
+  itemActive: {
+    borderColor: theme.colors.palette.success_alpha_36,
+    backgroundColor: theme.colors.palette.success_alpha_12,
+  },
+  itemLast: {
+    marginBottom: theme.size.s20,
   },
   icon: {
     width: theme.size.s28,

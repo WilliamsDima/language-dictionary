@@ -1,4 +1,4 @@
-import React, { FC, memo, RefObject, useState } from 'react'
+import React, { FC, memo, RefObject, useMemo, useState } from 'react'
 import { styles } from './ModalLanguagesList.styles'
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import { ILanguage, languages } from '@/shared/json/languages'
@@ -31,15 +31,22 @@ const LanguageRow = memo(
     onPress,
     onImageError,
   }: LanguageRowProps) => {
-    styles.useVariants({
-      isActive,
-      isLast,
-    })
+    const itemStyles = useMemo(() => {
+      return [
+        styles.item,
+        isActive ? styles.itemActive : null,
+        isLast ? styles.itemLast : null,
+      ]
+    }, [isActive, isLast])
+
+    const nameStyles = useMemo(() => {
+      return [styles.name, isActive ? styles.nameActive : null]
+    }, [isActive])
 
     return (
-      <TouchableOpacity style={styles.item} onPress={onPress}>
+      <TouchableOpacity style={itemStyles} onPress={onPress}>
         <View style={styles.languageInfo}>
-          <Text style={styles.name}>{item.full_name}</Text>
+          <Text style={nameStyles}>{item.full_name}</Text>
           <Text style={styles.code}>{item.short_name.toUpperCase()}</Text>
         </View>
 

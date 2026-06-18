@@ -1,12 +1,9 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   inputs: {
     gap: theme.size.s10,
     paddingHorizontal: theme.size.s12,
-    borderBottomWidth: theme.size.s1,
-    borderBottomColor: theme.colors.palette.border,
     paddingVertical: theme.size.s14,
     backgroundColor: theme.colors.palette.white_alpha_015,
     borderRadius: theme.size.s18,
