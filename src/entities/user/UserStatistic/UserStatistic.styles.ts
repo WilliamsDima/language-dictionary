@@ -4,32 +4,116 @@ import { StyleSheet } from 'react-native-unistyles'
 export const styles = StyleSheet.create((theme) => ({
   container: {
     marginTop: theme.size.s20,
+  },
+
+  title: {
+    fontSize: theme.fontSize.s18,
+    fontFamily: theme.fonts.extraBold,
+    color: theme.colors.palette.white,
+    marginBottom: theme.size.s12,
+  },
+
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.size.s10,
+  },
+
+  statCard: {
+    width: '48.5%',
+    minHeight: theme.size.s110,
+    padding: theme.size.s14,
+    borderRadius: theme.size.s20,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_06,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  statCardGlow: {
+    position: 'absolute',
+    top: -theme.size.s32,
+    right: -theme.size.s12,
+    width: theme.size.s84,
+    height: theme.size.s84,
+    borderRadius: theme.size.s84,
+    backgroundColor: theme.colors.palette.white_alpha_06,
+  },
+  statCardTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statCardDot: {
+    width: theme.size.s8,
+    height: theme.size.s8,
+    borderRadius: theme.size.s8,
+    backgroundColor: theme.colors.palette.white,
+    opacity: theme.opacity.o60,
+  },
+  statCardCaption: {
+    marginLeft: theme.size.s6,
+    fontSize: theme.fontSize.s10,
+    letterSpacing: theme.letterSpacing.s08,
+    textTransform: 'uppercase',
+    color: theme.colors.palette.white,
+    fontFamily: theme.fonts.bold,
+  },
+  statCardValue: {
+    marginTop: theme.size.s14,
+    fontSize: theme.fontSize.s24,
+    fontFamily: theme.fonts.extraBold,
+    color: theme.colors.palette.black,
+  },
+  statCardLabel: {
+    marginTop: theme.size.s10,
+    fontSize: theme.fontSize.s13,
+    lineHeight: theme.lineHeights.sm,
+    color: theme.colors.palette.black,
+  },
+
+  languagesSection: {
+    marginTop: theme.size.s10,
+    gap: theme.size.s10,
+  },
+  languageCard: {
     padding: theme.size.s14,
     borderRadius: theme.size.s20,
     backgroundColor: theme.colors.palette.card_alpha_90,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
-
-  statistic: {
-    fontSize: theme.fontSize.s13,
-    color: theme.colors.palette.primery,
-    textTransform: 'uppercase',
-    fontFamily: 'Mulish-Bold',
-    marginBottom: theme.size.s8,
-  },
-
-  item: {
-    marginVertical: theme.size.s4,
+  languageCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: theme.size.s6,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.palette.white_alpha_05,
+    justifyContent: 'space-between',
   },
-  itemText: {
-    fontSize: theme.fontSize.s13,
-    color: theme.colors.palette.white,
+  languageCardTitle: {
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.gray_text,
+    fontFamily: theme.fonts.bold,
+  },
+  languageCardContent: {
+    marginTop: theme.size.s12,
+  },
+  languagesList: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: theme.size.s8,
+  },
+  emptyText: {
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.primery,
+  },
+  emptyTextDanger: {
+    color: theme.colors.palette.red,
+  },
+  editBtn: {
+    width: theme.size.s32,
+    height: theme.size.s32,
+    borderRadius: theme.size.s12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.palette.white_alpha_03,
   },
 
   loader: {

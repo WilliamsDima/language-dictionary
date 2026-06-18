@@ -16,6 +16,7 @@ export type SettingsStackParams = {
 
 export type ProfileStackParams = {
   [RoutesNames.profile]: undefined
+  [RoutesNames.achievements]: undefined
   [RoutesNames.cardsRepetition]: undefined
 }
 

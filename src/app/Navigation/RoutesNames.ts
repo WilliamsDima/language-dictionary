@@ -8,6 +8,7 @@ export const RoutesNames = {
   settings: 'settings',
   profileStack: 'profileStack',
   profile: 'profile',
+  achievements: 'achievements',
   cardsRepetition: 'cardsRepetition',
 } as const
 

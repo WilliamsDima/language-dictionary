@@ -5,6 +5,7 @@ import { RoutesNames } from '../RoutesNames'
 import ProfileScreen from '@/pages/ProfileScreen/ProfileScreen'
 import CardsRepetition from '@/pages/CardsRepetition/CardsRepetition'
 import type { ProfileStackParams } from '../params'
+import AchievementsScreen from '@/pages/AchievementsScreen/AchievementsScreen'
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>()
 
@@ -15,6 +16,15 @@ const ProfileTabRoutes = () => {
         options={stackScreenOptions}
         name={RoutesNames.profile}
         component={ProfileScreen}
+      />
+
+      <ProfileStack.Screen
+        options={{
+          ...stackScreenOptions,
+          title: 'Достижения',
+        }}
+        name={RoutesNames.achievements}
+        component={AchievementsScreen}
       />
 
       <ProfileStack.Screen
