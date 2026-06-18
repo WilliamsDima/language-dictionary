@@ -30,6 +30,7 @@ import { useUserActivity } from '@/shared/hooks/useUserActivity'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useTranslation } from '@/shared/i18n/types'
 import { declOfNum } from '@/shared/helpers/textFormat'
+import { dateFormat } from '@/shared/helpers/dateFormat'
 
 type Props = {
   item: IItem
@@ -70,8 +71,8 @@ const MainItem: FC<Props> = ({ item }) => {
   }, [item.items.length, t])
 
   const dateLabel = useMemo(() => {
-    return item.date ? new Date(item.id).toLocaleDateString() : ''
-  }, [item.date, item.id])
+    return dateFormat({ date: item.date, type: 'FULL' }) || ''
+  }, [item.date])
 
   const animatedCardStyle = useMemo(() => {
     return {
@@ -91,23 +92,6 @@ const MainItem: FC<Props> = ({ item }) => {
     theme.colors.palette.item_ready,
     theme.colors.palette.item_study,
   ])
-
-  const animatedTranslateGlowStyle = useMemo(() => {
-    return {
-      opacity: translateGlow.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, theme.opacity.o100],
-      }),
-      transform: [
-        {
-          scale: translateGlow.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0.92, 1.06],
-          }),
-        },
-      ],
-    }
-  }, [theme.opacity.o100, translateGlow])
 
   useEffect(() => {
     if (hiddenTranslate) {
@@ -227,23 +211,6 @@ const MainItem: FC<Props> = ({ item }) => {
 
         <View style={styles.content}>
           <WordItems translateActive={!hiddenTranslate} item={item} />
-
-          <View style={styles.translateAction}>
-            {hiddenTranslate && (
-              <Animated.View
-                pointerEvents="none"
-                style={[styles.translateGlow, animatedTranslateGlowStyle]}
-              />
-            )}
-
-            <TouchableOpacity
-              style={styles.btnTranslate}
-              onPress={toggleTranslate}
-              activeOpacity={0.9}
-            >
-              <TranslateIcon width={25} height={25} />
-            </TouchableOpacity>
-          </View>
         </View>
 
         {hiddenTranslate && (

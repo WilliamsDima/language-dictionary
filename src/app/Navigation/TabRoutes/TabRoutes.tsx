@@ -9,7 +9,6 @@ import { RoutesNames, TabsKeys } from '../RoutesNames'
 import TabBar from '@/shared/UI/TabBar/TabBar'
 import SettingsTabRoutes from '../TabStacks/SettingsTabRoutes'
 import ProfileTabRoutes from '../TabStacks/ProfileTabRoutes'
-import { useTimeTracker } from '@/shared/hooks/useTimeTracker'
 import type { TabParamsList } from '../params'
 import { tabScreenOptions } from '../config'
 import VariableSafeAreaView from '@/shared/UI/VariableSafeAreaView/VariableSafeAreaView'
@@ -25,7 +24,6 @@ const Tab = createBottomTabNavigator<TabParamsList>()
  */
 
 const HomeTabsScreen = () => {
-  useTimeTracker()
   const [activeTab, setActiveTab] = useState<TabsKeys>(RoutesNames.mainStack)
 
   const renderTabBar = useCallback((props: BottomTabBarProps) => {

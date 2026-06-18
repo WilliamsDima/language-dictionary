@@ -87,32 +87,6 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'space-between',
     gap: theme.size.s12,
   },
-  translateAction: {
-    position: 'relative',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-  btnTranslate: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: theme.size.s50,
-    height: theme.size.s50,
-    gap: theme.size.s6,
-    borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.palette.surface_light,
-    borderWidth: theme.size.s1,
-    borderColor: theme.colors.palette.success_alpha_22,
-    zIndex: 1,
-  },
-  translateGlow: {
-    position: 'absolute',
-    top: theme.size.s4,
-    right: theme.size.s6,
-    left: theme.size.s6,
-    bottom: theme.size.s4,
-    borderRadius: theme.size.s18,
-    backgroundColor: theme.colors.palette.success_alpha_16,
-  },
 
   tapHint: {
     marginTop: theme.size.s10,

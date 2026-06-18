@@ -27,6 +27,11 @@ describe('dateFormat', () => {
     expect(result).toBe('05.10.2023')
   })
 
+  it('должен корректно обработать дату как строку', () => {
+    const result = dateFormat({ date: '2023-10-05T00:00:00.000Z', type: 'FULL' })
+    expect(result).toBe('05.10.2023')
+  })
+
   it('должен возвращать undefined для некорректной даты', () => {
     const result = dateFormat({ date: 'invalid-date' as any, type: 'FULL' })
     expect(result).toBeUndefined()

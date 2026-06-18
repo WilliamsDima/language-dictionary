@@ -12,6 +12,7 @@ import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
 import { useTranslation } from '@/shared/i18n/types'
+import { dateFormat } from '@/shared/helpers/dateFormat'
 
 const SaveData: FC = () => {
   const { t } = useTranslation()
@@ -49,9 +50,13 @@ const SaveData: FC = () => {
 
   const dateSaveText = useMemo(() => {
     if (lastSaveData) {
-      return `${new Date(lastSaveData).toLocaleDateString()} ${new Date(
-        lastSaveData
-      ).toLocaleTimeString()}`
+      const formattedDate = dateFormat({ date: lastSaveData, type: 'FULL' })
+
+      if (!formattedDate) {
+        return ''
+      }
+
+      return `${formattedDate} ${new Date(lastSaveData).toLocaleTimeString()}`
     }
     return ''
   }, [lastSaveData])
