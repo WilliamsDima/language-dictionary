@@ -33,7 +33,7 @@ const MainScreen: FC = () => {
   const { width } = useWindowDimensions()
   const { t } = useTranslation()
   const { theme } = useUnistyles()
-  const sliderWidth = width - theme.layout.appPadding * 2
+  const sliderWidth = width
 
   const tabs = useMemo(() => tabsWords(t, theme), [t, theme])
   const sliderRef = useRef<FlatList<TabWord>>(null)

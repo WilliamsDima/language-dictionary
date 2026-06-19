@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   screen: {
-    paddingHorizontal: theme.layout.appPadding,
     position: 'relative',
     justifyContent: 'flex-start',
     paddingTop: theme.size.s12,
@@ -17,10 +16,12 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: theme.layout.appPadding,
     marginBottom: theme.size.s8,
   },
   tabsWrapper: {
     width: '100%',
+    paddingHorizontal: theme.layout.appPadding,
     marginBottom: theme.size.s10,
   },
   listSection: {
@@ -31,5 +32,6 @@ export const styles = StyleSheet.create((theme) => ({
   slide: {
     flex: 1,
     minHeight: theme.size.s0,
+    paddingHorizontal: theme.layout.appPadding,
   },
 }))
