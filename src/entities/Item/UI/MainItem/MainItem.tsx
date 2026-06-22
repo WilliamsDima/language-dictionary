@@ -1,26 +1,11 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import {
-  ActivityIndicator,
-  Animated,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import React, { FC, memo, useCallback, useMemo, useState } from 'react'
+import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './MainItem.styles'
 import Text from '@/shared/UI/Text/Text'
 import { IItem } from '../../model/item'
 import DeleteIcon from '@/assets/icons/UI/trash-red-64.svg'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
-import TranslateIcon from '@/assets/icons/UI/translate-primery-64.svg'
 import DotsVerticalIcon from '@/assets/icons/UI/dots-vertical-white-64.svg'
 import { useExpandAnim } from '@/shared/hooks/useExpandAnim'
 import WordItems from '../WordItems/WordItems'
@@ -31,6 +16,13 @@ import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useTranslation } from '@/shared/i18n/types'
 import { declOfNum } from '@/shared/helpers/textFormat'
 import { dateFormat } from '@/shared/helpers/dateFormat'
+import GyroView from '@/shared/UI/GyroView/GyroView'
+import Animated, {
+  cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 
 type Props = {
   item: IItem
@@ -47,11 +39,7 @@ const MainItem: FC<Props> = ({ item }) => {
   const { hidden: hiddenTranslate, toggle: toggleTranslate } = useExpandAnim()
 
   const [isLoading, setIsLoading] = useState(false)
-  const pressScale = useRef(new Animated.Value(1)).current
-  const translateGlow = useRef(
-    new Animated.Value(hiddenTranslate ? 1 : 0)
-  ).current
-  const translateGlowLoopRef = useRef<Animated.CompositeAnimation | null>(null)
+  const pressScale = useSharedValue(1)
 
   styles.useVariants({
     isDeleteActive: item.id === modalDeleteItem?.id,
@@ -74,12 +62,6 @@ const MainItem: FC<Props> = ({ item }) => {
     return dateFormat({ date: item.date, type: 'FULL' }) || ''
   }, [item.date])
 
-  const animatedCardStyle = useMemo(() => {
-    return {
-      transform: [{ scale: pressScale }],
-    }
-  }, [pressScale])
-
   const statusDotStyle = useMemo(() => {
     return {
       backgroundColor:
@@ -93,54 +75,28 @@ const MainItem: FC<Props> = ({ item }) => {
     theme.colors.palette.item_study,
   ])
 
-  useEffect(() => {
-    if (hiddenTranslate) {
-      translateGlowLoopRef.current?.stop()
-      translateGlowLoopRef.current = Animated.loop(
-        Animated.sequence([
-          Animated.timing(translateGlow, {
-            toValue: 1,
-            duration: 1200,
-            useNativeDriver: true,
-          }),
-          Animated.timing(translateGlow, {
-            toValue: 0.35,
-            duration: 1200,
-            useNativeDriver: true,
-          }),
-        ])
-      )
-      translateGlowLoopRef.current.start()
-    } else {
-      translateGlowLoopRef.current?.stop()
-      Animated.timing(translateGlow, {
-        toValue: 0,
-        duration: 180,
-        useNativeDriver: true,
-      }).start()
+  const pressAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: pressScale.value }],
     }
-
-    return () => {
-      translateGlowLoopRef.current?.stop()
-    }
-  }, [hiddenTranslate, translateGlow])
+  })
 
   const animatePressIn = useCallback(() => {
-    Animated.spring(pressScale, {
-      toValue: 0.985,
-      useNativeDriver: true,
-      speed: 18,
-      bounciness: 4,
-    }).start()
+    cancelAnimation(pressScale)
+    pressScale.value = withSpring(0.985, {
+      damping: 16,
+      stiffness: 260,
+      mass: 0.8,
+    })
   }, [pressScale])
 
   const animatePressOut = useCallback(() => {
-    Animated.spring(pressScale, {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 18,
-      bounciness: 6,
-    }).start()
+    cancelAnimation(pressScale)
+    pressScale.value = withSpring(1, {
+      damping: 14,
+      stiffness: 220,
+      mass: 0.8,
+    })
   }, [pressScale])
 
   const editItem = useCallback(() => {
@@ -176,102 +132,111 @@ const MainItem: FC<Props> = ({ item }) => {
   }, [toggleFooter])
 
   return (
-    <Animated.View style={animatedCardStyle}>
-      <TouchableOpacity
-        style={styles.item}
-        activeOpacity={1}
-        onPress={onCardPress}
-        onPressIn={animatePressIn}
-        onPressOut={animatePressOut}
-      >
-        <View style={[styles.statusOrb, statusDotStyle]} />
+    <GyroView>
+      <Animated.View style={pressAnimatedStyle}>
+        <TouchableOpacity
+          style={styles.item}
+          activeOpacity={1}
+          onPress={onCardPress}
+          onPressIn={animatePressIn}
+          onPressOut={animatePressOut}
+        >
+          <View style={[styles.statusOrb, statusDotStyle]} />
 
-        <View style={styles.header}>
-          <View style={styles.headerMain}>
-            {!!dateLabel ? <Text style={styles.date}>{dateLabel}</Text> : <></>}
-
-            <View style={styles.metaGroup}>
-              <View style={styles.wordsBadge}>
-                <Text style={styles.wordsBadgeText}>
-                  {item.items.length} {wordsLabel}
-                </Text>
-              </View>
-
-              {!!item.language.country && (
-                <View style={styles.flagWrapper}>
-                  <Image
-                    source={{ uri: item.language.country.flag }}
-                    style={styles.flag}
-                  />
-                </View>
+          <View style={styles.header}>
+            <View style={styles.headerMain}>
+              {!!dateLabel ? (
+                <Text style={styles.date}>{dateLabel}</Text>
+              ) : (
+                <></>
               )}
+
+              <View style={styles.metaGroup}>
+                <View style={styles.wordsBadge}>
+                  <Text style={styles.wordsBadgeText}>
+                    {item.items.length} {wordsLabel}
+                  </Text>
+                </View>
+
+                {!!item.language.country && (
+                  <View style={styles.flagWrapper}>
+                    <Image
+                      source={{ uri: item.language.country.flag }}
+                      style={styles.flag}
+                    />
+                  </View>
+                )}
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.content}>
-          <WordItems translateActive={!hiddenTranslate} item={item} />
-        </View>
+          <View style={styles.content}>
+            <WordItems translateActive={!hiddenTranslate} item={item} />
+          </View>
 
-        {hiddenTranslate && (
-          <View style={styles.tapHint}>
-            <Text style={styles.tapHintText}>
-              Нажми на карточку, чтобы открыть перевод
+          {hiddenTranslate && (
+            <View style={styles.tapHint}>
+              <Text style={styles.tapHintText}>
+                Нажми на карточку, чтобы открыть перевод
+              </Text>
+            </View>
+          )}
+
+          {!!item.description && !hiddenTranslate && (
+            <View style={styles.descriptionBlock}>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+          )}
+
+          <TouchableOpacity
+            style={styles.showFooterBtn}
+            onPress={onFooterPress}
+          >
+            <Text style={styles.showFooterText}>
+              {hiddenFooter ? 'Действия' : 'Свернуть'}
             </Text>
-          </View>
-        )}
+            <DotsVerticalIcon width={10} height={10} />
+          </TouchableOpacity>
 
-        {!!item.description && !hiddenTranslate && (
-          <View style={styles.descriptionBlock}>
-            <Text style={styles.description}>{item.description}</Text>
-          </View>
-        )}
+          {!hiddenFooter && (
+            <View style={styles.footer}>
+              <TouchableOpacity style={styles.footerAction} onPress={editItem}>
+                <EditIcon width={25} height={25} />
+              </TouchableOpacity>
 
-        <TouchableOpacity style={styles.showFooterBtn} onPress={onFooterPress}>
-          <Text style={styles.showFooterText}>
-            {hiddenFooter ? 'Действия' : 'Свернуть'}
-          </Text>
-          <DotsVerticalIcon width={10} height={10} />
-        </TouchableOpacity>
+              {isLoading ? (
+                <ActivityIndicator
+                  size={'small'}
+                  color={
+                    item.status === 'READY'
+                      ? theme.colors.palette.item_ready
+                      : theme.colors.palette.item_study
+                  }
+                />
+              ) : (
+                <TouchableOpacity
+                  style={styles.footerAction}
+                  onPress={updateStatus}
+                >
+                  <Text style={styles.statusText}>
+                    {item.status === 'READY'
+                      ? t('cards.study')
+                      : t('cards.studied')}
+                  </Text>
+                </TouchableOpacity>
+              )}
 
-        {!hiddenFooter && (
-          <View style={styles.footer}>
-            <TouchableOpacity style={styles.footerAction} onPress={editItem}>
-              <EditIcon width={25} height={25} />
-            </TouchableOpacity>
-
-            {isLoading ? (
-              <ActivityIndicator
-                size={'small'}
-                color={
-                  item.status === 'READY'
-                    ? theme.colors.palette.item_ready
-                    : theme.colors.palette.item_study
-                }
-              />
-            ) : (
               <TouchableOpacity
                 style={styles.footerAction}
-                onPress={updateStatus}
+                onPress={deleteItemHandler}
               >
-                <Text style={styles.statusText}>
-                  {item.status === 'READY'
-                    ? t('cards.study')
-                    : t('cards.studied')}
-                </Text>
+                <DeleteIcon width={25} height={25} />
               </TouchableOpacity>
-            )}
-
-            <TouchableOpacity
-              style={styles.footerAction}
-              onPress={deleteItemHandler}
-            >
-              <DeleteIcon width={25} height={25} />
-            </TouchableOpacity>
-          </View>
-        )}
-      </TouchableOpacity>
-    </Animated.View>
+            </View>
+          )}
+        </TouchableOpacity>
+      </Animated.View>
+    </GyroView>
   )
 }
 
