@@ -18,7 +18,7 @@ import Button from '@/shared/UI/Button/Button'
 
 type Props = {
   sheetRef: RefObject<BottomSheetModal | null>
-  onDismiss: () => void
+  onDismiss?: () => void
   selects?: ILanguage[]
   multiselect?: boolean
   title?: string
@@ -118,7 +118,7 @@ const ModalLanguagesList: FC<Props> = ({
       if (closeOnSelect && !multiselect) {
         setSelectedLanguages([language])
         onConfirm([language])
-        onDismiss()
+        onDismiss?.()
         return
       }
 
@@ -137,13 +137,13 @@ const ModalLanguagesList: FC<Props> = ({
         return [...prev, language]
       })
     },
-    [closeOnSelect, multiselect, onConfirm]
+    [closeOnSelect, multiselect, onConfirm, onDismiss]
   )
 
   const onApply = useCallback(() => {
     onConfirm(selectedLanguages)
-    onDismiss()
-  }, [onConfirm, selectedLanguages, sheetRef])
+    onDismiss?.()
+  }, [onConfirm, onDismiss, selectedLanguages])
 
   const footer = withFooter ? (
     <View style={styles.footer}>

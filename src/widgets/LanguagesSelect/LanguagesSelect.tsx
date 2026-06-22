@@ -27,7 +27,7 @@ type Props = {
 const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
-  const [sheetRef, presentSheet] = useBottomSheet()
+  const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
 
   const selectStyles = useMemo(() => {
     return [
@@ -42,13 +42,16 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
     ]
   }, [classes?.select, error, theme.colors.palette.red])
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     presentSheet()
-  }
+  }, [presentSheet])
 
-  const onSelectLanguage = (lang: ILanguage) => {
-    onSelect && onSelect(lang)
-  }
+  const onSelectLanguage = useCallback(
+    (lang: ILanguage) => {
+      onSelect?.(lang)
+    },
+    [onSelect]
+  )
 
   const onConfirmLanguage = useCallback(
     (langs: ILanguage[]) => {
@@ -58,7 +61,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         onSelectLanguage(selectedLanguage)
       }
     },
-    [onSelect]
+    [onSelectLanguage]
   )
 
   return (
@@ -84,6 +87,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         withFooter={false}
         selects={language ? [language] : []}
         subtitle="Выбери язык карточки для нового набора"
+        onDismiss={dismissSheet}
         onConfirm={onConfirmLanguage}
       />
     </>
