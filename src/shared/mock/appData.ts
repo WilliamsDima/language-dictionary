@@ -3,7 +3,11 @@ import type {
   AppLanguageType,
   IAplication,
 } from '@/shared/store/slice/appSlice'
-import type { IFirebaseData, ShowVariantList } from '@/shared/store/slice/userSlice'
+import type {
+  IFirebaseData,
+  MainButtonSide,
+  ShowVariantList,
+} from '@/shared/store/slice/userSlice'
 
 const showVariantsList: ShowVariantList[] = [
   {
@@ -20,6 +24,19 @@ const showVariantsList: ShowVariantList[] = [
     label: 'Слово и перевод',
     value: 'word_and_translate',
     keyTranslate: 'settingsScreen.showVariantsList.word_and_translate',
+  },
+]
+
+const mainButtonSides: MainButtonSide[] = [
+  {
+    label: 'Правша',
+    value: 'right',
+    keyTranslate: 'settingsScreen.mainButtonSides.right',
+  },
+  {
+    label: 'Левша',
+    value: 'left',
+    keyTranslate: 'settingsScreen.mainButtonSides.left',
   },
 ]
 
@@ -155,6 +172,7 @@ export const mockFirebaseData: IFirebaseData = {
   email: '',
   dateRegistration: new Date(),
   showVariantList: showVariantsList[1],
+  mainButtonSide: mainButtonSides[0],
   languages: [],
   native_language: null,
   image: '',

@@ -71,12 +71,17 @@ export const styles = StyleSheet.create((theme) => ({
     position: 'absolute',
     zIndex: 100,
     bottom: theme.size.s10,
-    right: theme.size.s0,
     height: theme.size.s42,
     width: theme.size.s42,
     borderRadius: theme.size.s14,
     backgroundColor: theme.colors.palette.surface_light,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
+  },
+  scrollToTopBtnLeft: {
+    left: theme.size.s0,
+  },
+  scrollToTopBtnRight: {
+    right: theme.size.s0,
   },
 }))

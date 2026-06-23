@@ -25,15 +25,18 @@ import { useUnistyles } from 'react-native-unistyles'
 import { tabsWords, type TabWord } from '@/shared/helpers/tabsWord'
 import type { StatusItem } from '@/entities/Item/model/item'
 import MainStatusSlide from './UI/MainStatusSlide/MainStatusSlide'
+import { normalizeMainButtonSide } from '../SettingsScreen/UI/Settings/data'
 
 const MainScreen: FC = () => {
   const { setFilterByStatus } = useActions()
   const { filterByStatus } = useAppSelector((store) => store.items)
+  const { firebaseData } = useAppSelector((store) => store.user)
   const [sheetFilterRef, presentSheetFilter] = useBottomSheet()
   const { width } = useWindowDimensions()
   const { t } = useTranslation()
   const { theme } = useUnistyles()
   const sliderWidth = width
+  const mainButtonSide = normalizeMainButtonSide(firebaseData?.mainButtonSide)
 
   const tabs = useMemo(() => tabsWords(t, theme), [t, theme])
   const sliderRef = useRef<FlatList<TabWord>>(null)
@@ -70,11 +73,11 @@ const MainScreen: FC = () => {
     ({ item }) => {
       return (
         <View style={[styles.slide, { width: sliderWidth }]}>
-          <MainStatusSlide status={item.status} />
+          <MainStatusSlide status={item.status} mainButtonSide={mainButtonSide} />
         </View>
       )
     },
-    [sliderWidth]
+    [mainButtonSide, sliderWidth]
   )
 
   const getItemLayout = useCallback(
@@ -157,7 +160,7 @@ const MainScreen: FC = () => {
           scrollEventThrottle={16}
         />
 
-        <ButtonAdd />
+        <ButtonAdd side={mainButtonSide} />
       </View>
 
       <ModalAddItem />

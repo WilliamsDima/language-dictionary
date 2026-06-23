@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -9,5 +8,6 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.palette.card_alpha_90,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
+    gap: theme.size.s12,
   },
 }))

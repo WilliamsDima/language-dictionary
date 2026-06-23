@@ -1,16 +1,20 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   wrapper: {
     position: 'absolute',
     bottom: theme.size.s102,
-    right: theme.size.s14,
     zIndex: 50,
     width: theme.size.s58,
     height: theme.size.s58,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  wrapperLeft: {
+    left: theme.size.s14,
+  },
+  wrapperRight: {
+    right: theme.size.s14,
   },
   halo: {
     position: 'absolute',
@@ -18,6 +22,12 @@ export const styles = StyleSheet.create((theme) => ({
     height: theme.size.s58,
     borderRadius: theme.size.s58 / 2,
     backgroundColor: theme.colors.palette.success_alpha_22,
+  },
+  haloLeft: {
+    left: theme.size.s0,
+  },
+  haloRight: {
+    right: theme.size.s0,
   },
   btn: {
     width: theme.size.s58,

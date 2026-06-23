@@ -16,7 +16,6 @@ import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useTranslation } from '@/shared/i18n/types'
 import { declOfNum } from '@/shared/helpers/textFormat'
 import { dateFormat } from '@/shared/helpers/dateFormat'
-import GyroView from '@/shared/UI/GyroView/GyroView'
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -132,111 +131,102 @@ const MainItem: FC<Props> = ({ item }) => {
   }, [toggleFooter])
 
   return (
-    <GyroView>
-      <Animated.View style={pressAnimatedStyle}>
-        <TouchableOpacity
-          style={styles.item}
-          activeOpacity={1}
-          onPress={onCardPress}
-          onPressIn={animatePressIn}
-          onPressOut={animatePressOut}
-        >
-          <View style={[styles.statusOrb, statusDotStyle]} />
+    <Animated.View style={pressAnimatedStyle}>
+      <TouchableOpacity
+        style={styles.item}
+        activeOpacity={1}
+        onPress={onCardPress}
+        onPressIn={animatePressIn}
+        onPressOut={animatePressOut}
+      >
+        <View style={[styles.statusOrb, statusDotStyle]} />
 
-          <View style={styles.header}>
-            <View style={styles.headerMain}>
-              {!!dateLabel ? (
-                <Text style={styles.date}>{dateLabel}</Text>
-              ) : (
-                <></>
-              )}
+        <View style={styles.header}>
+          <View style={styles.headerMain}>
+            {!!dateLabel ? <Text style={styles.date}>{dateLabel}</Text> : <></>}
 
-              <View style={styles.metaGroup}>
-                <View style={styles.wordsBadge}>
-                  <Text style={styles.wordsBadgeText}>
-                    {item.items.length} {wordsLabel}
-                  </Text>
-                </View>
-
-                {!!item.language.country && (
-                  <View style={styles.flagWrapper}>
-                    <Image
-                      source={{ uri: item.language.country.flag }}
-                      style={styles.flag}
-                    />
-                  </View>
-                )}
+            <View style={styles.metaGroup}>
+              <View style={styles.wordsBadge}>
+                <Text style={styles.wordsBadgeText}>
+                  {item.items.length} {wordsLabel}
+                </Text>
               </View>
-            </View>
-          </View>
 
-          <View style={styles.content}>
-            <WordItems translateActive={!hiddenTranslate} item={item} />
-          </View>
-
-          {hiddenTranslate && (
-            <View style={styles.tapHint}>
-              <Text style={styles.tapHintText}>
-                Нажми на карточку, чтобы открыть перевод
-              </Text>
-            </View>
-          )}
-
-          {!!item.description && !hiddenTranslate && (
-            <View style={styles.descriptionBlock}>
-              <Text style={styles.description}>{item.description}</Text>
-            </View>
-          )}
-
-          <TouchableOpacity
-            style={styles.showFooterBtn}
-            onPress={onFooterPress}
-          >
-            <Text style={styles.showFooterText}>
-              {hiddenFooter ? 'Действия' : 'Свернуть'}
-            </Text>
-            <DotsVerticalIcon width={10} height={10} />
-          </TouchableOpacity>
-
-          {!hiddenFooter && (
-            <View style={styles.footer}>
-              <TouchableOpacity style={styles.footerAction} onPress={editItem}>
-                <EditIcon width={25} height={25} />
-              </TouchableOpacity>
-
-              {isLoading ? (
-                <ActivityIndicator
-                  size={'small'}
-                  color={
-                    item.status === 'READY'
-                      ? theme.colors.palette.item_ready
-                      : theme.colors.palette.item_study
-                  }
-                />
-              ) : (
-                <TouchableOpacity
-                  style={styles.footerAction}
-                  onPress={updateStatus}
-                >
-                  <Text style={styles.statusText}>
-                    {item.status === 'READY'
-                      ? t('cards.study')
-                      : t('cards.studied')}
-                  </Text>
-                </TouchableOpacity>
+              {!!item.language.country && (
+                <View style={styles.flagWrapper}>
+                  <Image
+                    source={{ uri: item.language.country.flag }}
+                    style={styles.flag}
+                  />
+                </View>
               )}
+            </View>
+          </View>
+        </View>
 
+        <View style={styles.content}>
+          <WordItems translateActive={!hiddenTranslate} item={item} />
+        </View>
+
+        {hiddenTranslate && (
+          <View style={styles.tapHint}>
+            <Text style={styles.tapHintText}>
+              Нажми на карточку, чтобы открыть перевод
+            </Text>
+          </View>
+        )}
+
+        {!!item.description && !hiddenTranslate && (
+          <View style={styles.descriptionBlock}>
+            <Text style={styles.description}>{item.description}</Text>
+          </View>
+        )}
+
+        <TouchableOpacity style={styles.showFooterBtn} onPress={onFooterPress}>
+          <Text style={styles.showFooterText}>
+            {hiddenFooter ? 'Действия' : 'Свернуть'}
+          </Text>
+          <DotsVerticalIcon width={10} height={10} />
+        </TouchableOpacity>
+
+        {!hiddenFooter && (
+          <View style={styles.footer}>
+            <TouchableOpacity style={styles.footerAction} onPress={editItem}>
+              <EditIcon width={25} height={25} />
+            </TouchableOpacity>
+
+            {isLoading ? (
+              <ActivityIndicator
+                size={'small'}
+                color={
+                  item.status === 'READY'
+                    ? theme.colors.palette.item_ready
+                    : theme.colors.palette.item_study
+                }
+              />
+            ) : (
               <TouchableOpacity
                 style={styles.footerAction}
-                onPress={deleteItemHandler}
+                onPress={updateStatus}
               >
-                <DeleteIcon width={25} height={25} />
+                <Text style={styles.statusText}>
+                  {item.status === 'READY'
+                    ? t('cards.study')
+                    : t('cards.studied')}
+                </Text>
               </TouchableOpacity>
-            </View>
-          )}
-        </TouchableOpacity>
-      </Animated.View>
-    </GyroView>
+            )}
+
+            <TouchableOpacity
+              style={styles.footerAction}
+              onPress={deleteItemHandler}
+            >
+              <DeleteIcon width={25} height={25} />
+            </TouchableOpacity>
+          </View>
+        )}
+      </TouchableOpacity>
+    </Animated.View>
   )
 }
 

@@ -22,6 +22,14 @@ export type ShowVariantList = {
   keyTranslate: I18NKeys
 }
 
+export type MainButtonSideValue = 'left' | 'right'
+
+export type MainButtonSide = {
+  label: string
+  value: MainButtonSideValue
+  keyTranslate: I18NKeys
+}
+
 export interface IActivityMonth {
   addedCards: number // добавлено карточек за месяц ✅
   viewedAds: number // количество просмотренной рекламмы ✅
@@ -58,6 +66,7 @@ export interface IFirebaseData {
   uid: string
   dateRegistration: Date
   showVariantList: null | ShowVariantList
+  mainButtonSide: null | MainButtonSide
   email: string
   languages: ILanguage[]
   native_language: ILanguage | null

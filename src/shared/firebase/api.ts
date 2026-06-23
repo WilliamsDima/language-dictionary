@@ -136,7 +136,9 @@ export const updateUserProfile = async (
   _uid: string,
   data: Partial<IFirebaseData>
 ) => {
-  return data
+  Object.assign(mockFirebaseData, data)
+
+  return mockFirebaseData
 }
 
 export const deleteAllItems = async (_uid: string) => {}

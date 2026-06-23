@@ -1,9 +1,7 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   container: {
-    marginTop: theme.size.s20,
     alignItems: 'center',
   },
   btn: {

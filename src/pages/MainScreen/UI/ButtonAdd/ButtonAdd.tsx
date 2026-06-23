@@ -1,15 +1,26 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useMemo, useRef } from 'react'
 import { styles } from './ButtonAdd.styles'
 import { Animated, Easing, View, TouchableOpacity } from 'react-native'
 import PlusIcon from '@/assets/icons/UI/plus.svg'
 import { useActions } from '@/shared/hooks/useActions'
+import type { MainButtonSideValue } from '@/shared/store/slice/userSlice'
 
-interface Props {}
+interface Props {
+  side?: MainButtonSideValue
+}
 
-const ButtonAdd: FC<Props> = (props) => {
+const ButtonAdd: FC<Props> = ({ side = 'right' }) => {
   const { setShowAddModal } = useActions()
   const floatAnim = useRef(new Animated.Value(0)).current
   const pulseAnim = useRef(new Animated.Value(0)).current
+
+  const wrapperStyle = useMemo(() => {
+    return side === 'left' ? styles.wrapperLeft : styles.wrapperRight
+  }, [side])
+
+  const haloStyle = useMemo(() => {
+    return side === 'left' ? styles.haloLeft : styles.haloRight
+  }, [side])
 
   useEffect(() => {
     Animated.loop(
@@ -66,11 +77,12 @@ const ButtonAdd: FC<Props> = (props) => {
   })
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, wrapperStyle]}>
       <Animated.View
         pointerEvents="none"
         style={[
           styles.halo,
+          haloStyle,
           {
             opacity: haloOpacity,
             transform: [{ scale: haloScale }],
@@ -78,7 +90,11 @@ const ButtonAdd: FC<Props> = (props) => {
         ]}
       />
       <Animated.View style={{ transform: [{ translateY }] }}>
-        <TouchableOpacity style={styles.btn} onPress={onAdd} activeOpacity={0.9}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={onAdd}
+          activeOpacity={0.9}
+        >
           <PlusIcon width={24} height={24} />
         </TouchableOpacity>
       </Animated.View>

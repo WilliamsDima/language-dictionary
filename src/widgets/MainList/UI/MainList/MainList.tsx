@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from 'react'
+import React, { FC, useMemo, useRef, useState } from 'react'
 import { FlatList, View, Animated } from 'react-native'
 import { styles } from './MainList.styles'
 import LottieView from 'lottie-react-native'
@@ -9,6 +9,7 @@ import Loader from '@/shared/UI/Loader/Loader'
 import Button from '@/shared/UI/Button/Button'
 import { useTranslation } from '@/shared/i18n/types'
 import type { IItem } from '@/entities/Item/model/item'
+import type { MainButtonSideValue } from '@/shared/store/slice/userSlice'
 
 type Props = {
   count: number
@@ -16,6 +17,7 @@ type Props = {
   isLoading: boolean
   items: Record<number, IItem> | null
   loadMoreItems: () => void
+  side?: MainButtonSideValue
 }
 
 const MainList: FC<Props> = ({
@@ -24,12 +26,20 @@ const MainList: FC<Props> = ({
   isLoading,
   items,
   loadMoreItems,
+  side = 'right',
 }) => {
   const { t } = useTranslation()
 
   const [showScrollTop, setShowScrollTop] = useState(false)
   const flatListRef = useRef<FlatList>(null)
   const scrollY = useRef(new Animated.Value(0)).current
+
+  const scrollToTopBtnStyle = useMemo(() => {
+    return side === 'left'
+      ? styles.scrollToTopBtnLeft
+      : styles.scrollToTopBtnRight
+  }, [side])
+
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
     {
@@ -82,7 +92,7 @@ const MainList: FC<Props> = ({
           {showScrollTop && (
             <Button
               classes={{
-                btn: styles.scrollToTopBtn,
+                btn: [styles.scrollToTopBtn, scrollToTopBtnStyle],
               }}
               onPress={scrollToTop}
               isText={false}

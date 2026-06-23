@@ -8,14 +8,16 @@ import React, {
 } from 'react'
 import type { IItem, StatusItem } from '@/entities/Item/model/item'
 import MainList from '@/widgets/MainList/UI/MainList/MainList'
+import type { MainButtonSideValue } from '@/shared/store/slice/userSlice'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useLazyGetItemsQuery } from '../../api/cardsServices'
 
 type Props = {
   status: StatusItem
+  mainButtonSide: MainButtonSideValue
 }
 
-const MainStatusSlide: FC<Props> = ({ status }) => {
+const MainStatusSlide: FC<Props> = ({ status, mainButtonSide }) => {
   const { firebaseData } = useAppSelector((store) => store.user)
   const { search, filterMain, itemsRevision } = useAppSelector(
     (store) => store.items
@@ -163,6 +165,7 @@ const MainStatusSlide: FC<Props> = ({ status }) => {
       isLoading={isLoading}
       items={items}
       loadMoreItems={loadMoreItems}
+      side={mainButtonSide}
     />
   )
 }
