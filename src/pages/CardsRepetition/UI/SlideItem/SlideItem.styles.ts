@@ -58,6 +58,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.size.s28,
     borderWidth: theme.size.s4,
     borderColor: theme.colors.palette.surface_light,
+    gap: theme.size.s10,
   },
   cardBack: {
     position: 'absolute',
@@ -117,18 +118,8 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: theme.size.s18,
-    paddingHorizontal: theme.size.s14,
-    borderRadius: theme.size.s18,
     flex: 1,
     backgroundColor: theme.colors.palette.ink_alpha_04,
-    variants: {
-      hasBorder: {
-        true: {
-          borderBottomWidth: theme.size.s1,
-          borderBottomColor: theme.colors.palette.ink_alpha_08,
-        },
-      },
-    },
   },
 
   wrapperText: {

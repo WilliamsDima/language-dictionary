@@ -24,17 +24,14 @@ type CardWordRowProps = {
   firstText: string
   secondText: string
   isFlipped: boolean
-  hasBorder: boolean
 }
 
 const CardWordRow: FC<CardWordRowProps> = ({
   firstText,
   secondText,
   isFlipped,
-  hasBorder,
 }) => {
   styles.useVariants({
-    hasBorder,
     isFlipped,
   })
 
@@ -73,7 +70,6 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
         firstText={firstText}
         secondText={secondText}
         isFlipped={isFlipped}
-        hasBorder={currentItem?.items.length > 1}
       />
     )
   })
@@ -159,11 +155,17 @@ const SlideItem: FC<Props> = (props) => {
                   ]}
                 >
                   <LinearGradient
-                    colors={[theme.colors.palette.dark_alpha_20, theme.colors.palette.dark_alpha_0]}
+                    colors={[
+                      theme.colors.palette.dark_alpha_20,
+                      theme.colors.palette.dark_alpha_0,
+                    ]}
                     style={styles.innerShadowTop}
                   />
                   <LinearGradient
-                    colors={[theme.colors.palette.dark_alpha_0, theme.colors.palette.dark_alpha_20]}
+                    colors={[
+                      theme.colors.palette.dark_alpha_0,
+                      theme.colors.palette.dark_alpha_20,
+                    ]}
                     style={styles.innerShadowBottom}
                   />
                   <CardContent isFlipped={isFlipped} {...props} />
@@ -179,11 +181,17 @@ const SlideItem: FC<Props> = (props) => {
                   ]}
                 >
                   <LinearGradient
-                    colors={[theme.colors.palette.dark_alpha_20, theme.colors.palette.dark_alpha_0]}
+                    colors={[
+                      theme.colors.palette.dark_alpha_20,
+                      theme.colors.palette.dark_alpha_0,
+                    ]}
                     style={styles.innerShadowTop}
                   />
                   <LinearGradient
-                    colors={[theme.colors.palette.dark_alpha_0, theme.colors.palette.dark_alpha_20]}
+                    colors={[
+                      theme.colors.palette.dark_alpha_0,
+                      theme.colors.palette.dark_alpha_20,
+                    ]}
                     style={styles.innerShadowBottom}
                   />
                   <CardContent isFlipped={isFlipped} {...props} />
