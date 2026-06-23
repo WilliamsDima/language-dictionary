@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-		<color name="primary_dark">#cccccc</color>
-		<color name="status_bar_color">#cccccc</color>
-		<color name="splash_bg">#cccccc</color>
-		<color name="bootsplash_background">#cccccc</color>
+		<color name="primary_dark">#08111F</color>
+		<color name="status_bar_color">#08111F</color>
+		<color name="splash_bg">#08111F</color>
+		<color name="bootsplash_background">#08111F</color>
 </resources>

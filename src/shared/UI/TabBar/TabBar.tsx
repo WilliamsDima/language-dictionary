@@ -36,6 +36,16 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
     theme.colors.palette.white,
   ])
 
+  const tabStyle = useMemo(() => {
+    return [
+      styles.tab,
+      {
+        backgroundColor,
+        paddingBottom: rt.insets.bottom,
+      },
+    ]
+  }, [backgroundColor, rt.insets.bottom])
+
   const tabTitles = useMemo<Record<TabsKeys, string>>(() => {
     return {
       mainStack: 'Слова',
@@ -67,7 +77,7 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
           styles.containerStyle,
           { backgroundColor: colorShdow },
         ]}
-        style={[styles.tab, { backgroundColor }]}
+        style={tabStyle}
       >
         {state?.routes.map((route, index) => {
           const isFocused = state.index === index
