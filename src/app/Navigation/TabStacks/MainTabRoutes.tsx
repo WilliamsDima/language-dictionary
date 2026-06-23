@@ -7,6 +7,7 @@ import SplashScreen from '@/pages/SplashScreen/SplashScreen'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { CardProvider } from '@/shared/hooks/useCardsContext'
 import type { MainStackParams } from '../params'
+import CardsRepetition from '@/pages/CardsRepetition/CardsRepetition'
 
 const MainStack = createNativeStackNavigator<MainStackParams>()
 
@@ -35,6 +36,11 @@ const MainTabRoutes = () => {
         options={stackScreenOptions}
         name={RoutesNames.main}
         component={MainScreenWithProvider}
+      />
+      <MainStack.Screen
+        options={tabStackScreenOptions}
+        name={RoutesNames.cardsRepetition}
+        component={CardsRepetition}
       />
     </MainStack.Navigator>
   )

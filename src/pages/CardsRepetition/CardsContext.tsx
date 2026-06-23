@@ -8,6 +8,7 @@ import React, {
   useRef,
   RefObject,
   useEffect,
+  useCallback,
 } from 'react'
 import {
   NativeScrollEvent,
@@ -17,11 +18,6 @@ import {
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NavigateStack } from '@/app/Navigation/types/paramsTypes'
-import {
-  HandlerStateChangeEvent,
-  PanGestureHandlerEventPayload,
-  State,
-} from 'react-native-gesture-handler'
 import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
 import { useAppSelector } from '@/shared/hooks/useStore'
@@ -40,9 +36,7 @@ type IContext = {
   isLoading: boolean
   currentSlideData?: CardSlideType
   count: number
-  swipeSlide: (
-    event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>
-  ) => void
+  swipeSlide: (translationX: number) => void
   updateCurrentSlideIndex: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
   nextSlide: () => void
   onEnd: () => void
@@ -85,12 +79,12 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     return data.find((it, i) => i === currentSlide)
   }, [currentSlide, data])
 
-  const onEnd = () => {
+  const onEnd = useCallback(() => {
     setCurrentSlide(0)
     goBack()
-  }
+  }, [goBack])
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     const prevSlideIndex = currentSlide - 1
     const offset = prevSlideIndex * width
 
@@ -98,9 +92,9 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       flatList.current?.scrollToOffset({ offset })
       setCurrentSlide(prevSlideIndex)
     }
-  }
+  }, [currentSlide])
 
-  const nextSlide = async () => {
+  const nextSlide = useCallback(() => {
     const nexSlideIndex = currentSlide + 1
     const offset = nexSlideIndex * width
 
@@ -110,33 +104,27 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     } else {
       // долистал до конца
     }
-  }
+  }, [currentSlide, data.length])
 
-  const swipeSlide = (
-    event: HandlerStateChangeEvent<PanGestureHandlerEventPayload>
-  ) => {
-    if (event.nativeEvent.oldState === State.ACTIVE) {
-      const { translationX } = event.nativeEvent
-
+  const swipeSlide = useCallback(
+    (translationX: number) => {
       if (translationX > 50) {
-        // console.log('Свайп вправо');
         prevSlide()
-
-        // Обработка свайпа влево
       } else if (translationX < -50) {
-        // console.log('Свайп влево');
         nextSlide()
       }
-    }
-  }
+    },
+    [nextSlide, prevSlide]
+  )
 
-  const updateCurrentSlideIndex = (
-    e: NativeSyntheticEvent<NativeScrollEvent>
-  ) => {
-    const offset = e.nativeEvent.contentOffset.x
-    const currentIndex = Math.round(offset / width)
-    setCurrentSlide(currentIndex)
-  }
+  const updateCurrentSlideIndex = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offset = e.nativeEvent.contentOffset.x
+      const currentIndex = Math.round(offset / width)
+      setCurrentSlide(currentIndex)
+    },
+    []
+  )
 
   useEffect(() => {
     page.current = 1

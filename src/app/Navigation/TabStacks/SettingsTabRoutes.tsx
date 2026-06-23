@@ -4,6 +4,7 @@ import { stackScreenOptions, tabStackScreenOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import SettingsScreen from '@/pages/SettingsScreen/SettingsScreen'
 import type { SettingsStackParams } from '../params'
+import CardsRepetition from '@/pages/CardsRepetition/CardsRepetition'
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>()
 
@@ -14,6 +15,11 @@ const SettingsTabRoutes = () => {
         options={stackScreenOptions}
         name={RoutesNames.settings}
         component={SettingsScreen}
+      />
+      <SettingsStack.Screen
+        options={tabStackScreenOptions}
+        name={RoutesNames.cardsRepetition}
+        component={CardsRepetition}
       />
     </SettingsStack.Navigator>
   )

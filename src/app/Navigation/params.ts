@@ -1,4 +1,4 @@
-import {RoutesNames} from './RoutesNames'
+import { RoutesNames } from './RoutesNames'
 
 export type StartStackParams = {
   [RoutesNames.auth]: undefined
@@ -8,10 +8,12 @@ export type StartStackParams = {
 export type MainStackParams = {
   [RoutesNames.splash]: undefined
   [RoutesNames.main]: undefined
+  [RoutesNames.cardsRepetition]: undefined
 }
 
 export type SettingsStackParams = {
   [RoutesNames.settings]: undefined
+  [RoutesNames.cardsRepetition]: undefined
 }
 
 export type ProfileStackParams = {

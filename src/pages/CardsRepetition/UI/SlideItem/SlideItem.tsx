@@ -8,12 +8,13 @@ import {
   View,
 } from 'react-native'
 import { styles } from './SlideItem.styles'
-import { PanGestureHandler } from 'react-native-gesture-handler'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { CardSlideType, useCardsRepetition } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
 import LinearGradient from 'react-native-linear-gradient'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import { runOnJS } from 'react-native-reanimated'
 
 type Props = {
   item: CardSlideType
@@ -119,6 +120,12 @@ const SlideItem: FC<Props> = (props) => {
     outputRange: [0, 0, 1],
   })
 
+  const panGesture = useMemo(() => {
+    return Gesture.Pan().onEnd((event) => {
+      runOnJS(swipeSlide)(event.translationX)
+    })
+  }, [swipeSlide])
+
   const flipCard = () => {
     Animated.timing(flipAnimation, {
       toValue: isFlipped ? 0 : 1,
@@ -128,7 +135,7 @@ const SlideItem: FC<Props> = (props) => {
   }
 
   return (
-    <PanGestureHandler onHandlerStateChange={swipeSlide}>
+    <GestureDetector gesture={panGesture}>
       <View style={styles.wrapper}>
         <TouchableOpacity
           activeOpacity={1}
@@ -217,7 +224,7 @@ const SlideItem: FC<Props> = (props) => {
           </Animated.View>
         </TouchableOpacity>
       </View>
-    </PanGestureHandler>
+    </GestureDetector>
   )
 }
 

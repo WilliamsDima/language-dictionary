@@ -28,7 +28,7 @@ const ProfileTabRoutes = () => {
       />
 
       <ProfileStack.Screen
-        options={stackScreenOptions}
+        options={tabStackScreenOptions}
         name={RoutesNames.cardsRepetition}
         component={CardsRepetition}
       />
