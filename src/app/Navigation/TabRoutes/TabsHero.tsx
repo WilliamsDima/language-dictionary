@@ -3,7 +3,7 @@ import { View } from 'react-native'
 
 import Text from '@/shared/UI/Text/Text'
 
-import { RoutesNames, TabsKeys } from '../RoutesNames'
+import { RouteName, RoutesNames, TabsKeys } from '../RoutesNames'
 import { styles } from './TabsHero.styles'
 
 type HeroConfig = {
@@ -22,14 +22,20 @@ const HERO_BY_TAB: Partial<Record<TabsKeys, HeroConfig>> = {
   },
 }
 
+const TABS_HERO_HIDDEN_ROUTES: RouteName[] = [RoutesNames.cardsRepetition]
+
 type Props = {
+  activeScreen?: RouteName
   tabName: TabsKeys
 }
 
-const TabsHero: FC<Props> = ({ tabName }) => {
+const TabsHero: FC<Props> = ({ activeScreen, tabName }) => {
   const hero = HERO_BY_TAB[tabName]
+  const isHidden = activeScreen
+    ? TABS_HERO_HIDDEN_ROUTES.includes(activeScreen)
+    : false
 
-  if (!hero) {
+  if (!hero || isHidden) {
     return <></>
   }
 

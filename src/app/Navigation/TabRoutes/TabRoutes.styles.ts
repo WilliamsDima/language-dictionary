@@ -5,9 +5,6 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     backgroundColor: theme.colors.palette.gray_bg,
   },
-  shadowBand: {
-    height: theme.size.s12,
-  },
   tabsArea: {
     flex: 1,
     minHeight: 0,
