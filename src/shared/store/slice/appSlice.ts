@@ -108,7 +108,7 @@ const initialState: InitialState = {
   aplication: mockAppData,
   tooltip: null,
   hiddenTabBar: false,
-  isWatchSplash: true,
+  isWatchSplash: false,
   showUpdateModal: false,
   showYearResult: false,
   appLanguage: mockAppLanguage,
