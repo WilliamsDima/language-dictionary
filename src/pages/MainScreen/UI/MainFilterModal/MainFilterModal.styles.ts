@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme, rt) => ({
   wrapper: {
     flex: 1,
     backgroundColor: theme.colors.palette.bg_modal,
@@ -49,7 +49,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   bottom: {
     marginTop: theme.size.s24,
-    paddingBottom: theme.size.s30,
+    paddingBottom: rt.insets.bottom + theme.size.s12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

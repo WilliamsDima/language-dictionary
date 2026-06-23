@@ -2,7 +2,7 @@ import { height } from '@/shared/helpers/ScaleUtils'
 import { NativeModules } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme, rt) => ({
   wrapper: {
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
@@ -80,7 +80,7 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'space-between',
     paddingHorizontal: theme.size.s20,
     marginTop: theme.size.s8,
-    marginBottom: theme.size.s20,
+    marginBottom: rt.insets.bottom + theme.size.s12,
   },
   actionBtn: {
     width: theme.size.s52,

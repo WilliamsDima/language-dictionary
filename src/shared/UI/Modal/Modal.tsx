@@ -13,7 +13,7 @@ interface Props extends ModalProps {
 }
 
 const Modal: FC<Props> = (props) => {
-  const { children, style, statusBarTranslucent, ...rest } = props
+  const { children, style, statusBarTranslucent = true, ...rest } = props
 
   const overStyle = useMemo(() => {
     return [styles.modal, style]
