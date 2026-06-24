@@ -1,5 +1,11 @@
 import React, { FC, memo, useEffect, useMemo, useRef } from 'react'
-import { Animated, Easing, View, useWindowDimensions } from 'react-native'
+import {
+  Animated,
+  Easing,
+  StatusBar,
+  View,
+  useWindowDimensions,
+} from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import LinearGradient from 'react-native-linear-gradient'
 import { styles } from './ScreenBackground.styles'
@@ -287,6 +293,10 @@ const ScreenBackground: FC = () => {
 
   return (
     <View pointerEvents="none" style={styles.background}>
+      <StatusBar
+        translucent
+        barStyle={rt.themeName === 'dark' ? 'light-content' : 'dark-content'}
+      />
       <LinearGradient
         colors={gradientColors}
         locations={[0, 0.35, 0.7, 1]}
