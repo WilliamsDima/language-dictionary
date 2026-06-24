@@ -37,10 +37,10 @@ export const styles = StyleSheet.create((theme) => ({
     minHeight: height / 1.85,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.white_surface_98,
+    backgroundColor: theme.colors.palette.card_alpha_90,
     borderRadius: theme.size.s28,
-    borderWidth: theme.size.s4,
-    borderColor: theme.colors.palette.surface_light,
+    borderWidth: theme.size.s2,
+    borderColor: theme.colors.palette.border,
     gap: theme.size.s10,
   },
 
@@ -51,7 +51,7 @@ export const styles = StyleSheet.create((theme) => ({
     marginTop: theme.size.s14,
   },
   description: {
-    color: theme.colors.palette.black,
+    color: theme.colors.palette.gray_text,
     fontSize: theme.fontSize.s14,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -80,7 +80,10 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     paddingVertical: theme.size.s18,
     flex: 1,
-    backgroundColor: theme.colors.palette.ink_alpha_04,
+    backgroundColor: theme.colors.palette.white_alpha_04,
+    borderRadius: theme.size.s6,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_06,
   },
 
   wrapperText: {
@@ -91,7 +94,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   text: {
-    color: theme.colors.palette.black,
+    color: theme.colors.palette.white,
     textAlign: 'center',
     fontSize: theme.fontSize.s24,
     fontStyle: 'normal',
