@@ -3,14 +3,14 @@ import { StyleSheet } from 'react-native-unistyles'
 export const styles = StyleSheet.create((theme, rt) => ({
   wrapper: {
     flex: 1,
-    backgroundColor: theme.colors.palette.bg_modal,
+    backgroundColor: theme.colors.overlay.modal,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
 
   content: {
     width: '100%',
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     borderTopLeftRadius: theme.size.s28,
     borderTopRightRadius: theme.size.s28,
     paddingHorizontal: theme.size.s18,
@@ -69,7 +69,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     borderColor: theme.colors.palette.border,
   },
   btnCancelText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   btnSubmitText: {
     color: theme.colors.palette.black,

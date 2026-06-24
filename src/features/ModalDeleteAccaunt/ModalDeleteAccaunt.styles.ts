@@ -7,14 +7,14 @@ export const styles = StyleSheet.create((theme) => ({
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.bg_modal,
+    backgroundColor: theme.colors.overlay.modal,
     width: '100%',
   },
   container: {
     maxWidth: '88%',
     minWidth: '88%',
     width: '100%',
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     padding: theme.size.s18,
     borderRadius: theme.size.s24,
     borderWidth: theme.size.s1,
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   title: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s20,
     fontFamily: 'Mulish-ExtraBold',
   },
@@ -60,7 +60,7 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.palette.white_alpha_04,
   },
   cancelText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },
@@ -70,7 +70,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.palette.transparent,
   },
   logoutText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.base.white,
     fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },

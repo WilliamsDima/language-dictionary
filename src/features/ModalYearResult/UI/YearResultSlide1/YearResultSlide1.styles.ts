@@ -13,7 +13,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
   },
   title: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     textTransform: 'uppercase',
     fontWeight: '800',
     fontSize: theme.fontSize.s40,

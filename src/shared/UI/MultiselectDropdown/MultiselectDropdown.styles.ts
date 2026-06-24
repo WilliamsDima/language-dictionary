@@ -12,7 +12,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   dropdown: {
     minHeight: theme.size.s56,
-    backgroundColor: theme.colors.palette.surface,
+    backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s16,
     paddingHorizontal: theme.size.s8,
     paddingVertical: theme.size.s14,
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.palette.border,
   },
   containerStyle: {
-    backgroundColor: theme.colors.palette.surface_light,
+    backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s24,
     marginTop: theme.size.s8,
     borderColor: theme.colors.palette.border,
@@ -34,11 +34,11 @@ export const styles = StyleSheet.create((theme) => ({
   },
   selectedTextStyle: {
     fontSize: theme.fontSize.s16,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     lineHeight: theme.lineHeights.md,
   },
   selectedTextStyleActive: {
-    color: theme.colors.palette.black,
+    color: theme.colors.base.black,
   },
   inputSearchStyle: {
     height: theme.size.s48,
@@ -47,8 +47,8 @@ export const styles = StyleSheet.create((theme) => ({
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
     borderRadius: theme.size.s14,
-    color: theme.colors.palette.white,
-    backgroundColor: theme.colors.palette.surface,
+    color: theme.colors.text.primary,
+    backgroundColor: theme.colors.background.input,
     paddingHorizontal: theme.size.s14,
     marginBottom: theme.size.s10,
   },
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   label: {
     fontSize: theme.fontSize.s16,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   optionContainer: {
     position: 'absolute',
@@ -107,7 +107,7 @@ export const styles = StyleSheet.create((theme) => ({
     flexShrink: 0,
     minHeight: theme.size.s30,
     borderRadius: theme.size.s14,
-    backgroundColor: theme.colors.palette.surface_light,
+    backgroundColor: theme.colors.background.input,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
     marginRight: theme.size.s8,
@@ -125,7 +125,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   textSelectedStyle: {
     fontSize: theme.fontSize.s16,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     lineHeight: theme.lineHeights.md,
   },
 }))

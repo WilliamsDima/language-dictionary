@@ -6,7 +6,6 @@ import Text from '@/shared/UI/Text/Text'
 import { IItem } from '../../model/item'
 import DeleteIcon from '@/assets/icons/UI/trash-red-64.svg'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
-import DotsVerticalIcon from '@/assets/icons/UI/dots-vertical-white-64.svg'
 import { useExpandAnim } from '@/shared/hooks/useExpandAnim'
 import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
@@ -22,6 +21,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
+import { Icon } from '@/assets/icons/Icon'
 
 type Props = {
   item: IItem
@@ -186,7 +186,13 @@ const MainItem: FC<Props> = ({ item }) => {
           <Text style={styles.showFooterText}>
             {hiddenFooter ? 'Действия' : 'Свернуть'}
           </Text>
-          <DotsVerticalIcon width={10} height={10} />
+          <Icon
+            kind="svg"
+            name="dots-vertical-white-64"
+            width={10}
+            height={10}
+            color={theme.colors.icon.primary}
+          />
         </TouchableOpacity>
 
         {!hiddenFooter && (

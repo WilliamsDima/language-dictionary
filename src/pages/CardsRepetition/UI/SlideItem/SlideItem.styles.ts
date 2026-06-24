@@ -37,7 +37,7 @@ export const styles = StyleSheet.create((theme) => ({
     minHeight: height / 1.85,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s28,
     borderWidth: theme.size.s2,
     borderColor: theme.colors.palette.border,
@@ -94,7 +94,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   text: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     textAlign: 'center',
     fontSize: theme.fontSize.s24,
     fontStyle: 'normal',
@@ -113,13 +113,13 @@ export const styles = StyleSheet.create((theme) => ({
   btn: {
     minWidth: theme.size.s176,
     paddingVertical: theme.size.s16,
-    backgroundColor: theme.colors.palette.surface,
+    backgroundColor: theme.colors.background.input,
   },
   btnText: {
     textAlign: 'center',
     fontSize: theme.fontSize.s16,
     fontStyle: 'normal',
     fontWeight: '600',
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
 }))

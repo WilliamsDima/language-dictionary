@@ -1,9 +1,8 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   backdrop: {
-    backgroundColor: theme.colors.palette.black,
+    backgroundColor: theme.colors.overlay.modal,
   },
   handleIndicator: {
     width: theme.size.s44,
@@ -12,7 +11,7 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.palette.border,
   },
   background: {
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     borderTopLeftRadius: theme.size.s28,
     borderTopRightRadius: theme.size.s28,
     borderTopWidth: theme.size.s1,
@@ -47,7 +46,7 @@ export const styles = StyleSheet.create((theme) => ({
     minWidth: theme.size.s0,
   },
   title: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s18,
     fontFamily: 'Mulish-ExtraBold',
     paddingTop: theme.size.s4,

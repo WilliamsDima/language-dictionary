@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -7,7 +6,7 @@ export const styles = StyleSheet.create((theme) => ({
     margin: theme.size.s0,
   },
   content: {
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     borderTopRightRadius: theme.size.s28,
     borderTopLeftRadius: theme.size.s28,
     paddingHorizontal: theme.size.s18,
@@ -28,7 +27,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   title: {
     fontSize: theme.fontSize.s18,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontFamily: 'Mulish-ExtraBold',
     marginBottom: theme.size.s4,
   },
@@ -62,11 +61,11 @@ export const styles = StyleSheet.create((theme) => ({
   textBtnCancel: {
     textTransform: 'uppercase',
     fontSize: theme.fontSize.s13,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   textBtnConfirm: {
     textTransform: 'uppercase',
     fontSize: theme.fontSize.s13,
-    color: theme.colors.palette.black,
+    color: theme.colors.base.black,
   },
 }))

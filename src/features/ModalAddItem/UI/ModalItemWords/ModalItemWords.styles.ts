@@ -19,8 +19,8 @@ export const styles = StyleSheet.create((theme) => ({
   input: {
     maxHeight: theme.size.s100,
     height: 'auto',
-    backgroundColor: theme.colors.palette.surface,
-    color: theme.colors.palette.white,
+    backgroundColor: theme.colors.background.surface,
+    color: theme.colors.text.primary,
   },
 
   footer: {

@@ -1,10 +1,10 @@
 import React, { FC, memo } from 'react'
 import { styles } from './SearchInput.styles'
 import Input, { InputProps } from '../Input/Input'
-import SearchIcon from '@/assets/icons/UI/search.svg'
-import ClearIcon from '@/assets/icons/UI/close-red-64.svg'
 import { TouchableOpacity } from 'react-native'
 import { useTranslation } from '@/shared/i18n/types'
+import { useUnistyles } from 'react-native-unistyles'
+import { Icon } from '@/assets/icons/Icon'
 
 interface Props extends InputProps {
   showIcon?: boolean
@@ -19,6 +19,7 @@ interface Props extends InputProps {
 const SearchInput: FC<Props> = (props) => {
   const { showIcon = true, ...rest } = props
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   return (
     <Input
@@ -26,7 +27,13 @@ const SearchInput: FC<Props> = (props) => {
       {...rest}
       rightIcon={
         showIcon && !rest.value?.trim().length ? (
-          <SearchIcon />
+          <Icon
+            kind="svg"
+            name="search"
+            width={22}
+            height={22}
+            color={theme.colors.text.placeholder}
+          />
         ) : (
           <TouchableOpacity
             style={styles.clear}
@@ -34,7 +41,7 @@ const SearchInput: FC<Props> = (props) => {
               rest?.onChangeText!('')
             }}
           >
-            <ClearIcon width={15} height={15} />
+            <Icon kind="svg" name="close-red-64" width={15} height={15} />
           </TouchableOpacity>
         )
       }

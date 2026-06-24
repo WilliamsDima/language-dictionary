@@ -1,6 +1,6 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { stackScreenOptions, tabStackScreenOptions } from '../config'
+import { useStackScreenOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import ProfileScreen from '@/pages/ProfileScreen/ProfileScreen'
 import CardsRepetition from '@/pages/CardsRepetition/CardsRepetition'
@@ -10,6 +10,8 @@ import AchievementsScreen from '@/pages/AchievementsScreen/AchievementsScreen'
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>()
 
 const ProfileTabRoutes = () => {
+  const { stackScreenOptions, tabStackScreenOptions } = useStackScreenOptions()
+
   return (
     <ProfileStack.Navigator screenOptions={tabStackScreenOptions}>
       <ProfileStack.Screen

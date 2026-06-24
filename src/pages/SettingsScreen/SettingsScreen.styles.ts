@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -14,7 +13,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.palette.border,
   },
   privacyPolicyText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s14,
     fontFamily: 'Mulish-Bold',
   },

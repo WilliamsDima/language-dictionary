@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native-unistyles'
 export const styles = StyleSheet.create((theme) => ({
   root: {
     flex: 1,
-    backgroundColor: theme.colors.palette.gray_bg,
+    backgroundColor: theme.colors.background.screen,
   },
   tabsArea: {
     flex: 1,

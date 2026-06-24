@@ -1,6 +1,6 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { stackScreenOptions, startStackScreenOptions } from '../config'
+import { useStackScreenOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import AuthScreen from '@/processes/AuthScreen/AuthScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
@@ -17,6 +17,7 @@ const StartStack = createNativeStackNavigator<StartStackParams>()
 
 const StartRoutes = () => {
   const { isWatchSplash } = useAppSelector((store) => store.app)
+  const { stackScreenOptions, startStackScreenOptions } = useStackScreenOptions()
 
   return (
     <StartStack.Navigator screenOptions={startStackScreenOptions}>

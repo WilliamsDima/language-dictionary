@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -11,7 +10,7 @@ export const styles = StyleSheet.create((theme) => ({
   metaCard: {
     padding: theme.size.s16,
     borderRadius: theme.size.s20,
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
@@ -26,13 +25,13 @@ export const styles = StyleSheet.create((theme) => ({
     marginTop: theme.size.s6,
     fontSize: theme.fontSize.s18,
     fontFamily: theme.fonts.extraBold,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   achievementsBlock: {
     marginTop: theme.size.s16,
     padding: theme.size.s16,
     borderRadius: theme.size.s20,
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
@@ -44,7 +43,7 @@ export const styles = StyleSheet.create((theme) => ({
   achievementsTitle: {
     fontSize: theme.fontSize.s18,
     fontFamily: theme.fonts.extraBold,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   achievementsSubtitle: {
     marginTop: theme.size.s6,
@@ -117,7 +116,7 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
     fontFamily: 'Mulish-ExtraBold',
-    color: theme.colors.palette.white,
+    color: theme.colors.base.white,
   },
   deleteText: {
     fontSize: theme.fontSize.s13,

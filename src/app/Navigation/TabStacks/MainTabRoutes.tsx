@@ -1,6 +1,6 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { stackScreenOptions, tabStackScreenOptions } from '../config'
+import { useStackScreenOptions } from '../config'
 import { RoutesNames } from '../RoutesNames'
 import MainScreen from '@/pages/MainScreen/MainScreen'
 import SplashScreen from '@/pages/SplashScreen/SplashScreen'
@@ -21,6 +21,7 @@ const MainScreenWithProvider = () => {
 
 const MainTabRoutes = () => {
   const { isWatchSplash } = useAppSelector((store) => store.app)
+  const { stackScreenOptions, tabStackScreenOptions } = useStackScreenOptions()
 
   return (
     <MainStack.Navigator screenOptions={tabStackScreenOptions}>

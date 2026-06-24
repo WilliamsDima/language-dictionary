@@ -1,11 +1,10 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   button: {
     minHeight: theme.size.s48,
     paddingHorizontal: theme.size.s18,
-    backgroundColor: theme.colors.palette.surface,
+    backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -21,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
     height: theme.size.s18,
   },
   btnText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontFamily: 'Mulish-Bold',
     fontSize: theme.fontSize.s14,
   },
@@ -41,13 +40,13 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.palette.border,
   },
   ['BORDER-TRANSPARENT-TEXT']: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   PRIMERY: {
     backgroundColor: theme.colors.palette.primery,
     borderColor: theme.colors.palette.transparent,
   },
   ['PRIMERY-TEXT']: {
-    color: theme.colors.palette.black,
+    color: theme.colors.base.black,
   },
 }))

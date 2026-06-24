@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -24,6 +23,6 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s24,
     textTransform: 'uppercase',
     fontWeight: '600',
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
 }))

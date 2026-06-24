@@ -9,7 +9,7 @@ export const styles = StyleSheet.create((theme) => ({
   title: {
     fontSize: theme.fontSize.s18,
     fontFamily: theme.fonts.extraBold,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     marginBottom: theme.size.s12,
   },
 
@@ -46,7 +46,7 @@ export const styles = StyleSheet.create((theme) => ({
     width: theme.size.s8,
     height: theme.size.s8,
     borderRadius: theme.size.s8,
-    backgroundColor: theme.colors.palette.white,
+    backgroundColor: theme.colors.base.white,
     opacity: theme.opacity.o60,
   },
   statCardCaption: {
@@ -54,7 +54,7 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s10,
     letterSpacing: theme.letterSpacing.s08,
     textTransform: 'uppercase',
-    color: theme.colors.palette.white,
+    color: theme.colors.base.white,
     fontFamily: theme.fonts.bold,
   },
   statCardValue: {
@@ -77,7 +77,7 @@ export const styles = StyleSheet.create((theme) => ({
   languageCard: {
     padding: theme.size.s14,
     borderRadius: theme.size.s20,
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },

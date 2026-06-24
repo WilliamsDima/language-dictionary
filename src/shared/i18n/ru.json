@@ -11,6 +11,9 @@
   },
   "settingsScreen": {
     "privacy_policy": "политика конфиденциальности",
+    "theme": "Тема приложения",
+    "theme_light": "Светлая",
+    "theme_dark": "Тёмная",
     "show_varian": "Вариант показа",
     "main_button_side": "Рука для интерфейса",
     "showVariantsList": {

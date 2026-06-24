@@ -17,6 +17,7 @@ import {
   getShowVariantsList,
   normalizeMainButtonSide,
 } from './data'
+import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
 
 const Settings: FC = () => {
   const { t } = useTranslation()
@@ -95,6 +96,8 @@ const Settings: FC = () => {
 
   return (
     <View style={styles.container}>
+      <ThemeSwitch />
+
       <Select
         title={t('settingsScreen.show_varian')}
         select={showVariantSelect}

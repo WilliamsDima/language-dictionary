@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -15,7 +14,7 @@ export const styles = StyleSheet.create((theme) => ({
   heroCard: {
     borderRadius: theme.size.s32,
     padding: theme.size.s20,
-    backgroundColor: theme.colors.palette.card_alpha_92,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
@@ -90,7 +89,7 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
     borderRadius: theme.size.s28,
     padding: theme.size.s18,
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },

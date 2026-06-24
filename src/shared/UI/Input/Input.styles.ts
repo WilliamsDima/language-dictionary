@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -19,13 +18,13 @@ export const styles = StyleSheet.create((theme) => ({
   input: {
     height: theme.size.s50,
     fontSize: theme.fontSize.s15,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     textDecorationColor: 'transparent',
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
     borderRadius: theme.size.s16,
     paddingHorizontal: theme.size.s18,
-    backgroundColor: theme.colors.palette.card_alpha_92,
+    backgroundColor: theme.colors.background.surface,
     fontFamily: 'Mulish-SemiBold',
     variants: {
       hasRightIcon: {
@@ -37,7 +36,7 @@ export const styles = StyleSheet.create((theme) => ({
         true: {
           borderColor: theme.colors.palette.primery,
           borderWidth: theme.size.s1,
-          backgroundColor: theme.colors.palette.surface_light,
+          backgroundColor: theme.colors.background.input,
         },
       },
     },

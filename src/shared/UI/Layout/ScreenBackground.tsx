@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { styles } from './ScreenBackground.styles'
 
 const ScreenBackground: FC = () => {
-  const { theme } = useUnistyles()
+  const { theme, rt } = useUnistyles()
   const { width, height } = useWindowDimensions()
   const topGlowX = useRef(new Animated.Value(0)).current
   const topGlowY = useRef(new Animated.Value(0)).current
@@ -145,14 +145,7 @@ const ScreenBackground: FC = () => {
     return () => {
       glowLoopRef.current?.stop()
     }
-  }, [
-    bottomGlowX,
-    bottomGlowY,
-    sideGlowX,
-    sideGlowY,
-    topGlowX,
-    topGlowY,
-  ])
+  }, [bottomGlowX, bottomGlowY, sideGlowX, sideGlowY, topGlowX, topGlowY])
 
   useEffect(() => {
     pulseLoopRef.current?.stop()
@@ -266,15 +259,36 @@ const ScreenBackground: FC = () => {
     }
   }, [bottomGlowX, bottomGlowY, pulseAnim, topGlowRange.x, topGlowRange.y])
 
+  const gradientColors = useMemo(() => {
+    if (rt.themeName === 'dark') {
+      return [
+        theme.colors.palette.gray_bg,
+        theme.colors.palette.blue_navy_soft,
+        theme.colors.palette.item,
+        theme.colors.palette.blue_navy,
+      ]
+    }
+
+    return [
+      theme.colors.background.screen,
+      theme.colors.palette.blue_navy_soft,
+      theme.colors.background.surface,
+      theme.colors.palette.blue_navy,
+    ]
+  }, [
+    rt.themeName,
+    theme.colors.background.screen,
+    theme.colors.background.surface,
+    theme.colors.palette.blue_navy,
+    theme.colors.palette.blue_navy_soft,
+    theme.colors.palette.gray_bg,
+    theme.colors.palette.item,
+  ])
+
   return (
     <View pointerEvents="none" style={styles.background}>
       <LinearGradient
-        colors={[
-          theme.colors.palette.gray_bg,
-          theme.colors.palette.blue_navy_soft,
-          theme.colors.palette.item,
-          theme.colors.palette.blue_navy,
-        ]}
+        colors={gradientColors}
         locations={[0, 0.35, 0.7, 1]}
         style={styles.gradient}
       />

@@ -51,7 +51,7 @@ export const styles = StyleSheet.create((theme) => ({
     textTransform: 'uppercase',
     marginLeft: theme.size.s6,
     fontWeight: '700',
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     flexShrink: 1,
   },
 }))

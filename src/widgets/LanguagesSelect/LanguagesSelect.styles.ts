@@ -9,12 +9,12 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.size.s14,
     paddingVertical: theme.size.s12,
     borderRadius: theme.size.s16,
-    backgroundColor: theme.colors.palette.surface,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
   title: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s14,
   },
   error: {

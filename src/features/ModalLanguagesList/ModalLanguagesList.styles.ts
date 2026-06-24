@@ -7,13 +7,13 @@ export const styles = StyleSheet.create((theme, rt) => ({
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.bg_modal,
+    backgroundColor: theme.colors.overlay.modal,
     width: '100%',
   },
   container: {
     width: '100%',
     maxHeight: '78%',
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     paddingHorizontal: theme.size.s18,
     paddingTop: theme.size.s14,
     paddingBottom: theme.size.s24,
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
   },
 
   name: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s14,
     fontFamily: 'Mulish-Bold',
   },
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.surface,
+    backgroundColor: theme.colors.background.surface,
   },
   itemActive: {
     borderColor: theme.colors.palette.success_alpha_36,

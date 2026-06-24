@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -7,7 +6,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     padding: theme.size.s14,
     borderRadius: theme.size.s20,
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
@@ -21,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
 
   name: {
     fontSize: theme.fontSize.s18,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     marginBottom: theme.size.s4,
     fontFamily: 'Mulish-ExtraBold',
   },

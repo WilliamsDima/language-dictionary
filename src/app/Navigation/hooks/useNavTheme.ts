@@ -1,10 +1,14 @@
-import {DarkTheme, DefaultTheme, type Theme as NavTheme} from '@react-navigation/native'
-import {useUnistyles} from 'react-native-unistyles'
+import {
+  DarkTheme,
+  DefaultTheme,
+  type Theme as NavTheme,
+} from '@react-navigation/native'
+import { useUnistyles } from 'react-native-unistyles'
 
 export function useNavTheme(): NavTheme {
-  const {theme, rt} = useUnistyles()
+  const { theme, rt } = useUnistyles()
 
-  const isDark = rt.themeName === 'dark' || rt.colorScheme === 'dark'
+  const isDark = rt.themeName === 'dark'
   const baseTheme = isDark ? DarkTheme : DefaultTheme
 
   return {

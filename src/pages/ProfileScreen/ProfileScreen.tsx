@@ -15,14 +15,16 @@ import Text from '@/shared/UI/Text/Text'
 import { dateFormat } from '@/shared/helpers/dateFormat'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
 import { RoutesNames } from '@/app/Navigation/RoutesNames'
-import TopArrow from '@/assets/icons/UI/arrow-top-white-64.svg'
 import LinearGradient from 'react-native-linear-gradient'
+import { Icon } from '@/assets/icons/Icon'
+import { useUnistyles } from 'react-native-unistyles'
 
 const ProfileScreen: FC = () => {
   const { navigate } = useAppNavigation()
   const { t } = useTranslation()
   const { setShowYearResult } = useActions()
   const { firebaseData } = useAppSelector((store) => store.user)
+  const { theme } = useUnistyles()
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
@@ -98,9 +100,12 @@ const ProfileScreen: FC = () => {
               onPress={openAchievements}
               isText={false}
             >
-              <TopArrow
+              <Icon
+                kind="svg"
+                name="arrow-top-white-64"
                 width={28}
                 height={28}
+                color={theme.colors.icon.primary}
                 style={styles.achievementsArrow}
               />
             </Button>

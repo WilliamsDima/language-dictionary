@@ -53,7 +53,8 @@ const Layout: FC<Props> = (props) => {
   } = props
 
   const { hiddenTabBar } = useAppSelector((store) => store.app)
-  const { theme } = useUnistyles()
+  const { theme, rt } = useUnistyles()
+  const contentKey = rt.themeName || 'dark'
 
   styles.useVariants({
     headerSpacing: isScroll ? 'scroll' : 'top',
@@ -76,7 +77,7 @@ const Layout: FC<Props> = (props) => {
   return (
     <VariableSafeAreaView isSafeArea={!!isSafeArea} style={overStylesSafeArea}>
       <ScreenBackground />
-      <View style={styles.content}>
+      <View key={contentKey} style={styles.content}>
         {header}
 
         {dismissKeyboard ? (

@@ -9,7 +9,7 @@ import { useAdsScreen } from '@/shared/hooks/useAdsScreen'
 import { useUserActivity } from '@/shared/hooks/useUserActivity'
 
 const CardsRepetition: FC = () => {
-  const { theme } = useUnistyles()
+  const { theme, rt } = useUnistyles()
   useHiddenTabBar()
   useAdsScreen()
 
@@ -23,9 +23,9 @@ const CardsRepetition: FC = () => {
     <CardsProvider>
       <Layout isSafeArea>
         <StatusBar
-          backgroundColor={theme.colors.palette.black}
+          backgroundColor={theme.colors.background.screen}
           translucent
-          barStyle={'light-content'}
+          barStyle={rt.themeName === 'dark' ? 'light-content' : 'dark-content'}
         />
 
         <Slides />

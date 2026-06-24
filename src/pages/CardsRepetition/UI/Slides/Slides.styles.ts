@@ -24,7 +24,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
   count: {
     fontSize: theme.fontSize.s14,
     fontWeight: '600',
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
 
   empty: {
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
   },
   emptyText: {
     fontSize: theme.fontSize.s16,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontWeight: '700',
     maxWidth: '80%',
     textAlign: 'center',
@@ -71,7 +71,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     textTransform: 'uppercase',
     fontSize: theme.fontSize.s16,
     fontWeight: '600',
-    color: theme.colors.palette.black,
+    color: theme.colors.base.black,
   },
   contentContainerStyle: {
     alignItems: 'center',

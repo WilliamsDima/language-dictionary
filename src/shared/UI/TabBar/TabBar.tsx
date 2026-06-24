@@ -22,19 +22,13 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
 
   const colorShdow = useMemo(() => {
     return rt.themeName === 'dark'
-      ? theme.colors.palette.gray_bg
-      : theme.colors.palette.white
-  }, [rt.themeName, theme.colors.palette.gray_bg, theme.colors.palette.white])
+      ? theme.colors.background.screen
+      : theme.colors.base.white
+  }, [rt.themeName, theme.colors.background.screen, theme.colors.base.white])
 
   const backgroundColor = useMemo(() => {
-    return rt.themeName === 'dark'
-      ? theme.colors.palette.tab_bar_dark
-      : theme.colors.palette.white
-  }, [
-    rt.themeName,
-    theme.colors.palette.tab_bar_dark,
-    theme.colors.palette.white,
-  ])
+    return theme.colors.tabBar.background
+  }, [theme.colors.tabBar.background])
 
   const tabStyle = useMemo(() => {
     return [

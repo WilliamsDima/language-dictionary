@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -29,7 +28,7 @@ export const styles = StyleSheet.create((theme) => ({
     variants: {
       isFocused: {
         true: {
-          color: theme.colors.palette.white,
+          color: theme.colors.text.primary,
         },
       },
     },

@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { TouchableOpacity } from 'react-native'
-import FilterWhite from '@/assets/icons/UI/filter-white-64.svg'
-import FilterPrimery from '@/assets/icons/UI/filter-primery-64.svg'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import { Icon } from '@/assets/icons/Icon'
+import { useUnistyles } from 'react-native-unistyles'
 
 interface Props {
   onPress: () => void
@@ -10,14 +10,20 @@ interface Props {
 
 const MainFilter: FC<Props> = ({ onPress }) => {
   const { filterMain } = useAppSelector((store) => store.items)
+  const { theme } = useUnistyles()
+  const isActive = !!filterMain?.sortDate || !!filterMain?.languages?.length
 
   return (
     <TouchableOpacity onPress={onPress}>
-      {!!filterMain?.sortDate || !!filterMain?.languages?.length ? (
-        <FilterPrimery width={30} height={30} />
-      ) : (
-        <FilterWhite width={30} height={30} />
-      )}
+      <Icon
+        kind="svg"
+        name={isActive ? 'filter-primery-64' : 'filter-white-64'}
+        width={30}
+        height={30}
+        color={
+          isActive ? theme.colors.action.primary : theme.colors.icon.primary
+        }
+      />
     </TouchableOpacity>
   )
 }

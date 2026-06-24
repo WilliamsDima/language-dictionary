@@ -8,14 +8,14 @@ export const styles = StyleSheet.create((theme) => ({
   hero: {
     padding: theme.size.s18,
     borderRadius: theme.size.s24,
-    backgroundColor: theme.colors.palette.card_alpha_90,
+    backgroundColor: theme.colors.background.surface,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
   heroTitle: {
     fontSize: theme.fontSize.s20,
     fontFamily: theme.fonts.extraBold,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
   },
   heroText: {
     marginTop: theme.size.s8,

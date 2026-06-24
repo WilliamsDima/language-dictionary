@@ -7,12 +7,12 @@ export const styles = StyleSheet.create((theme, rt) => ({
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.bg_modal,
+    backgroundColor: theme.colors.overlay.modal,
     width: '100%',
   },
   container: {
     width: '100%',
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     paddingHorizontal: theme.size.s18,
     paddingTop: theme.size.s14,
     paddingBottom: theme.size.s24,
@@ -42,7 +42,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
   },
 
   title: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s18,
     fontFamily: 'Mulish-ExtraBold',
     marginBottom: theme.size.s4,
@@ -86,7 +86,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
   },
 
   selectBtnText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s14,
     fontWeight: '600',
   },
@@ -125,7 +125,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     backgroundColor: theme.colors.palette.white_alpha_04,
   },
   cancelText: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s13,
     textTransform: 'uppercase',
   },

@@ -4,12 +4,13 @@ import { styles } from './MainList.styles'
 import LottieView from 'lottie-react-native'
 import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
-import TopArrow from '@/assets/icons/UI/arrow-top-white-64.svg'
 import Loader from '@/shared/UI/Loader/Loader'
 import Button from '@/shared/UI/Button/Button'
 import { useTranslation } from '@/shared/i18n/types'
 import type { IItem } from '@/entities/Item/model/item'
 import type { MainButtonSideValue } from '@/shared/store/slice/userSlice'
+import { Icon } from '@/assets/icons/Icon'
+import { useUnistyles } from 'react-native-unistyles'
 
 type Props = {
   count: number
@@ -29,6 +30,7 @@ const MainList: FC<Props> = ({
   side = 'right',
 }) => {
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   const [showScrollTop, setShowScrollTop] = useState(false)
   const flatListRef = useRef<FlatList>(null)
@@ -97,7 +99,13 @@ const MainList: FC<Props> = ({
               onPress={scrollToTop}
               isText={false}
             >
-              <TopArrow width={32} height={32} />
+              <Icon
+                kind="svg"
+                name="arrow-top-white-64"
+                width={32}
+                height={32}
+                color={theme.colors.icon.primary}
+              />
             </Button>
           )}
         </>

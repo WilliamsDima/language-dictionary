@@ -7,7 +7,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     height: height + (NativeModules?.StatusBarManager?.HEIGHT || 0),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.palette.bg_modal,
+    backgroundColor: theme.colors.overlay.modal,
     width: '100%',
   },
   container: {
@@ -15,7 +15,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     minWidth: '90%',
     maxHeight: '90%',
     minHeight: '90%',
-    backgroundColor: theme.colors.palette.tab_bar_dark,
+    backgroundColor: theme.colors.background.surface,
     paddingTop: theme.size.s14,
     borderRadius: theme.size.s28,
     alignItems: 'center',
@@ -60,7 +60,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     borderRadius: theme.size.s28,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.palette.surface_light,
+    backgroundColor: theme.colors.background.input,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },
@@ -68,8 +68,8 @@ export const styles = StyleSheet.create((theme, rt) => ({
   input: {
     maxHeight: theme.size.s100,
     height: 'auto',
-    backgroundColor: theme.colors.palette.surface,
-    color: theme.colors.palette.white,
+    backgroundColor: theme.colors.background.surface,
+    color: theme.colors.text.primary,
   },
 
   btns: {
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     borderRadius: theme.size.s26,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.palette.surface_light,
+    backgroundColor: theme.colors.background.input,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
   },

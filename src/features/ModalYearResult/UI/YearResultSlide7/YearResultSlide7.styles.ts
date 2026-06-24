@@ -15,7 +15,7 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.size.s10,
   },
   title: {
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     textTransform: 'uppercase',
     fontWeight: '800',
     fontSize: theme.fontSize.s25,

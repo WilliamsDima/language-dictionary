@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -10,7 +9,7 @@ export const styles = StyleSheet.create((theme) => ({
 
   dropdown: {
     minHeight: theme.size.s56,
-    backgroundColor: theme.colors.palette.surface,
+    backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s16,
     paddingHorizontal: theme.size.s16,
     paddingVertical: theme.size.s14,
@@ -19,7 +18,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   containerStyle: {
-    backgroundColor: theme.colors.palette.surface_light,
+    backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s16,
     marginTop: theme.size.s8,
     borderWidth: theme.size.s1,
@@ -33,19 +32,19 @@ export const styles = StyleSheet.create((theme) => ({
   },
   selectedTextStyle: {
     fontSize: theme.fontSize.s16,
-    color: theme.colors.palette.white,
+    color: theme.colors.text.primary,
     lineHeight: theme.lineHeights.md,
   },
   selectedTextStyleActive: {
-    color: theme.colors.palette.black,
+    color: theme.colors.base.black,
   },
   inputSearchStyle: {
     height: theme.size.s40,
     fontSize: theme.fontSize.s16,
     borderColor: theme.colors.palette.border,
     borderRadius: theme.size.s5,
-    color: theme.colors.palette.white,
-    backgroundColor: theme.colors.palette.gray_bg_btn,
+    color: theme.colors.text.primary,
+    backgroundColor: theme.colors.background.input,
   },
   iconStyle: {
     width: theme.size.s20,
@@ -101,7 +100,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   textSelectedStyle: {
     fontSize: theme.fontSize.s16,
-    color: theme.colors.palette.white,
+    color: theme.colors.base.white,
   },
   loader: {
     position: 'absolute',

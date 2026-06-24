@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
@@ -9,7 +8,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   tooltip: {
-    backgroundColor: theme.colors.palette.white,
+    backgroundColor: theme.colors.base.white,
     paddingHorizontal: theme.size.s20,
     paddingVertical: theme.size.s10,
     borderRadius: theme.size.s30,
@@ -18,6 +17,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   path: {
     fontSize: theme.fontSize.s10,
-    color: theme.colors.palette.black,
+    color: theme.colors.base.black,
   },
 }))
