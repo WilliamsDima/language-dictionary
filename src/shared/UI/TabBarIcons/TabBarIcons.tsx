@@ -21,13 +21,12 @@ const TabBarIcons: FC<ButtonTabBar> = ({ routeName, isFocused }) => {
           width={24}
           height={24}
           stroke={isFocused ? activeColor : inactiveColor}
-          fill={isFocused ? activeColor : 'transparent'}
-          viewBox="0 0 24 24"
+          fill={isFocused ? activeColor : inactiveColor}
+          viewBox="0 0 1025 1024"
         >
           <Path
-            fill={isFocused ? activeColor : 'transparent'}
-            fillRule="nonzero"
-            d="M18 2a2.5 2.5 0 0 1 2.5 2.5v14.25a.75.75 0 0 1-.75.75H5.5a1 1 0 0 0 1 1h13.25a.75.75 0 0 1 0 1.5H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Zm-2 3H8a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z"
+            fill={isFocused ? activeColor : inactiveColor}
+            d="M960.356 1024h-512q-27 0-45.5-19t-18.5-45V832q0-26 18.5-45t45.5-19h512q26 0 45 19t19 45v128q0 27-19 45.5t-45 18.5zm0-384h-512q-27 0-45.5-18.5t-18.5-45.5V448q0-27 18.5-45.5t45.5-18.5h512q26 0 45 18.5t19 45.5v128q0 27-19 45.5t-45 18.5zm0-384h-512q-27 0-45.5-19t-18.5-45V64q0-27 18.5-45.5t45.5-18.5h512q26 0 45 18.5t19 45.5v128q0 26-19 45t-45 19zm-768 768h-128q-26 0-45-19t-19-45V832q0-26 19-45t45-19h128q26 0 45 19t19 45v128q0 27-18.5 45.5t-45.5 18.5zm0-384h-128q-26 0-45-18.5t-19-45.5V448q0-27 19-45.5t45-18.5h128q26 0 45 18.5t19 45.5v128q0 27-18.5 45.5t-45.5 18.5zm0-384h-128q-26 0-45-19t-19-45V64q0-27 19-45.5t45-18.5h128q26 0 45 18.5t19 45.5v128q0 26-18.5 45t-45.5 19z"
           />
         </Svg>
       )

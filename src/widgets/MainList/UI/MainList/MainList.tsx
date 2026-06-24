@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useRef, useState } from 'react'
-import { FlatList, View, Animated } from 'react-native'
+import { FlatList, View, Animated, TouchableOpacity } from 'react-native'
 import { styles } from './MainList.styles'
 import LottieView from 'lottie-react-native'
 import Text from '@/shared/UI/Text/Text'
@@ -92,21 +92,18 @@ const MainList: FC<Props> = ({
 
           {/* Кнопка наверх */}
           {showScrollTop && (
-            <Button
-              classes={{
-                btn: [styles.scrollToTopBtn, scrollToTopBtnStyle],
-              }}
+            <TouchableOpacity
+              style={[styles.scrollToTopBtn, scrollToTopBtnStyle]}
               onPress={scrollToTop}
-              isText={false}
             >
               <Icon
                 kind="svg"
-                name="arrow-top-white-64"
-                width={32}
-                height={32}
+                name="up-circle"
+                width={42}
+                height={42}
                 color={theme.colors.icon.primary}
               />
-            </Button>
+            </TouchableOpacity>
           )}
         </>
       ) : (

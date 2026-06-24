@@ -4,8 +4,7 @@ export const styles = StyleSheet.create((theme) => ({
   button: {
     minWidth: theme.size.s80,
     minHeight: theme.size.s50,
-    paddingHorizontal: theme.size.s10,
-    paddingVertical: theme.size.s6,
+    padding: theme.size.s6,
     borderRadius: theme.size.s18,
     alignItems: 'center',
     justifyContent: 'center',
@@ -21,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   title: {
-    fontSize: theme.fontSize.s10,
+    fontSize: theme.fontSize.s14,
     marginTop: theme.size.s4,
     textAlign: 'center',
     color: theme.colors.palette.gray_text,

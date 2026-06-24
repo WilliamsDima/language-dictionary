@@ -3,7 +3,6 @@ import React, { FC, useMemo } from 'react'
 import { View } from 'react-native'
 import { styles } from './SaveData.styles'
 import Text from '@/shared/UI/Text/Text'
-import SaveIcon from '@/assets/icons/UI/save-primery-64.svg'
 import Button from '@/shared/UI/Button/Button'
 import * as RNFS from '@dr.pogodin/react-native-fs'
 import { useActions } from '@/shared/hooks/useActions'
@@ -13,10 +12,13 @@ import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
 import { useTranslation } from '@/shared/i18n/types'
 import { dateFormat } from '@/shared/helpers/dateFormat'
+import { Icon } from '@/assets/icons/Icon'
+import { useUnistyles } from 'react-native-unistyles'
 
 const SaveData: FC = () => {
   const { t } = useTranslation()
   const { setLastSaveData, setTooltip } = useActions()
+  const { theme } = useUnistyles()
 
   const { lastSaveData, items } = useAppSelector((store) => store.items)
 
@@ -65,7 +67,13 @@ const SaveData: FC = () => {
     <View style={styles.container}>
       <Button isText={false} classes={{ btn: styles.btn }} onPress={toSave}>
         <Text style={styles.btnText}>{t('settingsScreen.save_json')}</Text>
-        <SaveIcon width={30} height={30} />
+        <Icon
+          kind="svg"
+          name="download"
+          color={theme.colors.palette.primery}
+          width={25}
+          height={25}
+        />
       </Button>
 
       {!!dateSaveText && <Text style={styles.saveData}>{dateSaveText}</Text>}
