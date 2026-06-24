@@ -1,5 +1,4 @@
 import React, { FC, useMemo, useRef, useState } from 'react'
-import { useUnistyles } from 'react-native-unistyles'
 import {
   Animated,
   ScrollView,
@@ -12,7 +11,6 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { CardSlideType, useCardsRepetition } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
-import LinearGradient from 'react-native-linear-gradient'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { runOnJS } from 'react-native-reanimated'
 
@@ -59,7 +57,7 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
     return items[item?.item.id]
   }, [item, items])
 
-  return currentItem?.items.map((it, i) => {
+  return currentItem?.items.map((it) => {
     const firstText =
       filterCardsModal.showVariant === 'word_only' ? it.word : it.translate
     const secondText =
@@ -78,7 +76,6 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
-  const { theme } = useUnistyles()
   const { scrollX, nextSlide, swipeSlide } = useCardsRepetition()
 
   const { items } = useAppSelector((store) => store.items)
@@ -97,27 +94,11 @@ const SlideItem: FC<Props> = (props) => {
 
   const [isFlipped, setIsFlipped] = useState(false)
   const flipAnimation = useRef(new Animated.Value(0)).current
+  const isFlipAnimating = useRef(false)
 
-  // Интерполяция угла поворота
-  const frontInterpolate = flipAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
-  })
-
-  const backInterpolate = flipAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['180deg', '360deg'],
-  })
-
-  // Обратная сторона невидима, если её угол меньше 90°
-  const frontOpacity = flipAnimation.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [1, 0, 0],
-  })
-
-  const backOpacity = flipAnimation.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 0, 1],
+  const rotateY = flipAnimation.interpolate({
+    inputRange: [-1, 0, 1],
+    outputRange: ['-90deg', '0deg', '90deg'],
   })
 
   const panGesture = useMemo(() => {
@@ -127,102 +108,68 @@ const SlideItem: FC<Props> = (props) => {
   }, [swipeSlide])
 
   const flipCard = () => {
+    if (isFlipAnimating.current) {
+      return
+    }
+
+    isFlipAnimating.current = true
+
     Animated.timing(flipAnimation, {
-      toValue: isFlipped ? 0 : 1,
-      duration: 400,
+      toValue: 1,
+      duration: 180,
       useNativeDriver: true,
-    }).start(() => setIsFlipped(!isFlipped))
+    }).start(() => {
+      setIsFlipped((prevState) => !prevState)
+      flipAnimation.setValue(-1)
+
+      Animated.timing(flipAnimation, {
+        toValue: 0,
+        duration: 180,
+        useNativeDriver: true,
+      }).start(() => {
+        isFlipAnimating.current = false
+      })
+    })
   }
 
   return (
     <GestureDetector gesture={panGesture}>
       <View style={styles.wrapper}>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.itemWrapper}
-          onPress={nextSlide}
-        >
+        <View style={styles.itemWrapper}>
           <Animated.View style={[styles.item, { opacity }]}>
-            <TouchableOpacity
-              onPress={nextSlide}
-              activeOpacity={1}
-              style={styles.press}
-            >
+            <TouchableOpacity onPress={nextSlide} activeOpacity={1}>
               <ScrollView
                 style={styles.itemWords}
                 contentContainerStyle={styles.contentContainerStyle}
                 showsVerticalScrollIndicator
               >
-                {/* Передняя сторона */}
                 <Animated.View
                   style={[
                     styles.card,
-                    { transform: [{ rotateY: frontInterpolate }] },
-                    { opacity: frontOpacity },
+                    { transform: [{ perspective: 1200 }, { rotateY }] },
                   ]}
                 >
-                  <LinearGradient
-                    colors={[
-                      theme.colors.palette.dark_alpha_20,
-                      theme.colors.palette.dark_alpha_0,
-                    ]}
-                    style={styles.innerShadowTop}
-                  />
-                  <LinearGradient
-                    colors={[
-                      theme.colors.palette.dark_alpha_0,
-                      theme.colors.palette.dark_alpha_20,
-                    ]}
-                    style={styles.innerShadowBottom}
-                  />
                   <CardContent isFlipped={isFlipped} {...props} />
-                </Animated.View>
-
-                {/* Задняя сторона */}
-                <Animated.View
-                  style={[
-                    styles.card,
-                    styles.cardBack,
-                    { transform: [{ rotateY: backInterpolate }] },
-                    { opacity: backOpacity },
-                  ]}
-                >
-                  <LinearGradient
-                    colors={[
-                      theme.colors.palette.dark_alpha_20,
-                      theme.colors.palette.dark_alpha_0,
-                    ]}
-                    style={styles.innerShadowTop}
-                  />
-                  <LinearGradient
-                    colors={[
-                      theme.colors.palette.dark_alpha_0,
-                      theme.colors.palette.dark_alpha_20,
-                    ]}
-                    style={styles.innerShadowBottom}
-                  />
-                  <CardContent isFlipped={isFlipped} {...props} />
+                  {!!currentItem?.description && isFlipped && (
+                    <Text style={styles.description}>
+                      {currentItem?.description}
+                    </Text>
+                  )}
                 </Animated.View>
               </ScrollView>
-
-              <View style={styles.footer}>
-                {!!currentItem?.description && isFlipped && (
-                  <Text style={styles.description}>
-                    {currentItem?.description}
-                  </Text>
-                )}
-
-                <Button
-                  style={styles.btn}
-                  classes={{ textBtn: styles.btnText }}
-                  onPress={flipCard}
-                >
-                  Проверить
-                </Button>
-              </View>
             </TouchableOpacity>
+
+            <View style={styles.footer}>
+              <Button
+                style={styles.btn}
+                classes={{ textBtn: styles.btnText }}
+                onPress={flipCard}
+              >
+                Проверить
+              </Button>
+            </View>
           </Animated.View>
-        </TouchableOpacity>
+        </View>
       </View>
     </GestureDetector>
   )

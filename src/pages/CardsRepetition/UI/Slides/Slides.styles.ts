@@ -1,31 +1,22 @@
-import { height } from '@/shared/helpers/ScaleUtils'
 import { StyleSheet } from 'react-native-unistyles'
 
 export const styles = StyleSheet.create((theme) => ({
   container: {
-    height: height,
-    maxHeight: height,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
+    flex: 1,
   },
 
   slidesWrapper: {
-    justifyContent: 'center',
+    flex: 1,
     alignItems: 'center',
-    height: height,
-    maxHeight: height,
-    //position: 'absolute',
-    zIndex: 100,
+    paddingTop: theme.size.s16,
+    paddingBottom: theme.size.s24,
     backgroundColor: theme.colors.palette.transparent,
   },
 
   header: {
-    position: 'absolute',
-    zIndex: 1000,
-    top: theme.size.s16,
     paddingHorizontal: theme.size.s14,
     paddingVertical: theme.size.s8,
+    marginBottom: theme.size.s16,
     borderRadius: theme.size.s999,
     backgroundColor: theme.colors.palette.card_alpha_88,
     borderWidth: theme.size.s1,
@@ -56,11 +47,9 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   footer: {
-    position: 'absolute',
-    zIndex: 1000,
-    bottom: theme.size.s110,
     width: '100%',
     alignItems: 'center',
+    marginTop: theme.size.s20,
   },
   btns: {
     flexDirection: 'row',
@@ -86,7 +75,15 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.palette.black,
   },
   contentContainerStyle: {
-    justifyContent: 'center',
     alignItems: 'center',
+  },
+  listWrapper: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-start',
+  },
+  list: {
+    flex: 1,
+    width: '100%',
   },
 }))
