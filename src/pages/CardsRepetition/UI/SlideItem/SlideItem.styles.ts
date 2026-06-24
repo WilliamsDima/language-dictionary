@@ -22,8 +22,6 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: theme.size.s4,
-    paddingBottom: theme.size.s16,
   },
 
   title: {
@@ -36,7 +34,7 @@ export const styles = StyleSheet.create((theme) => ({
 
   card: {
     width: '100%',
-    minHeight: height / 2.2,
+    minHeight: height / 1.85,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.palette.white_surface_98,
@@ -50,7 +48,7 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginTop: theme.size.s24,
+    marginTop: theme.size.s14,
   },
   description: {
     color: theme.colors.palette.black,
@@ -61,7 +59,7 @@ export const styles = StyleSheet.create((theme) => ({
 
   itemWords: {
     flexGrow: 0,
-    maxHeight: height / 1.55,
+    maxHeight: height / 1.38,
     width: width - theme.layout.appPadding * 2 - theme.size.s20,
   },
   contentContainerStyle: {

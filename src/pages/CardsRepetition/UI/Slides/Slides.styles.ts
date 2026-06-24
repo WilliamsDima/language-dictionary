@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme, rt) => ({
   container: {
     flex: 1,
   },
@@ -8,15 +8,14 @@ export const styles = StyleSheet.create((theme) => ({
   slidesWrapper: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: theme.size.s16,
-    paddingBottom: theme.size.s24,
+    paddingBottom: rt.insets.bottom + theme.size.s12,
     backgroundColor: theme.colors.palette.transparent,
   },
 
   header: {
     paddingHorizontal: theme.size.s14,
     paddingVertical: theme.size.s8,
-    marginBottom: theme.size.s16,
+    marginBottom: theme.size.s8,
     borderRadius: theme.size.s999,
     backgroundColor: theme.colors.palette.card_alpha_88,
     borderWidth: theme.size.s1,
@@ -49,12 +48,12 @@ export const styles = StyleSheet.create((theme) => ({
   footer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: theme.size.s20,
+    marginTop: theme.size.s8,
   },
   btns: {
     flexDirection: 'row',
     gap: theme.size.s20,
-    marginBottom: theme.size.s20,
+    marginBottom: theme.size.s14,
   },
   btnGroup: {
     minWidth: theme.size.s74,
