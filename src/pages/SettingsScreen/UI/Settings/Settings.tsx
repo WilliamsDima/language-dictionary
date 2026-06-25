@@ -22,7 +22,7 @@ import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
 const Settings: FC = () => {
   const { t } = useTranslation()
   const { setFirebaseData } = useActions()
-  const { aplication, appLanguage } = useAppSelector((store) => store.app)
+  const { appLanguage } = useAppSelector((store) => store.app)
   const { firebaseData } = useAppSelector((store) => store.user)
 
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
@@ -35,10 +35,8 @@ const Settings: FC = () => {
   const userProfile = profile || firebaseData
 
   const showVariantList = useMemo(() => {
-    return aplication?.showVariantsList
-      ? getShowVariantsList(aplication?.showVariantsList, t)
-      : []
-  }, [aplication, t, appLanguage])
+    return getShowVariantsList(t)
+  }, [t, appLanguage])
 
   const mainButtonSidesList = useMemo(() => {
     return getMainButtonSidesList(t)

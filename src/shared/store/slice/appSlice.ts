@@ -1,7 +1,9 @@
 import type { TooltipType } from '@/entities/Tooltip/model/Tooltip'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import type { ShowVariantList } from './userSlice'
-import { mockAppData, mockAppLanguage } from '@/shared/mock/appData'
+import {
+  appLanguagesList,
+  defaultAppLanguage,
+} from '@/shared/constants/appLanguages'
 
 export type ThemeApp = 'dark' | 'light'
 
@@ -69,7 +71,6 @@ export type AppLanguageType = {
   code: TranslationKeys
   emoji: string
   id: number
-  ruName: string
 }
 export type AppLanguagesType = Record<TranslationKeys, AppLanguageType>
 
@@ -83,7 +84,6 @@ export interface IAplication {
   }
   socials: ISocial[]
   version: string
-  showVariantsList: ShowVariantList[]
   privacy_policy_link: string
   showVKAuth: boolean
   translations: TranslationsType
@@ -104,14 +104,42 @@ type InitialState = {
 
 const initialState: InitialState = {
   theme: 'dark',
-  isAuth: true,
-  aplication: mockAppData,
+  isAuth: false,
+  aplication: {
+    about: {
+      blocks: [],
+    },
+    appName: 'Nori',
+    developer: {
+      icon: '',
+      link: '',
+      text: '',
+    },
+    socials: [],
+    version: '',
+    privacy_policy_link: '',
+    showVKAuth: false,
+    translations: {
+      ru: 'local',
+      en: 'local',
+      de: 'local',
+      fr: 'local',
+      es: 'local',
+      it: 'local',
+      pt: 'local',
+      pl: 'local',
+      tr: 'local',
+      ja: 'local',
+      zh: 'local',
+    } as IAplication['translations'],
+    appLanguages: appLanguagesList,
+  },
   tooltip: null,
   hiddenTabBar: false,
   isWatchSplash: false,
   showUpdateModal: false,
   showYearResult: false,
-  appLanguage: mockAppLanguage,
+  appLanguage: defaultAppLanguage,
 }
 
 export const appSlice = createSlice({

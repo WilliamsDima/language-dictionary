@@ -4,6 +4,7 @@ import type {
   MainButtonSideValue,
   ShowVariantList,
 } from '@/shared/store/slice/userSlice'
+import { SHOW_VARIANTS_LIST } from '@/shared/constants/showVariants'
 
 const translateSettingsList = <T extends { keyTranslate: Parameters<I18t>[0] }>(
   list: T[],
@@ -17,11 +18,8 @@ const translateSettingsList = <T extends { keyTranslate: Parameters<I18t>[0] }>(
   })
 }
 
-export const getShowVariantsList = (
-  list: ShowVariantList[],
-  t: I18t
-): ShowVariantList[] => {
-  return translateSettingsList(list, t)
+export const getShowVariantsList = (t: I18t): ShowVariantList[] => {
+  return translateSettingsList(SHOW_VARIANTS_LIST, t)
 }
 
 export const getMainButtonSidesList = (t: I18t): MainButtonSide[] => {

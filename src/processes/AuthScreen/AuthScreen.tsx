@@ -65,7 +65,7 @@ const AuthLanguageRow = memo(
 
         <View style={styles.sheetItemCopy}>
           <Text style={nameStyles}>{item.nativeName}</Text>
-          <Text style={styles.sheetItemHint}>{item.ruName}</Text>
+          <Text style={styles.sheetItemHint}>{item.name}</Text>
         </View>
 
         <View style={styles.sheetItemMeta}>
@@ -146,7 +146,7 @@ const AuthScreen: FC = () => {
       return 'Выбери язык интерфейса'
     }
 
-    return appLanguage.ruName
+    return appLanguage.name
   }, [appLanguage])
 
   const selectorTitle = useMemo(() => {

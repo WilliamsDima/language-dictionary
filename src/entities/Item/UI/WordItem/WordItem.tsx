@@ -7,6 +7,7 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { AddItemWords } from '@/features/ModalAddItem/Model/items'
 import SoundBIcon from '@/assets/icons/UI/sound-primery-64.svg'
 import { textToSpeech } from '@/shared/helpers/textToSpeech'
+import { DEFAULT_SHOW_VARIANT } from '@/shared/constants/showVariants'
 import { IItem } from '../../model/item'
 
 type Props = {
@@ -24,15 +25,12 @@ const WordItem: FC<Props> = ({
   parentItem,
   isLast,
 }) => {
-  const { aplication } = useAppSelector((store) => store.app)
   const { firebaseData } = useAppSelector((store) => store.user)
   const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
 
   const viewTypeItem = useMemo(() => {
-    return profile?.showVariantList
-      ? profile?.showVariantList
-      : aplication?.showVariantsList[1]
-  }, [profile, aplication])
+    return profile?.showVariantList ? profile?.showVariantList : DEFAULT_SHOW_VARIANT
+  }, [profile])
 
   const sound = () => {
     textToSpeech({ lang: parentItem.language.short_name, text: item.word })

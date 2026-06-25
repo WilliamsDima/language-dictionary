@@ -2,7 +2,6 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import type { ILanguage } from '@/shared/json/languages'
 import type { IItem } from '@/entities/Item/model/item'
 import type { I18NKeys } from '@/shared/i18n/types'
-import { mockFirebaseData } from '@/shared/mock/appData'
 
 export type IUser = {
   uid: string
@@ -82,7 +81,7 @@ type InitialState = {
 }
 
 const initialState: InitialState = {
-  firebaseData: mockFirebaseData,
+  firebaseData: null,
   showAddModal: false,
   itemEdit: null,
   isVkLogin: false,
