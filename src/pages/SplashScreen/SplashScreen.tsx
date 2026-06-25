@@ -61,7 +61,7 @@ const SplashScreen: FC = () => {
   return (
     <Layout>
       <View style={styles.screen}>
-        <Text style={styles.title}>Language Dictionary</Text>
+        <Text style={styles.title}>Nori</Text>
         <Text style={styles.subtitle}>
           Прокачиваем словарный запас через живые карточки
         </Text>

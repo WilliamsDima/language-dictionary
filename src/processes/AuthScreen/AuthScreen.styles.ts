@@ -45,18 +45,20 @@ export const styles = StyleSheet.create((theme, rt) => ({
     resizeMode: 'contain',
   },
   placeholderCard: {
-    minHeight: theme.size.s96,
-    borderRadius: theme.size.s24,
-    borderWidth: theme.size.s2,
-    borderColor: theme.colors.palette.red_placeholder,
-    backgroundColor: theme.colors.palette.danger_alpha_16,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  mascotImage: {
+    width: '100%',
+    minHeight: '70%',
+    resizeMode: 'contain',
+    flex: 1,
+  },
   placeholderText: {
-    color: theme.colors.palette.red_placeholder,
+    color: theme.colors.text.primary,
     fontSize: theme.fontSize.s14,
     fontFamily: 'Mulish-ExtraBold',
+    textAlign: 'center',
   },
 
   iconSelect: {

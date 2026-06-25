@@ -43,7 +43,10 @@ const AuthLanguageRow = memo(
     }, [isActive])
 
     const nameStyles = useMemo(() => {
-      return [styles.sheetItemName, isActive ? styles.sheetItemNameActive : null]
+      return [
+        styles.sheetItemName,
+        isActive ? styles.sheetItemNameActive : null,
+      ]
     }, [isActive])
 
     const onPress = useCallback(() => {
@@ -89,8 +92,7 @@ const AuthScreen: FC = () => {
 
   const languages = useMemo(() => {
     return aplication?.appLanguages
-      ? Object.values(aplication?.appLanguages)
-          .sort((a, b) => a.id - b.id)
+      ? Object.values(aplication?.appLanguages).sort((a, b) => a.id - b.id)
       : []
   }, [aplication])
 
@@ -207,12 +209,16 @@ const AuthScreen: FC = () => {
               <Text style={styles.badge}>Language streak</Text>
               <Text style={styles.title}>{t('auth.title')}</Text>
               <Text style={styles.subtitle}>
-                Вход пока минимальный, но сам опыт изучения уже собираем как живую и игровую систему.
+                Вход пока минимальный, но сам опыт изучения уже собираем как
+                живую и игровую систему.
               </Text>
             </View>
 
             <Animated.View
-              style={[styles.heroVisual, { transform: [{ translateY: heroTranslate }] }]}
+              style={[
+                styles.heroVisual,
+                { transform: [{ translateY: heroTranslate }] },
+              ]}
             >
               <Image
                 source={require('../../assets/images/languages.png')}
@@ -222,8 +228,10 @@ const AuthScreen: FC = () => {
           </View>
 
           <View style={styles.placeholderCard}>
-            {/* PLACEHOLDER: здесь хочется видеть большую бренд-иллюстрацию/персонажа на стартовом экране */}
-            <Text style={styles.placeholderText}>HERO ART</Text>
+            <Image
+              source={require('../../assets/images/maskot.png')}
+              style={styles.mascotImage}
+            />
           </View>
         </View>
 

@@ -139,7 +139,7 @@ export const mockAppData: IAplication = {
   about: {
     blocks: [],
   },
-  appName: 'WordCards',
+  appName: 'Nori',
   developer: {
     icon: '',
     link: '',
