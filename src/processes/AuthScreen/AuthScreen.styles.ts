@@ -4,12 +4,9 @@ export const styles = StyleSheet.create((theme, rt) => ({
   screen: {
     paddingHorizontal: theme.layout.appPadding,
     flex: 1,
-    justifyContent: 'space-between',
+    gap: theme.size.s18,
     paddingTop: rt.insets.top + theme.size.s12,
     paddingBottom: rt.insets.bottom + theme.size.s12,
-  },
-  content: {
-    gap: theme.size.s18,
   },
   heroCard: {
     borderRadius: theme.size.s32,
@@ -44,15 +41,13 @@ export const styles = StyleSheet.create((theme, rt) => ({
     height: theme.size.s112,
     resizeMode: 'contain',
   },
-  placeholderCard: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  mascotWrapper: {
+    flex: 1,
   },
   mascotImage: {
     width: '100%',
-    minHeight: '70%',
+    height: '100%',
     resizeMode: 'contain',
-    flex: 1,
   },
   placeholderText: {
     color: theme.colors.text.primary,

@@ -203,36 +203,34 @@ const AuthScreen: FC = () => {
   return (
     <Layout>
       <View style={styles.screen}>
-        <View style={styles.content}>
-          <View style={styles.heroCard}>
-            <View style={styles.heroCopy}>
-              <Text style={styles.badge}>Language streak</Text>
-              <Text style={styles.title}>{t('auth.title')}</Text>
-              <Text style={styles.subtitle}>
-                Вход пока минимальный, но сам опыт изучения уже собираем как
-                живую и игровую систему.
-              </Text>
-            </View>
-
-            <Animated.View
-              style={[
-                styles.heroVisual,
-                { transform: [{ translateY: heroTranslate }] },
-              ]}
-            >
-              <Image
-                source={require('../../assets/images/languages.png')}
-                style={styles.heroImage}
-              />
-            </Animated.View>
+        <View style={styles.heroCard}>
+          <View style={styles.heroCopy}>
+            <Text style={styles.badge}>Language streak</Text>
+            <Text style={styles.title}>{t('auth.title')}</Text>
+            <Text style={styles.subtitle}>
+              Вход пока минимальный, но сам опыт изучения уже собираем как
+              живую и игровую систему.
+            </Text>
           </View>
 
-          <View style={styles.placeholderCard}>
+          <Animated.View
+            style={[
+              styles.heroVisual,
+              { transform: [{ translateY: heroTranslate }] },
+            ]}
+          >
             <Image
-              source={require('../../assets/images/maskot.png')}
-              style={styles.mascotImage}
+              source={require('../../assets/images/languages.png')}
+              style={styles.heroImage}
             />
-          </View>
+          </Animated.View>
+        </View>
+
+        <View style={styles.mascotWrapper}>
+          <Image
+            source={require('../../assets/images/maskot.png')}
+            style={styles.mascotImage}
+          />
         </View>
 
         <View style={styles.controlsCard}>
