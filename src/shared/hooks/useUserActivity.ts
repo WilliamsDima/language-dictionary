@@ -15,14 +15,12 @@ type Props = {
 }
 
 export const useUserActivity = () => {
-  const { setFirebaseData } = useActions()
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const { setActivity } = useActions()
+  const { isAuth } = useAppSelector((store) => store.app)
+  const activity = useAppSelector((store) => store.user.activity)
 
   const updateActivity = useCallback(
     async (data: Props) => {
-      // console.log('updateActivity data', data)
-      // console.log('updateActivity firebaseData', firebaseData)
-
       const {
         totalTimeSpent,
         openApp,
@@ -34,9 +32,7 @@ export const useUserActivity = () => {
         repeatCard,
       } = data
 
-      const activityData = firebaseData?.activity
-
-      if (!firebaseData?.uid || !activityData) return
+      if (!isAuth || !activity) return
 
       const year = new Date().getFullYear()
       const month = new Date().getMonth()
@@ -52,73 +48,57 @@ export const useUserActivity = () => {
         viewedAds: 0,
       }
 
-      // Создаем копию, так как мутировать `activityData` напрямую нельзя
-      const activity = JSON.parse(JSON.stringify(activityData))
+      const updatedActivity = JSON.parse(JSON.stringify(activity))
 
-      if (!activity.year) {
-        activity.year = {}
+      if (!updatedActivity.year) {
+        updatedActivity.year = {}
       }
 
-      // года ещё нет
-      if (!activity.year[year]) {
-        activity.year[year] = {}
+      if (!updatedActivity.year[year]) {
+        updatedActivity.year[year] = {}
       }
 
-      // месяца ещё нет
-      if (!activity.year[year][month]) {
-        activity.year[year][month] = defaultMonth
+      if (!updatedActivity.year[year][month]) {
+        updatedActivity.year[year][month] = defaultMonth
       }
 
-      // Обновляем значения времени
       if (totalTimeSpent) {
-        activity.year[year][month].totalTimeSpent += totalTimeSpent
+        updatedActivity.year[year][month].totalTimeSpent += totalTimeSpent
       }
 
-      // открыл приложение
       if (openApp) {
-        activity.year[year][month].openApp += 1
+        updatedActivity.year[year][month].openApp += 1
       }
 
-      // активные дни
       if (activeDay) {
-        if (!activity.year[year][month].activeDays.includes(activeDay)) {
-          activity.year[year][month].activeDays.push(activeDay)
+        if (!updatedActivity.year[year][month].activeDays.includes(activeDay)) {
+          updatedActivity.year[year][month].activeDays.push(activeDay)
         }
       }
 
-      // добавление карточек
       if (addedCard) {
-        activity.year[year][month].addedCards += 1
+        updatedActivity.year[year][month].addedCards += 1
       }
 
-      // посмотрел рекламу
       if (viewedAds) {
-        activity.year[year][month].viewedAds += 1
+        updatedActivity.year[year][month].viewedAds += 1
       }
 
-      // зашел на повторение карточкек
       if (startTraningCards) {
-        activity.year[year][month].startTraningCards += 1
+        updatedActivity.year[year][month].startTraningCards += 1
       }
 
-      // количество раз изучил карточку
       if (studiedCard) {
-        activity.year[year][month].studiedCard += 1
+        updatedActivity.year[year][month].studiedCard += 1
       }
 
-      // количество раз повторил карточку
       if (repeatCard) {
-        activity.year[year][month].repeatCard += 1
+        updatedActivity.year[year][month].repeatCard += 1
       }
 
-      // console.log('month', activity.year[year][month])
-
-      setFirebaseData({
-        ...firebaseData,
-        activity,
-      })
+      setActivity(updatedActivity)
     },
-    [firebaseData, setFirebaseData]
+    [isAuth, activity, setActivity]
   )
 
   return {

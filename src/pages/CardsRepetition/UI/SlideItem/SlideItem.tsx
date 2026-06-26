@@ -50,12 +50,11 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
   isFlipped,
 }) => {
   const { filterCardsModal } = useAppSelector((store) => store.items)
-
-  const { items } = useAppSelector((store) => store.items)
+  const { liveItems } = useCardsRepetition()
 
   const currentItem = useMemo(() => {
-    return items[item?.item.id]
-  }, [item, items])
+    return liveItems.find((it) => it.id === item?.item.id)
+  }, [item, liveItems])
 
   return currentItem?.items.map((it) => {
     const firstText =
@@ -76,15 +75,13 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
-  const { scrollX, nextSlide, swipeSlide } = useCardsRepetition()
-
-  const { items } = useAppSelector((store) => store.items)
+  const { scrollX, nextSlide, swipeSlide, liveItems } = useCardsRepetition()
 
   const inputRange = [(index - 1) * width, index * width, (index + 1) * width]
 
   const currentItem = useMemo(() => {
-    return items[item?.item.id]
-  }, [item, items])
+    return liveItems.find((it) => it.id === item?.item.id)
+  }, [item, liveItems])
 
   const opacity = scrollX.interpolate({
     inputRange,

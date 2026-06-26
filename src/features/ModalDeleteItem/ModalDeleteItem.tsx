@@ -15,7 +15,7 @@ type Props = {}
 const ModalDeleteItem: FC<Props> = () => {
   const { t } = useTranslation()
   const { setModalDeleteItem } = useActions()
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const { isAuth } = useAppSelector((store) => store.app)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
 
   const { deleteItemHandler } = useCards()
@@ -29,7 +29,7 @@ const ModalDeleteItem: FC<Props> = () => {
   }
 
   const onDelete = async () => {
-    if (modalDeleteItem?.idDoc && firebaseData) {
+    if (modalDeleteItem?.idDoc && isAuth) {
       await deleteItemHandler(modalDeleteItem)
       onCancelHandler()
     }

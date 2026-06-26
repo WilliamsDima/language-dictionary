@@ -19,19 +19,15 @@ const YearResultSlide2: FC<Props> = ({ index, currentSlide }) => {
 
   const date = new Date()
 
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const activity = useAppSelector((store) => store.user.activity)
 
   const activeDays = useMemo(() => {
-    return firebaseData
-      ? getActiveDaysInYear(firebaseData, date.getFullYear())
-      : 0
-  }, [firebaseData])
+    return getActiveDaysInYear(activity, date.getFullYear())
+  }, [activity])
 
   const bestActivityMonth = useMemo(() => {
-    return firebaseData
-      ? getMostActiveMonthInYear(firebaseData, date.getFullYear())
-      : null
-  }, [firebaseData])
+    return getMostActiveMonthInYear(activity, date.getFullYear())
+  }, [activity])
 
   const percent = useMemo(() => {
     return ((activeDays / 365) * 100).toFixed(1)

@@ -3,13 +3,6 @@ import type { ILanguage } from '@/shared/json/languages'
 import type { IItem } from '@/entities/Item/model/item'
 import type { I18NKeys } from '@/shared/i18n/types'
 
-export type IUser = {
-  uid: string
-  displayName?: string | null
-  email?: string | null
-  photoURL?: string | null
-}
-
 export type ShowVariantListVale =
   | 'translate_only'
   | 'word_only'
@@ -30,81 +23,83 @@ export type MainButtonSide = {
 }
 
 export interface IActivityMonth {
-  addedCards: number // добавлено карточек за месяц ✅
-  viewedAds: number // количество просмотренной рекламмы ✅
-  openApp: number // количество заходов в приложение ✅
-  startTraningCards: number // количество раз сколько было заходов на повторение карточек ✅
-  activeDays: string[] // количество активных дней в месяце ✅
-  totalTimeSpent: number // Время в секундах за месяц проведено в приложении ✅
-  studiedCard: number // количество изученных карточек за месяц ✅
-  repeatCard: number // количество повторений карточек за месяц ✅
+  addedCards: number
+  viewedAds: number
+  openApp: number
+  startTraningCards: number
+  activeDays: string[]
+  totalTimeSpent: number
+  studiedCard: number
+  repeatCard: number
 }
 
-// A1 (Beginner)	500 - 1000 слов
-// A2 (Elementary)	1000 - 2000 слов
-// B1 (Intermediate)	2000 - 4000 слов
-// B2 (Upper-Intermediate)	4000 - 8000 слов
-// C1 (Advanced)	8000 - 12000 слов
-// C2 (Proficient)	12000+ слов
-
-// TODO: любимый язык, оценка уровня,
 export interface IActivityYear {
-  // месяц
   [key: number]: IActivityMonth
 }
 
 export interface IUserActivity {
   year: {
-    // 2025 и т.д.
     [key: number]: IActivityYear
   }
 }
 
-export interface IFirebaseData {
-  name: string
-  uid: string
-  dateRegistration: Date
+type InitialState = {
   showVariantList: null | ShowVariantList
   mainButtonSide: null | MainButtonSide
-  email: string
-  languages: ILanguage[]
-  native_language: ILanguage | null
-  image: string
-  activity?: IUserActivity
-}
-
-type InitialState = {
-  firebaseData: null | IFirebaseData
+  native_language: null | ILanguage
+  activity: null | IUserActivity
   showAddModal: boolean
   itemEdit: null | IItem
-  isVkLogin: boolean
 }
 
 const initialState: InitialState = {
-  firebaseData: null,
+  showVariantList: null,
+  mainButtonSide: null,
+  native_language: null,
+  activity: null,
   showAddModal: false,
   itemEdit: null,
-  isVkLogin: false,
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setFirebaseData: (
+    setShowVariantList: (
       state,
-      { payload }: PayloadAction<null | IFirebaseData>
+      { payload }: PayloadAction<null | ShowVariantList>
     ) => {
-      state.firebaseData = payload
+      state.showVariantList = payload
+    },
+    setMainButtonSide: (
+      state,
+      { payload }: PayloadAction<null | MainButtonSide>
+    ) => {
+      state.mainButtonSide = payload
+    },
+    setNativeLanguage: (
+      state,
+      { payload }: PayloadAction<null | ILanguage>
+    ) => {
+      state.native_language = payload
+    },
+    setActivity: (
+      state,
+      { payload }: PayloadAction<null | IUserActivity>
+    ) => {
+      state.activity = payload
+    },
+    clearLocalSettings: (state) => {
+      state.showVariantList = null
+      state.mainButtonSide = null
+      state.native_language = null
+      state.activity = null
     },
     setShowAddModal: (state, { payload }: PayloadAction<boolean>) => {
       state.showAddModal = payload
     },
     setItemEdit: (state, { payload }: PayloadAction<null | any>) => {
       state.itemEdit = payload
-    },
-    setIsVkLogin: (state, { payload }: PayloadAction<boolean>) => {
-      state.isVkLogin = payload
     },
   },
 })

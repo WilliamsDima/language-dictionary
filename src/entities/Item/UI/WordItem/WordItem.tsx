@@ -2,7 +2,6 @@ import React, { FC, memo, useMemo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { styles } from './WordItem.styles'
 import Text from '@/shared/UI/Text/Text'
-import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { AddItemWords } from '@/features/ModalAddItem/Model/items'
 import SoundBIcon from '@/assets/icons/UI/sound-primery-64.svg'
@@ -25,12 +24,11 @@ const WordItem: FC<Props> = ({
   parentItem,
   isLast,
 }) => {
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
+  const showVariantList = useAppSelector((store) => store.user.showVariantList)
 
   const viewTypeItem = useMemo(() => {
-    return profile?.showVariantList ? profile?.showVariantList : DEFAULT_SHOW_VARIANT
-  }, [profile])
+    return showVariantList ?? DEFAULT_SHOW_VARIANT
+  }, [showVariantList])
 
   const sound = () => {
     textToSpeech({ lang: parentItem.language.short_name, text: item.word })

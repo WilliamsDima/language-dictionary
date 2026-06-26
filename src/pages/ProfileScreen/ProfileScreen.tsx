@@ -5,10 +5,9 @@ import { styles } from './ProfileScreen.styles'
 import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
-import { useAppSelector } from '@/shared/hooks/useStore'
 import { isShowModalYearResult } from '@/shared/constants/app'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import { useActions } from '@/shared/hooks/useActions'
-import { useGetItems } from '@/shared/hooks/useGetItems'
 import { dateFormat } from '@/shared/helpers/dateFormat'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
 import { RoutesNames } from '@/app/Navigation/RoutesNames'
@@ -19,15 +18,14 @@ import ProfileActions from './UI/ProfileActions/ProfileActions'
 const ProfileScreen: FC = () => {
   const { navigate } = useAppNavigation()
   const { setShowYearResult } = useActions()
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const { data: profile } = useMeProfile()
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
-  useGetItems()
 
   const registrationDate = useMemo(() => {
-    return dateFormat({ date: firebaseData?.dateRegistration, type: 'FULL' })
-  }, [firebaseData?.dateRegistration])
+    return dateFormat({ date: profile?.dateRegistration, type: 'FULL' })
+  }, [profile?.dateRegistration])
 
   const showModalLogout = useCallback(() => {
     setModalLogout(true)

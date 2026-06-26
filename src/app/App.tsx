@@ -7,7 +7,8 @@ import { LogBox } from 'react-native'
 import { EventProvider } from 'react-native-outside-press'
 import { Provider } from 'react-redux'
 import Routes from './Navigation/AppRoutes'
-import { AuthProvider } from '@/shared/hooks/useAuth'
+import { AuthProvider, useAuth } from '@/shared/hooks/useAuth'
+import { configureGoogleSignIn } from '@/shared/firebase/auth'
 import BootSplash from 'react-native-bootsplash'
 import { initI18n } from '@/shared/i18n'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -16,28 +17,33 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 LogBox.ignoreLogs(['Remote debugger'])
 
-const AppContent: FC = () => (
-  <GestureHandlerRootView style={{ flex: 1 }}>
-    <SafeAreaProvider>
-      <BottomSheetModalProvider>
-        <EventProvider>
-          <Routes />
-        </EventProvider>
-      </BottomSheetModalProvider>
-    </SafeAreaProvider>
-  </GestureHandlerRootView>
-)
+const AppContent: FC = () => {
+  const { isBootstrapping } = useAuth()
+
+  useEffect(() => {
+    if (!isBootstrapping) {
+      BootSplash.hide({ fade: true })
+    }
+  }, [isBootstrapping])
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <BottomSheetModalProvider>
+          <EventProvider>
+            <Routes />
+          </EventProvider>
+        </BottomSheetModalProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
+  )
+}
 
 const App: FC = () => {
   useEffect(() => {
     helloApp()
     initI18n()
-
-    const splashTimeout = setTimeout(() => {
-      BootSplash.hide({ fade: true })
-    }, 500)
-
-    return () => clearTimeout(splashTimeout)
+    configureGoogleSignIn()
   }, [])
 
   return (

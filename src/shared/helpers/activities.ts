@@ -1,8 +1,8 @@
 import type { I18t } from '../i18n/types'
-import type { IActivityMonth, IFirebaseData } from '../store/slice/userSlice'
+import type { IActivityMonth, IUserActivity } from '../store/slice/userSlice'
 
-export const getActiveDaysInYear = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getActiveDaysInYear = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return 0
 
@@ -19,8 +19,8 @@ export const getActiveDaysInYear = (user: IFirebaseData, year: number) => {
   return daysSet.size
 }
 
-export const getMostActiveMonthInYear = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getMostActiveMonthInYear = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
   if (!activityYear) return null
 
   let mostActiveMonth: string | null = null
@@ -47,8 +47,8 @@ export const getMostActiveMonthInYear = (user: IFirebaseData, year: number) => {
   }
 }
 
-export const getYearAddedCardsStats = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getYearAddedCardsStats = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return { total: 0, topMonth: null }
 
@@ -74,8 +74,8 @@ export const getYearAddedCardsStats = (user: IFirebaseData, year: number) => {
   return { total, topMonth, topMonthValue }
 }
 
-export const getYearStudiedCardsStats = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getYearStudiedCardsStats = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return { total: 0, topMonth: null }
 
@@ -101,8 +101,8 @@ export const getYearStudiedCardsStats = (user: IFirebaseData, year: number) => {
   return { total, topMonth, topMonthValue }
 }
 
-export const getYearRepeatCardsStats = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getYearRepeatCardsStats = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return { total: 0, topMonth: null }
 
@@ -141,11 +141,11 @@ export const formatTime = (seconds: number, t: I18t) => {
 }
 
 export const getYearTotalTime = (
-  user: IFirebaseData,
+  activity: IUserActivity | null | undefined,
   year: number,
   t: I18t
 ) => {
-  const activityYear = user.activity?.year?.[year]
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear)
     return { totalSeconds: 0, formatted: `0 ${t('time.secs')}` }
@@ -165,10 +165,10 @@ export const getYearTotalTime = (
 }
 
 export const getYearStartTraningCardsStats = (
-  user: IFirebaseData,
+  activity: IUserActivity | null | undefined,
   year: number
 ) => {
-  const activityYear = user.activity?.year?.[year]
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return { total: 0, topMonth: null }
 
@@ -194,8 +194,8 @@ export const getYearStartTraningCardsStats = (
   return { total, topMonth, topMonthValue }
 }
 
-export const getYearTotaltOpenApp = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getYearTotaltOpenApp = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return 0
 
@@ -210,8 +210,8 @@ export const getYearTotaltOpenApp = (user: IFirebaseData, year: number) => {
   return total
 }
 
-export const getYearTotaltViewedAds = (user: IFirebaseData, year: number) => {
-  const activityYear = user.activity?.year?.[year]
+export const getYearTotaltViewedAds = (activity: IUserActivity | null | undefined, year: number) => {
+  const activityYear = activity?.year?.[year]
 
   if (!activityYear) return 0
 

@@ -4,10 +4,6 @@ import React, { type FC, useEffect, useMemo, useState } from 'react'
 import { View } from 'react-native'
 import { styles } from './Settings.styles'
 import Select from '@/shared/UI/Select/Select'
-import {
-  useGetUserProfileQuery,
-  useUpdateUserProfileMutation,
-} from '../../../ProfileScreen/api/userServices'
 import SaveData from '../SaveData/SaveData'
 import UpdateButton from '../UpdateButton/UpdateButton'
 import { useTranslation } from '@/shared/i18n/types'
@@ -21,18 +17,16 @@ import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
 
 const Settings: FC = () => {
   const { t } = useTranslation()
-  const { setFirebaseData } = useActions()
+  const { setShowVariantList, setMainButtonSide } = useActions()
   const { appLanguage } = useAppSelector((store) => store.app)
-  const { firebaseData } = useAppSelector((store) => store.user)
-
-  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
-  const [updateUserProfile] = useUpdateUserProfileMutation()
+  const { isAuth } = useAppSelector((store) => store.app)
+  const savedShowVariant = useAppSelector((store) => store.user.showVariantList)
+  const savedMainButtonSide = useAppSelector((store) => store.user.mainButtonSide)
 
   const [showVariantSelect, setShowVariantSelect] =
     useState<ShowVariantList | null>(null)
   const [mainButtonSideSelect, setMainButtonSideSelect] =
     useState<MainButtonSide | null>(null)
-  const userProfile = profile || firebaseData
 
   const showVariantList = useMemo(() => {
     return getShowVariantsList(t)
@@ -43,54 +37,40 @@ const Settings: FC = () => {
   }, [t, appLanguage])
 
   const normalizedMainButtonSide = useMemo(() => {
-    const normalizedValue = normalizeMainButtonSide(userProfile?.mainButtonSide)
+    const normalizedValue = normalizeMainButtonSide(savedMainButtonSide)
 
     return (
       mainButtonSidesList.find((item) => item.value === normalizedValue) ||
       mainButtonSidesList[0] ||
       null
     )
-  }, [mainButtonSidesList, userProfile?.mainButtonSide])
+  }, [mainButtonSidesList, savedMainButtonSide])
 
-  const onSelectShowVariant = async (v: ShowVariantList) => {
-    if (userProfile?.uid) {
-      const nextProfile = { ...userProfile, showVariantList: v }
-
-      await updateUserProfile({
-        data: nextProfile,
-        uid: userProfile.uid,
-      })
-
-      setFirebaseData(nextProfile)
+  const onSelectShowVariant = (v: ShowVariantList) => {
+    if (isAuth) {
+      setShowVariantList(v)
       setShowVariantSelect(v)
     }
   }
 
-  const onSelectMainButtonSide = async (v: MainButtonSide) => {
-    if (userProfile?.uid) {
-      const nextProfile = { ...userProfile, mainButtonSide: v }
-
-      await updateUserProfile({
-        data: nextProfile,
-        uid: userProfile.uid,
-      })
-
-      setFirebaseData(nextProfile)
+  const onSelectMainButtonSide = (v: MainButtonSide) => {
+    if (isAuth) {
+      setMainButtonSide(v)
       setMainButtonSideSelect(v)
     }
   }
 
   useEffect(() => {
-    if (!showVariantSelect && userProfile) {
-      setShowVariantSelect(userProfile.showVariantList)
+    if (!showVariantSelect && isAuth) {
+      setShowVariantSelect(savedShowVariant)
     }
-  }, [showVariantSelect, userProfile])
+  }, [showVariantSelect, isAuth, savedShowVariant])
 
   useEffect(() => {
-    if (!mainButtonSideSelect && userProfile) {
+    if (!mainButtonSideSelect && isAuth) {
       setMainButtonSideSelect(normalizedMainButtonSide)
     }
-  }, [mainButtonSideSelect, normalizedMainButtonSide, userProfile])
+  }, [mainButtonSideSelect, isAuth, normalizedMainButtonSide])
 
   return (
     <View style={styles.container}>

@@ -6,6 +6,7 @@ import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import * as RNFS from '@dr.pogodin/react-native-fs'
 import { useActions } from '@/shared/hooks/useActions'
+import { useAllItems } from '@/shared/hooks/useAllItems'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
@@ -20,10 +21,11 @@ const SaveData: FC = () => {
   const { setLastSaveData, setTooltip } = useActions()
   const { theme } = useUnistyles()
 
-  const { lastSaveData, items } = useAppSelector((store) => store.items)
+  const { lastSaveData } = useAppSelector((store) => store.items)
+  const { allItems } = useAllItems()
 
   const toSave = async () => {
-    const jsonString = JSON.stringify(items)
+    const jsonString = JSON.stringify(allItems ?? [])
 
     //console.log('jsonString', jsonString)
 
@@ -63,7 +65,7 @@ const SaveData: FC = () => {
     return ''
   }, [lastSaveData])
 
-  return !!Object.keys(items)?.length ? (
+  return allItems?.length ? (
     <View style={styles.container}>
       <Button isText={false} classes={{ btn: styles.btn }} onPress={toSave}>
         <Text style={styles.btnText}>{t('settingsScreen.save_json')}</Text>

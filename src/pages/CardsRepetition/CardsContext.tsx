@@ -21,7 +21,7 @@ import { NavigateStack } from '@/app/Navigation/types/paramsTypes'
 import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useCards } from '@/shared/hooks/useCards'
+import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 export type CardSlideType = {
   index: number
@@ -30,6 +30,7 @@ export type CardSlideType = {
 
 type IContext = {
   data: CardSlideType[]
+  liveItems: IItem[]
   flatList: RefObject<FlatList | null>
   currentSlide: number
   scrollX: Animated.Value
@@ -53,27 +54,31 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const flatList = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
 
-  const { filterCardsModal, items } = useAppSelector((store) => store.items)
+  const { filterCardsModal } = useAppSelector((store) => store.items)
+  const { isAuth } = useAppSelector((store) => store.app)
 
-  const {
-    getMoreItemsRepetition,
-    page,
-    allItems,
-    isLoading,
-    counts,
-    setLastVisible,
-    setAllItems,
-    getItemsRepetition,
-  } = useCards()
+  const queryArgs = useMemo(
+    () => ({
+      filter: {
+        status: filterCardsModal.status,
+        filter: {
+          languages: filterCardsModal?.languages,
+        },
+      },
+      limitCount: 10,
+      page: 1,
+    }),
+    [filterCardsModal.status, filterCardsModal.languages]
+  )
+
+  const { data: queryData, isFetching } = useGetItemsQuery(queryArgs, {
+    skip: !isAuth,
+  })
+
+  const liveItems = useMemo(() => queryData?.items ?? [], [queryData?.items])
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
-  const [count, setCount] = useState<number>(0)
-  const [data, setData] = useState<
-    {
-      index: number
-      item: IItem
-    }[]
-  >([])
+  const [data, setData] = useState<CardSlideType[]>([])
 
   const currentSlideData = useMemo(() => {
     return data.find((it, i) => i === currentSlide)
@@ -126,55 +131,28 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     []
   )
 
+  // карточки для тренировки собираются один раз при заходе на экран,
+  // дальше статус каждой карточки уже обновляется реактивно через liveItems
   useEffect(() => {
-    page.current = 1
-    setAllItems({})
-    setLastVisible(null)
-    getItemsRepetition()
-  }, [])
-
-  // пагинация убрана
-  // useEffect(() => {
-  //   if ((currentSlide + 1) % 9 === 0) {
-  //     getMoreItemsRepetition()
-  //   }
-  // }, [currentSlide])
-
-  useEffect(() => {
-    if (!data?.length) {
+    if (!data.length && queryData?.items.length) {
       setData(
-        Object.values(items)
-          .filter((it) =>
-            filterCardsModal.languages.length
-              ? filterCardsModal.languages.includes(it.language.short_name)
-              : true && filterCardsModal.status === it.status
-          )
-          .map((it, index) => {
-            return {
-              index,
-              item: it,
-            }
-          })
-          .sort(() => Math.random() - 0.5) || []
+        queryData.items
+          .map((it, index) => ({ index, item: it }))
+          .sort(() => Math.random() - 0.5)
       )
     }
-  }, [items, filterCardsModal, data])
-
-  useEffect(() => {
-    if (!count) {
-      setCount(counts[filterCardsModal.status])
-    }
-  }, [counts, filterCardsModal, count])
+  }, [queryData?.items, data.length])
 
   const value = useMemo(() => {
     return {
       data,
+      liveItems,
       flatList,
       currentSlide,
       scrollX,
       currentSlideData,
-      isLoading,
-      count,
+      isLoading: isFetching,
+      count: data.length,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
@@ -182,12 +160,11 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     }
   }, [
     data,
-    flatList,
+    liveItems,
     currentSlide,
     scrollX,
     currentSlideData,
-    isLoading,
-    count,
+    isFetching,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,

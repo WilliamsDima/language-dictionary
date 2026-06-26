@@ -24,6 +24,7 @@ const Slides: FC<Props> = ({}) => {
   const { setItemEdit, setShowAddModal } = useActions()
   const {
     data,
+    liveItems,
     flatList,
     scrollX,
     currentSlideData,
@@ -34,12 +35,11 @@ const Slides: FC<Props> = ({}) => {
     updateCurrentSlideIndex,
   } = useCardsRepetition()
 
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { items } = useAppSelector((store) => store.items)
+  const { isAuth } = useAppSelector((store) => store.app)
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const { updateItemHandler } = useCards()
+  const { updateStatusHandler } = useCards()
   const { updateActivity } = useUserActivity()
 
   const editItem = () => {
@@ -50,18 +50,18 @@ const Slides: FC<Props> = ({}) => {
   }
 
   const currentItem = useMemo(() => {
-    return currentSlideData && items[currentSlideData?.item.id]
-  }, [currentSlideData, items])
+    return (
+      currentSlideData &&
+      liveItems.find((it) => it.id === currentSlideData.item.id)
+    )
+  }, [currentSlideData, liveItems])
 
   const changeStatus = async () => {
-    if (firebaseData && currentSlideData?.item.idDoc && currentItem) {
+    if (isAuth && currentSlideData?.item.idDoc && currentItem) {
       if (currentItem.status === 'READY') {
         setIsLoading(true)
 
-        await updateItemHandler({
-          ...currentItem,
-          status: 'STUDY',
-        })
+        await updateStatusHandler(currentItem, 'STUDY')
 
         updateActivity({ repeatCard: true })
 
@@ -71,10 +71,7 @@ const Slides: FC<Props> = ({}) => {
       } else {
         setIsLoading(true)
 
-        await updateItemHandler({
-          ...currentItem,
-          status: 'READY',
-        })
+        await updateStatusHandler(currentItem, 'READY')
 
         updateActivity({ studiedCard: true })
 

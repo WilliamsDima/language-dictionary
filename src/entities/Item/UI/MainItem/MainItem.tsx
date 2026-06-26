@@ -31,7 +31,7 @@ const MainItem: FC<Props> = ({ item }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
   const { setModalDeleteItem, setItemEdit, setShowAddModal } = useActions()
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const { isAuth } = useAppSelector((store) => store.app)
   const { modalDeleteItem } = useAppSelector((store) => store.items)
 
   const { hidden: hiddenFooter, toggle: toggleFooter } = useExpandAnim()
@@ -45,7 +45,7 @@ const MainItem: FC<Props> = ({ item }) => {
     statusTone: item.status === 'READY' ? 'ready' : 'study',
   })
 
-  const { updateItemHandler } = useCardsContext()
+  const { updateStatusHandler } = useCardsContext()
 
   const { updateActivity } = useUserActivity()
 
@@ -104,19 +104,19 @@ const MainItem: FC<Props> = ({ item }) => {
   }, [item, setItemEdit, setShowAddModal])
 
   const updateStatus = useCallback(async () => {
-    if (firebaseData && item.idDoc) {
+    if (isAuth && item.idDoc) {
       setIsLoading(true)
       if (item.status === 'READY') {
-        await updateItemHandler({ ...item, status: 'STUDY' })
+        await updateStatusHandler(item, 'STUDY')
         updateActivity({ repeatCard: true })
       } else {
-        await updateItemHandler({ ...item, status: 'READY' })
+        await updateStatusHandler(item, 'READY')
         updateActivity({ studiedCard: true })
       }
 
       setIsLoading(false)
     }
-  }, [firebaseData, item, updateActivity, updateItemHandler])
+  }, [isAuth, item, updateActivity, updateStatusHandler])
 
   const deleteItemHandler = useCallback(() => {
     setModalDeleteItem(item)

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { AddItemWords } from './Model/items'
 import useKeyboardState from '@/shared/hooks/useKeyboardState'
 import { ScrollView } from 'react-native'
-import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { useCards } from '@/shared/hooks/useCards'
@@ -12,10 +11,8 @@ import { useCards } from '@/shared/hooks/useCards'
 export const useModalAddItem = () => {
   const { setShowAddModal, setItemEdit } = useActions()
 
-  const { itemEdit } = useAppSelector((store) => store.user)
-  const { showAddModal, firebaseData } = useAppSelector((store) => store.user)
-
-  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
+  const { itemEdit, showAddModal } = useAppSelector((store) => store.user)
+  const { isAuth } = useAppSelector((store) => store.app)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -78,10 +75,10 @@ export const useModalAddItem = () => {
   }
 
   const onConfirm = async () => {
-    // console.log('onConfirm', firebaseData)
+    // console.log('onConfirm', profile)
     // console.log('onConfirm', profile)
 
-    if (firebaseData && profile) {
+    if (isAuth) {
       const itemsError = items.some(
         (it) => !it.word.trim() || !it.translate.trim()
       )

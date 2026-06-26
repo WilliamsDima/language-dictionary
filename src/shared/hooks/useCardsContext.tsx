@@ -4,6 +4,10 @@ import { useCards } from './useCards'
 
 type IContext = {
   updateItemHandler: (itemEdit: IItem) => Promise<void> | undefined
+  updateStatusHandler: (
+    item: IItem,
+    status: 'READY' | 'STUDY'
+  ) => Promise<void> | undefined
   addItemHandler: (item: IItem) => Promise<void> | undefined
   deleteItemHandler: (item: IItem) => Promise<void> | undefined
 }
@@ -15,15 +19,17 @@ type CardsProviderType = {
 }
 
 export const CardProvider: FC<CardsProviderType> = ({ children }) => {
-  const { addItemHandler, deleteItemHandler, updateItemHandler } = useCards()
+  const { addItemHandler, deleteItemHandler, updateItemHandler, updateStatusHandler } =
+    useCards()
 
   const value = useMemo(() => {
     return {
       updateItemHandler,
+      updateStatusHandler,
       addItemHandler,
       deleteItemHandler,
     }
-  }, [updateItemHandler, addItemHandler, deleteItemHandler])
+  }, [updateItemHandler, updateStatusHandler, addItemHandler, deleteItemHandler])
 
   return <CardContext.Provider value={value}>{children}</CardContext.Provider>
 }

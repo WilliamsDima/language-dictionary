@@ -1,7 +1,11 @@
 import { IItem, StatusItem } from '@/entities/Item/model/item'
-import { FilterMain } from '@/shared/firebase/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ShowVariantListVale } from './userSlice'
+
+export type FilterMain = {
+  sortDate?: 'asc' | 'desc'
+  languages?: string[]
+}
 
 export type FilterCardsModal = {
   status: StatusItem
@@ -13,19 +17,16 @@ type InitialState = {
   modalDeleteItem: IItem | null
   lastSaveData: Date | null | undefined
   filterByStatus: StatusItem
-  itemsRevision: number
   search: string
   showFilterMain: boolean
   filterMain: FilterMain | null
   filterCardsModal: FilterCardsModal
-  items: Record<number, IItem>
 }
 
 const initialState: InitialState = {
   modalDeleteItem: null,
   lastSaveData: null,
   filterByStatus: 'ALL',
-  itemsRevision: 0,
   search: '',
   showFilterMain: false,
   filterMain: {
@@ -36,31 +37,12 @@ const initialState: InitialState = {
     languages: [],
     showVariant: 'word_only',
   },
-  items: {},
 }
 
 export const itemsSlice = createSlice({
   name: 'items',
   initialState,
   reducers: {
-    setItems: (state, { payload }: PayloadAction<Record<number, IItem>>) => {
-      state.items = payload ? payload : state.items
-      state.itemsRevision += 1
-    },
-    addItemAC: (state, { payload }: PayloadAction<IItem>) => {
-      state.items[payload.id] = payload
-      state.itemsRevision += 1
-    },
-    updateItemAC: (state, { payload }: PayloadAction<IItem>) => {
-      state.items[payload.id] = payload
-      state.itemsRevision += 1
-    },
-    deleteItemAC: (state, { payload }: PayloadAction<IItem>) => {
-      if (state.items[payload.id]) {
-        delete state.items[payload.id]
-      }
-      state.itemsRevision += 1
-    },
     setModalDeleteItem: (state, { payload }: PayloadAction<IItem | null>) => {
       state.modalDeleteItem = payload
     },

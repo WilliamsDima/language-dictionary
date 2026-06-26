@@ -30,7 +30,6 @@ export type SvgName =
   | 'translate-primery-64'
   | 'trash-red-64'
   | 'up-circle'
-  | 'vk-64'
 
 export type ImageName = keyof typeof imageIcons
 
@@ -151,10 +150,6 @@ export function Icon<K extends keyof KindMap>(props: {kind: K} & KindMap[K]) {
       case 'up-circle': {
         const {SvgUpCircle} = require('./svg/components/UpCircle')
         return <SvgIcon Component={SvgUpCircle} {...svgProps} />
-      }
-      case 'vk-64': {
-        const {SvgVk64} = require('./svg/components/Vk64')
-        return <SvgIcon Component={SvgVk64} {...svgProps} />
       }
       default:
         return null

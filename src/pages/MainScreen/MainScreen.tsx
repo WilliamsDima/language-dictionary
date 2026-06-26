@@ -30,13 +30,13 @@ import { normalizeMainButtonSide } from '../SettingsScreen/UI/Settings/data'
 const MainScreen: FC = () => {
   const { setFilterByStatus } = useActions()
   const { filterByStatus } = useAppSelector((store) => store.items)
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const savedMainButtonSide = useAppSelector((store) => store.user.mainButtonSide)
   const [sheetFilterRef, presentSheetFilter] = useBottomSheet()
   const { width } = useWindowDimensions()
   const { t } = useTranslation()
   const { theme } = useUnistyles()
   const sliderWidth = width
-  const mainButtonSide = normalizeMainButtonSide(firebaseData?.mainButtonSide)
+  const mainButtonSide = normalizeMainButtonSide(savedMainButtonSide)
 
   const tabs = useMemo(() => tabsWords(t, theme), [t, theme])
   const sliderRef = useRef<FlatList<TabWord>>(null)

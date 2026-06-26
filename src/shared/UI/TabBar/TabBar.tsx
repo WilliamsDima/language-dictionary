@@ -10,12 +10,16 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
 import PracticeButton from '../PracticeButton/PracticeButton'
+import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 
 const TabBar: FC<BottomTabBarProps> = (props) => {
   const { state, navigation } = props
 
-  const { hiddenTabBar } = useAppSelector((store) => store.app)
-  const { items } = useAppSelector((store) => store.items)
+  const { hiddenTabBar, isAuth } = useAppSelector((store) => store.app)
+  const { data } = useGetItemsQuery(
+    { filter: { status: 'ALL' }, limitCount: 1, page: 1 },
+    { skip: !isAuth }
+  )
   const { theme, rt } = useUnistyles()
   const [cardsSheetRef, presentCardsSheet, onDismissCardsSheet] =
     useBottomSheet()
@@ -49,8 +53,8 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
   }, [])
 
   const hasItems = useMemo(() => {
-    return !!Object.keys(items || {}).length
-  }, [items])
+    return !!data?.total
+  }, [data?.total])
 
   const onOpenPractice = useCallback(() => {
     presentCardsSheet()

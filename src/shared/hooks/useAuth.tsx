@@ -5,19 +5,22 @@ import React, {
   useContext,
   ReactNode,
   useCallback,
+  useEffect,
+  useState,
 } from 'react'
 import { useActions } from './useActions'
-import { useAppDispatch, useAppSelector } from './useStore'
-import { IFirebaseData } from '../store/slice/userSlice'
-import { deleteAllItems, deleteProfile, logout } from '../firebase/api'
+import { useAppDispatch } from './useStore'
+import { signInWithGoogle, signOutFirebase } from '../firebase/auth'
 import { baseApi } from '../API/baseApi'
-import { removeAsyncLocal } from '../helpers/asyncStorage'
-import { LOCAL_KEYS } from '../constants/localStorage'
+import { useGetMeQuery, useDeleteMeMutation } from '../API/services/me/MeQuery'
+import { useGoogleSyncMutation } from '../API/services/auth/AuthQuery'
+import { getAuthToken, clearAuthToken } from '../lib/authToken'
 
 type IContext = {
+  loginWithGoogle: () => Promise<void>
   logoutHandler: () => Promise<void>
-  deleteAccaunt: () => void
-  firebaseData: IFirebaseData | null
+  deleteAccaunt: () => Promise<void>
+  isBootstrapping: boolean
 }
 
 const AuthContext = createContext<IContext>({} as IContext)
@@ -27,75 +30,79 @@ type AuthProviderType = {
 }
 
 export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
-  const { setIsAuth, setFirebaseData, setIsVkLogin } = useActions()
+  const { setIsAuth, clearLocalSettings } = useActions()
 
   const dispatch = useAppDispatch()
 
-  const { firebaseData, isVkLogin } = useAppSelector((store) => store.user)
+  const [deleteMe] = useDeleteMeMutation()
+  const [googleSync] = useGoogleSyncMutation()
 
-  const logoutVk = useCallback(async () => {
-    console.log('logoutVk')
+  const [bootstrapToken] = useState(() => getAuthToken())
+  const [isBootstrapping, setIsBootstrapping] = useState(!!bootstrapToken)
 
-    setIsVkLogin(false)
-    await removeAsyncLocal(LOCAL_KEYS.vk_token)
-    await removeAsyncLocal(LOCAL_KEYS.vk_id_user)
-  }, [setIsVkLogin])
+  const {
+    data: meProfile,
+    isLoading: isMeLoading,
+    isError: isMeError,
+  } = useGetMeQuery(undefined, { skip: !bootstrapToken })
+
+  useEffect(() => {
+    if (!bootstrapToken) {
+      setIsBootstrapping(false)
+      return
+    }
+
+    if (isMeLoading) return
+
+    if (isMeError) {
+      clearAuthToken()
+      setIsAuth(false)
+    } else if (meProfile) {
+      setIsAuth(true)
+    }
+
+    setIsBootstrapping(false)
+  }, [bootstrapToken, isMeLoading, isMeError, meProfile, setIsAuth])
+
+  const loginWithGoogle = useCallback(async () => {
+    const idToken = await signInWithGoogle()
+    await googleSync({ idToken }).unwrap()
+    setIsAuth(true)
+  }, [googleSync, setIsAuth])
 
   const logoutHandler = useCallback(async () => {
-    console.log('logoutHandler')
-
     try {
-      dispatch(baseApi.util.resetApiState())
-
-      if (isVkLogin) {
-        await logoutVk()
-      } else {
-        await logout()
-      }
-
-      setIsAuth(false)
-      setFirebaseData(null)
-    } catch (error: any) {
-      if (error) console.log('error logout: ', error)
+      await signOutFirebase()
+    } catch (error) {
+      console.log('error signOutFirebase: ', error)
     } finally {
+      clearAuthToken()
+      dispatch(baseApi.util.resetApiState())
+      setIsAuth(false)
+      clearLocalSettings()
     }
-  }, [dispatch, isVkLogin, logoutVk, setFirebaseData, setIsAuth])
+  }, [dispatch, clearLocalSettings, setIsAuth])
 
   const deleteAccaunt = useCallback(async () => {
-    if (firebaseData) {
-      console.log('deleteAccaunt')
-
-      deleteUserAPI(firebaseData?.uid.toString())
-
-      if (isVkLogin) {
-        await deleteAllItems(firebaseData?.uid.toString())
-      }
-
-      if (!isVkLogin) {
-        await deleteProfile(firebaseData)
-      }
-
-      setTimeout(() => {
-        logoutHandler()
-      }, 500)
+    try {
+      await deleteMe().unwrap()
+    } finally {
+      await logoutHandler()
     }
-  }, [firebaseData, isVkLogin, logoutHandler])
+  }, [deleteMe, logoutHandler])
 
   const value = useMemo(() => {
     return {
+      loginWithGoogle,
       logoutHandler,
       deleteAccaunt,
-      firebaseData,
+      isBootstrapping,
     }
-  }, [logoutHandler, deleteAccaunt, firebaseData])
+  }, [loginWithGoogle, logoutHandler, deleteAccaunt, isBootstrapping])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {
   return useContext(AuthContext)
-}
-
-export const deleteUserAPI = async (id: string) => {
-  console.log('deleteUserAPI skipped without Firebase', id)
 }

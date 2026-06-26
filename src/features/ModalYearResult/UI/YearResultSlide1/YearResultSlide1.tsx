@@ -3,7 +3,7 @@ import { styles } from './YearResultSlide1.styles'
 import { View } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import LottieView from 'lottie-react-native'
-import { useAppSelector } from '@/shared/hooks/useStore'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import UserAvatart from '@/shared/UI/UserAvatart/UserAvatart'
 import type { PropsSlideYearResult } from '../../data'
 import { useTranslation } from '@/shared/i18n/types'
@@ -13,7 +13,7 @@ type Props = {} & PropsSlideYearResult
 const YearResultSlide1: FC<Props> = ({}) => {
   const { t } = useTranslation()
 
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const { data: profile } = useMeProfile()
 
   return (
     <View style={styles.slide}>
@@ -42,7 +42,7 @@ const YearResultSlide1: FC<Props> = ({}) => {
 
       <View style={styles.user}>
         <UserAvatart
-          uri={firebaseData?.image}
+          uri={profile?.image}
           classes={{ wrapper: styles.imageWrapper, image: styles.image }}
         />
 

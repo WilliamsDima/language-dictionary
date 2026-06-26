@@ -2,12 +2,11 @@ import React, { FC, memo } from 'react'
 import { View } from 'react-native'
 import { styles } from './LanguageStatisticList.styles'
 import Text from '@/shared/UI/Text/Text'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGetUserProfileQuery } from '@/pages/ProfileScreen/api/userServices'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import LanguageStatisticItem from '../LanguageStatisticItem/LanguageStatisticItem'
 import { useTranslation } from '@/shared/i18n/types'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
 
 type Props = {
   onOpenLanguages: () => void
@@ -19,8 +18,7 @@ const LanguageStatisticList: FC<Props> = ({
   onOpenLanguages,
 }) => {
   const { t } = useTranslation()
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { data: profile } = useGetUserProfileQuery(firebaseData?.uid)
+  const { data: profile } = useMeProfile()
 
   return (
     <>

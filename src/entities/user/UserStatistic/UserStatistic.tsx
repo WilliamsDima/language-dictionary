@@ -2,11 +2,10 @@ import React, { FC, memo, useCallback, useMemo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { styles } from './UserStatistic.styles'
 import Text from '@/shared/UI/Text/Text'
-import {
-  useGetUserProfileQuery,
-  useUpdateUserProfileMutation,
-} from '@/pages/ProfileScreen/api/userServices'
+import { useUpdateMeLanguagesMutation } from '@/shared/API/services/me/MeQuery'
 import { useAppSelector } from '@/shared/hooks/useStore'
+import { useActions } from '@/shared/hooks/useActions'
+import { useAllItems } from '@/shared/hooks/useAllItems'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
 import { ILanguage } from '@/shared/json/languages'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
@@ -16,6 +15,7 @@ import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import LanguageStatisticItem from './UI/LanguageStatisticItem/LanguageStatisticItem'
 import LinearGradient from 'react-native-linear-gradient'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
 
 type StatisticCardProps = {
   label: string
@@ -64,55 +64,55 @@ const LanguageCard = memo(({ title, onPress, children }: LanguageCardProps) => {
 
 const UserStatistic: FC = () => {
   const { t } = useTranslation()
-  const { firebaseData } = useAppSelector((store) => store.user)
-  const { items } = useAppSelector((store) => store.items)
+  const { setNativeLanguage } = useActions()
+  const { data: profile } = useMeProfile()
+  const native_language = useAppSelector((store) => store.user.native_language)
+  const { allItems, isLoading: isLoadingItems } = useAllItems()
 
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
   const [languagesSheetRef, presentLanguagesSheet, onDismissLanguagesSheet] =
     useBottomSheet()
 
-  const { data: profile, isLoading: isLoadingProfile } = useGetUserProfileQuery(
-    firebaseData?.uid
-  )
-  const [updateUserProfile] = useUpdateUserProfileMutation()
+  const [updateMeLanguages, { isLoading: isSavingLanguages }] =
+    useUpdateMeLanguagesMutation()
 
   const loading = useMemo(() => {
-    return isLoadingProfile
-  }, [isLoadingProfile])
+    return isSavingLanguages || isLoadingItems
+  }, [isSavingLanguages, isLoadingItems])
 
   const allWordsCount = useMemo(() => {
-    if (items) {
+    if (allItems) {
       return formatNumberWithSpaces(
-        Object.values(items).reduce((prev, next) => prev + next.items.length, 0)
+        allItems.reduce((prev, next) => prev + next.items.length, 0)
       )
     }
 
     return '0'
-  }, [items])
+  }, [allItems])
 
   const allWordsReady = useMemo(() => {
-    if (items) {
+    if (allItems) {
       return formatNumberWithSpaces(
-        Object.values(items).reduce((prev, next) => {
+        allItems.reduce((prev, next) => {
           return prev + (next.status === 'READY' ? next.items.length : 0)
         }, 0)
       )
     }
 
     return '0'
-  }, [items])
+  }, [allItems])
 
   const allWordsStady = useMemo(() => {
-    if (items) {
+    if (allItems) {
       return formatNumberWithSpaces(
-        Object.values(items).reduce((prev, next) => {
+        allItems.reduce((prev, next) => {
           return prev + (next.status === 'STUDY' ? next.items.length : 0)
         }, 0)
       )
     }
 
     return '0'
-  }, [items])
+  }, [allItems])
 
   const statisticsCards = useMemo(() => {
     return [
@@ -125,7 +125,7 @@ const UserStatistic: FC = () => {
       {
         id: 'allCardsCount',
         label: t('profileScreen.all_count_cards_short'),
-        value: Object.keys(items)?.length || 0,
+        value: allItems?.length || 0,
         colors: ['#59B8FF', '#3A7BD5'],
       },
       {
@@ -141,33 +141,31 @@ const UserStatistic: FC = () => {
         colors: ['#FF6FAE', '#DD2476'],
       },
     ]
-  }, [allWordsCount, allWordsReady, allWordsStady, items, t])
+  }, [allWordsCount, allWordsReady, allWordsStady, allItems, t])
 
   const languageSelects = useMemo(() => {
     if (isNativeLanguage) {
-      return profile?.native_language ? [profile.native_language] : []
+      return native_language ? [native_language] : []
     }
 
     return profile?.languages || []
-  }, [isNativeLanguage, profile?.languages, profile?.native_language])
+  }, [isNativeLanguage, profile?.languages, native_language])
 
   const onSelectLanguages = useCallback(
-    (langs: ILanguage[]) => {
-      if (firebaseData && profile) {
-        if (isNativeLanguage) {
-          updateUserProfile({
-            data: { ...profile, native_language: langs[0] || null },
-            uid: firebaseData.uid,
-          })
-        } else {
-          updateUserProfile({
-            data: { ...profile, languages: langs },
-            uid: firebaseData.uid,
-          })
-        }
+    async (langs: ILanguage[]) => {
+      if (isNativeLanguage) {
+        // native_language не поддерживается backend — храним только локально
+        setNativeLanguage(langs[0] || null)
+        return
+      }
+
+      try {
+        await updateMeLanguages(langs.map((lang) => lang.id)).unwrap()
+      } catch (error) {
+        // оставляем предыдущий список языков, если backend отказал
       }
     },
-    [firebaseData, isNativeLanguage, profile, updateUserProfile]
+    [isNativeLanguage, setNativeLanguage, updateMeLanguages]
   )
 
   const onEditLanguages = useCallback(() => {
@@ -230,8 +228,8 @@ const UserStatistic: FC = () => {
             title={t('profileScreen.native_language_card')}
             onPress={onEditNativeLanguage}
           >
-            {profile?.native_language ? (
-              <LanguageStatisticItem item={profile.native_language} />
+            {native_language ? (
+              <LanguageStatisticItem item={native_language} />
             ) : (
               <Text style={[styles.emptyText, styles.emptyTextDanger]}>
                 {t('profileScreen.native_language_not_select')}

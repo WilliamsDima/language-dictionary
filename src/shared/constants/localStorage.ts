@@ -1,8 +1,6 @@
 export enum LOCAL_KEYS {
   themeApp = 'themeApp',
   saveDate = 'saveDate',
-  vk_token = 'vk_token',
-  vk_id_user = 'vk_id_user',
   timeSpent = 'timeSpent',
   watchYearResult = 'watchYearResult',
   appLanguage = 'appLanguage', // en,ru ...

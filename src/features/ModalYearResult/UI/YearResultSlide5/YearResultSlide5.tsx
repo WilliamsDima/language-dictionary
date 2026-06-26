@@ -16,13 +16,11 @@ const YearResultSlide5: FC<Props> = ({ index, currentSlide }) => {
   const { t } = useTranslation()
   const date = new Date()
 
-  const { firebaseData } = useAppSelector((store) => store.user)
+  const activity = useAppSelector((store) => store.user.activity)
 
   const active = useMemo(() => {
-    return firebaseData
-      ? getYearRepeatCardsStats(firebaseData, date.getFullYear())
-      : null
-  }, [firebaseData])
+    return getYearRepeatCardsStats(activity, date.getFullYear())
+  }, [activity])
 
   return (
     <View style={styles.slide}>

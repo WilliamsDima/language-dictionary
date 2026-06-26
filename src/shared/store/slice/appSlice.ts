@@ -85,7 +85,6 @@ export interface IAplication {
   socials: ISocial[]
   version: string
   privacy_policy_link: string
-  showVKAuth: boolean
   translations: TranslationsType
   appLanguages: AppLanguagesType
 }
@@ -118,7 +117,6 @@ const initialState: InitialState = {
     socials: [],
     version: '',
     privacy_policy_link: '',
-    showVKAuth: false,
     translations: {
       ru: 'local',
       en: 'local',
