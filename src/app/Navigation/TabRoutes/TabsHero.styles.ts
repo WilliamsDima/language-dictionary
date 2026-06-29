@@ -37,10 +37,16 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.palette.danger_alpha_16,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   heroPlaceholderText: {
     color: theme.colors.palette.red_placeholder,
     fontSize: theme.fontSize.s10,
     fontFamily: 'Mulish-ExtraBold',
+  },
+  heroAvatar: {
+    width: theme.size.s68,
+    height: theme.size.s68,
+    resizeMode: 'cover',
   },
 }))
