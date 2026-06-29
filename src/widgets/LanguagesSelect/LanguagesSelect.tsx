@@ -1,5 +1,6 @@
 import React, { FC, memo, useCallback, useMemo } from 'react'
-import { Image, TouchableOpacity, ViewStyle } from 'react-native'
+import { TouchableOpacity, ViewStyle } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './LanguagesSelect.styles'
 import Text from '@/shared/UI/Text/Text'
@@ -72,7 +73,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         </Text>
 
         {language ? (
-          <Image style={styles.flag} source={{ uri: language.country.flag }} />
+          <FastImage style={styles.flag} source={{ uri: language.country.flag }} />
         ) : (
           <EarthIcon width={25} height={25} />
         )}

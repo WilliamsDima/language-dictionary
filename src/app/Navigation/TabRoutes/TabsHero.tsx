@@ -1,5 +1,16 @@
-import React, { FC, useMemo } from 'react'
-import { View, Image } from 'react-native'
+import React, { FC, useEffect, useMemo } from 'react'
+import { View } from 'react-native'
+import FastImage from 'react-native-fast-image'
+import LinearGradient from 'react-native-linear-gradient'
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
+import { useUnistyles } from 'react-native-unistyles'
 
 import Text from '@/shared/UI/Text/Text'
 import { useMeProfile } from '@/shared/hooks/useMeProfile'
@@ -44,12 +55,36 @@ const TabsHero: FC<Props> = ({ activeScreen, tabName }) => {
     ? TABS_HERO_HIDDEN_ROUTES.includes(activeScreen)
     : false
 
+  const { theme } = useUnistyles()
   const { data: profile } = useMeProfile()
+
+  const rotation = useSharedValue(0)
+  const scale = useSharedValue(1)
 
   const initials = useMemo(
     () => (profile?.name ? getInitials(profile.name) : ''),
-    [profile?.name],
+    [profile?.name]
   )
+
+  const rotateStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value}deg` }, { scale: scale.value }],
+  }))
+
+  useEffect(() => {
+    rotation.value = withRepeat(
+      withTiming(360, { duration: 6000, easing: Easing.linear }),
+      -1,
+      false
+    )
+    scale.value = withRepeat(
+      withSequence(
+        withTiming(1.5, { duration: 700, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1, { duration: 700, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      false
+    )
+  }, [rotation, scale])
 
   if (!hero || isHidden) {
     return <></>
@@ -63,8 +98,27 @@ const TabsHero: FC<Props> = ({ activeScreen, tabName }) => {
       </View>
 
       <View style={styles.heroPlaceholder}>
+        <Animated.View style={[styles.heroGradientRotator, rotateStyle]}>
+          <LinearGradient
+            colors={[
+              'transparent',
+              theme.colors.palette.gradient_blue,
+              theme.colors.palette.gradient_purple,
+              theme.colors.palette.gradient_mint,
+              'transparent',
+            ]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.heroGradient}
+          />
+        </Animated.View>
+
         {profile?.image ? (
-          <Image style={styles.heroAvatar} source={{ uri: profile.image }} />
+          <FastImage
+            style={styles.heroAvatar}
+            source={{ uri: profile.image }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
         ) : (
           <Text style={styles.heroPlaceholderText}>{initials}</Text>
         )}

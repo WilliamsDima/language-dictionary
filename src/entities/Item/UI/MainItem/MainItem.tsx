@@ -1,5 +1,6 @@
 import React, { FC, memo, useCallback, useMemo, useState } from 'react'
-import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './MainItem.styles'
 import Text from '@/shared/UI/Text/Text'
@@ -154,7 +155,7 @@ const MainItem: FC<Props> = ({ item }) => {
 
               {!!item.language.country && (
                 <View style={styles.flagWrapper}>
-                  <Image
+                  <FastImage
                     source={{ uri: item.language.country.flag }}
                     style={styles.flag}
                   />

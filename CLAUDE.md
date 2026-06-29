@@ -61,3 +61,4 @@ Feature-Sliced Design (FSD), enforced top to bottom — `app → pages → widge
 - Hook order inside a component (skip any not used): `useNavigation`, `useRoutes`, `useActions`, `useAppDispatch`, `useAppSelector`, `useState`, RTK Query hooks, other custom hooks, `useMemo`, `useCallback`, `useEffect`.
 - Component responsibility: a component owns the logic for its own action (e.g. delete logic lives in the delete modal, not lifted to a parent "for control"); only move logic to a `hook`/`helper`/`shared` once it's genuinely reused elsewhere.
 - UI text stays in Russian unless the task says otherwise. If a file with Russian UI text is already encoded as UTF-8 with BOM, preserve that encoding when editing it.
+- Images: always use `react-native-fast-image` — never `Image` from `react-native`. Pass `resizeMode` as a prop (`FastImage.resizeMode.cover`), not in the style object.

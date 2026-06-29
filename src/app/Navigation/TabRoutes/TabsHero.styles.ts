@@ -33,20 +33,29 @@ export const styles = StyleSheet.create((theme) => ({
     height: theme.size.s68,
     borderRadius: theme.radius.pill,
     borderWidth: theme.size.s2,
-    borderColor: theme.colors.palette.red_placeholder,
-    backgroundColor: theme.colors.palette.danger_alpha_16,
+    borderColor: theme.colors.palette.gradient_blue,
+    backgroundColor: theme.colors.palette.blue_navy,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
   },
+  heroGradientRotator: {
+    position: 'absolute',
+    // larger than container (68 * √2 ≈ 96) to fill the circle during rotation
+    width: 96,
+    height: 96,
+  },
+  heroGradient: {
+    flex: 1,
+  },
   heroPlaceholderText: {
-    color: theme.colors.palette.red_placeholder,
-    fontSize: theme.fontSize.s10,
+    color: theme.colors.palette.white,
+    fontSize: theme.fontSize.s14,
     fontFamily: 'Mulish-ExtraBold',
   },
   heroAvatar: {
-    width: theme.size.s68,
-    height: theme.size.s68,
-    resizeMode: 'cover',
+    width: theme.size.s58,
+    height: theme.size.s58,
+    borderRadius: theme.radius.pill,
   },
 }))

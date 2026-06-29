@@ -7,7 +7,8 @@ import React, {
   useState,
 } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
-import { Image, StyleProp, TextInput, TextStyle, View } from 'react-native'
+import { StyleProp, TextInput, TextStyle, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import Text from '../Text/Text'
 import { MultiSelect } from 'react-native-element-dropdown'
 import { styles } from './MultiselectDropdown.styles'
@@ -35,7 +36,7 @@ type DropdownItemProps = {
 const DropdownItem = memo(({ active, iconUrl, label }: DropdownItemProps) => {
   return (
     <View style={[styles.item, active && styles.itemActive]}>
-      {!!iconUrl && <Image source={{ uri: iconUrl }} style={styles.icon} />}
+      {!!iconUrl && <FastImage source={{ uri: iconUrl }} style={styles.icon} />}
       <Text
         style={[
           styles.selectedTextStyle,

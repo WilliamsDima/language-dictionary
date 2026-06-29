@@ -8,7 +8,8 @@ import React, {
   useState,
 } from 'react'
 import { styles } from './ModalLanguagesList.styles'
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
+import { ScrollView, TouchableOpacity, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import { ILanguage, languages } from '@/shared/json/languages'
 import { useTranslation } from '@/shared/i18n/types'
 import Text from '@/shared/UI/Text/Text'
@@ -66,7 +67,7 @@ const LanguageRow = memo(
         </View>
 
         {!iconIsError ? (
-          <Image
+          <FastImage
             source={{ uri: item.country.flag }}
             style={styles.icon}
             onError={onImageError}

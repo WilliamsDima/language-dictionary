@@ -16,7 +16,6 @@ export const styles = StyleSheet.create((theme) => ({
     width: theme.size.s76,
     height: theme.size.s76,
     borderRadius: theme.size.s76 / 2,
-    resizeMode: 'cover',
   },
 
   name: {

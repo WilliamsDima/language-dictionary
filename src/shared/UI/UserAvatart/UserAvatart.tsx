@@ -1,5 +1,6 @@
 import React, { FC, memo } from 'react'
-import { ViewStyle, View, Image, ImageStyle } from 'react-native'
+import { ViewStyle, View } from 'react-native'
+import FastImage, { FastImageProps } from 'react-native-fast-image'
 import { styles } from './UserAvatart.styles'
 import Text from '../Text/Text'
 
@@ -11,7 +12,7 @@ import Text from '../Text/Text'
 
 type Props = {
   classes?: {
-    image?: ImageStyle | ImageStyle[]
+    image?: FastImageProps['style']
     wrapper?: ViewStyle | ViewStyle[]
   }
   uri?: string
@@ -24,7 +25,11 @@ const UserAvatart: FC<Props> = (props) => {
   return (
     <View style={[styles.wrapper, classes?.wrapper]}>
       {!!uri ? (
-        <Image style={[styles.avatar, classes?.image]} source={{ uri }} />
+        <FastImage
+          style={[styles.avatar, classes?.image]}
+          source={{ uri }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
       ) : (
         <Text style={styles.name}>{name ? name?.slice(0, 2) : 'NA'}</Text>
       )}
