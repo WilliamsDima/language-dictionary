@@ -14,6 +14,7 @@ import { initI18n } from '@/shared/i18n'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import Toast from '@/shared/UI/Toast/ToastProvider'
 
 LogBox.ignoreLogs(['Remote debugger'])
 
@@ -34,6 +35,7 @@ const AppContent: FC = () => {
             <Routes />
           </EventProvider>
         </BottomSheetModalProvider>
+        <Toast />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )

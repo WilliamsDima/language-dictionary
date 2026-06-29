@@ -3,9 +3,10 @@ import { styles } from './ButtonGoogle.styles'
 import Button from '@/shared/UI/Button/Button'
 import GoogleIcon from '@/assets/icons/UI/google.svg'
 import Text from '@/shared/UI/Text/Text'
-import { ActivityIndicator, Alert, View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import { useTranslation } from '@/shared/i18n/types'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { toast } from '@/shared/UI/Toast/toast'
 
 interface Props {}
 
@@ -23,10 +24,7 @@ const ButtonGoogle: FC<Props> = (props) => {
     } catch (error) {
       console.log('Google error', error)
 
-      Alert.alert(
-        'Ошибка входа',
-        'Не удалось войти через Google. Попробуйте снова.'
-      )
+      toast.error('Не удалось войти через Google. Попробуйте снова.')
     } finally {
       setIsLoading(false)
     }
