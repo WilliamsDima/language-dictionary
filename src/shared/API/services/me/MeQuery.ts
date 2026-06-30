@@ -1,7 +1,7 @@
 import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { meService } from './MeService'
-import type { MeProfile } from './types'
+import type { MeProfile, UpdateLanguagesPayload } from './types'
 
 export const meAPI = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -12,14 +12,15 @@ export const meAPI = baseApi.injectEndpoints({
       providesTags: ['me'],
     }),
 
-    updateMeLanguages: build.mutation<MeProfile, number[]>({
-      async queryFn(languages) {
-        return toRtkQueryResult(await meService.updateLanguages(languages))
+    updateMeLanguages: build.mutation<MeProfile, UpdateLanguagesPayload>({
+      async queryFn(payload) {
+        return toRtkQueryResult(await meService.updateLanguages(payload))
       },
-      async onQueryStarted(languages, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ languages, nativeLanguageId }, { dispatch, queryFulfilled }) {
         const patch = dispatch(
           meAPI.util.updateQueryData('getMe', undefined, (draft) => {
             draft.languages = languages
+            draft.native_language_id = nativeLanguageId
           })
         )
         try {

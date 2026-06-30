@@ -1,5 +1,5 @@
 import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
-import { ILanguage } from '@/shared/json/languages'
+import { ILanguage } from '@/shared/API/services/languages/types'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { AddItemWords } from './Model/items'
 import useKeyboardState from '@/shared/hooks/useKeyboardState'

@@ -1,5 +1,5 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import type { ILanguage } from '@/shared/json/languages'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 import type { IItem } from '@/entities/Item/model/item'
 import type { I18NKeys } from '@/shared/i18n/types'
 

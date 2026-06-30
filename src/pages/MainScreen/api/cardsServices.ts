@@ -1,8 +1,9 @@
 import { IItem } from '@/entities/Item/model/item'
-import { ILanguage, languages } from '@/shared/json/languages'
+import { ILanguage } from '@/shared/API/services/languages/types'
 import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { cardsService } from './CardsService'
+import { languagesAPI } from '@/shared/API/services/languages/LanguagesQuery'
 import type {
   AddItemParams,
   CardDTO,
@@ -14,20 +15,20 @@ import type {
   UpdateItemStatusParams,
 } from './types'
 
-const findLanguage = (code: string): ILanguage =>
-  languages.find((lang) => lang.short_name === code) ?? {
+const findLanguage = (langList: ILanguage[], code: string): ILanguage =>
+  langList.find((lang) => lang.code === code) ?? {
     id: 0,
-    full_name: code,
-    short_name: code,
-    country: { id: 0, title: '', flag: '' },
+    name: code,
+    code,
+    emoji: '',
   }
 
-const cardToItem = (card: CardDTO): IItem => ({
+const cardToItem = (langList: ILanguage[], card: CardDTO): IItem => ({
   id: card.id,
   idDoc: String(card.id),
   date: new Date(card.date),
   description: card.description ?? '',
-  language: findLanguage(card.language),
+  language: findLanguage(langList, card.language),
   items: card.items.map((it) => ({
     id: it.id,
     word: it.word,
@@ -40,17 +41,32 @@ const toCardStatus = (status: IItem['status']): CardStatus =>
   status === 'READY' ? 'READY' : 'STUDY'
 
 const itemToCreatePayload = (item: IItem) => ({
-  language: item.language.short_name,
+  language: item.language.code,
   description: item.description,
   status: toCardStatus(item.status),
   items: item.items.map((it) => ({ word: it.word, translate: it.translate })),
 })
 
 const itemToUpdatePayload = (item: Partial<IItem>) => ({
-  language: item.language?.short_name ?? '',
+  language: item.language?.code ?? '',
   description: item.description ?? '',
   items: (item.items ?? []).map((it) => ({ word: it.word, translate: it.translate })),
 })
+
+const getLangList = async (
+  dispatch: (action: any) => any,
+  getState: () => unknown
+): Promise<ILanguage[]> => {
+  const cached = languagesAPI.endpoints.getLanguages.select(undefined)(
+    getState() as any
+  )
+  if (cached.data) return cached.data
+
+  const result = await dispatch(
+    languagesAPI.endpoints.getLanguages.initiate(undefined)
+  )
+  return 'data' in result ? (result.data ?? []) : []
+}
 
 const toListQuery = (params: GetItemsParams) => {
   const limit = params.limitCount ?? 20
@@ -70,7 +86,8 @@ export const cardsServices = baseApi.injectEndpoints({
   endpoints: (build) => ({
     // получение списка — все страницы одного фильтра копятся в одной записи кэша
     getItems: build.query<GetItemsRequest, GetItemsParams>({
-      async queryFn(params) {
+      async queryFn(params, { dispatch, getState }) {
+        const langList = await getLangList(dispatch, getState)
         const result = await cardsService.list(toListQuery(params))
         if (!result.ok) return toRtkQueryResult<GetItemsRequest>(result)
 
@@ -79,7 +96,7 @@ export const cardsServices = baseApi.injectEndpoints({
 
         return {
           data: {
-            items: items.map(cardToItem),
+            items: items.map((card) => cardToItem(langList, card)),
             total,
             lastVisible: hasMore ? offset + items.length : undefined,
           },
@@ -105,10 +122,11 @@ export const cardsServices = baseApi.injectEndpoints({
     }),
     // добавление элемента
     addItem: build.mutation<IItem, AddItemParams>({
-      async queryFn({ item }) {
+      async queryFn({ item }, { dispatch, getState }) {
+        const langList = await getLangList(dispatch, getState)
         const result = await cardsService.create(itemToCreatePayload(item))
         if (!result.ok) return toRtkQueryResult<IItem>(result)
-        return { data: cardToItem(result.data) }
+        return { data: cardToItem(langList, result.data) }
       },
       async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
         const { data: created } = await queryFulfilled.catch(() => ({ data: null }))
@@ -130,13 +148,14 @@ export const cardsServices = baseApi.injectEndpoints({
     }),
     // обновление элемента
     updateItem: build.mutation<IItem, UpdateItemParams>({
-      async queryFn({ idDoc, updatedData }) {
+      async queryFn({ idDoc, updatedData }, { dispatch, getState }) {
+        const langList = await getLangList(dispatch, getState)
         const result = await cardsService.update(
           Number(idDoc),
           itemToUpdatePayload(updatedData)
         )
         if (!result.ok) return toRtkQueryResult<IItem>(result)
-        return { data: cardToItem(result.data) }
+        return { data: cardToItem(langList, result.data) }
       },
       async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
         const { data: updated } = await queryFulfilled.catch(() => ({ data: null }))
@@ -158,10 +177,11 @@ export const cardsServices = baseApi.injectEndpoints({
     }),
     // изменение статуса элемента — оптимистичное обновление с rollback
     updateItemStatus: build.mutation<IItem, UpdateItemStatusParams>({
-      async queryFn({ idDoc, status }) {
+      async queryFn({ idDoc, status }, { dispatch, getState }) {
+        const langList = await getLangList(dispatch, getState)
         const result = await cardsService.updateStatus(Number(idDoc), status)
         if (!result.ok) return toRtkQueryResult<IItem>(result)
-        return { data: cardToItem(result.data) }
+        return { data: cardToItem(langList, result.data) }
       },
       async onQueryStarted({ idDoc, status }, { dispatch, getState, queryFulfilled }) {
         const cardId = Number(idDoc)

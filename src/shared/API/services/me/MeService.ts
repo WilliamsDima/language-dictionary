@@ -1,15 +1,15 @@
 import { request } from '@/shared/API/request'
-import type { MeProfile } from './types'
+import type { MeProfile, UpdateLanguagesPayload } from './types'
 
 class MeService {
   getMe() {
     return request<MeProfile>('/me', { method: 'GET' })
   }
 
-  updateLanguages(languages: number[]) {
+  updateLanguages({ languages, nativeLanguageId }: UpdateLanguagesPayload) {
     return request<MeProfile>('/me/languages', {
       method: 'PUT',
-      json: { languages },
+      json: { languages, native_language_id: nativeLanguageId },
     })
   }
 

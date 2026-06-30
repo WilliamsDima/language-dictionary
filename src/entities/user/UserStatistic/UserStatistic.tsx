@@ -3,11 +3,9 @@ import { TouchableOpacity, View } from 'react-native'
 import { styles } from './UserStatistic.styles'
 import Text from '@/shared/UI/Text/Text'
 import { useUpdateMeLanguagesMutation } from '@/shared/API/services/me/MeQuery'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import { useActions } from '@/shared/hooks/useActions'
 import { useAllItems } from '@/shared/hooks/useAllItems'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
-import { ILanguage } from '@/shared/json/languages'
+import { ILanguage } from '@/shared/API/services/languages/types'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
 import Loader from '@/shared/UI/Loader/Loader'
 import { useTranslation } from '@/shared/i18n/types'
@@ -64,9 +62,7 @@ const LanguageCard = memo(({ title, onPress, children }: LanguageCardProps) => {
 
 const UserStatistic: FC = () => {
   const { t } = useTranslation()
-  const { setNativeLanguage } = useActions()
   const { data: profile } = useMeProfile()
-  const native_language = useAppSelector((store) => store.user.native_language)
   const { allItems, isLoading: isLoadingItems } = useAllItems()
 
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
@@ -145,27 +141,31 @@ const UserStatistic: FC = () => {
 
   const languageSelects = useMemo(() => {
     if (isNativeLanguage) {
-      return native_language ? [native_language] : []
+      return profile?.nativeLanguage ? [profile.nativeLanguage] : []
     }
 
     return profile?.languages || []
-  }, [isNativeLanguage, profile?.languages, native_language])
+  }, [isNativeLanguage, profile?.languages, profile?.nativeLanguage])
 
   const onSelectLanguages = useCallback(
     async (langs: ILanguage[]) => {
-      if (isNativeLanguage) {
-        // native_language не поддерживается backend — храним только локально
-        setNativeLanguage(langs[0] || null)
-        return
-      }
-
       try {
-        await updateMeLanguages(langs.map((lang) => lang.id)).unwrap()
-      } catch (error) {
-        // оставляем предыдущий список языков, если backend отказал
+        if (isNativeLanguage) {
+          await updateMeLanguages({
+            languages: profile?.languages?.map((l) => l.id) ?? [],
+            nativeLanguageId: langs[0]?.id ?? null,
+          }).unwrap()
+        } else {
+          await updateMeLanguages({
+            languages: langs.map((lang) => lang.id),
+            nativeLanguageId: profile?.nativeLanguage?.id ?? null,
+          }).unwrap()
+        }
+      } catch {
+        // оставляем предыдущие значения, если backend отказал
       }
     },
-    [isNativeLanguage, setNativeLanguage, updateMeLanguages]
+    [isNativeLanguage, updateMeLanguages, profile]
   )
 
   const onEditLanguages = useCallback(() => {
@@ -228,8 +228,8 @@ const UserStatistic: FC = () => {
             title={t('profileScreen.native_language_card')}
             onPress={onEditNativeLanguage}
           >
-            {native_language ? (
-              <LanguageStatisticItem item={native_language} />
+            {profile?.nativeLanguage ? (
+              <LanguageStatisticItem item={profile.nativeLanguage} />
             ) : (
               <Text style={[styles.emptyText, styles.emptyTextDanger]}>
                 {t('profileScreen.native_language_not_select')}

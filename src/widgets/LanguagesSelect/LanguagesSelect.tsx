@@ -1,12 +1,11 @@
 import React, { FC, memo, useCallback, useMemo } from 'react'
 import { TouchableOpacity, ViewStyle } from 'react-native'
-import FastImage from 'react-native-fast-image'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './LanguagesSelect.styles'
 import Text from '@/shared/UI/Text/Text'
 import EarthIcon from '@/assets/icons/UI/earth.svg'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
-import { ILanguage } from '@/shared/json/languages'
+import { ILanguage } from '@/shared/API/services/languages/types'
 import { useTranslation } from '@/shared/i18n/types'
 import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 
@@ -69,11 +68,11 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
     <>
       <TouchableOpacity style={selectStyles} onPress={openModal}>
         <Text style={styles.title}>
-          {language ? language.full_name : t('ui.language_selection')}
+          {language ? language.name : t('ui.language_selection')}
         </Text>
 
         {language ? (
-          <FastImage style={styles.flag} source={{ uri: language.country.flag }} />
+          <Text style={styles.flag}>{language.emoji}</Text>
         ) : (
           <EarthIcon width={25} height={25} />
         )}

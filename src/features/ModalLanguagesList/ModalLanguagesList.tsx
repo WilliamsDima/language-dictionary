@@ -9,8 +9,8 @@ import React, {
 } from 'react'
 import { styles } from './ModalLanguagesList.styles'
 import { ScrollView, TouchableOpacity, View } from 'react-native'
-import FastImage from 'react-native-fast-image'
-import { ILanguage, languages } from '@/shared/json/languages'
+import { ILanguage } from '@/shared/API/services/languages/types'
+import { useGetLanguagesQuery } from '@/shared/API/services/languages/LanguagesQuery'
 import { useTranslation } from '@/shared/i18n/types'
 import Text from '@/shared/UI/Text/Text'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
@@ -32,53 +32,34 @@ type Props = {
 type LanguageRowProps = {
   isActive: boolean
   isLast: boolean
-  iconIsError: boolean
   item: ILanguage
   onPress: () => void
-  onImageError: () => void
 }
 
-const LanguageRow = memo(
-  ({
-    isActive,
-    isLast,
-    iconIsError,
-    item,
-    onPress,
-    onImageError,
-  }: LanguageRowProps) => {
-    const itemStyles = useMemo(() => {
-      return [
-        styles.item,
-        isActive ? styles.itemActive : null,
-        isLast ? styles.itemLast : null,
-      ]
-    }, [isActive, isLast])
+const LanguageRow = memo(({ isActive, isLast, item, onPress }: LanguageRowProps) => {
+  const itemStyles = useMemo(() => {
+    return [
+      styles.item,
+      isActive ? styles.itemActive : null,
+      isLast ? styles.itemLast : null,
+    ]
+  }, [isActive, isLast])
 
-    const nameStyles = useMemo(() => {
-      return [styles.name, isActive ? styles.nameActive : null]
-    }, [isActive])
+  const nameStyles = useMemo(() => {
+    return [styles.name, isActive ? styles.nameActive : null]
+  }, [isActive])
 
-    return (
-      <TouchableOpacity style={itemStyles} onPress={onPress}>
-        <View style={styles.languageInfo}>
-          <Text style={nameStyles}>{item.full_name}</Text>
-          <Text style={styles.code}>{item.short_name.toUpperCase()}</Text>
-        </View>
+  return (
+    <TouchableOpacity style={itemStyles} onPress={onPress}>
+      <View style={styles.languageInfo}>
+        <Text style={nameStyles}>{item.name}</Text>
+        <Text style={styles.code}>{item.code.toUpperCase()}</Text>
+      </View>
 
-        {!iconIsError ? (
-          <FastImage
-            source={{ uri: item.country.flag }}
-            style={styles.icon}
-            onError={onImageError}
-          />
-        ) : (
-          <></>
-        )}
-      </TouchableOpacity>
-    )
-  }
-)
+      <Text style={styles.icon}>{item.emoji}</Text>
+    </TouchableOpacity>
+  )
+})
 
 const ModalLanguagesList: FC<Props> = ({
   sheetRef,
@@ -92,8 +73,8 @@ const ModalLanguagesList: FC<Props> = ({
   onDismiss,
 }) => {
   const { t } = useTranslation()
+  const { data: languages = [] } = useGetLanguagesQuery()
 
-  const [isonsError, setIsonsError] = useState<number[]>([])
   const [selectedLanguages, setSelectedLanguages] = useState<ILanguage[]>([])
 
   const syncSelectedLanguages = useCallback(() => {
@@ -103,16 +84,6 @@ const ModalLanguagesList: FC<Props> = ({
   useEffect(() => {
     syncSelectedLanguages()
   }, [syncSelectedLanguages])
-
-  const onImageError = useCallback((id: number) => {
-    setIsonsError((prev) => {
-      if (prev.includes(id)) {
-        return prev
-      }
-
-      return [...prev, id]
-    })
-  }, [])
 
   const onSelectLanguage = useCallback(
     (language: ILanguage) => {
@@ -180,7 +151,6 @@ const ModalLanguagesList: FC<Props> = ({
         contentContainerStyle={styles.list}
       >
         {languages.map((it, i) => {
-          const iconIsError = isonsError.includes(it.id)
           const isActive = selectedLanguages.some((item) => item.id === it.id)
 
           return (
@@ -189,12 +159,8 @@ const ModalLanguagesList: FC<Props> = ({
               item={it}
               isActive={isActive}
               isLast={i === languages.length - 1}
-              iconIsError={iconIsError}
               onPress={() => {
                 onSelectLanguage(it)
-              }}
-              onImageError={() => {
-                onImageError(it.id)
               }}
             />
           )

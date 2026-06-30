@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useRef } from 'react'
+import React, { FC, memo, startTransition, useCallback, useEffect, useRef } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalAddItem.styles'
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
@@ -47,6 +47,10 @@ const ModalAddItem: FC<Props> = () => {
   const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
   const wasVisibleRef = useRef(false)
 
+  const handleConfirm = useCallback(() => {
+    startTransition(onConfirm)
+  }, [onConfirm])
+
   useEffect(() => {
     if (showAddModal && !wasVisibleRef.current) {
       presentSheet()
@@ -94,7 +98,7 @@ const ModalAddItem: FC<Props> = () => {
                   <CloseIcon width={30} height={30} />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={onConfirm}>
+              <TouchableOpacity onPress={handleConfirm}>
                 <View style={[styles.actionBtn, styles.actionBtnPrimary]}>
                   <ReadyIcon width={30} height={30} />
                 </View>

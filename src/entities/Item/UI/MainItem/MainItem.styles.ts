@@ -67,10 +67,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.palette.white_alpha_06,
   },
   flag: {
-    width: theme.size.s20,
-    height: theme.size.s20,
-    borderRadius: theme.size.s20 / 2,
-    resizeMode: 'cover',
+    fontSize: theme.fontSize.s16,
   },
 
   date: {

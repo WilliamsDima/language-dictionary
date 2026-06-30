@@ -1,32 +1,37 @@
 import { useMemo } from 'react'
 import { useGetMeQuery } from '@/shared/API/services/me/MeQuery'
-import { languages } from '@/shared/json/languages'
-import type { ILanguage } from '@/shared/json/languages'
-
-const mapLanguageIdsToList = (ids?: number[]): ILanguage[] =>
-  (ids ?? [])
-    .map((id) => languages.find((lang) => lang.id === id))
-    .filter((lang): lang is ILanguage => Boolean(lang))
+import { useGetLanguagesQuery } from '@/shared/API/services/languages/LanguagesQuery'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 
 export const useMeProfile = () => {
-  const { data, ...rest } = useGetMeQuery()
+  const { data: meData, ...rest } = useGetMeQuery()
+  const { data: allLanguages = [] } = useGetLanguagesQuery()
 
   const mappedLanguages = useMemo(
-    () => mapLanguageIdsToList(data?.languages),
-    [data?.languages]
+    (): ILanguage[] =>
+      (meData?.languages ?? [])
+        .map((id) => allLanguages.find((l) => l.id === id))
+        .filter((l): l is ILanguage => Boolean(l)),
+    [meData?.languages, allLanguages]
+  )
+
+  const nativeLanguage = useMemo(
+    () => allLanguages.find((l) => l.id === meData?.native_language_id) ?? null,
+    [meData?.native_language_id, allLanguages]
   )
 
   const profile = useMemo(() => {
-    if (!data) return undefined
+    if (!meData) return undefined
     return {
-      uid: data.google_uid,
-      name: data.name,
-      email: data.email,
-      image: data.image ?? '',
-      dateRegistration: new Date(data.created_at),
+      uid: meData.google_uid,
+      name: meData.name,
+      email: meData.email,
+      image: meData.image ?? '',
+      dateRegistration: new Date(meData.created_at),
       languages: mappedLanguages,
+      nativeLanguage,
     }
-  }, [data, mappedLanguages])
+  }, [meData, mappedLanguages, nativeLanguage])
 
   return { ...rest, data: profile }
 }

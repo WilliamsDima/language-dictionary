@@ -1,5 +1,5 @@
 import { AddItemWords } from '@/features/ModalAddItem/Model/items'
-import { ILanguage } from '@/shared/json/languages'
+import { ILanguage } from '@/shared/API/services/languages/types'
 
 export type StatusItem = 'READY' | 'STUDY' | 'ALL'
 

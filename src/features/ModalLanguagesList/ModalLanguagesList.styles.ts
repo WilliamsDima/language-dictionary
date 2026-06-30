@@ -98,10 +98,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
     marginBottom: theme.size.s20,
   },
   icon: {
-    width: theme.size.s28,
-    height: theme.size.s28,
-    borderRadius: theme.size.s14,
-    resizeMode: 'cover',
+    fontSize: theme.fontSize.s20,
   },
 
   footer: {

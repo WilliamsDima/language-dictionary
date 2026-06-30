@@ -24,8 +24,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   flag: {
-    width: theme.size.s25,
-    height: theme.size.s25,
-    resizeMode: 'cover',
+    fontSize: theme.fontSize.s20,
   },
 }))

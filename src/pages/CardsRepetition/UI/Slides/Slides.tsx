@@ -1,4 +1,4 @@
-import React, { FC, useActionState, useMemo, useOptimistic } from 'react'
+import React, { FC, startTransition, useActionState, useCallback, useMemo, useOptimistic } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
@@ -84,6 +84,10 @@ const Slides: FC<Props> = ({}) => {
     null,
   )
 
+  const handleChangeStatus = useCallback(() => {
+    startTransition(changeStatusAction)
+  }, [changeStatusAction])
+
   return (
     <View style={styles.container}>
       <View style={styles.slidesWrapper}>
@@ -139,7 +143,7 @@ const Slides: FC<Props> = ({}) => {
               <Button
                 isText={false}
                 style={styles.btnGroup}
-                onPress={changeStatusAction}
+                onPress={handleChangeStatus}
               >
                 {isLoading ? (
                   <ActivityIndicator

@@ -1,4 +1,4 @@
-import React, { FC, useActionState } from 'react'
+import React, { FC, startTransition, useActionState, useCallback } from 'react'
 import { styles } from './ButtonGoogle.styles'
 import Button from '@/shared/UI/Button/Button'
 import GoogleIcon from '@/assets/icons/UI/google.svg'
@@ -24,15 +24,19 @@ const ButtonGoogle: FC<Props> = () => {
       }
       return null
     },
-    null,
+    null
   )
+
+  const handlePress = useCallback(() => {
+    startTransition(loginAction)
+  }, [loginAction])
 
   return (
     <Button
       classes={{ btn: styles.btn }}
       isText={false}
       disabled={isLoading}
-      onPress={loginAction}
+      onPress={handlePress}
     >
       <View style={styles.content}>
         <Text style={styles.text}>{t('auth.googleBtn')}</Text>
