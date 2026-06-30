@@ -4,4 +4,5 @@ export enum LOCAL_KEYS {
   timeSpent = 'timeSpent',
   watchYearResult = 'watchYearResult',
   appLanguage = 'appLanguage', // en,ru ...
+  showVariantList = 'showVariantList',
 }
