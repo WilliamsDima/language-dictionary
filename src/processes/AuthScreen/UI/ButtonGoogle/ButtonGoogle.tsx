@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useActionState } from 'react'
 import { styles } from './ButtonGoogle.styles'
 import Button from '@/shared/UI/Button/Button'
 import GoogleIcon from '@/assets/icons/UI/google.svg'
@@ -10,32 +10,29 @@ import { toast } from '@/shared/UI/Toast/toast'
 
 interface Props {}
 
-const ButtonGoogle: FC<Props> = (props) => {
+const ButtonGoogle: FC<Props> = () => {
   const { t } = useTranslation()
   const { loginWithGoogle } = useAuth()
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  const onGoogleButtonPress = useCallback(async () => {
-    setIsLoading(true)
-
-    try {
-      await loginWithGoogle()
-    } catch (error) {
-      console.log('Google error', error)
-
-      toast.error('Не удалось войти через Google. Попробуйте снова.')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [loginWithGoogle])
+  const [, loginAction, isLoading] = useActionState(
+    async (_prevState: null) => {
+      try {
+        await loginWithGoogle()
+      } catch (error) {
+        console.log('Google error', error)
+        toast.error('Не удалось войти через Google. Попробуйте снова.')
+      }
+      return null
+    },
+    null,
+  )
 
   return (
     <Button
       classes={{ btn: styles.btn }}
       isText={false}
       disabled={isLoading}
-      onPress={onGoogleButtonPress}
+      onPress={loginAction}
     >
       <View style={styles.content}>
         <Text style={styles.text}>{t('auth.googleBtn')}</Text>

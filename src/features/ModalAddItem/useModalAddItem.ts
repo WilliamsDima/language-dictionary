@@ -1,6 +1,6 @@
 import { useScaleAnim } from '@/shared/hooks/useScaleAnim'
 import { ILanguage } from '@/shared/json/languages'
-import { useEffect, useRef, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import { AddItemWords } from './Model/items'
 import useKeyboardState from '@/shared/hooks/useKeyboardState'
 import { ScrollView } from 'react-native'
@@ -13,8 +13,6 @@ export const useModalAddItem = () => {
 
   const { itemEdit, showAddModal } = useAppSelector((store) => store.user)
   const { isAuth } = useAppSelector((store) => store.app)
-
-  const [isLoading, setIsLoading] = useState(false)
 
   const { updateItemHandler, addItemHandler } = useCards()
 
@@ -74,54 +72,36 @@ export const useModalAddItem = () => {
     setItemEdit(null)
   }
 
-  const onConfirm = async () => {
-    // console.log('onConfirm', profile)
-    // console.log('onConfirm', profile)
+  const [, onConfirm, isLoading] = useActionState(async (_prevState: null) => {
+    if (!isAuth) return null
 
-    if (isAuth) {
-      const itemsError = items.some(
-        (it) => !it.word.trim() || !it.translate.trim()
-      )
+    const itemsError = items.some(
+      (it) => !it.word.trim() || !it.translate.trim()
+    )
+    const error = !language || itemsError
 
-      // console.log('items', items)
-      // console.log('itemsError', itemsError)
-      // console.log('language', language)
-      // console.log('itemEdit', itemEdit)
+    if (!language) setErrorLanguage(true)
+    if (itemsError) setErrorItems(true)
+    if (error) return null
 
-      const error = !language || itemsError
-
-      if (!language) {
-        setErrorLanguage(true)
-      }
-
-      if (itemsError) {
-        setErrorItems(true)
-      }
-
-      if (error) return
-
-      if (itemEdit?.idDoc) {
-        setIsLoading(true)
-
-        await updateItemHandler({ ...itemEdit, items, description, language })
-        setIsLoading(false)
-        setItemEdit(null)
-        onCancelHandler()
-      } else {
-        setIsLoading(true)
-        await addItemHandler({
-          items,
-          description,
-          language,
-          date: new Date(),
-          id: +new Date(),
-          status: 'STUDY',
-        })
-        setIsLoading(false)
-        onCancelHandler()
-      }
+    if (itemEdit?.idDoc) {
+      await updateItemHandler({ ...itemEdit, items, description, language })
+      setItemEdit(null)
+      onCancelHandler()
+    } else {
+      await addItemHandler({
+        items,
+        description,
+        language,
+        date: new Date(),
+        id: +new Date(),
+        status: 'STUDY',
+      })
+      onCancelHandler()
     }
-  }
+
+    return null
+  }, null)
 
   const onSelectLanguage = (lang: ILanguage) => {
     setErrorLanguage(false)

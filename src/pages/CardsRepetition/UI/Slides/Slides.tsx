@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useActionState, useMemo, useOptimistic } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
@@ -16,6 +16,7 @@ import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import LottieView from 'lottie-react-native'
 import { useCards } from '@/shared/hooks/useCards'
 import { useUserActivity } from '@/shared/hooks/useUserActivity'
+import type { IItem } from '@/entities/Item/model/item'
 
 type Props = {}
 
@@ -37,10 +38,16 @@ const Slides: FC<Props> = ({}) => {
 
   const { isAuth } = useAppSelector((store) => store.app)
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const { updateStatusHandler } = useCards()
   const { updateActivity } = useUserActivity()
+
+  const [optimisticLiveItems, updateOptimisticStatus] = useOptimistic(
+    liveItems,
+    (current: IItem[], update: { id: number; status: 'READY' | 'STUDY' }) =>
+      current.map((it) =>
+        it.id === update.id ? { ...it, status: update.status } : it
+      ),
+  )
 
   const editItem = () => {
     if (currentSlideData?.item) {
@@ -52,35 +59,30 @@ const Slides: FC<Props> = ({}) => {
   const currentItem = useMemo(() => {
     return (
       currentSlideData &&
-      liveItems.find((it) => it.id === currentSlideData.item.id)
+      optimisticLiveItems.find((it) => it.id === currentSlideData.item.id)
     )
-  }, [currentSlideData, liveItems])
+  }, [currentSlideData, optimisticLiveItems])
 
-  const changeStatus = async () => {
-    if (isAuth && currentSlideData?.item.idDoc && currentItem) {
-      if (currentItem.status === 'READY') {
-        setIsLoading(true)
+  const [, changeStatusAction, isLoading] = useActionState(
+    async (_prevState: null) => {
+      if (!isAuth || !currentSlideData?.item.idDoc || !currentItem) return null
 
-        await updateStatusHandler(currentItem, 'STUDY')
+      const nextStatus = currentItem.status === 'READY' ? 'STUDY' : 'READY'
+      updateOptimisticStatus({ id: currentItem.id, status: nextStatus })
 
-        updateActivity({ repeatCard: true })
+      await updateStatusHandler(currentItem, nextStatus)
 
-        nextSlide()
-
-        setIsLoading(false)
-      } else {
-        setIsLoading(true)
-
-        await updateStatusHandler(currentItem, 'READY')
-
+      if (nextStatus === 'READY') {
         updateActivity({ studiedCard: true })
-
-        nextSlide()
-
-        setIsLoading(false)
+      } else {
+        updateActivity({ repeatCard: true })
       }
-    }
-  }
+
+      nextSlide()
+      return null
+    },
+    null,
+  )
 
   return (
     <View style={styles.container}>
@@ -137,7 +139,7 @@ const Slides: FC<Props> = ({}) => {
               <Button
                 isText={false}
                 style={styles.btnGroup}
-                onPress={changeStatus}
+                onPress={changeStatusAction}
               >
                 {isLoading ? (
                   <ActivityIndicator
