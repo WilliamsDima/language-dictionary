@@ -6,7 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `language-dictionary` ("Word Cards") is a React Native app for learning foreign words via flashcards. The core entity is a **card** (`IItem`): one or more words/phrases, a chosen language, and a translation. Central user flows: browsing/searching/filtering the card list on the main screen, creating cards, and "practice" (reviewing cards with animation and marking study progress). Other screens: profile (stats/achievements/account), settings, year-in-review summary.
 
-UI copy stays in Russian unless a task says otherwise. Full product/UX rules and many mandatory code-style rules live in `RULES.md` — read it before non-trivial changes; this file does not repeat it.
+UI copy stays in Russian unless a task says otherwise. Full product/UX rules and many mandatory code-style rules live in `RULES.md`. It's long — don't read it end to end; use the **Task routing** table below to jump to the section(s) that matter.
+
+## Task routing
+
+Classify your task, then read only the listed `RULES.md` section(s) — section numbers refer to its `##` headers.
+
+| Task | Read in `RULES.md` | Template / reference |
+|---|---|---|
+| New screen/page | §4 Architectural landmarks | nearest existing `pages/*` screen |
+| New modal/feature (user scenario) | §7 Component responsibility, §6 Hook order | nearest existing `features/Modal*` |
+| New or changed reusable UI component | §5 Mandatory rules (TS/React/styles) | check `shared/UI` first (see Architecture below) |
+| Styling/visual tweak | §5 "Стили и UI" subsection | this file's Styling section (unistyles tokens) |
+| State/data fetching (RTK Query, slices) | — (covered in this file's State & data section) | inject into `shared/API/baseApi.ts`, not a new `createApi` |
+| Pure refactor / bug fix, no new abstraction | §9 Antipatterns, §10 Criterion of a good change | — |
+
+§3 "Как работать по проекту" and §8 (what the agent should value here) are short, general workflow advice worth reading once regardless of task.
 
 ## Commands
 
