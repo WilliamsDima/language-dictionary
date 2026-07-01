@@ -6,22 +6,22 @@ import {
 } from '@/pages/MainScreen/api/cardsServices'
 import { useAppSelector } from './useStore'
 import { IItem } from '@/entities/Item/model/item'
-import { useActions } from './useActions'
-import ItemTooltip from '../UI/Tooltips/ItemTooltip/ItemTooltip'
 import { Vibration } from 'react-native'
 import { useUserActivity } from './useUserActivity'
+import { toast } from '@/shared/UI/Toast/toast'
+import { useTranslation } from '@/shared/i18n/types'
 
 export const useCards = () => {
-  const { setTooltip } = useActions()
-
   const { isAuth } = useAppSelector((store) => store.app)
-
-  const { updateActivity } = useUserActivity()
 
   const [addItemAPI] = useAddItemMutation()
   const [updateItem] = useUpdateItemMutation()
   const [updateItemStatus] = useUpdateItemStatusMutation()
   const [deleteItem] = useDeleteItemMutation()
+
+  const { updateActivity } = useUserActivity()
+
+  const { t } = useTranslation()
 
   // обновление карточки
   const updateItemHandler = async (itemEdit: IItem) => {
@@ -32,13 +32,10 @@ export const useCards = () => {
           updatedData: itemEdit,
         }).unwrap()
 
-        setTooltip({
-          children: <ItemTooltip type="UPDATE" />,
-          time: 3000,
-        })
+        toast.success(t('itemTooltip.UPDATE'))
       }
     } catch (error) {
-      setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
+      toast.error(t('itemTooltip.ERROR'))
     }
   }
 
@@ -50,12 +47,9 @@ export const useCards = () => {
 
         updateActivity({ addedCard: true })
         setTimeout(() => Vibration.vibrate(300), 300)
-        setTooltip({
-          children: <ItemTooltip type="ADD" />,
-          time: 3000,
-        })
+        toast.success(t('itemTooltip.ADD'))
       } catch (error) {
-        setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
+        toast.error(t('itemTooltip.ERROR'))
       }
     }
   }
@@ -68,16 +62,10 @@ export const useCards = () => {
           idDoc: item.idDoc,
         }).unwrap()
 
-        setTooltip({
-          children: <ItemTooltip type="DELETE" />,
-          time: 3000,
-        })
+        toast.success(t('itemTooltip.DELETE'))
       }
     } catch (error) {
-      setTooltip({
-        children: <ItemTooltip type="ERROR" />,
-        time: 3000,
-      })
+      toast.error(t('itemTooltip.ERROR'))
     }
   }
 
@@ -91,7 +79,7 @@ export const useCards = () => {
         }).unwrap()
       }
     } catch (error) {
-      setTooltip({ children: <ItemTooltip type="ERROR" />, time: 3000 })
+      toast.error(t('itemTooltip.ERROR'))
     }
   }
 

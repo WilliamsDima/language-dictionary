@@ -16,7 +16,7 @@ export type CardDTO = {
   language: string
   description?: string
   status: CardStatus
-  items: CardItemDTO[]
+  items: CardItemDTO[] | null
   date: string
   updated_at: string
 }

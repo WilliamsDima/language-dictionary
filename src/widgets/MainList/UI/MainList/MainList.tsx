@@ -16,7 +16,7 @@ type Props = {
   count: number
   isFilterActive: boolean
   isLoading: boolean
-  items: Record<number, IItem> | null
+  items: IItem[] | null
   loadMoreItems: () => void
   side?: MainButtonSideValue
 }
@@ -73,12 +73,12 @@ const MainList: FC<Props> = ({
         {t('main.list_count')} {count}
       </Text>
 
-      {!!items && !!Object.keys(items)?.length ? (
+      {!!items && !!items.length ? (
         <>
           <FlatList
             ref={flatListRef}
             keyExtractor={(item) => item.id.toString()}
-            data={Object.values(items)}
+            data={items}
             showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={styles.columnWrapperStyle}

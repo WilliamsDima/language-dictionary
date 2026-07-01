@@ -29,7 +29,7 @@ const cardToItem = (langList: ILanguage[], card: CardDTO): IItem => ({
   date: new Date(card.date),
   description: card.description ?? '',
   language: findLanguage(langList, card.language),
-  items: card.items.map((it) => ({
+  items: (card.items ?? []).map((it) => ({
     id: it.id,
     word: it.word,
     translate: it.translate,
