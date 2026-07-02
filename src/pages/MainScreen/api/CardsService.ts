@@ -5,6 +5,7 @@ type ListQuery = {
   search?: string
   status?: CardStatus
   languages?: string[]
+  sort?: 'date_asc' | 'date_desc'
   limit?: number
   offset?: number
 }
@@ -32,6 +33,7 @@ const buildQuery = (params: ListQuery): string => {
   if (params.search) query.set('search', params.search)
   if (params.status) query.set('status', params.status)
   if (params.languages?.length) query.set('languages', params.languages.join(','))
+  if (params.sort) query.set('sort', params.sort)
   if (typeof params.limit === 'number') query.set('limit', String(params.limit))
   if (typeof params.offset === 'number') query.set('offset', String(params.offset))
 

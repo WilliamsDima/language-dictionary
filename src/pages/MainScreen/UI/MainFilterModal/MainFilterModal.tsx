@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useMemo, useState } from 'react'
+import React, { FC, RefObject, useCallback, useMemo, useState } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './MainFilterModal.styles'
 import { ActivityIndicator, View } from 'react-native'
@@ -23,6 +23,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   const { theme } = useUnistyles()
 
   const { appLanguage, aplication } = useAppSelector((store) => store.app)
+  const { filterMain } = useAppSelector((store) => store.items)
 
   const sortByDate: SelectOption[] = useMemo(() => {
     return [
@@ -37,9 +38,10 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
     ]
   }, [appLanguage, t])
 
-  const [sortDateValue, setSortDateValue] = useState<SelectOption>(
-    sortByDate[1]
-  )
+  const defaultSortDateValue = sortByDate[0]
+
+  const [sortDateValue, setSortDateValue] =
+    useState<SelectOption>(defaultSortDateValue)
   const [languages, setLanguages] = useState<AppLanguageType[]>([])
 
   const languagesOptions = useMemo(() => {
@@ -50,8 +52,31 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const syncFromStore = useCallback(() => {
+    const sortOption =
+      sortByDate.find((it) => it.value === filterMain?.sortDate) ??
+      defaultSortDateValue
+    setSortDateValue(sortOption)
+
+    const selectedLanguages = filterMain?.languages ?? []
+    setLanguages(
+      selectedLanguages
+        .map((code) => languagesOptions.find((lang) => lang.code === code))
+        .filter((lang): lang is AppLanguageType => !!lang)
+    )
+  }, [defaultSortDateValue, filterMain, languagesOptions, sortByDate])
+
+  const onChangeSheet = useCallback(
+    (index: number) => {
+      if (index === 0) {
+        syncFromStore()
+      }
+    },
+    [syncFromStore]
+  )
+
   const onCancel = () => {
-    setSortDateValue(sortByDate[1])
+    setSortDateValue(defaultSortDateValue)
     setLanguages([])
   }
 
@@ -69,8 +94,6 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
       sortDate: sortDateValue.value as 'asc' | 'desc',
       languages: languages.map((it) => it.code),
     })
-    setSortDateValue(sortByDate[1])
-    setLanguages([])
     sheetRef.current?.dismiss()
     setIsLoading(false)
   }
@@ -83,6 +106,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
       dynamicSizing={false}
       snapPoints={['90%']}
       scrollContentStyle={styles.scrollContent}
+      onChange={onChangeSheet}
       footer={
         <View style={styles.bottom}>
           <Button

@@ -4,6 +4,7 @@ import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { cardsService } from './CardsService'
 import { languagesAPI } from '@/shared/API/services/languages/LanguagesQuery'
+import type { FilterMain } from '@/shared/store/slice/itemsSlice'
 import type {
   AddItemParams,
   CardDTO,
@@ -68,6 +69,9 @@ const getLangList = async (
   return 'data' in result ? (result.data ?? []) : []
 }
 
+const toSortParam = (sortDate: FilterMain['sortDate']): 'date_asc' | 'date_desc' =>
+  sortDate === 'asc' ? 'date_asc' : 'date_desc'
+
 const toListQuery = (params: GetItemsParams) => {
   const limit = params.limitCount ?? 20
   const page = params.page ?? 1
@@ -77,6 +81,7 @@ const toListQuery = (params: GetItemsParams) => {
     search: params.filter?.search,
     status: status && status !== 'ALL' ? status : undefined,
     languages: params.filter?.filter?.languages,
+    sort: toSortParam(params.filter?.filter?.sortDate),
     limit,
     offset: (page - 1) * limit,
   }
