@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import type { StatusItem } from '@/entities/Item/model/item'
 import MainList from '@/widgets/MainList/UI/MainList/MainList'
 import type { MainButtonSideValue } from '@/shared/store/slice/userSlice'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useDebouncedValue } from '@/shared/hooks/useDebounce'
 import { useGetItemsQuery } from '../../api/cardsServices'
@@ -11,9 +12,14 @@ const SEARCH_DEBOUNCE_MS = 400
 type Props = {
   status: StatusItem
   mainButtonSide: MainButtonSideValue
+  languagesByCode: Map<string, ILanguage>
 }
 
-const MainStatusSlide: FC<Props> = ({ status, mainButtonSide }) => {
+const MainStatusSlide: FC<Props> = ({
+  status,
+  mainButtonSide,
+  languagesByCode,
+}) => {
   const { isAuth } = useAppSelector((store) => store.app)
   const { search, filterMain } = useAppSelector((store) => store.items)
 
@@ -64,6 +70,7 @@ const MainStatusSlide: FC<Props> = ({ status, mainButtonSide }) => {
       isFilterActive={isFilterActive}
       isLoading={isFetching}
       items={items}
+      languagesByCode={languagesByCode}
       loadMoreItems={loadMoreItems}
       side={mainButtonSide}
     />

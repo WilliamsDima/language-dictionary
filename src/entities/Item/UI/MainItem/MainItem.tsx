@@ -22,12 +22,14 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated'
 import { Icon } from '@/assets/icons/Icon'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 
 type Props = {
   item: IItem
+  language?: ILanguage
 }
 
-const MainItem: FC<Props> = ({ item }) => {
+const MainItem: FC<Props> = ({ item, language }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
   const { setModalDeleteItem, setItemEdit, setShowAddModal } = useActions()
@@ -104,7 +106,7 @@ const MainItem: FC<Props> = ({ item }) => {
   }, [item, setItemEdit, setShowAddModal])
 
   const updateStatus = useCallback(async () => {
-    if (isAuth && item.idDoc) {
+    if (isAuth && item.id) {
       setIsLoading(true)
       if (item.status === 'READY') {
         await updateStatusHandler(item, 'STUDY')
@@ -152,9 +154,9 @@ const MainItem: FC<Props> = ({ item }) => {
                 </Text>
               </View>
 
-              {!!item.language.emoji && (
+              {!!language?.emoji && (
                 <View style={styles.flagWrapper}>
-                  <Text style={styles.flag}>{item.language.emoji}</Text>
+                  <Text style={styles.flag}>{language.emoji}</Text>
                 </View>
               )}
             </View>

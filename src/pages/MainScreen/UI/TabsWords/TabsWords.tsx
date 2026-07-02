@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './TabsWords.styles'
 import { Animated, TouchableOpacity, View } from 'react-native'
@@ -17,23 +17,34 @@ type Props = {
 type StatusTabProps = {
   color: string
   label: string
-  onPress: () => void
+  status: StatusItem
+  onPress: (status: StatusItem) => void
 }
 
-const StatusTab = ({ color, label, onPress }: StatusTabProps) => {
-  const circleStyle = useMemo(() => {
-    return [styles.circle, { backgroundColor: color }]
-  }, [color])
+const StatusTab = memo(
+  ({ color, label, status, onPress }: StatusTabProps) => {
+    const circleStyle = useMemo(() => {
+      return [styles.circle, { backgroundColor: color }]
+    }, [color])
 
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.btn} activeOpacity={0.9}>
-      <View style={circleStyle} />
-      <Text numberOfLines={1} style={styles.label}>
-        {label}
-      </Text>
-    </TouchableOpacity>
-  )
-}
+    const handlePress = useCallback(() => {
+      onPress(status)
+    }, [onPress, status])
+
+    return (
+      <TouchableOpacity
+        onPress={handlePress}
+        style={styles.btn}
+        activeOpacity={0.9}
+      >
+        <View style={circleStyle} />
+        <Text numberOfLines={1} style={styles.label}>
+          {label}
+        </Text>
+      </TouchableOpacity>
+    )
+  }
+)
 
 const TabsWords: FC<Props> = ({
   activeStatus,
@@ -103,7 +114,8 @@ const TabsWords: FC<Props> = ({
             key={it.status}
             color={it.color}
             label={it.label}
-            onPress={() => onPressHandler(it.status)}
+            status={it.status}
+            onPress={onPressHandler}
           />
         )
       })}

@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef, useState } from 'react'
+import React, { FC, memo, useMemo, useRef, useState } from 'react'
 import {
   Animated,
   ScrollView,
@@ -172,4 +172,4 @@ const SlideItem: FC<Props> = (props) => {
   )
 }
 
-export default SlideItem
+export default memo(SlideItem)

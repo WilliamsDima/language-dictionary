@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef, useState } from 'react'
+import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 import { FlatList, View, Animated, TouchableOpacity } from 'react-native'
 import { styles } from './MainList.styles'
 import LottieView from 'lottie-react-native'
@@ -6,8 +6,10 @@ import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
 import Loader from '@/shared/UI/Loader/Loader'
 import { useTranslation } from '@/shared/i18n/types'
+import type { ListRenderItem } from 'react-native'
 import type { IItem } from '@/entities/Item/model/item'
 import type { MainButtonSideValue } from '@/shared/store/slice/userSlice'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 import { Icon } from '@/assets/icons/Icon'
 import { useUnistyles } from 'react-native-unistyles'
 
@@ -16,6 +18,7 @@ type Props = {
   isFilterActive: boolean
   isLoading: boolean
   items: IItem[] | null
+  languagesByCode: Map<string, ILanguage>
   loadMoreItems: () => void
   side?: MainButtonSideValue
 }
@@ -25,6 +28,7 @@ const MainList: FC<Props> = ({
   isFilterActive,
   isLoading,
   items,
+  languagesByCode,
   loadMoreItems,
   side = 'right',
 }) => {
@@ -54,9 +58,18 @@ const MainList: FC<Props> = ({
   )
 
   // Функция для прокрутки вверх
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })
-  }
+  }, [])
+
+  const keyExtractor = useCallback((item: IItem) => item.id.toString(), [])
+
+  const renderItem: ListRenderItem<IItem> = useCallback(
+    ({ item }) => (
+      <MainItem item={item} language={languagesByCode.get(item.language)} />
+    ),
+    [languagesByCode]
+  )
 
   return (
     <View style={styles.listWrapper}>
@@ -76,14 +89,14 @@ const MainList: FC<Props> = ({
         <>
           <FlatList
             ref={flatListRef}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={keyExtractor}
             data={items}
             showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={styles.columnWrapperStyle}
             onEndReached={loadMoreItems}
             onEndReachedThreshold={0.5}
-            renderItem={({ item }) => <MainItem item={item} />}
+            renderItem={renderItem}
             onScroll={handleScroll}
             scrollEventThrottle={16}
             keyboardShouldPersistTaps="handled"

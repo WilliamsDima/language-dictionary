@@ -26,6 +26,8 @@ import { tabsWords, type TabWord } from '@/shared/helpers/tabsWord'
 import type { StatusItem } from '@/entities/Item/model/item'
 import MainStatusSlide from './UI/MainStatusSlide/MainStatusSlide'
 import { normalizeMainButtonSide } from '../SettingsScreen/UI/Settings/data'
+import { useGetLanguagesQuery } from '@/shared/API/services/languages/LanguagesQuery'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 
 const MainScreen: FC = () => {
   const { setFilterByStatus } = useActions()
@@ -39,6 +41,15 @@ const MainScreen: FC = () => {
   const { theme } = useUnistyles()
   const sliderWidth = width
   const mainButtonSide = normalizeMainButtonSide(savedMainButtonSide)
+
+  const { data: languages = [] } = useGetLanguagesQuery()
+
+  const languagesByCode = useMemo(() => {
+    return languages.reduce((map, lang) => {
+      map.set(lang.code, lang)
+      return map
+    }, new Map<string, ILanguage>())
+  }, [languages])
 
   const tabs = useMemo(() => tabsWords(t, theme), [t, theme])
   const sliderRef = useRef<FlatList<TabWord>>(null)
@@ -72,12 +83,15 @@ const MainScreen: FC = () => {
           <MainStatusSlide
             status={item.status}
             mainButtonSide={mainButtonSide}
+            languagesByCode={languagesByCode}
           />
         </View>
       )
     },
-    [mainButtonSide, sliderWidth]
+    [languagesByCode, mainButtonSide, sliderWidth]
   )
+
+  const keyExtractor = useCallback((item: TabWord) => item.status, [])
 
   const getItemLayout = useCallback(
     (_: ArrayLike<TabWord> | null | undefined, index: number) => {
@@ -146,7 +160,7 @@ const MainScreen: FC = () => {
         <Animated.FlatList
           ref={sliderRef}
           data={tabs}
-          keyExtractor={(item) => item.status}
+          keyExtractor={keyExtractor}
           renderItem={renderSlide}
           getItemLayout={getItemLayout}
           horizontal

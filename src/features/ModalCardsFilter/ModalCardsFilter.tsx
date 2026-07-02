@@ -1,4 +1,4 @@
-import React, { FC, memo, RefObject, useMemo, useState } from 'react'
+import React, { FC, memo, RefObject, useCallback, useMemo, useState } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalCardsFilter.styles'
 import { View, TouchableOpacity } from 'react-native'
@@ -23,22 +23,34 @@ type Props = {
   onDismiss: () => void
 }
 
-type FilterOptionRowProps = {
+type FilterOptionRowProps<T> = {
   active: boolean
   label: string
-  onPress: () => void
+  value: T
+  onPress: (value: T) => void
+}
+
+const FilterOptionRowInner = <T,>({
+  active,
+  label,
+  value,
+  onPress,
+}: FilterOptionRowProps<T>) => {
+  const handlePress = useCallback(() => {
+    onPress(value)
+  }, [onPress, value])
+
+  return (
+    <TouchableOpacity onPress={handlePress} style={styles.selectBtn}>
+      <View style={[styles.circle, active && styles.circleActive]} />
+      <Text style={styles.selectBtnText}>{label}</Text>
+    </TouchableOpacity>
+  )
 }
 
 const FilterOptionRow = memo(
-  ({ active, label, onPress }: FilterOptionRowProps) => {
-    return (
-      <TouchableOpacity onPress={onPress} style={styles.selectBtn}>
-        <View style={[styles.circle, active && styles.circleActive]} />
-        <Text style={styles.selectBtnText}>{label}</Text>
-      </TouchableOpacity>
-    )
-  }
-)
+  FilterOptionRowInner
+) as typeof FilterOptionRowInner
 
 const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
   const { setFilterCardsModal } = useActions()
@@ -77,9 +89,9 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
     setLanguages(value)
   }
 
-  const onSelectShowVariant = (v: SelectOption) => {
+  const onSelectShowVariant = useCallback((v: SelectOption) => {
     setShowVariantSelect(v)
-  }
+  }, [])
 
   const resetFilters = () => {
     setLanguages([])
@@ -143,9 +155,8 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
                 key={it.status}
                 active={active}
                 label={it.label}
-                onPress={() => {
-                  setStatusSelect(it.status)
-                }}
+                value={it.status}
+                onPress={setStatusSelect}
               />
             )
           })}
@@ -164,9 +175,8 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
               key={it.value}
               active={active}
               label={it.label}
-              onPress={() => {
-                onSelectShowVariant(it)
-              }}
+              value={it}
+              onPress={onSelectShowVariant}
             />
           )
         })}

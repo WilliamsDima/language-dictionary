@@ -31,7 +31,7 @@ const WordItem: FC<Props> = ({
   }, [showVariantList])
 
   const sound = () => {
-    textToSpeech({ lang: parentItem.language.code, text: item.word })
+    textToSpeech({ lang: parentItem.language, text: item.word })
   }
 
   styles.useVariants({

@@ -18,7 +18,7 @@ Classify your task, then read only the listed `RULES.md` section(s) — section 
 | New modal/feature (user scenario) | §7 Component responsibility, §6 Hook order | nearest existing `features/Modal*` |
 | New or changed reusable UI component | §5 Mandatory rules (TS/React/styles) | check `shared/UI` first (see Architecture below) |
 | Styling/visual tweak | §5 "Стили и UI" subsection | this file's Styling section (unistyles tokens) |
-| State/data fetching (RTK Query, slices) | — (covered in this file's State & data section) | inject into `shared/API/baseApi.ts`, not a new `createApi` |
+| State/data fetching (RTK Query, slices) | §5 "RTK Query и компоненты списков" (if touching list items) | inject into `shared/API/baseApi.ts`, not a new `createApi` |
 | Pure refactor / bug fix, no new abstraction | §9 Antipatterns, §10 Criterion of a good change | — |
 
 §3 "Как работать по проекту" and §8 (what the agent should value here) are short, general workflow advice worth reading once regardless of task.
@@ -80,4 +80,6 @@ Feature-Sliced Design (FSD), enforced top to bottom — `app → pages → widge
 - Images: always use `react-native-fast-image` — never `Image` from `react-native`. Pass `resizeMode` as a prop (`FastImage.resizeMode.cover`), not in the style object.
 - Conditional rendering: never use `{condition && <X />}` (`&&` renders `0` or other falsy values as text) or `{condition ? <X /> : null}`. Always use `{condition ? <X /> : <></>}` when the false branch renders nothing.
 - No inline object/array literals in JSX props: `classes={{ btn: styles.btn }}` or `style={[styles.a, { transform: [{ translateY: val }] }]}` allocates a new reference on every render. Extract static values to a `const` outside the component; dynamic values go in `useMemo`.
+- Never call a query-initiating hook (RTK Query `use*Query`, or a custom hook wrapping one) inside a component that renders repeatedly in a list (`FlatList`/`.map()` item, row, card) — each mount creates its own subscription, and list virtualization re-triggers fetches past `keepUnusedDataFor`. Resolve such data once in the parent container/screen (build a `Map`/lookup via `useMemo`) and pass the resolved value down via props.
+- Never pass an inline arrow function (a new reference every render) into `renderItem`/`keyExtractor` on `FlatList`/`SectionList`, or into a callback prop (`onPress`, `onChange`, ...) of a component rendered inside `.map()` — it defeats that child's `React.memo`. Wrap the function in `useCallback`, ensure the list-item child is `memo`-wrapped, and if the callback needs to close over a per-item value (e.g. `item`), pass that value down as its own prop (or via `useCallback` per row) rather than creating a closure in the parent's render.
 - Extract every self-contained UI block to its own component file: modals, bottom sheets, or any block with its own purpose should not be inlined in the parent's JSX — create a dedicated component and import it.

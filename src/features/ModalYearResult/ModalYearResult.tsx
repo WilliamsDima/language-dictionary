@@ -1,6 +1,7 @@
 import React, {
   type FC,
   memo,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -10,6 +11,7 @@ import { styles } from './ModalYearResult.styles'
 import {
   Animated,
   FlatList,
+  ListRenderItem,
   Modal,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -18,7 +20,7 @@ import {
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import YearResultSlide from './UI/YearResultSlide/YearResultSlide'
-import { dataYearsResult } from './data'
+import { dataYearsResult, type DataYearsResultType } from './data'
 import { height, width } from '@/shared/helpers/ScaleUtils'
 
 type Props = {}
@@ -63,13 +65,21 @@ const ModalYearResult: FC<Props> = () => {
     }
   }
 
-  const updateCurrentSlideIndex = (
-    e: NativeSyntheticEvent<NativeScrollEvent>
-  ) => {
-    const offset = e.nativeEvent.contentOffset.y
-    const currentIndex = Math.round(offset / height)
-    setCurrentSlide(currentIndex)
-  }
+  const updateCurrentSlideIndex = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offset = e.nativeEvent.contentOffset.y
+      const currentIndex = Math.round(offset / height)
+      setCurrentSlide(currentIndex)
+    },
+    []
+  )
+
+  const renderItem: ListRenderItem<DataYearsResultType> = useCallback(
+    ({ item, index }) => (
+      <YearResultSlide index={index} currentSlide={currentSlide} item={item} />
+    ),
+    [currentSlide]
+  )
 
   useEffect(() => {}, [])
 
@@ -89,13 +99,7 @@ const ModalYearResult: FC<Props> = () => {
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
             { useNativeDriver: false }
           )}
-          renderItem={({ item, index }) => (
-            <YearResultSlide
-              index={index}
-              currentSlide={currentSlide}
-              item={item}
-            />
-          )}
+          renderItem={renderItem}
           pagingEnabled
           contentContainerStyle={styles.contentContainerStyle}
           showsVerticalScrollIndicator={false}

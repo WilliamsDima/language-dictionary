@@ -59,7 +59,7 @@ export const useCards = () => {
     try {
       if (isAuth && itemEdit) {
         await updateItem({
-          idDoc: itemEdit?.idDoc!,
+          id: itemEdit.id,
           updatedData: itemEdit,
         }).unwrap()
 
@@ -97,9 +97,9 @@ export const useCards = () => {
   // удаление карточки
   const deleteItemHandler = async (item: IItem) => {
     try {
-      if (isAuth && item?.idDoc) {
+      if (isAuth && item?.id) {
         await deleteItem({
-          idDoc: item.idDoc,
+          id: item.id,
         }).unwrap()
 
         toast.success(t('itemTooltip.DELETE'))
@@ -113,9 +113,9 @@ export const useCards = () => {
   // изменение статуса карточки
   const updateStatusHandler = async (item: IItem, status: 'READY' | 'STUDY') => {
     try {
-      if (isAuth && item?.idDoc) {
+      if (isAuth && item?.id) {
         await updateItemStatus({
-          idDoc: item.idDoc,
+          id: item.id,
           status,
         }).unwrap()
       }

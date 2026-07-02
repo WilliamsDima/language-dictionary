@@ -1,14 +1,16 @@
 import { AddItemWords } from '@/features/ModalAddItem/Model/items'
-import { ILanguage } from '@/shared/API/services/languages/types'
 
-export type StatusItem = 'READY' | 'STUDY' | 'ALL'
+// статус карточки как его отдаёт бэкенд
+export type CardStatus = 'READY' | 'STUDY'
+
+// статус для фильтров списка/практики — расширяет CardStatus значением "все"
+export type StatusItem = CardStatus | 'ALL'
 
 export interface IItem {
   id: number
-  idDoc?: string
-  date: Date
+  date: string
   description: string
-  language: ILanguage
+  language: string
   items: AddItemWords[]
-  status: StatusItem
+  status: CardStatus
 }

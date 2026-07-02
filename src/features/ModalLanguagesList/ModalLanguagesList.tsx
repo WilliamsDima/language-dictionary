@@ -33,7 +33,7 @@ type LanguageRowProps = {
   isActive: boolean
   isLast: boolean
   item: ILanguage
-  onPress: () => void
+  onPress: (item: ILanguage) => void
 }
 
 const LanguageRow = memo(({ isActive, isLast, item, onPress }: LanguageRowProps) => {
@@ -49,8 +49,12 @@ const LanguageRow = memo(({ isActive, isLast, item, onPress }: LanguageRowProps)
     return [styles.name, isActive ? styles.nameActive : null]
   }, [isActive])
 
+  const handlePress = useCallback(() => {
+    onPress(item)
+  }, [item, onPress])
+
   return (
-    <TouchableOpacity style={itemStyles} onPress={onPress}>
+    <TouchableOpacity style={itemStyles} onPress={handlePress}>
       <View style={styles.languageInfo}>
         <Text style={nameStyles}>{item.name}</Text>
         <Text style={styles.code}>{item.code.toUpperCase()}</Text>
@@ -159,9 +163,7 @@ const ModalLanguagesList: FC<Props> = ({
               item={it}
               isActive={isActive}
               isLast={i === languages.length - 1}
-              onPress={() => {
-                onSelectLanguage(it)
-              }}
+              onPress={onSelectLanguage}
             />
           )
         })}

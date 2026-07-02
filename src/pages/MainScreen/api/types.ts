@@ -1,7 +1,7 @@
-import { IItem, StatusItem } from '@/entities/Item/model/item'
+import { CardStatus, IItem, StatusItem } from '@/entities/Item/model/item'
 import { FilterMain } from '@/shared/store/slice/itemsSlice'
 
-export type CardStatus = 'READY' | 'STUDY'
+export type { CardStatus }
 
 export type CardItemDTO = {
   id: number
@@ -52,15 +52,15 @@ export type AddItemParams = {
 }
 
 export type UpdateItemParams = {
-  idDoc: string
+  id: number
   updatedData: Partial<IItem>
 }
 
 export type DeleteItemParams = {
-  idDoc: string
+  id: number
 }
 
 export type UpdateItemStatusParams = {
-  idDoc: string
+  id: number
   status: CardStatus
 }

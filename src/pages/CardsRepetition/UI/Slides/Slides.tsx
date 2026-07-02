@@ -1,6 +1,7 @@
 import React, { FC, startTransition, useActionState, useCallback, useMemo, useOptimistic } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
+import type { ListRenderItem } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
 import { styles } from './Slides.styles'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -17,6 +18,7 @@ import LottieView from 'lottie-react-native'
 import { useCards } from '@/shared/hooks/useCards'
 import { useUserActivity } from '@/shared/hooks/useUserActivity'
 import type { IItem } from '@/entities/Item/model/item'
+import type { CardSlideType } from '../../CardsContext'
 
 type Props = {}
 
@@ -65,7 +67,7 @@ const Slides: FC<Props> = ({}) => {
 
   const [, changeStatusAction, isLoading] = useActionState(
     async (_prevState: null) => {
-      if (!isAuth || !currentSlideData?.item.idDoc || !currentItem) return null
+      if (!isAuth || !currentSlideData?.item.id || !currentItem) return null
 
       const nextStatus = currentItem.status === 'READY' ? 'STUDY' : 'READY'
       updateOptimisticStatus({ id: currentItem.id, status: nextStatus })
@@ -87,6 +89,11 @@ const Slides: FC<Props> = ({}) => {
   const handleChangeStatus = useCallback(() => {
     startTransition(changeStatusAction)
   }, [changeStatusAction])
+
+  const renderItem: ListRenderItem<CardSlideType> = useCallback(
+    ({ item, index }) => <SlideItem index={index} item={item} />,
+    []
+  )
 
   return (
     <View style={styles.container}>
@@ -111,9 +118,7 @@ const Slides: FC<Props> = ({}) => {
               [{ nativeEvent: { contentOffset: { x: scrollX } } }],
               { useNativeDriver: false }
             )}
-            renderItem={({ item, index }) => (
-              <SlideItem index={index} item={item} />
-            )}
+            renderItem={renderItem}
             horizontal
             pagingEnabled
             contentContainerStyle={styles.contentContainerStyle}

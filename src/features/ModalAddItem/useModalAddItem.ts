@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { useCards } from '@/shared/hooks/useCards'
+import { useLanguageByCode } from '@/shared/hooks/useLanguageByCode'
 
 export const useModalAddItem = () => {
   const { setShowAddModal, setItemEdit } = useActions()
@@ -37,6 +38,8 @@ export const useModalAddItem = () => {
 
   const [errorLanguage, setErrorLanguage] = useState(false)
   const [errorItems, setErrorItems] = useState(false)
+
+  const itemEditLanguage = useLanguageByCode(itemEdit?.language)
 
   const addItem = () => {
     setItems((prev) => {
@@ -84,16 +87,21 @@ export const useModalAddItem = () => {
     if (itemsError) setErrorItems(true)
     if (error) return null
 
-    if (itemEdit?.idDoc) {
-      await updateItemHandler({ ...itemEdit, items, description, language })
+    if (itemEdit?.id) {
+      await updateItemHandler({
+        ...itemEdit,
+        items,
+        description,
+        language: language.code,
+      })
       setItemEdit(null)
       onCancelHandler()
     } else {
       await addItemHandler({
         items,
         description,
-        language,
-        date: new Date(),
+        language: language.code,
+        date: new Date().toISOString(),
         id: +new Date(),
         status: 'STUDY',
       })
@@ -119,10 +127,17 @@ export const useModalAddItem = () => {
   useEffect(() => {
     if (itemEdit) {
       setItems(itemEdit.items)
-      setLanguage(itemEdit.language)
       setDescription(itemEdit.description)
     }
   }, [itemEdit])
+
+  // язык резолвится из itemEdit.language (code) отдельно, так как список
+  // языков может ещё не быть в кэше в момент открытия модалки на редактирование
+  useEffect(() => {
+    if (itemEdit && itemEditLanguage) {
+      setLanguage(itemEditLanguage)
+    }
+  }, [itemEdit, itemEditLanguage])
 
   return {
     onSelectLanguage,

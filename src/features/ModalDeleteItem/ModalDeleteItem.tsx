@@ -29,7 +29,7 @@ const ModalDeleteItem: FC<Props> = () => {
   }
 
   const onDelete = async () => {
-    if (modalDeleteItem?.idDoc && isAuth) {
+    if (modalDeleteItem?.id && isAuth) {
       await deleteItemHandler(modalDeleteItem)
       onCancelHandler()
     }
