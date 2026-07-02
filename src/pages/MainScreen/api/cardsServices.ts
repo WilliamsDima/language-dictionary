@@ -175,7 +175,9 @@ export const cardsServices = baseApi.injectEndpoints({
         })
       },
     }),
-    // изменение статуса элемента — оптимистичное обновление с rollback
+    // изменение статуса элемента — оптимистичное обновление с rollback:
+    // карточка сразу пропадает из кэша списков с другим статусом-фильтром
+    // и появляется в кэше списков, под фильтр которых теперь подходит
     updateItemStatus: build.mutation<IItem, UpdateItemStatusParams>({
       async queryFn({ idDoc, status }, { dispatch, getState }) {
         const langList = await getLangList(dispatch, getState)
@@ -189,17 +191,72 @@ export const cardsServices = baseApi.injectEndpoints({
           getState(),
           'getItems'
         )
-        const patches = cachedArgs.map((args) =>
-          dispatch(
-            cardsServices.util.updateQueryData('getItems', args, (draft) => {
-              const found = draft.items.find((it) => it.id === cardId)
-              if (found) found.status = status
-            })
+
+        // берём актуальные данные карточки из любого кэша, где она уже есть —
+        // это нужно, чтобы вставить полноценный элемент в списки, под фильтр
+        // которых она подпадает только после смены статуса
+        const knownItem = cachedArgs.reduce<IItem | undefined>((acc, args) => {
+          if (acc) return acc
+          const selected = cardsServices.endpoints.getItems.select(args)(
+            getState()
           )
-        )
+          return selected.data?.items.find((it) => it.id === cardId)
+        }, undefined)
+
+        const patches = knownItem
+          ? cachedArgs.map((args) => {
+              const optimisticItem = { ...knownItem, status }
+              const filterStatus = args.filter?.status
+              const matchesFilter =
+                !filterStatus || filterStatus === 'ALL' || filterStatus === status
+
+              return dispatch(
+                cardsServices.util.updateQueryData('getItems', args, (draft) => {
+                  const index = draft.items.findIndex((it) => it.id === cardId)
+
+                  if (matchesFilter) {
+                    if (index !== -1) {
+                      draft.items[index].status = status
+                    } else {
+                      draft.items.unshift(optimisticItem)
+                      draft.total += 1
+                    }
+                  } else if (index !== -1) {
+                    draft.items.splice(index, 1)
+                    draft.total -= 1
+                  }
+                })
+              )
+            })
+          : []
 
         try {
-          await queryFulfilled
+          const { data: updated } = await queryFulfilled
+
+          // подстраховка на случай, если карточки не было ни в одном кэше
+          // на момент старта мутации (например, вкладка ещё не была открыта) —
+          // используем реальные данные с сервера, чтобы список всё равно обновился
+          if (!knownItem) {
+            cachedArgs.forEach((args) => {
+              const filterStatus = args.filter?.status
+              const matchesFilter =
+                !filterStatus || filterStatus === 'ALL' || filterStatus === status
+
+              dispatch(
+                cardsServices.util.updateQueryData('getItems', args, (draft) => {
+                  const index = draft.items.findIndex((it) => it.id === cardId)
+
+                  if (matchesFilter && index === -1) {
+                    draft.items.unshift(updated)
+                    draft.total += 1
+                  } else if (!matchesFilter && index !== -1) {
+                    draft.items.splice(index, 1)
+                    draft.total -= 1
+                  }
+                })
+              )
+            })
+          }
         } catch {
           patches.forEach((patch) => patch.undo())
         }

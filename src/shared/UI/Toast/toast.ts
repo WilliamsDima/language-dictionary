@@ -6,17 +6,17 @@ type ToastRef = {
   show: (config: ShowInput) => void
 }
 
-let _ref: ToastRef | null = null
+const _refHolder: { current: ToastRef | null } = { current: null }
 
 export const _registerToast = (ref: ToastRef | null): void => {
-  _ref = ref
+  _refHolder.current = ref
 }
 
 export const toast = {
   error: (message: string, duration?: number): void => {
-    _ref?.show({ message, type: 'error', duration })
+    _refHolder.current?.show({ message, type: 'error', duration })
   },
   success: (message: string, duration?: number): void => {
-    _ref?.show({ message, type: 'success', duration })
+    _refHolder.current?.show({ message, type: 'success', duration })
   },
 }

@@ -13,12 +13,11 @@ const Tooltip: FC<Props> = (props) => {
   const { getAnimationStyles } = useTooltipAnim({ active: !!tooltip })
 
   useEffect(() => {
-    let id: any
-    if (tooltip?.time) {
-      id = setTimeout(() => {
-        setTooltip(null)
-      }, tooltip?.time)
-    }
+    const id = tooltip?.time
+      ? setTimeout(() => {
+          setTooltip(null)
+        }, tooltip.time)
+      : undefined
 
     return () => {
       id && clearTimeout(id)

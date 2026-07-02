@@ -80,23 +80,26 @@ const Input: FC<InputProps> = (props) => {
   const onHandleChangeText = (text: string) => {
     const additionalText =
       customPlaceholder?.additionalLeft || customPlaceholder?.additionalRight
-    let nText = text
+
     if (!additionalText) {
-      onChangeText && onChangeText(nText)
+      onChangeText && onChangeText(text)
       return
     }
-    if (!text.startsWith(additionalText)) {
-      if (customPlaceholder?.additionalLeft) {
-        nText =
-          additionalText + nText.slice(additionalText.length, nText.length)
-      }
-      if (customPlaceholder?.additionalRight) {
-        nText =
-          additionalText + nText.slice(nText.length, additionalText.length)
-      }
+
+    if (text.startsWith(additionalText)) {
+      onChangeText && onChangeText(text)
+      return
     }
 
-    onChangeText && onChangeText(nText)
+    const withLeft = customPlaceholder?.additionalLeft
+      ? additionalText + text.slice(additionalText.length, text.length)
+      : text
+
+    const withRight = customPlaceholder?.additionalRight
+      ? additionalText + withLeft.slice(withLeft.length, additionalText.length)
+      : withLeft
+
+    onChangeText && onChangeText(withRight)
   }
 
   const stylesHandler = useMemo(() => {

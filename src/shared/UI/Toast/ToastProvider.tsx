@@ -5,7 +5,7 @@ import { _registerToast } from './toast'
 import { ToastConfig } from './types'
 import ToastItem from './ToastItem'
 
-let _nextId = 0
+const _idCounter = { current: 0 }
 
 const Toast: FC = () => {
   const { rt, theme } = useUnistyles()
@@ -19,8 +19,8 @@ const Toast: FC = () => {
   useEffect(() => {
     _registerToast({
       show: (config) => {
-        _nextId += 1
-        const id = String(_nextId)
+        _idCounter.current += 1
+        const id = String(_idCounter.current)
         setQueue((prev) => [...prev, { ...config, id }])
       },
     })

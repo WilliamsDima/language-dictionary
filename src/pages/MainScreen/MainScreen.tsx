@@ -30,7 +30,9 @@ import { normalizeMainButtonSide } from '../SettingsScreen/UI/Settings/data'
 const MainScreen: FC = () => {
   const { setFilterByStatus } = useActions()
   const { filterByStatus } = useAppSelector((store) => store.items)
-  const savedMainButtonSide = useAppSelector((store) => store.user.mainButtonSide)
+  const savedMainButtonSide = useAppSelector(
+    (store) => store.user.mainButtonSide
+  )
   const [sheetFilterRef, presentSheetFilter] = useBottomSheet()
   const { width } = useWindowDimensions()
   const { t } = useTranslation()
@@ -42,12 +44,6 @@ const MainScreen: FC = () => {
   const sliderRef = useRef<FlatList<TabWord>>(null)
   const scrollX = useRef(new Animated.Value(0)).current
   const currentStatusRef = useRef(filterByStatus)
-  const activeIndex = useMemo(() => {
-    return Math.max(
-      tabs.findIndex((tab) => tab.status === filterByStatus),
-      0
-    )
-  }, [filterByStatus, tabs])
 
   const changeStatus = (status: StatusItem) => {
     if (status !== filterByStatus) {
@@ -73,7 +69,10 @@ const MainScreen: FC = () => {
     ({ item }) => {
       return (
         <View style={[styles.slide, { width: sliderWidth }]}>
-          <MainStatusSlide status={item.status} mainButtonSide={mainButtonSide} />
+          <MainStatusSlide
+            status={item.status}
+            mainButtonSide={mainButtonSide}
+          />
         </View>
       )
     },

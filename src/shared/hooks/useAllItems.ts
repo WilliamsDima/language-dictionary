@@ -20,11 +20,11 @@ export const useAllItems = () => {
     setIsLoading(true)
 
     try {
-      let page = 1
-      let lastVisible: unknown
-      let collected: IItem[] = []
-
-      do {
+      const fetchPage = async (
+        page: number,
+        lastVisible: unknown,
+        collected: IItem[]
+      ): Promise<IItem[]> => {
         const res = await getItems({
           filter: { status: 'ALL' },
           limitCount: PAGE_SIZE,
@@ -32,10 +32,14 @@ export const useAllItems = () => {
           lastVisible,
         }).unwrap()
 
-        collected = collected.concat(res.items)
-        lastVisible = res.lastVisible
-        page += 1
-      } while (lastVisible !== undefined)
+        const nextCollected = collected.concat(res.items)
+
+        return res.lastVisible !== undefined
+          ? fetchPage(page + 1, res.lastVisible, nextCollected)
+          : nextCollected
+      }
+
+      const collected = await fetchPage(1, undefined, [])
 
       setAllItems(collected)
     } finally {

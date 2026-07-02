@@ -25,21 +25,14 @@ export const numberFormatter = (num: number, digits?: number) => {
 
 export const formatNumberWithSpaces = (number: number) => {
   // Преобразование числа в строку
-  let numberString = number.toString()
+  const numberString = number.toString()
 
   // Разделение строки на массив по точке (если число с десятичной частью)
-  let parts = numberString.split('.')
+  const parts = numberString.split('.')
 
   // Форматирование целой части числа
-  let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+  const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
-  // Сборка результата
-  let result = integerPart
-
-  // Если есть десятичная часть, добавляем её
-  if (parts.length === 2) {
-    result += '.' + parts[1]
-  }
-
-  return result
+  // Сборка результата, добавляем десятичную часть, если она есть
+  return parts.length === 2 ? `${integerPart}.${parts[1]}` : integerPart
 }

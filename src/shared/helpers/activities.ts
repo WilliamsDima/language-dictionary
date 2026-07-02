@@ -23,55 +23,52 @@ export const getMostActiveMonthInYear = (activity: IUserActivity | null | undefi
   const activityYear = activity?.year?.[year]
   if (!activityYear) return null
 
-  let mostActiveMonth: string | null = null
-  let activeCountInMonth: number = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    const activeDaysCount = month.activeDays.length
-    const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
-    const name = date.toLocaleString('default', { month: 'long' })
+  const mostActive = months.reduce<{ mostActiveMonth: string | null; activeCountInMonth: number }>(
+    (acc, month) => {
+      const activeDaysCount = month.activeDays.length
+      const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
+      const name = date.toLocaleString('default', { month: 'long' })
 
-    if (activeCountInMonth < activeDaysCount) {
-      activeCountInMonth = activeDaysCount
-      mostActiveMonth = name
-    }
-  })
+      if (acc.activeCountInMonth < activeDaysCount) {
+        return { mostActiveMonth: name, activeCountInMonth: activeDaysCount }
+      }
 
-  if (mostActiveMonth === null) return null
+      return acc
+    },
+    { mostActiveMonth: null, activeCountInMonth: 0 }
+  )
 
-  return {
-    mostActiveMonth,
-    activeCountInMonth,
-  }
+  if (mostActive.mostActiveMonth === null) return null
+
+  return mostActive
 }
+
+type YearCardsStatsAcc = { total: number; topMonth: string | null; topMonthValue: number }
 
 export const getYearAddedCardsStats = (activity: IUserActivity | null | undefined, year: number) => {
   const activityYear = activity?.year?.[year]
 
   if (!activityYear) return { total: 0, topMonth: null }
 
-  let total = 0
-  let topMonth = null
-  let topMonthValue = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    total += month.addedCards
+  return months.reduce<YearCardsStatsAcc>(
+    (acc, month) => {
+      const total = acc.total + month.addedCards
 
-    if (month.addedCards > topMonthValue) {
-      topMonthValue = month.addedCards
+      if (month.addedCards > acc.topMonthValue) {
+        const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
+        const name = date.toLocaleString('default', { month: 'long' })
 
-      const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
-      const name = date.toLocaleString('default', { month: 'long' })
+        return { total, topMonth: name, topMonthValue: month.addedCards }
+      }
 
-      topMonth = name
-    }
-  })
-
-  return { total, topMonth, topMonthValue }
+      return { ...acc, total }
+    },
+    { total: 0, topMonth: null, topMonthValue: 0 }
+  )
 }
 
 export const getYearStudiedCardsStats = (activity: IUserActivity | null | undefined, year: number) => {
@@ -79,26 +76,23 @@ export const getYearStudiedCardsStats = (activity: IUserActivity | null | undefi
 
   if (!activityYear) return { total: 0, topMonth: null }
 
-  let total = 0
-  let topMonth = null
-  let topMonthValue = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    total += month.studiedCard
+  return months.reduce<YearCardsStatsAcc>(
+    (acc, month) => {
+      const total = acc.total + month.studiedCard
 
-    if (month.studiedCard > topMonthValue) {
-      topMonthValue = month.studiedCard
+      if (month.studiedCard > acc.topMonthValue) {
+        const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
+        const name = date.toLocaleString('default', { month: 'long' })
 
-      const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
-      const name = date.toLocaleString('default', { month: 'long' })
+        return { total, topMonth: name, topMonthValue: month.studiedCard }
+      }
 
-      topMonth = name
-    }
-  })
-
-  return { total, topMonth, topMonthValue }
+      return { ...acc, total }
+    },
+    { total: 0, topMonth: null, topMonthValue: 0 }
+  )
 }
 
 export const getYearRepeatCardsStats = (activity: IUserActivity | null | undefined, year: number) => {
@@ -106,26 +100,23 @@ export const getYearRepeatCardsStats = (activity: IUserActivity | null | undefin
 
   if (!activityYear) return { total: 0, topMonth: null }
 
-  let total = 0
-  let topMonth = null
-  let topMonthValue = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    total += month.repeatCard
+  return months.reduce<YearCardsStatsAcc>(
+    (acc, month) => {
+      const total = acc.total + month.repeatCard
 
-    if (month.repeatCard > topMonthValue) {
-      topMonthValue = month.repeatCard
+      if (month.repeatCard > acc.topMonthValue) {
+        const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
+        const name = date.toLocaleString('default', { month: 'long' })
 
-      const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
-      const name = date.toLocaleString('default', { month: 'long' })
+        return { total, topMonth: name, topMonthValue: month.repeatCard }
+      }
 
-      topMonth = name
-    }
-  })
-
-  return { total, topMonth, topMonthValue }
+      return { ...acc, total }
+    },
+    { total: 0, topMonth: null, topMonthValue: 0 }
+  )
 }
 
 export const formatTime = (seconds: number, t: I18t) => {
@@ -150,13 +141,9 @@ export const getYearTotalTime = (
   if (!activityYear)
     return { totalSeconds: 0, formatted: `0 ${t('time.secs')}` }
 
-  let totalSeconds = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    totalSeconds += month.totalTimeSpent
-  })
+  const totalSeconds = months.reduce((acc, month) => acc + month.totalTimeSpent, 0)
 
   return {
     totalSeconds,
@@ -172,26 +159,23 @@ export const getYearStartTraningCardsStats = (
 
   if (!activityYear) return { total: 0, topMonth: null }
 
-  let total = 0
-  let topMonth = null
-  let topMonthValue = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    total += month.startTraningCards
+  return months.reduce<YearCardsStatsAcc>(
+    (acc, month) => {
+      const total = acc.total + month.startTraningCards
 
-    if (month.startTraningCards > topMonthValue) {
-      topMonthValue = month.startTraningCards
+      if (month.startTraningCards > acc.topMonthValue) {
+        const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
+        const name = date.toLocaleString('default', { month: 'long' })
 
-      const date = new Date(month.activeDays[0]?.split('.').reverse().join('-'))
-      const name = date.toLocaleString('default', { month: 'long' })
+        return { total, topMonth: name, topMonthValue: month.startTraningCards }
+      }
 
-      topMonth = name
-    }
-  })
-
-  return { total, topMonth, topMonthValue }
+      return { ...acc, total }
+    },
+    { total: 0, topMonth: null, topMonthValue: 0 }
+  )
 }
 
 export const getYearTotaltOpenApp = (activity: IUserActivity | null | undefined, year: number) => {
@@ -199,15 +183,9 @@ export const getYearTotaltOpenApp = (activity: IUserActivity | null | undefined,
 
   if (!activityYear) return 0
 
-  let total = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    total += month.openApp
-  })
-
-  return total
+  return months.reduce((acc, month) => acc + month.openApp, 0)
 }
 
 export const getYearTotaltViewedAds = (activity: IUserActivity | null | undefined, year: number) => {
@@ -215,13 +193,7 @@ export const getYearTotaltViewedAds = (activity: IUserActivity | null | undefine
 
   if (!activityYear) return 0
 
-  let total = 0
-
   const months: IActivityMonth[] = Object.values(activityYear)
 
-  months.forEach((month) => {
-    total += month.viewedAds
-  })
-
-  return total
+  return months.reduce((acc, month) => acc + month.viewedAds, 0)
 }

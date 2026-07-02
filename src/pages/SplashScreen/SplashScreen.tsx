@@ -45,16 +45,15 @@ const SplashScreen: FC = () => {
   }, [aplication])
 
   useEffect(() => {
-    let id: NodeJS.Timeout
-    if (ready) {
-      id = setTimeout(() => {
-        replace(isAuth ? RoutesNames.main : RoutesNames.auth)
-        setIsWatchSplash(true)
-      }, 5000)
-    }
+    const id = ready
+      ? setTimeout(() => {
+          replace(isAuth ? RoutesNames.main : RoutesNames.auth)
+          setIsWatchSplash(true)
+        }, 5000)
+      : undefined
 
     return () => {
-      clearTimeout(id)
+      id && clearTimeout(id)
     }
   }, [replace, isAuth, ready])
 

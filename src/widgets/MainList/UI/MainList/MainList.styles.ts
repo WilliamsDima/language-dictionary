@@ -1,7 +1,6 @@
-import { height } from '@/shared/helpers/ScaleUtils'
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme, rt) => ({
   listWrapper: {
     width: '100%',
     flex: 1,
@@ -51,10 +50,6 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.size.s16,
-    borderRadius: theme.size.s22,
-    backgroundColor: theme.colors.background.surface,
-    borderWidth: theme.size.s1,
-    borderColor: theme.colors.palette.border,
     overflow: 'hidden',
   },
   emptyText: {
@@ -64,8 +59,8 @@ export const styles = StyleSheet.create((theme) => ({
     textAlign: 'center',
   },
   anim: {
-    width: theme.size.s132,
-    height: theme.size.s132,
+    width: rt.screen.width - theme.size.s24,
+    height: rt.screen.height / 4,
   },
   scrollToTopBtn: {
     position: 'absolute',
