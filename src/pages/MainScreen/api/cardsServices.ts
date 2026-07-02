@@ -4,6 +4,7 @@ import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { cardsService } from './CardsService'
 import { languagesAPI } from '@/shared/API/services/languages/LanguagesQuery'
+import type { AppDispatch, RootState } from '@/shared/store/store'
 import type { FilterMain } from '@/shared/store/slice/itemsSlice'
 import type {
   AddItemParams,
@@ -51,26 +52,32 @@ const itemToCreatePayload = (item: IItem) => ({
 const itemToUpdatePayload = (item: Partial<IItem>) => ({
   language: item.language?.code ?? '',
   description: item.description ?? '',
-  items: (item.items ?? []).map((it) => ({ word: it.word, translate: it.translate })),
+  items: (item.items ?? []).map((it) => ({
+    word: it.word,
+    translate: it.translate,
+  })),
 })
 
+// initiate() само переиспользует существующий кэш эндпоинта getLanguages
+// и не шлёт повторный запрос на сервер, пока кэш не инвалидирован
 const getLangList = async (
-  dispatch: (action: any) => any,
+  dispatch: AppDispatch,
   getState: () => unknown
 ): Promise<ILanguage[]> => {
-  const cached = languagesAPI.endpoints.getLanguages.select(undefined)(
-    getState() as any
-  )
-  if (cached.data) return cached.data
-
   const result = await dispatch(
     languagesAPI.endpoints.getLanguages.initiate(undefined)
   )
-  return 'data' in result ? (result.data ?? []) : []
+  if ('data' in result) return result.data ?? []
+
+  const cached = languagesAPI.endpoints.getLanguages.select(undefined)(
+    getState() as RootState
+  )
+  return cached.data ?? []
 }
 
-const toSortParam = (sortDate: FilterMain['sortDate']): 'date_asc' | 'date_desc' =>
-  sortDate === 'asc' ? 'date_asc' : 'date_desc'
+const toSortParam = (
+  sortDate: FilterMain['sortDate']
+): 'date_asc' | 'date_desc' => (sortDate === 'asc' ? 'date_asc' : 'date_desc')
 
 const toListQuery = (params: GetItemsParams) => {
   const limit = params.limitCount ?? 20
@@ -92,6 +99,8 @@ export const cardsServices = baseApi.injectEndpoints({
     // получение списка — все страницы одного фильтра копятся в одной записи кэша
     getItems: build.query<GetItemsRequest, GetItemsParams>({
       async queryFn(params, { dispatch, getState }) {
+        console.log('getItems')
+
         const langList = await getLangList(dispatch, getState)
         const result = await cardsService.list(toListQuery(params))
         if (!result.ok) return toRtkQueryResult<GetItemsRequest>(result)
@@ -108,8 +117,8 @@ export const cardsServices = baseApi.injectEndpoints({
         }
       },
       serializeQueryArgs: ({ queryArgs, endpointName }) => {
-        const { page, lastVisible, ...rest } = queryArgs
-        return `${endpointName}/${JSON.stringify(rest)}`
+        const { filter, limitCount } = queryArgs
+        return `${endpointName}/${JSON.stringify({ filter, limitCount })}`
       },
       merge: (currentCache, newData, { arg }) => {
         if ((arg.page ?? 1) <= 1) {
@@ -134,7 +143,9 @@ export const cardsServices = baseApi.injectEndpoints({
         return { data: cardToItem(langList, result.data) }
       },
       async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
-        const { data: created } = await queryFulfilled.catch(() => ({ data: null }))
+        const { data: created } = await queryFulfilled.catch(() => ({
+          data: null,
+        }))
         if (!created) return
 
         const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
@@ -163,7 +174,9 @@ export const cardsServices = baseApi.injectEndpoints({
         return { data: cardToItem(langList, result.data) }
       },
       async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
-        const { data: updated } = await queryFulfilled.catch(() => ({ data: null }))
+        const { data: updated } = await queryFulfilled.catch(() => ({
+          data: null,
+        }))
         if (!updated) return
 
         const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
@@ -190,7 +203,10 @@ export const cardsServices = baseApi.injectEndpoints({
         if (!result.ok) return toRtkQueryResult<IItem>(result)
         return { data: cardToItem(langList, result.data) }
       },
-      async onQueryStarted({ idDoc, status }, { dispatch, getState, queryFulfilled }) {
+      async onQueryStarted(
+        { idDoc, status },
+        { dispatch, getState, queryFulfilled }
+      ) {
         const cardId = Number(idDoc)
         const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
           getState(),
@@ -213,24 +229,32 @@ export const cardsServices = baseApi.injectEndpoints({
               const optimisticItem = { ...knownItem, status }
               const filterStatus = args.filter?.status
               const matchesFilter =
-                !filterStatus || filterStatus === 'ALL' || filterStatus === status
+                !filterStatus ||
+                filterStatus === 'ALL' ||
+                filterStatus === status
 
               return dispatch(
-                cardsServices.util.updateQueryData('getItems', args, (draft) => {
-                  const index = draft.items.findIndex((it) => it.id === cardId)
+                cardsServices.util.updateQueryData(
+                  'getItems',
+                  args,
+                  (draft) => {
+                    const index = draft.items.findIndex(
+                      (it) => it.id === cardId
+                    )
 
-                  if (matchesFilter) {
-                    if (index !== -1) {
-                      draft.items[index].status = status
-                    } else {
-                      draft.items.unshift(optimisticItem)
-                      draft.total += 1
+                    if (matchesFilter) {
+                      if (index !== -1) {
+                        draft.items[index].status = status
+                      } else {
+                        draft.items.unshift(optimisticItem)
+                        draft.total += 1
+                      }
+                    } else if (index !== -1) {
+                      draft.items.splice(index, 1)
+                      draft.total -= 1
                     }
-                  } else if (index !== -1) {
-                    draft.items.splice(index, 1)
-                    draft.total -= 1
                   }
-                })
+                )
               )
             })
           : []
@@ -245,20 +269,28 @@ export const cardsServices = baseApi.injectEndpoints({
             cachedArgs.forEach((args) => {
               const filterStatus = args.filter?.status
               const matchesFilter =
-                !filterStatus || filterStatus === 'ALL' || filterStatus === status
+                !filterStatus ||
+                filterStatus === 'ALL' ||
+                filterStatus === status
 
               dispatch(
-                cardsServices.util.updateQueryData('getItems', args, (draft) => {
-                  const index = draft.items.findIndex((it) => it.id === cardId)
+                cardsServices.util.updateQueryData(
+                  'getItems',
+                  args,
+                  (draft) => {
+                    const index = draft.items.findIndex(
+                      (it) => it.id === cardId
+                    )
 
-                  if (matchesFilter && index === -1) {
-                    draft.items.unshift(updated)
-                    draft.total += 1
-                  } else if (!matchesFilter && index !== -1) {
-                    draft.items.splice(index, 1)
-                    draft.total -= 1
+                    if (matchesFilter && index === -1) {
+                      draft.items.unshift(updated)
+                      draft.total += 1
+                    } else if (!matchesFilter && index !== -1) {
+                      draft.items.splice(index, 1)
+                      draft.total -= 1
+                    }
                   }
-                })
+                )
               )
             })
           }
@@ -268,10 +300,14 @@ export const cardsServices = baseApi.injectEndpoints({
       },
     }),
     // удаление элемента — оптимистичное обновление с rollback
-    deleteItem: build.mutation<{ success: boolean; id: string }, DeleteItemParams>({
+    deleteItem: build.mutation<
+      { success: boolean; id: string },
+      DeleteItemParams
+    >({
       async queryFn({ idDoc }) {
         const result = await cardsService.remove(Number(idDoc))
-        if (!result.ok) return toRtkQueryResult<{ success: boolean; id: string }>(result)
+        if (!result.ok)
+          return toRtkQueryResult<{ success: boolean; id: string }>(result)
         return { data: { success: true, id: idDoc } }
       },
       async onQueryStarted({ idDoc }, { dispatch, getState, queryFulfilled }) {

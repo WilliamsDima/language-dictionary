@@ -1,3 +1,1 @@
-export const StorageKeys = {
-  AUTH_TOKEN: 'auth_token',
-} as const
+export const StorageKeys = {} as const

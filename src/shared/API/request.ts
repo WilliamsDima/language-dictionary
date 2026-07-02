@@ -15,7 +15,7 @@ export const request = async <T>(
   path: string,
   options: RequestOptions = {}
 ): Promise<ServiceResult<T>> => {
-  const token = options.skipAuth ? null : (options.authToken ?? getAuthToken())
+  const token = options.skipAuth ? null : (options.authToken ?? (await getAuthToken()))
   const headers = {
     ...(options.headers ?? {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),

@@ -1,4 +1,20 @@
-import {useCallback, useRef} from 'react'
+import {useCallback, useEffect, useRef, useState} from 'react'
+
+export const useDebouncedValue = <Value>(value: Value, delay: number): Value => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value, delay])
+
+  return debouncedValue
+}
 
 export const useCallbackDebounce = <Args extends unknown[]>(
   callback: (...args: Args) => void,

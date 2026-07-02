@@ -8,13 +8,13 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import auth from '@react-native-firebase/auth'
 import { useActions } from './useActions'
 import { useAppDispatch } from './useStore'
 import { signInWithGoogle, signOutFirebase } from '../firebase/auth'
 import { baseApi } from '../API/baseApi'
 import { useGetMeQuery, useDeleteMeMutation } from '../API/services/me/MeQuery'
 import { useGoogleSyncMutation } from '../API/services/auth/AuthQuery'
-import { getAuthToken, clearAuthToken } from '../lib/authToken'
 
 type IContext = {
   loginWithGoogle: () => Promise<void>
@@ -37,17 +37,29 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   const [deleteMe] = useDeleteMeMutation()
   const [googleSync] = useGoogleSyncMutation()
 
-  const [bootstrapToken] = useState(() => getAuthToken())
-  const [isBootstrapping, setIsBootstrapping] = useState(!!bootstrapToken)
+  // Firebase persists the signed-in session natively; onAuthStateChanged
+  // fires once at startup with the restored user (or null) once that
+  // session has been resolved — that's the real signal for "was previously
+  // logged in", not a token cached in storage (which would go stale).
+  const [hasFirebaseSession, setHasFirebaseSession] = useState<boolean | null>(null)
+  const [isBootstrapping, setIsBootstrapping] = useState(true)
 
   const {
     data: meProfile,
     isLoading: isMeLoading,
     isError: isMeError,
-  } = useGetMeQuery(undefined, { skip: !bootstrapToken })
+  } = useGetMeQuery(undefined, { skip: !hasFirebaseSession })
 
   useEffect(() => {
-    if (!bootstrapToken) {
+    return auth().onAuthStateChanged((user) => {
+      setHasFirebaseSession(!!user)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (hasFirebaseSession === null) return
+
+    if (!hasFirebaseSession) {
       setIsBootstrapping(false)
       return
     }
@@ -55,14 +67,13 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     if (isMeLoading) return
 
     if (isMeError) {
-      clearAuthToken()
       setIsAuth(false)
     } else if (meProfile) {
       setIsAuth(true)
     }
 
     setIsBootstrapping(false)
-  }, [bootstrapToken, isMeLoading, isMeError, meProfile, setIsAuth])
+  }, [hasFirebaseSession, isMeLoading, isMeError, meProfile, setIsAuth])
 
   const loginWithGoogle = useCallback(async () => {
     const idToken = await signInWithGoogle()
@@ -77,7 +88,6 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     } catch (error) {
       console.log('error signOutFirebase: ', error)
     } finally {
-      clearAuthToken()
       dispatch(baseApi.util.resetApiState())
       setIsAuth(false)
       clearLocalSettings()
