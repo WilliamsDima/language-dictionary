@@ -5,6 +5,7 @@ import userReducer from './slice/userSlice'
 import itemsReducer from './slice/itemsSlice'
 import { baseApi } from '../API/baseApi'
 import { setupListeners } from '@reduxjs/toolkit/query'
+import { rtkQueryErrorLogger } from './middleware/rtkQueryErrorLogger'
 
 const rootReducer = combineReducers({
   app: appReducer,
@@ -18,7 +19,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(baseApi.middleware),
+    }).concat(baseApi.middleware, rtkQueryErrorLogger),
 })
 
 setupListeners(store.dispatch)

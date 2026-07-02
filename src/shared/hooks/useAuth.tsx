@@ -67,8 +67,6 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
   const loginWithGoogle = useCallback(async () => {
     const idToken = await signInWithGoogle()
 
-    console.log('idToken', idToken)
-
     await googleSync({ idToken }).unwrap()
     setIsAuth(true)
   }, [googleSync, setIsAuth])

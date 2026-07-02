@@ -1,18 +1,30 @@
 import {
+  cardsServices,
   useAddItemMutation,
   useDeleteItemMutation,
   useUpdateItemMutation,
   useUpdateItemStatusMutation,
 } from '@/pages/MainScreen/api/cardsServices'
-import { useAppSelector } from './useStore'
+import { useAppDispatch, useAppSelector } from './useStore'
+import { store } from '@/shared/store/store'
 import { IItem } from '@/entities/Item/model/item'
 import { Vibration } from 'react-native'
 import { useUserActivity } from './useUserActivity'
 import { toast } from '@/shared/UI/Toast/toast'
 import { useTranslation } from '@/shared/i18n/types'
 
+// бэкенд отвечает 404, когда карточка уже удалена (например, с другого устройства),
+// а локальный кэш ещё не успел об этом узнать
+const isNotFoundError = (error: unknown): boolean =>
+  typeof error === 'object' &&
+  error !== null &&
+  'status' in error &&
+  (error as { status?: unknown }).status === 404
+
 export const useCards = () => {
-  const { isAuth } = useAppSelector((store) => store.app)
+  const dispatch = useAppDispatch()
+
+  const { isAuth } = useAppSelector((state) => state.app)
 
   const [addItemAPI] = useAddItemMutation()
   const [updateItem] = useUpdateItemMutation()
@@ -22,6 +34,25 @@ export const useCards = () => {
   const { updateActivity } = useUserActivity()
 
   const { t } = useTranslation()
+
+  // убираем из локального кэша карточку, которую бэкенд больше не знает
+  const dropStaleItem = (cardId: number) => {
+    const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
+      store.getState(),
+      'getItems'
+    )
+
+    cachedArgs.forEach((args) => {
+      dispatch(
+        cardsServices.util.updateQueryData('getItems', args, (draft) => {
+          const index = draft.items.findIndex((it) => it.id === cardId)
+          if (index === -1) return
+          draft.items.splice(index, 1)
+          draft.total -= 1
+        })
+      )
+    })
+  }
 
   // обновление карточки
   const updateItemHandler = async (itemEdit: IItem) => {
@@ -35,6 +66,14 @@ export const useCards = () => {
         toast.success(t('itemTooltip.UPDATE'))
       }
     } catch (error) {
+      console.error('[useCards] updateItemHandler error', error)
+
+      if (isNotFoundError(error)) {
+        dropStaleItem(itemEdit.id)
+        toast.error(t('itemTooltip.NOT_FOUND'))
+        return
+      }
+
       toast.error(t('itemTooltip.ERROR'))
     }
   }
@@ -49,6 +88,7 @@ export const useCards = () => {
         setTimeout(() => Vibration.vibrate(300), 300)
         toast.success(t('itemTooltip.ADD'))
       } catch (error) {
+        console.error('[useCards] addItemHandler error', error)
         toast.error(t('itemTooltip.ERROR'))
       }
     }
@@ -65,6 +105,7 @@ export const useCards = () => {
         toast.success(t('itemTooltip.DELETE'))
       }
     } catch (error) {
+      console.error('[useCards] deleteItemHandler error', error)
       toast.error(t('itemTooltip.ERROR'))
     }
   }
@@ -79,6 +120,14 @@ export const useCards = () => {
         }).unwrap()
       }
     } catch (error) {
+      console.error('[useCards] updateStatusHandler error', error)
+
+      if (isNotFoundError(error)) {
+        dropStaleItem(item.id)
+        toast.error(t('itemTooltip.NOT_FOUND'))
+        return
+      }
+
       toast.error(t('itemTooltip.ERROR'))
     }
   }
