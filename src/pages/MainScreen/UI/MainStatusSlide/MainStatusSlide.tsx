@@ -47,7 +47,16 @@ const MainStatusSlide: FC<Props> = ({
     skip: !isAuth,
   })
 
-  const items = data?.items ?? null
+  const items = useMemo(() => data?.items ?? null, [data?.items])
+
+  const isInitialLoading = useMemo(
+    () => isFetching && !items,
+    [isFetching, items]
+  )
+  const isLoadingMore = useMemo(
+    () => isFetching && !!items,
+    [isFetching, items]
+  )
 
   const isFilterActive = useMemo(() => {
     return (
@@ -68,7 +77,8 @@ const MainStatusSlide: FC<Props> = ({
     <MainList
       count={data?.total ?? 0}
       isFilterActive={isFilterActive}
-      isLoading={isFetching}
+      isInitialLoading={isInitialLoading}
+      isLoadingMore={isLoadingMore}
       items={items}
       languagesByCode={languagesByCode}
       loadMoreItems={loadMoreItems}

@@ -69,13 +69,11 @@ export const cardsServices = baseApi.injectEndpoints({
     // получение списка — все страницы одного фильтра копятся в одной записи кэша
     getItems: build.query<GetItemsRequest, GetItemsParams>({
       async queryFn(params) {
-        console.log('getItems')
-
         const result = await cardsService.list(toListQuery(params))
+
         if (!result.ok) return toRtkQueryResult<GetItemsRequest>(result)
 
-        const { items, total, offset } = result.data
-        const hasMore = offset + items.length < total
+        const { items, total, offset, has_more: hasMore } = result.data
 
         return {
           data: {
@@ -203,9 +201,7 @@ export const cardsServices = baseApi.injectEndpoints({
                   'getItems',
                   args,
                   (draft) => {
-                    const index = draft.items.findIndex(
-                      (it) => it.id === id
-                    )
+                    const index = draft.items.findIndex((it) => it.id === id)
 
                     if (matchesFilter) {
                       if (index !== -1) {
@@ -243,9 +239,7 @@ export const cardsServices = baseApi.injectEndpoints({
                   'getItems',
                   args,
                   (draft) => {
-                    const index = draft.items.findIndex(
-                      (it) => it.id === id
-                    )
+                    const index = draft.items.findIndex((it) => it.id === id)
 
                     if (matchesFilter && index === -1) {
                       draft.items.unshift(updated)

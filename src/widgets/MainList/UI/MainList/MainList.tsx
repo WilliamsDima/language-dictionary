@@ -5,6 +5,7 @@ import LottieView from 'lottie-react-native'
 import Text from '@/shared/UI/Text/Text'
 import MainItem from '@/entities/Item/UI/MainItem/MainItem'
 import Loader from '@/shared/UI/Loader/Loader'
+import ListFooterLoader from '../ListFooterLoader/ListFooterLoader'
 import { useTranslation } from '@/shared/i18n/types'
 import type { ListRenderItem } from 'react-native'
 import type { IItem } from '@/entities/Item/model/item'
@@ -16,7 +17,8 @@ import { useUnistyles } from 'react-native-unistyles'
 type Props = {
   count: number
   isFilterActive: boolean
-  isLoading: boolean
+  isInitialLoading: boolean
+  isLoadingMore: boolean
   items: IItem[] | null
   languagesByCode: Map<string, ILanguage>
   loadMoreItems: () => void
@@ -26,7 +28,8 @@ type Props = {
 const MainList: FC<Props> = ({
   count,
   isFilterActive,
-  isLoading,
+  isInitialLoading,
+  isLoadingMore,
   items,
   languagesByCode,
   loadMoreItems,
@@ -73,7 +76,7 @@ const MainList: FC<Props> = ({
 
   return (
     <View style={styles.listWrapper}>
-      {isLoading ? (
+      {isInitialLoading ? (
         <View style={styles.loader}>
           <Loader lottieStyles={styles.animLoader} />
         </View>
@@ -101,6 +104,8 @@ const MainList: FC<Props> = ({
             scrollEventThrottle={16}
             keyboardShouldPersistTaps="handled"
           />
+
+          <ListFooterLoader isLoading={isLoadingMore} />
 
           {/* Кнопка наверх */}
           {showScrollTop && (

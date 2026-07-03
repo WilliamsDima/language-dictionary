@@ -26,6 +26,7 @@ export type GetCardsResponseDTO = {
   total: number
   limit: number
   offset: number
+  has_more: boolean
 }
 
 export type FilterItems = {
