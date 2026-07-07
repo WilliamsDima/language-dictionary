@@ -16,7 +16,6 @@ import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import LottieView from 'lottie-react-native'
 import { useCards } from '@/shared/hooks/useCards'
-import { useUserActivity } from '@/shared/hooks/useUserActivity'
 import type { IItem } from '@/entities/Item/model/item'
 import type { CardSlideType } from '../../CardsContext'
 
@@ -42,7 +41,6 @@ const Slides: FC<Props> = ({}) => {
   const { isAuth } = useAppSelector((store) => store.app)
 
   const { updateStatusHandler } = useCards()
-  const { updateActivity } = useUserActivity()
 
   const [optimisticLiveItems, updateOptimisticStatus] = useOptimistic(
     liveItems,
@@ -74,12 +72,6 @@ const Slides: FC<Props> = ({}) => {
       updateOptimisticStatus({ id: currentItem.id, status: nextStatus })
 
       await updateStatusHandler(currentItem, nextStatus)
-
-      if (nextStatus === 'READY') {
-        updateActivity({ studiedCard: true })
-      } else {
-        updateActivity({ repeatCard: true })
-      }
 
       nextSlide()
       return null

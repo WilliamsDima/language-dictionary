@@ -1,21 +1,14 @@
 import Layout from '@/shared/UI/Layout/Layout'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { StatusBar } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { CardsProvider } from './CardsContext'
 import { useHiddenTabBar } from '@/shared/hooks/useHiddenTabBar'
 import Slides from './UI/Slides/Slides'
-import { useUserActivity } from '@/shared/hooks/useUserActivity'
 
 const CardsRepetition: FC = () => {
   const { theme, rt } = useUnistyles()
   useHiddenTabBar()
-
-  const { updateActivity } = useUserActivity()
-
-  useEffect(() => {
-    updateActivity({ startTraningCards: true })
-  }, [])
 
   return (
     <CardsProvider>

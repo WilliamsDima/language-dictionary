@@ -1,25 +1,46 @@
 import React, { type FC, memo } from 'react'
 import { styles } from './YearResultSlide.styles'
 import { View } from 'react-native'
-import { type DataYearsResultType, SLIDE_GRADIENTS } from '../../data'
 import LinearGradient from 'react-native-linear-gradient'
+import { SLIDE_GRADIENTS } from '../../data'
+import YearResultSlideContent from '../YearResultSlideContent/YearResultSlideContent'
+import type { YearInReviewSlideConfig } from '@/shared/API/services/appConfig/types'
+import type { YearStatsResponse } from '@/shared/API/services/metrics/types'
 
 type Props = {
-  item: DataYearsResultType
+  config: YearInReviewSlideConfig
+  stats?: YearStatsResponse
+  locale: string
   index: number
   currentSlide: number
+  avatarUri?: string
 }
 
-const YearResultSlide: FC<Props> = ({ item, index, currentSlide }) => {
+const YearResultSlide: FC<Props> = ({
+  config,
+  stats,
+  locale,
+  index,
+  currentSlide,
+  avatarUri,
+}) => {
+  const gradient = SLIDE_GRADIENTS[index % SLIDE_GRADIENTS.length]
+
   return (
     <View style={styles.slide}>
       <LinearGradient
-        colors={SLIDE_GRADIENTS[index].colors}
-        start={SLIDE_GRADIENTS[index].start}
-        end={SLIDE_GRADIENTS[index].end}
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        colors={gradient.colors}
+        start={gradient.start}
+        end={gradient.end}
+        style={styles.gradient}
       >
-        {item.slide({ index, currentSlide, item })}
+        <YearResultSlideContent
+          config={config}
+          stats={stats}
+          locale={locale}
+          isActive={index === currentSlide}
+          avatarUri={avatarUri}
+        />
       </LinearGradient>
     </View>
   )

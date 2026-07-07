@@ -1,7 +1,6 @@
 import { IItem } from '@/entities/Item/model/item'
 import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
-import { metricsAPI } from '@/shared/API/services/metrics/MetricsQuery'
 import { cardsService } from './CardsService'
 import type { FilterMain } from '@/shared/store/slice/itemsSlice'
 import type {
@@ -121,14 +120,9 @@ export const cardsServices = baseApi.injectEndpoints({
         }))
         if (!created) return
 
-        // CARDS_CREATED — метрика event-sourced (см. CLAUDE.md бэкенда),
-        // растёт только от явного POST /events; сама мутация создания
-        // карточки не должна инвалидировать achievements раньше времени —
-        // logMetricEvent сделает это сам после того, как событие реально
-        // сохранится на бэкенде
-        dispatch(metricsAPI.endpoints.logMetricEvent.initiate({
-          type: 'card_created',
-        }))
+        // CARDS_CREATED теперь считается бэкендом сам внутри хендлера создания
+        // карточки — клиентский POST /events для card_created больше не
+        // нужен (и будет отклонён бэкендом 400-й ошибкой)
 
         const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
           getState(),

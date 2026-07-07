@@ -5,20 +5,20 @@ import { styles } from './ProfileScreen.styles'
 import ModalLogout from '@/features/ModalLogout/ModalLogout'
 import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt'
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
-import { isShowModalYearResult } from '@/shared/constants/app'
 import { useMeProfile } from '@/shared/hooks/useMeProfile'
-import { useActions } from '@/shared/hooks/useActions'
 import { dateFormat } from '@/shared/helpers/dateFormat'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
 import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import ProfileMetaCard from './UI/ProfileMetaCard/ProfileMetaCard'
 import ProfileAchievements from './UI/ProfileAchievements/ProfileAchievements'
 import ProfileActions from './UI/ProfileActions/ProfileActions'
+import { useYearInReviewGate } from './hooks/useYearInReviewGate'
 
 const ProfileScreen: FC = () => {
   const { navigate } = useAppNavigation()
-  const { setShowYearResult } = useActions()
   const { data: profile } = useMeProfile()
+  const { isAvailable: isShowYearResult, showManually: onShowModalYearResult } =
+    useYearInReviewGate()
 
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
@@ -35,10 +35,6 @@ const ProfileScreen: FC = () => {
     setModalDelete(true)
   }, [])
 
-  const onShowModalYearResult = useCallback(() => {
-    setShowYearResult(true)
-  }, [setShowYearResult])
-
   const openAchievements = useCallback(() => {
     navigate(RoutesNames.achievements)
   }, [navigate])
@@ -53,7 +49,7 @@ const ProfileScreen: FC = () => {
         <ProfileAchievements onPress={openAchievements} />
 
         <ProfileActions
-          isShowYearResult={isShowModalYearResult}
+          isShowYearResult={isShowYearResult}
           onShowYearResult={onShowModalYearResult}
           onLogout={showModalLogout}
           onDeleteAccount={showModalDelete}

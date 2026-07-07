@@ -55,32 +55,10 @@ export type MainButtonSide = {
   keyTranslate: I18NKeys
 }
 
-export interface IActivityMonth {
-  addedCards: number
-  viewedAds: number
-  openApp: number
-  startTraningCards: number
-  activeDays: string[]
-  totalTimeSpent: number
-  studiedCard: number
-  repeatCard: number
-}
-
-export interface IActivityYear {
-  [key: number]: IActivityMonth
-}
-
-export interface IUserActivity {
-  year: {
-    [key: number]: IActivityYear
-  }
-}
-
 type InitialState = {
   showVariantList: null | ShowVariantList
   mainButtonSide: null | MainButtonSide
   native_language: null | ILanguage
-  activity: null | IUserActivity
   showAddModal: boolean
   itemEdit: null | IItem
 }
@@ -89,7 +67,6 @@ const initialState: InitialState = {
   showVariantList: getStoredShowVariantList(),
   mainButtonSide: null,
   native_language: null,
-  activity: null,
   showAddModal: false,
   itemEdit: null,
 }
@@ -117,17 +94,10 @@ export const userSlice = createSlice({
     ) => {
       state.native_language = payload
     },
-    setActivity: (
-      state,
-      { payload }: PayloadAction<null | IUserActivity>
-    ) => {
-      state.activity = payload
-    },
     clearLocalSettings: (state) => {
       state.showVariantList = null
       state.mainButtonSide = null
       state.native_language = null
-      state.activity = null
       saveShowVariantList(null)
     },
     setShowAddModal: (state, { payload }: PayloadAction<boolean>) => {

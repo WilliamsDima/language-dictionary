@@ -8,10 +8,11 @@ export const styles = StyleSheet.create((theme) => ({
   },
   titles: {
     position: 'absolute',
-    top: theme.size.s50,
+    top: theme.size.s100,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: theme.size.s30,
+    gap: theme.size.s10,
+    paddingHorizontal: theme.size.s20,
   },
   title: {
     color: theme.colors.text.primary,
@@ -21,16 +22,16 @@ export const styles = StyleSheet.create((theme) => ({
     fontStyle: 'italic',
     textAlign: 'center',
   },
-  emojy: {
-    color: theme.colors.palette.gold,
-    fontWeight: '800',
-    fontSize: theme.fontSize.s30,
-    fontStyle: 'normal',
+  description: {
+    color: theme.colors.text.primary,
+    fontWeight: '600',
+    fontSize: theme.fontSize.s16,
     textAlign: 'center',
+    opacity: theme.opacity.o60,
   },
   footer: {
     position: 'absolute',
-    bottom: theme.size.s20,
+    bottom: theme.size.s30,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',

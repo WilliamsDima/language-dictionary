@@ -1,5 +1,5 @@
 import { request } from '@/shared/API/request'
-import type { LogEventPayload } from './types'
+import type { LogEventPayload, YearStatsResponse } from './types'
 
 class MetricsService {
   logEvent(payload: LogEventPayload) {
@@ -7,6 +7,10 @@ class MetricsService {
       method: 'POST',
       json: payload,
     })
+  }
+
+  getYearStats() {
+    return request<YearStatsResponse>('/stats/year', { method: 'GET' })
   }
 }
 

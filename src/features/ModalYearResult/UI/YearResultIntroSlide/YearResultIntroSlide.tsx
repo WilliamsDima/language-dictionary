@@ -1,25 +1,28 @@
-import React, { type FC, memo } from 'react'
-import { styles } from './YearResultSlide1.styles'
+import React, { type FC, memo, useMemo } from 'react'
+import { styles } from './YearResultIntroSlide.styles'
 import { View } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import LottieView from 'lottie-react-native'
-import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import UserAvatart from '@/shared/UI/UserAvatart/UserAvatart'
-import type { PropsSlideYearResult } from '../../data'
-import { useTranslation } from '@/shared/i18n/types'
 
-type Props = {} & PropsSlideYearResult
+type Props = {
+  title: string
+  description: string
+  avatarUri?: string
+}
 
-const YearResultSlide1: FC<Props> = ({}) => {
-  const { t } = useTranslation()
-
-  const { data: profile } = useMeProfile()
+const YearResultIntroSlide: FC<Props> = ({ title, description, avatarUri }) => {
+  const currentYear = useMemo(() => new Date().getFullYear(), [])
 
   return (
     <View style={styles.slide}>
       <View style={styles.titles}>
-        <Text style={styles.title}>{t('yearsResult.your')}</Text>
-        <Text style={styles.title}>{t('yearsResult.language_year')}</Text>
+        {!!title ? <Text style={styles.title}>{title}</Text> : <></>}
+        {!!description ? (
+          <Text style={styles.description}>{description}</Text>
+        ) : (
+          <></>
+        )}
 
         <LottieView
           style={styles.welcome}
@@ -29,20 +32,12 @@ const YearResultSlide1: FC<Props> = ({}) => {
         />
       </View>
 
-      <Text
-        style={styles.emojiLeft}
-      >
-        🎉
-      </Text>
-      <Text
-        style={styles.emojiRight}
-      >
-        🎉
-      </Text>
+      <Text style={styles.emojiLeft}>🎉</Text>
+      <Text style={styles.emojiRight}>🎉</Text>
 
       <View style={styles.user}>
         <UserAvatart
-          uri={profile?.image}
+          uri={avatarUri}
           classes={{ wrapper: styles.imageWrapper, image: styles.image }}
         />
 
@@ -63,12 +58,7 @@ const YearResultSlide1: FC<Props> = ({}) => {
           autoPlay
           loop
         />
-        <LottieView
-          style={styles.years}
-          source={require('../../../../shared/json/2025.json')}
-          autoPlay
-          loop={false}
-        />
+        <Text style={styles.year}>{currentYear}</Text>
         <LottieView
           style={styles.scrollRight}
           source={require('../../../../shared/json/scroll-down.json')}
@@ -80,4 +70,4 @@ const YearResultSlide1: FC<Props> = ({}) => {
   )
 }
 
-export default memo(YearResultSlide1)
+export default memo(YearResultIntroSlide)

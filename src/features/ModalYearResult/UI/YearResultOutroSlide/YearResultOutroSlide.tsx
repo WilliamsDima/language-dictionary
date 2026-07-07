@@ -1,37 +1,42 @@
-import React, { type FC, memo } from 'react'
-import { styles } from './YearResultSlide9.styles'
+import React, { type FC, memo, useCallback, useMemo } from 'react'
+import { styles } from './YearResultOutroSlide.styles'
 import { View } from 'react-native'
 import Text from '@/shared/UI/Text/Text'
 import LottieView from 'lottie-react-native'
-import type { PropsSlideYearResult } from '../../data'
 import Button from '@/shared/UI/Button/Button'
 import { useActions } from '@/shared/hooks/useActions'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import { useTranslation } from '@/shared/i18n/types'
 
-type Props = {} & PropsSlideYearResult
+type Props = {
+  title: string
+  description: string
+}
 
-const YearResultSlide9: FC<Props> = ({ index, currentSlide }) => {
+const YearResultOutroSlide: FC<Props> = ({ title, description }) => {
   const { setShowYearResult } = useActions()
   const { t } = useTranslation()
-  const date = new Date()
 
-  const onEnd = () => {
+  const currentYear = useMemo(() => new Date().getFullYear(), [])
+
+  // просмотр итогов года владеет своим завершением сам: прячет модалку и
+  // взводит флаг watchYearResult-{year}, который гейт на профиле использует,
+  // чтобы не показывать модалку автоматически повторно в этом же окне
+  const onFinish = useCallback(() => {
     setShowYearResult(false)
-    setAsyncLocal(`${LOCAL_KEYS.watchYearResult}-${date.getFullYear()}`, true)
-  }
+    setAsyncLocal(`${LOCAL_KEYS.watchYearResult}-${currentYear}`, true)
+  }, [setShowYearResult, currentYear])
 
   return (
     <View style={styles.slide}>
       <View style={styles.titles}>
-        <Text style={styles.title}>{t('yearsResult.last_slide_title_1')}</Text>
-        <Text style={styles.title}>{t('yearsResult.last_slide_title_2')}</Text>
-        <Text style={styles.title}>
-          {t('yearsResult.last_slide_title_3', {
-            date: date.getFullYear() + 1,
-          })}
-        </Text>
+        {!!title ? <Text style={styles.title}>{title}</Text> : <></>}
+        {!!description ? (
+          <Text style={styles.description}>{description}</Text>
+        ) : (
+          <></>
+        )}
       </View>
 
       <View style={styles.footer}>
@@ -51,7 +56,7 @@ const YearResultSlide9: FC<Props> = ({ index, currentSlide }) => {
 
       <View style={styles.btnWrapper}>
         <Button
-          onPress={onEnd}
+          onPress={onFinish}
           isText
           classes={{ btn: styles.btn, textBtn: styles.textBtn }}
         >
@@ -62,4 +67,4 @@ const YearResultSlide9: FC<Props> = ({ index, currentSlide }) => {
   )
 }
 
-export default memo(YearResultSlide9)
+export default memo(YearResultOutroSlide)

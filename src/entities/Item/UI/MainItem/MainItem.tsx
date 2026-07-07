@@ -10,7 +10,6 @@ import { useExpandAnim } from '@/shared/hooks/useExpandAnim'
 import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
-import { useUserActivity } from '@/shared/hooks/useUserActivity'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
 import { useTranslation } from '@/shared/i18n/types'
 import { declOfNum } from '@/shared/helpers/textFormat'
@@ -48,8 +47,6 @@ const MainItem: FC<Props> = ({ item, language }) => {
   })
 
   const { updateStatusHandler } = useCardsContext()
-
-  const { updateActivity } = useUserActivity()
 
   const wordsLabel = useMemo(() => {
     return declOfNum(item.items.length, [
@@ -110,15 +107,13 @@ const MainItem: FC<Props> = ({ item, language }) => {
       setIsLoading(true)
       if (item.status === 'READY') {
         await updateStatusHandler(item, 'STUDY')
-        updateActivity({ repeatCard: true })
       } else {
         await updateStatusHandler(item, 'READY')
-        updateActivity({ studiedCard: true })
       }
 
       setIsLoading(false)
     }
-  }, [isAuth, item, updateActivity, updateStatusHandler])
+  }, [isAuth, item, updateStatusHandler])
 
   const deleteItemHandler = useCallback(() => {
     setModalDeleteItem(item)

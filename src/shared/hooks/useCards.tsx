@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from './useStore'
 import { store } from '@/shared/store/store'
 import { IItem } from '@/entities/Item/model/item'
 import { Vibration } from 'react-native'
-import { useUserActivity } from './useUserActivity'
 import { toast } from '@/shared/UI/Toast/toast'
 import { useTranslation } from '@/shared/i18n/types'
 
@@ -30,8 +29,6 @@ export const useCards = () => {
   const [updateItem] = useUpdateItemMutation()
   const [updateItemStatus] = useUpdateItemStatusMutation()
   const [deleteItem] = useDeleteItemMutation()
-
-  const { updateActivity } = useUserActivity()
 
   const { t } = useTranslation()
 
@@ -84,7 +81,6 @@ export const useCards = () => {
       try {
         await addItemAPI({ item }).unwrap()
 
-        updateActivity({ addedCard: true })
         setTimeout(() => Vibration.vibrate(300), 300)
         toast.success(t('itemTooltip.ADD'))
       } catch (error) {

@@ -1,12 +1,4 @@
-import React, {
-  type FC,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { type FC, memo, useCallback, useMemo, useRef, useState } from 'react'
 import { styles } from './ModalYearResult.styles'
 import {
   Animated,
@@ -18,52 +10,46 @@ import {
   View,
 } from 'react-native'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useActions } from '@/shared/hooks/useActions'
+import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
+import { useGetYearStatsQuery } from '@/shared/API/services/metrics/MetricsQuery'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import YearResultSlide from './UI/YearResultSlide/YearResultSlide'
-import { dataYearsResult, type DataYearsResultType } from './data'
-import { height, width } from '@/shared/helpers/ScaleUtils'
+import { height } from '@/shared/helpers/ScaleUtils'
+import type { YearInReviewSlideConfig } from '@/shared/API/services/appConfig/types'
 
-type Props = {}
-
-const ModalYearResult: FC<Props> = () => {
-  const {} = useActions()
-
+const ModalYearResult: FC = () => {
   const flatList = useRef<FlatList>(null)
   const scrollY = useRef(new Animated.Value(0)).current
 
-  const { isWatchSplash, isAuth, showYearResult } = useAppSelector(
+  const { isWatchSplash, isAuth, showYearResult, appLanguage } = useAppSelector(
     (store) => store.app
   )
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
 
+  // публичный конфиг — без исключения (нужен и до открытия модалки, для
+  // гейтинга кнопки на профиле), статистика года — только когда модалка
+  // реально должна открыться, чтобы не дёргать /stats/year на каждый фокус
+  const { data: appConfig } = useGetAppConfigQuery(undefined, { skip: !isAuth })
+  const { data: yearStats } = useGetYearStatsQuery(undefined, {
+    skip: !isAuth || !showYearResult,
+  })
+  const { data: profile } = useMeProfile()
+
+  const locale = appLanguage?.code ?? 'ru'
+
+  const slides = useMemo<YearInReviewSlideConfig[]>(() => {
+    const configured = appConfig?.year_in_review?.slides ?? []
+
+    return configured
+      .filter((slide) => slide.enabled)
+      .slice()
+      .sort((a, b) => a.sort_order - b.sort_order)
+  }, [appConfig?.year_in_review?.slides])
+
   const isVisible = useMemo(() => {
-    return isWatchSplash && isAuth && showYearResult
-  }, [isWatchSplash, isAuth, showYearResult])
-
-  const onCancelHandler = () => {}
-
-  const prevSlide = () => {
-    const prevSlideIndex = currentSlide - 1
-    const offset = prevSlideIndex * width
-
-    if (currentSlide !== 0) {
-      flatList.current?.scrollToOffset({ offset })
-      setCurrentSlide(prevSlideIndex)
-    }
-  }
-
-  const nextSlide = async () => {
-    const nexSlideIndex = currentSlide + 1
-    const offset = nexSlideIndex * width
-
-    if (nexSlideIndex !== dataYearsResult.length) {
-      flatList.current?.scrollToOffset({ offset })
-      setCurrentSlide(nexSlideIndex)
-    } else {
-      // долистал до конца
-    }
-  }
+    return isWatchSplash && isAuth && showYearResult && slides.length > 0
+  }, [isWatchSplash, isAuth, showYearResult, slides.length])
 
   const updateCurrentSlideIndex = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -74,14 +60,24 @@ const ModalYearResult: FC<Props> = () => {
     []
   )
 
-  const renderItem: ListRenderItem<DataYearsResultType> = useCallback(
-    ({ item, index }) => (
-      <YearResultSlide index={index} currentSlide={currentSlide} item={item} />
-    ),
-    [currentSlide]
+  const keyExtractor = useCallback(
+    (item: YearInReviewSlideConfig) => item.id,
+    []
   )
 
-  useEffect(() => {}, [])
+  const renderItem: ListRenderItem<YearInReviewSlideConfig> = useCallback(
+    ({ item, index }) => (
+      <YearResultSlide
+        index={index}
+        currentSlide={currentSlide}
+        config={item}
+        stats={yearStats}
+        locale={locale}
+        avatarUri={profile?.image}
+      />
+    ),
+    [currentSlide, yearStats, locale, profile?.image]
+  )
 
   return (
     <Modal
@@ -94,7 +90,8 @@ const ModalYearResult: FC<Props> = () => {
         <FlatList
           onMomentumScrollEnd={updateCurrentSlideIndex}
           ref={flatList}
-          data={dataYearsResult}
+          data={slides}
+          keyExtractor={keyExtractor}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
             { useNativeDriver: false }

@@ -1,7 +1,7 @@
 import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { metricsService } from './MetricsService'
-import type { LogEventPayload } from './types'
+import type { LogEventPayload, YearStatsResponse } from './types'
 
 export const metricsAPI = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -15,7 +15,14 @@ export const metricsAPI = baseApi.injectEndpoints({
       },
       invalidatesTags: ['achievements'],
     }),
+    // "итоги года" — полностью серверная агрегация (event-sourced метрики +
+    // стрики), клиент только отображает готовые числа
+    getYearStats: build.query<YearStatsResponse, void>({
+      async queryFn() {
+        return toRtkQueryResult(await metricsService.getYearStats())
+      },
+    }),
   }),
 })
 
-export const { useLogMetricEventMutation } = metricsAPI
+export const { useLogMetricEventMutation, useGetYearStatsQuery } = metricsAPI

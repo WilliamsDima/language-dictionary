@@ -11,6 +11,8 @@ export const styles = StyleSheet.create((theme) => ({
     top: theme.size.s100,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: theme.size.s10,
+    paddingHorizontal: theme.size.s20,
   },
   title: {
     color: theme.colors.text.primary,
@@ -19,6 +21,13 @@ export const styles = StyleSheet.create((theme) => ({
     fontSize: theme.fontSize.s40,
     fontStyle: 'italic',
     textAlign: 'center',
+  },
+  description: {
+    color: theme.colors.text.primary,
+    fontWeight: '600',
+    fontSize: theme.fontSize.s16,
+    textAlign: 'center',
+    opacity: theme.opacity.o60,
   },
   emojiLeft: {
     position: 'absolute',
@@ -76,6 +85,8 @@ export const styles = StyleSheet.create((theme) => ({
     bottom: theme.size.s50,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: theme.size.s20,
   },
   scrollLeft: {
     width: theme.size.s100,
@@ -91,9 +102,11 @@ export const styles = StyleSheet.create((theme) => ({
     right: theme.size.s0,
     opacity: theme.opacity.o50,
   },
-  years: {
-    width: theme.size.s200,
-    height: theme.size.s200,
+  year: {
+    color: theme.colors.palette.gold,
+    fontWeight: '800',
+    fontSize: theme.fontSize.s48,
+    fontStyle: 'italic',
   },
   welcome: {
     width: theme.size.s200,
