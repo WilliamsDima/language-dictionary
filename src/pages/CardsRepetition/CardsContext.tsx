@@ -27,6 +27,7 @@ import { shuffleArray } from '@/shared/helpers/shuffleArray'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGetItemsQuery, cardToItem } from '@/pages/MainScreen/api/cardsServices'
 import { useCompleteStreakMutation } from '@/shared/API/services/streak/StreakQuery'
+import { useLogMetricEventMutation } from '@/shared/API/services/metrics/MetricsQuery'
 
 export type CardSlideType = {
   index: number
@@ -97,6 +98,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   })
 
   const [completeStreak] = useCompleteStreakMutation()
+  const [logMetricEvent] = useLogMetricEventMutation()
 
   const dailyItems = useMemo(
     () => dailyParams?.cards.map(cardToItem) ?? [],
@@ -114,14 +116,20 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
   const onEnd = useCallback(() => {
     // завершение задания дня фиксируем ровно в момент, когда пользователь
-    // выходит из практики — идемпотентно на бэкенде, поэтому не ждём ответ
+    // выходит из практики — идемпотентно на бэкенде, поэтому не ждём ответ.
     if (isDailyMode) {
       completeStreak(getLocalDateString())
     }
 
+    // training_opened — единственное реальное событие, которое двигает
+    // метрику trainings_count на бэкенде (достижения "Постоянная практика",
+    // "Мастер тренировок"); это фоновая метрика, не блокирует выход из
+    // практики и сама просит перечитать достижения (invalidatesTags)
+    logMetricEvent({ type: 'training_opened' })
+
     setCurrentSlide(0)
     goBack()
-  }, [completeStreak, goBack, isDailyMode])
+  }, [completeStreak, goBack, isDailyMode, logMetricEvent])
 
   const prevSlide = useCallback(() => {
     const prevSlideIndex = currentSlide - 1

@@ -11,6 +11,7 @@ export const baseApi = createApi({
     'appConfig',
     'streak',
     'dailyChallenge',
+    'achievements',
   ],
   endpoints: () => ({}),
 })

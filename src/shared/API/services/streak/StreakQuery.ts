@@ -31,7 +31,9 @@ export const streakAPI = baseApi.injectEndpoints({
       async queryFn(date) {
         return toRtkQueryResult(await streakService.complete(date))
       },
-      invalidatesTags: ['streak', 'dailyChallenge'],
+      // завершение стрика может пересечь порог достижения по метрике
+      // STREAK_LONGEST — просим перечитать список достижений
+      invalidatesTags: ['streak', 'dailyChallenge', 'achievements'],
       async onQueryStarted(_date, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled.catch(() => ({ data: null }))
         if (!data) return

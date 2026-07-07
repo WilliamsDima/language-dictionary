@@ -27,36 +27,32 @@ export const styles = StyleSheet.create((theme) => ({
     marginTop: theme.size.s16,
     gap: theme.size.s12,
   },
-  card: {
-    minHeight: theme.size.s160,
+  loader: {
+    height: theme.size.s200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  animLoader: {
+    width: theme.size.s150,
+    height: theme.size.s150,
+  },
+  errorBlock: {
+    marginTop: theme.size.s16,
     padding: theme.size.s18,
     borderRadius: theme.size.s24,
-    justifyContent: 'space-between',
-    overflow: 'hidden',
+    backgroundColor: theme.colors.background.surface,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.border,
+    alignItems: 'center',
+    gap: theme.size.s12,
   },
-  badge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: theme.size.s10,
-    paddingVertical: theme.size.s4,
-    borderRadius: theme.size.s999,
-    backgroundColor: theme.colors.palette.white_alpha_04,
-  },
-  badgeText: {
-    fontSize: theme.fontSize.s12,
-    fontFamily: theme.fonts.bold,
-    color: theme.colors.palette.black,
-    textTransform: 'uppercase',
-  },
-  cardTitle: {
-    marginTop: theme.size.s24,
-    fontSize: theme.fontSize.s20,
-    fontFamily: theme.fonts.extraBold,
-    color: theme.colors.palette.black,
-  },
-  cardText: {
-    marginTop: theme.size.s10,
+  errorText: {
     fontSize: theme.fontSize.s14,
+    color: theme.colors.palette.gray_text,
     lineHeight: theme.lineHeights.md,
-    color: theme.colors.palette.black,
+    textAlign: 'center',
+  },
+  retryBtn: {
+    minWidth: theme.size.s150,
   },
 }))

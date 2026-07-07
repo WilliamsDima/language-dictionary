@@ -39,31 +39,4 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.size.s10,
     paddingTop: theme.size.s14,
   },
-  achievementPreviewCard: {
-    width: theme.size.s132,
-    height: theme.size.s170,
-    borderRadius: theme.size.s20,
-    padding: theme.size.s14,
-    justifyContent: 'space-between',
-    overflow: 'hidden',
-  },
-  achievementPreviewBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: theme.size.s8,
-    paddingVertical: theme.size.s4,
-    borderRadius: theme.size.s999,
-    backgroundColor: theme.colors.palette.white_alpha_04,
-  },
-  achievementPreviewBadgeText: {
-    fontSize: theme.fontSize.s10,
-    fontFamily: theme.fonts.bold,
-    color: theme.colors.palette.black,
-    textTransform: 'uppercase',
-  },
-  achievementPreviewTitle: {
-    fontSize: theme.fontSize.s16,
-    lineHeight: theme.lineHeights.md,
-    fontFamily: theme.fonts.extraBold,
-    color: theme.colors.palette.black,
-  },
 }))
