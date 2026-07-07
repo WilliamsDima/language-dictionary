@@ -11,6 +11,9 @@ import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
 import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
 import PracticeButton from '../PracticeButton/PracticeButton'
 import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
+import DailyStreakBanner from '@/features/DailyStreakBanner/DailyStreakBanner'
+import { useStreakStatus } from '@/shared/hooks/useStreakStatus'
+import { useStartDailyChallenge } from '@/shared/hooks/useStartDailyChallenge'
 
 const TabBar: FC<BottomTabBarProps> = (props) => {
   const { state, navigation } = props
@@ -20,9 +23,11 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
     { filter: { status: 'ALL' }, limitCount: 1, page: 1 },
     { skip: !isAuth }
   )
+  const { data: streakData } = useStreakStatus()
   const { theme, rt } = useUnistyles()
   const [cardsSheetRef, presentCardsSheet, onDismissCardsSheet] =
     useBottomSheet()
+  const startDailyChallenge = useStartDailyChallenge()
 
   const colorShdow = useMemo(() => {
     return rt.themeName === 'dark'
@@ -56,15 +61,25 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
     return !!data?.total
   }, [data?.total])
 
+  const isDailyChallengePending = useMemo(() => {
+    return !!streakData && !streakData.completed_today
+  }, [streakData])
+
   const onOpenPractice = useCallback(() => {
+    if (isDailyChallengePending) {
+      startDailyChallenge()
+      return
+    }
+
     presentCardsSheet()
-  }, [presentCardsSheet])
+  }, [isDailyChallengePending, startDailyChallenge, presentCardsSheet])
 
   return !hiddenTabBar ? (
     <View style={styles.wrapper}>
       {hasItems ? (
         <View style={styles.practiceContainer}>
           <PracticeButton onPress={onOpenPractice} />
+          <DailyStreakBanner />
         </View>
       ) : (
         <></>

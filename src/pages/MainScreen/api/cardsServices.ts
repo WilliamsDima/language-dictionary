@@ -16,7 +16,7 @@ import type {
 // items[].date из CardItemDTO сознательно не сохраняется в IItem —
 // нигде в UI дата отдельного слова карточки не отображается,
 // значима только дата самой карточки (card.date)
-const cardToItem = (card: CardDTO): IItem => ({
+export const cardToItem = (card: CardDTO): IItem => ({
   id: card.id,
   date: card.date,
   description: card.description ?? '',

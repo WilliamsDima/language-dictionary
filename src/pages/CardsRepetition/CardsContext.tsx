@@ -16,12 +16,16 @@ import {
   FlatList,
   Animated,
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { NavigateStack } from '@/app/Navigation/types/paramsTypes'
+import type { AppRouteParams } from '@/app/Navigation/params'
+import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
+import { getLocalDateString } from '@/shared/helpers/localDate'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
+import { useGetItemsQuery, cardToItem } from '@/pages/MainScreen/api/cardsServices'
+import { useCompleteStreakMutation } from '@/shared/API/services/streak/StreakQuery'
 
 export type CardSlideType = {
   index: number
@@ -37,6 +41,7 @@ type IContext = {
   isLoading: boolean
   currentSlideData?: CardSlideType
   count: number
+  isDailyMode: boolean
   swipeSlide: (translationX: number) => void
   updateCurrentSlideIndex: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
   nextSlide: () => void
@@ -49,13 +54,25 @@ type CardsProviderType = {
   children: ReactNode
 }
 
+type CardsRepetitionRoute = RouteProp<
+  AppRouteParams,
+  typeof RoutesNames.cardsRepetition
+>
+
 export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const { goBack } = useNavigation<NavigateStack>()
+  const route = useRoute<CardsRepetitionRoute>()
   const flatList = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
 
   const { filterCardsModal } = useAppSelector((store) => store.items)
   const { isAuth } = useAppSelector((store) => store.app)
+
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [data, setData] = useState<CardSlideType[]>([])
+
+  const dailyParams = route.params?.mode === 'daily' ? route.params : undefined
+  const isDailyMode = !!dailyParams
 
   const queryArgs = useMemo(
     () => ({
@@ -71,23 +88,38 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     [filterCardsModal.status, filterCardsModal.languages]
   )
 
+  // в режиме задания дня карточки уже пришли параметром, отдельный запрос
+  // списка карточек по фильтру для практики не нужен
   const { data: queryData, isFetching } = useGetItemsQuery(queryArgs, {
-    skip: !isAuth,
+    skip: !isAuth || isDailyMode,
   })
 
-  const liveItems = useMemo(() => queryData?.items ?? [], [queryData?.items])
+  const [completeStreak] = useCompleteStreakMutation()
 
-  const [currentSlide, setCurrentSlide] = useState<number>(0)
-  const [data, setData] = useState<CardSlideType[]>([])
+  const dailyItems = useMemo(
+    () => dailyParams?.cards.map(cardToItem) ?? [],
+    [dailyParams]
+  )
+
+  const liveItems = useMemo(
+    () => (isDailyMode ? dailyItems : (queryData?.items ?? [])),
+    [isDailyMode, dailyItems, queryData?.items]
+  )
 
   const currentSlideData = useMemo(() => {
     return data.find((it, i) => i === currentSlide)
   }, [currentSlide, data])
 
   const onEnd = useCallback(() => {
+    // завершение задания дня фиксируем ровно в момент, когда пользователь
+    // выходит из практики — идемпотентно на бэкенде, поэтому не ждём ответ
+    if (isDailyMode) {
+      completeStreak(getLocalDateString())
+    }
+
     setCurrentSlide(0)
     goBack()
-  }, [goBack])
+  }, [completeStreak, goBack, isDailyMode])
 
   const prevSlide = useCallback(() => {
     const prevSlideIndex = currentSlide - 1
@@ -132,16 +164,27 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   )
 
   // карточки для тренировки собираются один раз при заходе на экран,
-  // дальше статус каждой карточки уже обновляется реактивно через liveItems
+  // дальше статус каждой карточки уже обновляется реактивно через liveItems.
+  // в режиме задания дня порядок карточек уже случайный на бэкенде —
+  // клиентский reshuffle для этого пути сознательно пропускается
   useEffect(() => {
-    if (!data.length && queryData?.items.length) {
+    if (data.length) return
+
+    if (isDailyMode) {
+      if (dailyItems.length) {
+        setData(dailyItems.map((it, index) => ({ index, item: it })))
+      }
+      return
+    }
+
+    if (queryData?.items.length) {
       setData(
         queryData.items
           .map((it, index) => ({ index, item: it }))
           .sort(() => Math.random() - 0.5)
       )
     }
-  }, [queryData?.items, data.length])
+  }, [queryData?.items, data.length, isDailyMode, dailyItems])
 
   const value = useMemo(() => {
     return {
@@ -151,8 +194,9 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       currentSlide,
       scrollX,
       currentSlideData,
-      isLoading: isFetching,
+      isLoading: isDailyMode ? false : isFetching,
       count: data.length,
+      isDailyMode,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
@@ -165,6 +209,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     scrollX,
     currentSlideData,
     isFetching,
+    isDailyMode,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,

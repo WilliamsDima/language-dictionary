@@ -57,11 +57,24 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.base.white,
     fontFamily: theme.fonts.bold,
   },
-  statCardValue: {
+  statCardValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: theme.size.s14,
+    gap: theme.size.s6,
+  },
+  statCardValue: {
     fontSize: theme.fontSize.s24,
     fontFamily: theme.fonts.extraBold,
     color: theme.colors.palette.black,
+  },
+  streakIcon: {
+    width: theme.size.s24,
+    height: theme.size.s24,
+  },
+  streakEmoji: {
+    fontSize: theme.fontSize.s20,
+    lineHeight: theme.fontSize.s24,
   },
   statCardLabel: {
     marginTop: theme.size.s10,

@@ -99,6 +99,8 @@ type InitialState = {
   isWatchSplash: boolean
   showUpdateModal: boolean
   appLanguage: AppLanguageType | null
+  showDailyStreakSuccessModal: boolean
+  dailyStreakAnimation: { from: number; to: number } | null
 }
 
 const initialState: InitialState = {
@@ -138,6 +140,8 @@ const initialState: InitialState = {
   showUpdateModal: false,
   showYearResult: false,
   appLanguage: defaultAppLanguage,
+  showDailyStreakSuccessModal: false,
+  dailyStreakAnimation: null,
 }
 
 export const appSlice = createSlice({
@@ -173,6 +177,18 @@ export const appSlice = createSlice({
       { payload }: PayloadAction<AppLanguageType | null>
     ) => {
       state.appLanguage = payload
+    },
+    setShowDailyStreakSuccessModal: (
+      state,
+      { payload }: PayloadAction<boolean>
+    ) => {
+      state.showDailyStreakSuccessModal = payload
+    },
+    setDailyStreakAnimation: (
+      state,
+      { payload }: PayloadAction<{ from: number; to: number } | null>
+    ) => {
+      state.dailyStreakAnimation = payload
     },
   },
 })

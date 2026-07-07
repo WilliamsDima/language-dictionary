@@ -1,9 +1,12 @@
-import React, { FC, memo, useCallback, useMemo, useState } from 'react'
+import React, { FC, ReactNode, memo, useCallback, useMemo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
+import LottieView from 'lottie-react-native'
 import { styles } from './UserStatistic.styles'
 import Text from '@/shared/UI/Text/Text'
 import { useUpdateMeLanguagesMutation } from '@/shared/API/services/me/MeQuery'
 import { useAllItems } from '@/shared/hooks/useAllItems'
+import { useStreakStatus } from '@/shared/hooks/useStreakStatus'
 import ModalLanguagesList from '@/features/ModalLanguagesList/ModalLanguagesList'
 import { ILanguage } from '@/shared/API/services/languages/types'
 import { formatNumberWithSpaces } from '@/shared/helpers/numberFormats'
@@ -19,26 +22,50 @@ type StatisticCardProps = {
   label: string
   value: string | number
   colors: string[]
+  valueColor?: string
+  valueIcon?: ReactNode
 }
 
-const StatisticCard = memo(({ label, value, colors }: StatisticCardProps) => {
-  return (
-    <LinearGradient
-      colors={colors}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.statCard}
-    >
-      <View style={styles.statCardGlow} />
-      <View style={styles.statCardTopRow}>
-        <View style={styles.statCardDot} />
-        <Text style={styles.statCardCaption}>ПРОГРЕСС</Text>
-      </View>
-      <Text style={styles.statCardValue}>{value}</Text>
-      <Text style={styles.statCardLabel}>{label}</Text>
-    </LinearGradient>
-  )
-})
+type StatCardData = {
+  id: string
+  label: string
+  value: string | number
+  colors: string[]
+  valueColor?: string
+  valueIcon?: ReactNode
+}
+
+const StatisticCard = memo(
+  ({ label, value, colors, valueColor, valueIcon }: StatisticCardProps) => {
+    const valueStyle = useMemo(
+      () =>
+        valueColor
+          ? [styles.statCardValue, { color: valueColor }]
+          : styles.statCardValue,
+      [valueColor]
+    )
+
+    return (
+      <LinearGradient
+        colors={colors}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.statCard}
+      >
+        <View style={styles.statCardGlow} />
+        <View style={styles.statCardTopRow}>
+          <View style={styles.statCardDot} />
+          <Text style={styles.statCardCaption}>ПРОГРЕСС</Text>
+        </View>
+        <View style={styles.statCardValueRow}>
+          {valueIcon}
+          <Text style={valueStyle}>{value}</Text>
+        </View>
+        <Text style={styles.statCardLabel}>{label}</Text>
+      </LinearGradient>
+    )
+  }
+)
 
 type LanguageCardProps = {
   title: string
@@ -62,8 +89,10 @@ const LanguageCard = memo(({ title, onPress, children }: LanguageCardProps) => {
 
 const UserStatistic: FC = () => {
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
   const { data: profile } = useMeProfile()
   const { allItems, isLoading: isLoadingItems } = useAllItems()
+  const { data: streakStatus } = useStreakStatus()
 
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
   const [languagesSheetRef, presentLanguagesSheet, onDismissLanguagesSheet] =
@@ -110,7 +139,33 @@ const UserStatistic: FC = () => {
     return '0'
   }, [allItems])
 
-  const statisticsCards = useMemo(() => {
+  const streakValue = useMemo(
+    () => streakStatus?.current_streak ?? 0,
+    [streakStatus?.current_streak]
+  )
+
+  const streakIcon = useMemo(() => {
+    return streakStatus?.completed_today ? (
+      <LottieView
+        source={require('../../../shared/json/fire.json')}
+        autoPlay
+        loop
+        style={styles.streakIcon}
+      />
+    ) : (
+      <Text style={styles.streakEmoji}>🔥</Text>
+    )
+  }, [streakStatus?.completed_today])
+
+  const streakValueColor = useMemo(
+    () =>
+      streakStatus?.completed_today
+        ? theme.colors.palette.black
+        : 'rgba(4, 7, 13, 0.35)',
+    [streakStatus?.completed_today, theme.colors.palette.black]
+  )
+
+  const statisticsCards = useMemo<StatCardData[]>(() => {
     return [
       {
         id: 'allWordsCount',
@@ -136,8 +191,25 @@ const UserStatistic: FC = () => {
         value: allWordsStady,
         colors: ['#FF6FAE', '#DD2476'],
       },
+      {
+        id: 'streak',
+        label: 'Серия',
+        value: streakValue,
+        colors: ['#FFD200', '#FFD66B'],
+        valueColor: streakValueColor,
+        valueIcon: streakIcon,
+      },
     ]
-  }, [allWordsCount, allWordsReady, allWordsStady, allItems, t])
+  }, [
+    allWordsCount,
+    allWordsReady,
+    allWordsStady,
+    allItems,
+    t,
+    streakValue,
+    streakValueColor,
+    streakIcon,
+  ])
 
   const languageSelects = useMemo(() => {
     if (isNativeLanguage) {
@@ -201,6 +273,8 @@ const UserStatistic: FC = () => {
                 colors={item.colors}
                 label={item.label}
                 value={item.value}
+                valueColor={item.valueColor}
+                valueIcon={item.valueIcon}
               />
             )
           })}

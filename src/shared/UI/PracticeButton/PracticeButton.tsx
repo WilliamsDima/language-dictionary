@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react'
-import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import LinearGradient from 'react-native-linear-gradient'
 import { useTranslation } from '@/shared/i18n/types'

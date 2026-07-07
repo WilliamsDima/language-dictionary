@@ -33,6 +33,7 @@ const Slides: FC<Props> = ({}) => {
     currentSlideData,
     currentSlide,
     count,
+    isDailyMode,
     onEnd,
     nextSlide,
     updateCurrentSlideIndex,
@@ -95,6 +96,19 @@ const Slides: FC<Props> = ({}) => {
     []
   )
 
+  const emptyText = useMemo(
+    () =>
+      isDailyMode
+        ? 'У вас нет карточек — добавьте карточки, чтобы пройти задание дня и не потерять серию'
+        : 'Ничего не найдено по выбранному фильтру',
+    [isDailyMode]
+  )
+
+  const isLastSlide = useMemo(
+    () => currentSlide === count - 1,
+    [currentSlide, count]
+  )
+
   return (
     <View style={styles.container}>
       <View style={styles.slidesWrapper}>
@@ -133,9 +147,7 @@ const Slides: FC<Props> = ({}) => {
                   loop
                 />
 
-                <Text style={styles.emptyText}>
-                  Ничего не найдено по выбранному фильтру
-                </Text>
+                <Text style={styles.emptyText}>{emptyText}</Text>
               </View>
             }
           />
@@ -174,6 +186,7 @@ const Slides: FC<Props> = ({}) => {
 
           <Button
             onPress={onEnd}
+            disabled={isDailyMode && !isLastSlide}
             style={styles.btn}
             classes={{ textBtn: styles.textBtn }}
           >

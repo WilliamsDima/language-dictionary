@@ -180,6 +180,7 @@ const size = {
   s42: 42,
   s44: 44,
   s48: 48,
+  s49: 49,
   s50: 50,
   s52: 52,
   s54: 54,
@@ -362,6 +363,10 @@ const colorsLight = {
     black: lightPalette.black,
     gold: lightPalette.gold,
   },
+  streak: {
+    bright: lightPalette.gold,
+    dim: '#51637D',
+  },
 } as const
 
 const colorsDark = {
@@ -409,6 +414,10 @@ const colorsDark = {
     white: '#F5FBFF',
     black: darkPalette.black,
     gold: darkPalette.gold,
+  },
+  streak: {
+    bright: darkPalette.gold,
+    dim: darkPalette.gray_text,
   },
 } as const
 

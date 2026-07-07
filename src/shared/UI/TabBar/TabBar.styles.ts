@@ -7,7 +7,9 @@ export const styles = StyleSheet.create((theme) => ({
   containerStyle: {
     backgroundColor: theme.colors.palette.transparent,
   },
-  practiceContainer: {},
+  practiceContainer: {
+    position: 'relative',
+  },
   tab: {
     position: 'relative',
     zIndex: 10,
@@ -20,10 +22,6 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.palette.tab_bar_alpha_94,
     overflow: 'hidden',
     width: '100%',
-    borderTopWidth: theme.size.s1,
-    borderLeftWidth: theme.size.s1,
-    borderRightWidth: theme.size.s1,
-    borderColor: theme.colors.palette.border,
   },
   hidden: {
     display: 'none',
