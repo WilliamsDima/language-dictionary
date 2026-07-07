@@ -114,6 +114,11 @@ export const cardsServices = baseApi.injectEndpoints({
         if (!result.ok) return toRtkQueryResult<IItem>(result)
         return { data: cardToItem(result.data) }
       },
+      // создание карточки инкрементирует CARDS_CREATED на бэкенде (см.
+      // комментарий выше) и может завести пользователя в новый язык
+      // (LANGUAGES_COUNT) — просим перечитать список достижений, иначе
+      // счётчики в нём обновятся только на следующем refetchOnFocus
+      invalidatesTags: ['achievements'],
       async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
         const { data: created } = await queryFulfilled.catch(() => ({
           data: null,
@@ -148,6 +153,10 @@ export const cardsServices = baseApi.injectEndpoints({
         if (!result.ok) return toRtkQueryResult<IItem>(result)
         return { data: cardToItem(result.data) }
       },
+      // редактирование карточки может сменить её язык, что затрагивает
+      // достижение по метрике LANGUAGES_COUNT — просим перечитать список
+      // достижений
+      invalidatesTags: ['achievements'],
       async onQueryStarted(_arg, { dispatch, getState, queryFulfilled }) {
         const { data: updated } = await queryFulfilled.catch(() => ({
           data: null,
@@ -282,6 +291,10 @@ export const cardsServices = baseApi.injectEndpoints({
           return toRtkQueryResult<{ success: boolean; id: number }>(result)
         return { data: { success: true, id } }
       },
+      // удаление карточки может уменьшить CARDS_READY (счётчик карточек в
+      // статусе "готово") и LANGUAGES_COUNT — просим перечитать список
+      // достижений
+      invalidatesTags: ['achievements'],
       async onQueryStarted({ id }, { dispatch, getState, queryFulfilled }) {
         const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
           getState(),
