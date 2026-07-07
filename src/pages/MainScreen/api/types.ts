@@ -40,6 +40,9 @@ export type GetItemsParams = {
   page?: number
   limitCount?: number
   lastVisible?: unknown
+  // запросить сразу весь список карточек пользователя одним ответом
+  // (без limit/offset) — см. `all` в CardsService.list
+  all?: boolean
 }
 
 export type GetItemsRequest = {

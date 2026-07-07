@@ -1,4 +1,3 @@
-import type { TooltipType } from '@/entities/Tooltip/model/Tooltip'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {
   appLanguagesList,
@@ -94,7 +93,6 @@ type InitialState = {
   isAuth: boolean
   showYearResult: boolean
   aplication: null | IAplication
-  tooltip: TooltipType | null
   hiddenTabBar: boolean
   isWatchSplash: boolean
   showUpdateModal: boolean
@@ -134,7 +132,6 @@ const initialState: InitialState = {
     } as IAplication['translations'],
     appLanguages: appLanguagesList,
   },
-  tooltip: null,
   hiddenTabBar: false,
   isWatchSplash: false,
   showUpdateModal: false,
@@ -159,9 +156,6 @@ export const appSlice = createSlice({
     },
     setShowYearResult: (state, { payload }: PayloadAction<boolean>) => {
       state.showYearResult = payload
-    },
-    setTooltip: (state, { payload }: PayloadAction<TooltipType | null>) => {
-      state.tooltip = payload
     },
     setHiddenTabBar: (state, { payload }: PayloadAction<boolean>) => {
       state.hiddenTabBar = payload

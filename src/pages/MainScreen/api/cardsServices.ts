@@ -59,8 +59,8 @@ const toListQuery = (params: GetItemsParams) => {
     status: status && status !== 'ALL' ? status : undefined,
     languages: params.filter?.filter?.languages,
     sort: toSortParam(params.filter?.filter?.sortDate),
-    limit,
-    offset: (page - 1) * limit,
+    // при all=true бэкенд сам игнорирует limit/offset, поэтому их вообще не шлём
+    ...(params.all ? { all: true } : { limit, offset: (page - 1) * limit }),
   }
 }
 
@@ -75,6 +75,12 @@ export const cardsServices = baseApi.injectEndpoints({
 
         const { items, total, offset, has_more: hasMore } = result.data
 
+        // TODO: при params.all === true бэкенд может вернуть has_more: true,
+        // только если пользователь превысил safety-кап в 5000 карточек —
+        // в этом крайне маловероятном случае клиент сейчас не подгружает
+        // остаток постранично (caller'ы all-режима не запрашивают следующую
+        // страницу). При необходимости можно повторно использовать
+        // lastVisible ниже так же, как это уже сделано для обычной пагинации.
         return {
           data: {
             items: items.map(cardToItem),
@@ -84,8 +90,8 @@ export const cardsServices = baseApi.injectEndpoints({
         }
       },
       serializeQueryArgs: ({ queryArgs, endpointName }) => {
-        const { filter, limitCount } = queryArgs
-        return `${endpointName}/${JSON.stringify({ filter, limitCount })}`
+        const { filter, limitCount, all } = queryArgs
+        return `${endpointName}/${JSON.stringify({ filter, limitCount, all })}`
       },
       merge: (currentCache, newData, { arg }) => {
         if ((arg.page ?? 1) <= 1) {

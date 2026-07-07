@@ -3,10 +3,8 @@ import { IItem } from '@/entities/Item/model/item'
 import { useLazyGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 import { useAppSelector } from './useStore'
 
-const PAGE_SIZE = 50
-
-// честно собирает все карточки пользователя постранично с backend,
-// а не то, что уже случайно оказалось в кэше других экранов
+// собирает все карточки пользователя одним запросом к бэкенду (`all=true`)
+// вместо постраничного page-walk
 export const useAllItems = () => {
   const { isAuth } = useAppSelector((store) => store.app)
   const [getItems] = useLazyGetItemsQuery()
@@ -20,28 +18,12 @@ export const useAllItems = () => {
     setIsLoading(true)
 
     try {
-      const fetchPage = async (
-        page: number,
-        lastVisible: unknown,
-        collected: IItem[]
-      ): Promise<IItem[]> => {
-        const res = await getItems({
-          filter: { status: 'ALL' },
-          limitCount: PAGE_SIZE,
-          page,
-          lastVisible,
-        }).unwrap()
+      const res = await getItems({
+        filter: { status: 'ALL' },
+        all: true,
+      }).unwrap()
 
-        const nextCollected = collected.concat(res.items)
-
-        return res.lastVisible !== undefined
-          ? fetchPage(page + 1, res.lastVisible, nextCollected)
-          : nextCollected
-      }
-
-      const collected = await fetchPage(1, undefined, [])
-
-      setAllItems(collected)
+      setAllItems(res.items)
     } finally {
       setIsLoading(false)
     }

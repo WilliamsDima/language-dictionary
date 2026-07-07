@@ -82,8 +82,9 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
           languages: filterCardsModal?.languages,
         },
       },
-      limitCount: 10,
-      page: 1,
+      // практика должна работать по всему набору карточек, подходящих
+      // под фильтр, а не только по первой странице
+      all: true,
     }),
     [filterCardsModal.status, filterCardsModal.languages]
   )

@@ -8,6 +8,9 @@ type ListQuery = {
   sort?: 'date_asc' | 'date_desc'
   limit?: number
   offset?: number
+  // при true бэкенд игнорирует limit/offset и отдаёт весь список одним ответом
+  // (до safety-капа в 5000 карточек)
+  all?: boolean
 }
 
 type CardItemPayload = {
@@ -36,6 +39,7 @@ const buildQuery = (params: ListQuery): string => {
   if (params.sort) query.set('sort', params.sort)
   if (typeof params.limit === 'number') query.set('limit', String(params.limit))
   if (typeof params.offset === 'number') query.set('offset', String(params.offset))
+  if (params.all) query.set('all', 'true')
 
   const qs = query.toString()
   return qs ? `?${qs}` : ''

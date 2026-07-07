@@ -4,7 +4,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import StartRoutes from './Stacks/StartStack'
 import TabNavigation from './TabRoutes/TabRoutes'
 import {useAppSelector} from '@/shared/hooks/useStore'
-import Tooltip from '@/entities/Tooltip/UI/Tooltip'
 import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
 import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 import ModalDailyStreakSuccess from '@/features/ModalDailyStreakSuccess/ModalDailyStreakSuccess'
@@ -35,7 +34,6 @@ const Routes = () => {
         )}
       </NavigationContainer>
 
-      <Tooltip />
       <ModalUpdateApp />
       <ModalYearResult />
       <ModalDailyStreakSuccess />

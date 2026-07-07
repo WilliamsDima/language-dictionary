@@ -9,7 +9,7 @@ import { useActions } from '@/shared/hooks/useActions'
 import { useAllItems } from '@/shared/hooks/useAllItems'
 import { setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
-import SaveDataTooltip from '../SaveDataTooltip/SaveDataTooltip'
+import { toast } from '@/shared/UI/Toast/toast'
 import { copyToClipboard } from '@/shared/helpers/copyToClipboard'
 import { useTranslation } from '@/shared/i18n/types'
 import { dateFormat } from '@/shared/helpers/dateFormat'
@@ -18,7 +18,7 @@ import { useUnistyles } from 'react-native-unistyles'
 
 const SaveData: FC = () => {
   const { t } = useTranslation()
-  const { setLastSaveData, setTooltip } = useActions()
+  const { setLastSaveData } = useActions()
   const { theme } = useUnistyles()
 
   const { lastSaveData } = useAppSelector((store) => store.items)
@@ -38,15 +38,12 @@ const SaveData: FC = () => {
 
       const dateSave = new Date()
 
-      setTooltip({ children: <SaveDataTooltip path={path} />, time: 3000 })
+      toast.success(t('settingsScreen.save_json_success', { path }))
       setLastSaveData(dateSave)
       setAsyncLocal(LOCAL_KEYS.saveDate, dateSave)
       console.log('save json')
     } catch (error) {
-      setTooltip({
-        children: <SaveDataTooltip error path={path} />,
-        time: 3000,
-      })
+      toast.error(t('settingsScreen.save_json_error'))
       copyToClipboard(jsonString)
       console.log('save json Error', error)
     }
