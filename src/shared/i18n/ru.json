@@ -83,6 +83,8 @@
     "studied_count_short": "Изучено",
     "progress_count": "В изучении:",
     "progress_count_short": "В изучении",
+    "streak_short": "Серия",
+    "best_streak_short": "Лучшая серия",
     "languages_studied": "Изучаемые языки: ",
     "languages_studied_card": "Изучаемые языки",
     "languages_studied_not_select": "не выбраны",

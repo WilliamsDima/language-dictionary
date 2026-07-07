@@ -165,6 +165,11 @@ const UserStatistic: FC = () => {
     [streakStatus?.completed_today, theme.colors.palette.black]
   )
 
+  const longestStreakValue = useMemo(
+    () => streakStatus?.longest_streak ?? 0,
+    [streakStatus?.longest_streak]
+  )
+
   const statisticsCards = useMemo<StatCardData[]>(() => {
     return [
       {
@@ -193,11 +198,18 @@ const UserStatistic: FC = () => {
       },
       {
         id: 'streak',
-        label: 'Серия',
+        label: t('profileScreen.streak_short'),
         value: streakValue,
         colors: ['#FFD200', '#FFD66B'],
         valueColor: streakValueColor,
         valueIcon: streakIcon,
+      },
+      {
+        id: 'longestStreak',
+        label: t('profileScreen.best_streak_short'),
+        value: longestStreakValue,
+        colors: ['#8E54E9', '#4776E6'],
+        valueIcon: <Text style={styles.streakEmoji}>🏆</Text>,
       },
     ]
   }, [
@@ -209,6 +221,7 @@ const UserStatistic: FC = () => {
     streakValue,
     streakValueColor,
     streakIcon,
+    longestStreakValue,
   ])
 
   const languageSelects = useMemo(() => {
