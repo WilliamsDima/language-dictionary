@@ -7,10 +7,13 @@ export type FilterMain = {
   languages?: string[]
 }
 
+export type CardsLimitValue = 'ALL' | 20 | 50 | 100
+
 export type FilterCardsModal = {
   status: StatusItem
   languages: string[]
   showVariant: ShowVariantListVale | null
+  limit: CardsLimitValue
 }
 
 type InitialState = {
@@ -36,6 +39,7 @@ const initialState: InitialState = {
     status: 'STUDY',
     languages: [],
     showVariant: 'word_only',
+    limit: 'ALL',
   },
 }
 

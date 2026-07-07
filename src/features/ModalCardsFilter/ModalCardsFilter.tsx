@@ -15,6 +15,7 @@ import { SelectOption } from '@/shared/UI/types'
 import { useTranslation } from '@/shared/i18n/types'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import type { AppLanguageType } from '@/shared/store/slice/appSlice'
+import type { CardsLimitValue } from '@/shared/store/slice/itemsSlice'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
@@ -23,34 +24,46 @@ type Props = {
   onDismiss: () => void
 }
 
-type FilterOptionRowProps<T> = {
+type FilterChipProps<T> = {
   active: boolean
   label: string
   value: T
+  color?: string
   onPress: (value: T) => void
 }
 
-const FilterOptionRowInner = <T,>({
+const FilterChipInner = <T,>({
   active,
   label,
   value,
+  color,
   onPress,
-}: FilterOptionRowProps<T>) => {
+}: FilterChipProps<T>) => {
   const handlePress = useCallback(() => {
     onPress(value)
   }, [onPress, value])
 
+  const dotStyle = useMemo(() => {
+    return color ? [styles.dot, { backgroundColor: color }] : styles.dot
+  }, [color])
+
+  styles.useVariants({
+    active,
+  })
+
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.selectBtn}>
-      <View style={[styles.circle, active && styles.circleActive]} />
-      <Text style={styles.selectBtnText}>{label}</Text>
+    <TouchableOpacity
+      onPress={handlePress}
+      style={styles.chip}
+      activeOpacity={0.85}
+    >
+      {color ? <View style={dotStyle} /> : <></>}
+      <Text style={styles.chipText}>{label}</Text>
     </TouchableOpacity>
   )
 }
 
-const FilterOptionRow = memo(
-  FilterOptionRowInner
-) as typeof FilterOptionRowInner
+const FilterChip = memo(FilterChipInner) as typeof FilterChipInner
 
 const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
   const { setFilterCardsModal } = useActions()
@@ -58,10 +71,11 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
 
-  const { aplication, appLanguage } = useAppSelector((store) => store.app)
+  const { aplication } = useAppSelector((store) => store.app)
 
   const [languages, setLanguages] = useState<AppLanguageType[]>([])
   const [statusSelect, setStatusSelect] = useState<StatusItem>('STUDY')
+  const [limitSelect, setLimitSelect] = useState<CardsLimitValue>('ALL')
 
   const showVariantListOptions: SelectOption[] = useMemo(() => {
     return [
@@ -74,10 +88,20 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
         value: 'translate_only',
       },
     ]
-  }, [appLanguage, t])
+  }, [t])
 
   const [showVariantSelect, setShowVariantSelect] =
     useState<SelectOption | null>(() => showVariantListOptions[0])
+
+  const limitOptions: { label: string; value: CardsLimitValue }[] = useMemo(
+    () => [
+      { label: t('modal.modalCardsFilter.limit_all'), value: 'ALL' },
+      { label: '20', value: 20 },
+      { label: '50', value: 50 },
+      { label: '100', value: 100 },
+    ],
+    [t]
+  )
 
   const languagesOptions = useMemo(() => {
     return aplication?.appLanguages
@@ -97,6 +121,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
     setLanguages([])
     setStatusSelect('STUDY')
     setShowVariantSelect(showVariantListOptions[0])
+    setLimitSelect('ALL')
   }
 
   const confirm = () => {
@@ -104,6 +129,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
       status: statusSelect,
       languages: languages.map((it) => it.code),
       showVariant: showVariantSelect?.value as ShowVariantListVale,
+      limit: limitSelect,
     })
 
     navigate(RoutesNames.cardsRepetition)
@@ -145,17 +171,20 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
       }
     >
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Статус карточек</Text>
-        <View style={styles.selects}>
+        <Text style={styles.sectionTitle}>
+          {t('modal.modalCardsFilter.status')}
+        </Text>
+        <View style={styles.chips}>
           {tabsWords(t, theme).map((it) => {
             const active = statusSelect === it.status
 
             return (
-              <FilterOptionRow
+              <FilterChip
                 key={it.status}
                 active={active}
                 label={it.label}
                 value={it.status}
+                color={it.color}
                 onPress={setStatusSelect}
               />
             )
@@ -168,18 +197,42 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
           {t('modal.modalCardsFilter.show_variants')}
         </Text>
 
-        {showVariantListOptions.map((it) => {
-          const active = it.value === showVariantSelect?.value
-          return (
-            <FilterOptionRow
-              key={it.value}
-              active={active}
-              label={it.label}
-              value={it}
-              onPress={onSelectShowVariant}
-            />
-          )
-        })}
+        <View style={styles.chips}>
+          {showVariantListOptions.map((it) => {
+            const active = it.value === showVariantSelect?.value
+            return (
+              <FilterChip
+                key={it.value}
+                active={active}
+                label={it.label}
+                value={it}
+                onPress={onSelectShowVariant}
+              />
+            )
+          })}
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>
+          {t('modal.modalCardsFilter.limit_title')}
+        </Text>
+
+        <View style={styles.chips}>
+          {limitOptions.map((it) => {
+            const active = it.value === limitSelect
+
+            return (
+              <FilterChip
+                key={it.value}
+                active={active}
+                label={it.label}
+                value={it.value}
+                onPress={setLimitSelect}
+              />
+            )
+          })}
+        </View>
       </View>
 
       <MultiselectDropdown

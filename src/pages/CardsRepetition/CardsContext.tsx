@@ -23,6 +23,7 @@ import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
 import { getLocalDateString } from '@/shared/helpers/localDate'
+import { shuffleArray } from '@/shared/helpers/shuffleArray'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGetItemsQuery, cardToItem } from '@/pages/MainScreen/api/cardsServices'
 import { useCompleteStreakMutation } from '@/shared/API/services/streak/StreakQuery'
@@ -179,13 +180,21 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     }
 
     if (queryData?.items.length) {
-      setData(
-        queryData.items
-          .map((it, index) => ({ index, item: it }))
-          .sort(() => Math.random() - 0.5)
-      )
+      const shuffledItems = shuffleArray(queryData.items)
+      const limitedItems =
+        filterCardsModal.limit === 'ALL'
+          ? shuffledItems
+          : shuffledItems.slice(0, filterCardsModal.limit)
+
+      setData(limitedItems.map((it, index) => ({ index, item: it })))
     }
-  }, [queryData?.items, data.length, isDailyMode, dailyItems])
+  }, [
+    queryData?.items,
+    data.length,
+    isDailyMode,
+    dailyItems,
+    filterCardsModal.limit,
+  ])
 
   const value = useMemo(() => {
     return {

@@ -52,10 +52,6 @@ export const styles = StyleSheet.create((theme, rt) => ({
     fontSize: theme.fontSize.s12,
   },
 
-  selects: {
-    flexDirection: 'column',
-    gap: theme.size.s8,
-  },
   section: {
     marginBottom: theme.size.s16,
   },
@@ -66,29 +62,46 @@ export const styles = StyleSheet.create((theme, rt) => ({
     marginBottom: theme.size.s8,
     textTransform: 'uppercase',
   },
-  selectBtn: {
+  chips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.size.s8,
+  },
+  chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.size.s10,
-    paddingVertical: theme.size.s8,
-  },
-  circle: {
-    width: theme.size.s15,
-    height: theme.size.s15,
-    borderRadius: theme.size.s15 / 2,
-    borderWidth: theme.size.s1,
-    borderColor: theme.colors.palette.border,
+    gap: theme.size.s8,
+    paddingHorizontal: theme.size.s14,
+    paddingVertical: theme.size.s10,
+    borderRadius: theme.size.s18,
     backgroundColor: theme.colors.palette.white_alpha_03,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.palette.white_alpha_06,
+    variants: {
+      active: {
+        true: {
+          backgroundColor: theme.colors.palette.success_alpha_16,
+          borderColor: theme.colors.palette.success_alpha_34,
+        },
+      },
+    },
   },
-  circleActive: {
-    borderColor: theme.colors.palette.success_alpha_36,
-    backgroundColor: theme.colors.palette.primery,
+  dot: {
+    width: theme.size.s10,
+    height: theme.size.s10,
+    borderRadius: theme.size.s10 / 2,
   },
-
-  selectBtnText: {
-    color: theme.colors.text.primary,
-    fontSize: theme.fontSize.s14,
-    fontWeight: '600',
+  chipText: {
+    color: theme.colors.palette.gray_text,
+    fontSize: theme.fontSize.s13,
+    fontFamily: 'Mulish-Bold',
+    variants: {
+      active: {
+        true: {
+          color: theme.colors.text.primary,
+        },
+      },
+    },
   },
 
   titleSelect: {
