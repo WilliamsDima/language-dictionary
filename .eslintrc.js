@@ -3,6 +3,9 @@ module.exports = {
   extends: '@react-native',
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
+  rules: {
+    'react-native/no-inline-styles': 'error',
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -20,6 +23,14 @@ module.exports = {
             message: 'Использование `let` запрещено. Используй `const` (пересоздавай значение вместо переприсваивания).',
           },
         ],
+      },
+    },
+    {
+      // Автогенерируемые SVG-иконки (yarn icons:svg) — перезатираются при каждой генерации,
+      // не подчиняются ручным стилевым конвенциям проекта.
+      files: ['src/assets/icons/svg/components/**/*.tsx'],
+      rules: {
+        'react-native/no-inline-styles': 'off',
       },
     },
   ],
