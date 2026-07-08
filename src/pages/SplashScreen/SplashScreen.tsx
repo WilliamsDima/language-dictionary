@@ -9,6 +9,7 @@ import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { changeLanguage, initI18n } from '@/shared/i18n'
+import { useInterfaceLanguages } from '@/shared/hooks/useInterfaceLanguages'
 import { getAsyncLocal, setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import type { TranslationKeys } from '@/shared/store/slice/appSlice'
@@ -21,28 +22,31 @@ const SplashScreen: FC = () => {
 
   const [ready, setReady] = useState(false)
 
-  const { isAuth, aplication } = useAppSelector((store) => store.app)
+  const { isAuth } = useAppSelector((store) => store.app)
+  const { languages, apiLanguages } = useInterfaceLanguages()
 
   const { replace } = useAppNavigation()
 
   useEffect(() => {
-    if (aplication) {
-      ;(async () => {
-        const localLang = (await getAsyncLocal(
-          LOCAL_KEYS.appLanguage,
-          true
-        )) as TranslationKeys
-        // default
-        const leng = aplication.appLanguages[localLang || 'en']
-        setAppLanguage(leng)
-        const path = aplication.translations[leng.code]
-        await initI18n()
-        await changeLanguage(leng.code, path)
-        await setAsyncLocal(LOCAL_KEYS.appLanguage, leng.code)
-        setReady(true)
-      })()
-    }
-  }, [aplication, setAppLanguage])
+    if (languages.length === 0) return
+    ;(async () => {
+      const localLang = (await getAsyncLocal(
+        LOCAL_KEYS.appLanguage,
+        true
+      )) as TranslationKeys | undefined
+      // default
+      const leng =
+        languages.find((item) => item.code === (localLang || 'en')) ??
+        languages.find((item) => item.code === 'ru') ??
+        languages[0]
+
+      setAppLanguage(leng)
+      await initI18n()
+      await changeLanguage(leng.code, apiLanguages)
+      await setAsyncLocal(LOCAL_KEYS.appLanguage, leng.code)
+      setReady(true)
+    })()
+  }, [apiLanguages, languages, setAppLanguage])
 
   useEffect(() => {
     const id = ready

@@ -62,8 +62,6 @@ export type TranslationKeys =
   | 'fa'
   | 'sw'
   | 'ro'
-export type TranslationsType = Record<TranslationKeys, string>
-
 export type AppLanguageType = {
   name: string
   nativeName: string
@@ -84,7 +82,6 @@ export interface IAplication {
   socials: ISocial[]
   version: string
   privacy_policy_link: string
-  translations: TranslationsType
   appLanguages: AppLanguagesType
 }
 
@@ -118,19 +115,6 @@ const initialState: InitialState = {
     socials: [],
     version: '',
     privacy_policy_link: '',
-    translations: {
-      ru: 'local',
-      en: 'local',
-      de: 'local',
-      fr: 'local',
-      es: 'local',
-      it: 'local',
-      pt: 'local',
-      pl: 'local',
-      tr: 'local',
-      ja: 'local',
-      zh: 'local',
-    } as IAplication['translations'],
     appLanguages: appLanguagesList,
   },
   hiddenTabBar: false,

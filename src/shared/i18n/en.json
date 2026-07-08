@@ -1,0 +1,194 @@
+{
+  "auth": {
+    "title": "Sign in to use the app",
+    "googleBtn": "Sign in with Google"
+  },
+  "main": {
+    "list_count": "Total found:",
+    "filter_not_found": "Nothing found",
+    "added_words": "Add words to learn"
+  },
+  "settingsScreen": {
+    "privacy_policy": "privacy policy",
+    "theme": "App theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "show_varian": "Display mode",
+    "main_button_side": "Interface hand",
+    "showVariantsList": {
+      "translate_only": "Translation only",
+      "word_only": "Word without translation",
+      "word_and_translate": "Word and translation"
+    },
+    "mainButtonSides": {
+      "left": "Left-handed",
+      "right": "Right-handed"
+    },
+    "update_is_available": "Update available",
+    "rate_app": "Leave a review",
+    "save_json": "Save cards as a JSON file",
+    "save_json_success": "Cards saved to file: {{path}}",
+    "save_json_error": "Failed to save the file. Data copied to clipboard",
+    "about": {
+      "1": {
+        "blockName": "Nori"
+      },
+      "2": {
+        "blockName": "Description",
+        "text": "Nori is your reliable guide to the world of foreign languages. It's convenient, no matter your level. Designed for anyone who wants to improve their language skills, Nori helps you save and remember new words and their translations, making language learning more engaging and effective."
+      },
+      "3": {
+        "blockName": "Features:",
+        "punkts": {
+          "1": "Simple interface: an intuitive, easy-to-use interface makes working with the app as comfortable as possible.",
+          "2": "Save words: add new words and their translations to your database with a single tap."
+        }
+      },
+      "4": {
+        "text": "Don't put off your learning. With Nori you can start your path to language fluency right now!"
+      }
+    },
+    "developerInfo": {
+      "title": "About the developer.",
+      "googlePlayLink": "Other apps by the developer",
+      "socials": {
+        "title": "Contact:"
+      }
+    },
+    "version_faild": "Your app version is outdated",
+    "version": "Version:",
+    "update": "Update"
+  },
+  "profileScreen": {
+    "start_repeating": "start review",
+    "practice_cta": "Practice",
+    "practice_badge": "Quick start",
+    "practice_hint": "Choose cards and start training",
+    "show_year_result": "View your {{date}} year in review 🎉",
+    "logout": "log out",
+    "delete_account": "delete account",
+    "date_registration": "Registration date: ",
+    "statistic": "Statistics:",
+    "achievements": "Achievements",
+    "achievements_subtitle": "Rewards for consistency, progress, and new language habits.",
+    "all_count": "Total words/rules/sentences:",
+    "all_count_short": "Words and phrases",
+    "all_count_cards": "Total cards:",
+    "all_count_cards_short": "Card sets",
+    "studied_count": "Learned:",
+    "studied_count_short": "Learned",
+    "progress_count": "Learning:",
+    "progress_count_short": "Learning",
+    "streak_short": "Streak",
+    "best_streak_short": "Best streak",
+    "languages_studied": "Languages you're learning: ",
+    "languages_studied_card": "Languages you're learning",
+    "languages_studied_not_select": "not selected",
+    "native_language": "Native language: ",
+    "native_language_card": "Native language",
+    "native_language_not_select": "not specified"
+  },
+  "ui": {
+    "select_placeholder": "not selected",
+    "finish": "finish",
+    "search": "Search",
+    "desc": "Descending",
+    "asc": "Ascending",
+    "sort_by_date": "Sort by date",
+    "language": "Language",
+    "language_selection": "Language selection",
+    "language_not_select": "No language selected",
+    "reset": "Reset",
+    "apply": "Apply",
+    "all": "All",
+    "in_study": "Learning",
+    "study": "Learned",
+    "cancel": "Cancel",
+    "start": "Start",
+    "delete": "delete",
+    "exit": "Exit"
+  },
+  "itemTooltip": {
+    "ADD": "Card added!",
+    "UPDATE": "Card updated!",
+    "DELETE": "Card deleted!",
+    "ERROR": "Something went wrong...",
+    "NOT_FOUND": "This card has already been deleted",
+    "default": "error text"
+  },
+  "modal": {
+    "modalCardsFilter": {
+      "word_only": "Word first, then translation",
+      "translate_only": "Translation first, then word",
+      "title": "Choose cards to review",
+      "show_variants": "Display mode:",
+      "status": "Card status",
+      "limit_title": "How many cards to review",
+      "limit_all": "All"
+    },
+    "modalDeleteItem": {
+      "title": "Are you sure you want to delete this card?",
+      "warning": "You won't be able to restore it after deletion."
+    },
+    "modalAddItem": {
+      "title": "Create a card",
+      "description": "Description (optional)",
+      "description_placeholder": "enter a description if needed",
+      "word_for_translate": "Word to translate",
+      "word_for_translate_placeholder": "enter a word",
+      "translate": "Translation",
+      "translate_placeholder": "enter the translation"
+    },
+    "modalAddLanguages": {
+      "title": "Language list:"
+    },
+    "modalDeleteAccaunt": {
+      "title": "Are you sure you want to delete your account?",
+      "text": "You won't be able to restore your account data after deletion — it will be permanently deleted."
+    },
+    "modalLogout": {
+      "title": "Log out of your account?"
+    }
+  },
+  "time": {
+    "hours": "h",
+    "minutes": "min",
+    "secs": "sec",
+    "once_1": "time",
+    "once_2": "times"
+  },
+  "cards": {
+    "card_1": "card",
+    "card_2": "cards",
+    "card_3": "cards",
+    "study": "study",
+    "studied": "learned"
+  },
+  "advertising_1": "ad",
+  "advertising_2": "ads",
+  "advertising_3": "ads",
+  "yearsResult": {
+    "your": "your",
+    "language_year": "language year",
+    "active_days": "Active days",
+    "percent_1": "That's almost",
+    "percent_2": "of the whole year!",
+    "most_active_month": "Most active month",
+    "have_added_over_past_year": "✏️ This year you added",
+    "each_added_example_is_a_step_towards_fluency_in_the_language": "Every example you add is a step toward fluency",
+    "you_have_learned_this_year": "📚 This year you learned",
+    "now_you_can_say_more_than_ever": "Now you can say more than ever!",
+    "you_repeated_this_year": "🔁 This year you reviewed",
+    "repetition": "Repetition is the mother of learning. And you proved it!",
+    "launched_card_training_title": "🧠 This year you launched card training",
+    "launched_card_training_text": "Not every day, but steadily — your brain was working at full power!",
+    "open_app_title": "🚀 This year you opened the app",
+    "open_app_text": "Sometimes out of habit, sometimes on purpose — but always toward knowledge.",
+    "advertising_title": "📺 This year you watched",
+    "advertising_text_1": "Thank you — it helps us keep improving the app 💚",
+    "advertising_text_2": "You're a hero for surviving every one of those seconds 😅",
+    "last_slide_title_1": "🌟 This was your year in language.",
+    "last_slide_title_2": "You're growing, learning, and not giving up.",
+    "last_slide_title_3": "In {{date}} there will be even more achievements! 🚀"
+  }
+}

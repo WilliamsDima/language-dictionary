@@ -2,26 +2,41 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import type { TranslationKeys } from '../store/slice/appSlice'
+import type { ILanguage } from '../API/services/languages/types'
 import type { IJSONLanguage, JsonData } from './types'
 import { setAsyncLocal } from '../helpers/asyncStorage'
 import { LOCAL_KEYS } from '../constants/localStorage'
 import ru from './ru.json'
+import en from './en.json'
 
-const cache: Record<string, IJSONLanguage> = {}
+// офлайн/error-фолбэк переводов интерфейса — используется, когда
+// `GET /languages` недоступен или у языка нет заполненного `json` на бэкенде
+const localTranslations: Partial<Record<TranslationKeys, IJSONLanguage>> = {
+  ru,
+  en,
+}
 
-export const getLanguageJson = async (path: string) => {
+const hasTranslationJson = (
+  json: ILanguage['json']
+): json is Record<string, unknown> => !!json && Object.keys(json).length > 0
+
+export const getLanguageJson = async (
+  lang: TranslationKeys,
+  apiLanguages?: ILanguage[]
+): Promise<JsonData | { error: true }> => {
   try {
-    if (cache[path]) {
-      return {
-        json: cache[path],
-      }
+    const apiLanguage = apiLanguages?.find((item) => item.code === lang)
+
+    if (hasTranslationJson(apiLanguage?.json)) {
+      return { json: apiLanguage.json as IJSONLanguage, sha: 'api' }
     }
 
-    const json = ru
+    const localJson = localTranslations[lang]
+    if (localJson) {
+      return { json: localJson, sha: 'local' }
+    }
 
-    cache[path] = json
-
-    return { json, sha: 'local' } as JsonData
+    return { error: true }
   } catch (error) {
     console.log('getLanguageJson error', error)
     return { error: true }
@@ -39,6 +54,9 @@ export const initI18n = () => {
       ru: {
         translation: ru,
       },
+      en: {
+        translation: en,
+      },
     },
     interpolation: { escapeValue: false },
   })
@@ -46,8 +64,15 @@ export const initI18n = () => {
 
 initI18n()
 
-export const changeLanguage = async (lang: TranslationKeys, path: string) => {
-  const data = await getLanguageJson(path)
+// приоритет — перевод конкретного языка из ответа `GET /languages`
+// (`apiLanguages`, уже зарезолвленного вызывающим компонентом через
+// `useInterfaceLanguages`/`useGetLanguagesQuery`); если для языка нет данных
+// с бэкенда (нет сети, ошибка запроса, пустой `json`) — локальный бандл
+export const changeLanguage = async (
+  lang: TranslationKeys,
+  apiLanguages?: ILanguage[]
+) => {
+  const data = await getLanguageJson(lang, apiLanguages)
   if ('error' in data) return
 
   i18n.addResourceBundle(lang, 'translation', data.json, true, true)

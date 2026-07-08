@@ -24,6 +24,7 @@ import { useTranslation } from '@/shared/i18n/types'
 import { useActions } from '@/shared/hooks/useActions'
 import type { AppLanguageType } from '@/shared/store/slice/appSlice'
 import { changeLanguage } from '@/shared/i18n'
+import { useInterfaceLanguages } from '@/shared/hooks/useInterfaceLanguages'
 import CountryFlag from 'react-native-country-flag'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
 import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
@@ -86,19 +87,14 @@ const AuthScreen: FC = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const { aplication, appLanguage } = useAppSelector((store) => store.app)
+  const { appLanguage } = useAppSelector((store) => store.app)
+  const { languages, apiLanguages } = useInterfaceLanguages()
   const floatAnim = useRef(new Animated.Value(0)).current
   const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
 
-  const languages = useMemo(() => {
-    return aplication?.appLanguages
-      ? Object.values(aplication?.appLanguages).sort((a, b) => a.id - b.id)
-      : []
-  }, [aplication])
-
   const onSelectLanguage = useCallback(
     async (lang: AppLanguageType) => {
-      if (!aplication || lang.code === appLanguage?.code) {
+      if (lang.code === appLanguage?.code) {
         dismissSheet()
         return
       }
@@ -107,15 +103,13 @@ const AuthScreen: FC = () => {
       setLoading(true)
 
       try {
-        const path = aplication.translations[lang.code]
-
-        await changeLanguage(lang.code, path)
+        await changeLanguage(lang.code, apiLanguages)
         setAppLanguage(lang)
       } finally {
         setLoading(false)
       }
     },
-    [appLanguage?.code, aplication, dismissSheet, setAppLanguage]
+    [apiLanguages, appLanguage?.code, dismissSheet, setAppLanguage]
   )
 
   const openLanguagesSheet = useCallback(() => {
