@@ -15,6 +15,8 @@
     "theme_dark": "Dark",
     "show_varian": "Display mode",
     "main_button_side": "Interface hand",
+    "interface_language": "Interface language",
+    "interface_language_subtitle": "Choose the language the app will use to show cards and hints",
     "showVariantsList": {
       "translate_only": "Translation only",
       "word_only": "Word without translation",

@@ -15,6 +15,7 @@ import {
   normalizeMainButtonSide,
 } from './data'
 import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
+import InterfaceLanguageSwitch from '../InterfaceLanguageSwitch/InterfaceLanguageSwitch'
 
 const Settings: FC = () => {
   const { t } = useTranslation()
@@ -75,6 +76,7 @@ const Settings: FC = () => {
   return (
     <View style={styles.container}>
       <ThemeSwitch />
+      <InterfaceLanguageSwitch />
 
       <Select
         title={t('settingsScreen.show_varian')}

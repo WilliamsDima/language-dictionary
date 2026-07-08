@@ -15,6 +15,8 @@
     "theme_dark": "Тёмная",
     "show_varian": "Вариант показа",
     "main_button_side": "Рука для интерфейса",
+    "interface_language": "Язык интерфейса",
+    "interface_language_subtitle": "Выбери язык, на котором приложение будет показывать карточки и подсказки",
     "showVariantsList": {
       "translate_only": "Только перевод",
       "word_only": "Слово без перевода",
