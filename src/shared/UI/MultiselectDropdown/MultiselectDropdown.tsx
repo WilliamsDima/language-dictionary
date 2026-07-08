@@ -102,7 +102,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
 
   return (
     <View>
-      {!!title ? (
+      {title ? (
         <Text style={[styles.title, classes?.title]}>{title}</Text>
       ) : (
         <></>

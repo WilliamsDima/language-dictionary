@@ -104,7 +104,7 @@ const Slides: FC<Props> = ({}) => {
   return (
     <View style={styles.container}>
       <View style={styles.slidesWrapper}>
-        {!!data.length ? (
+        {data.length ? (
           <View style={styles.header}>
             <Text style={styles.count}>
               {currentSlide + 1}/{count}

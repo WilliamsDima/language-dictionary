@@ -47,7 +47,7 @@ describe('getAsyncLocal', () => {
   })
 
   it('должна выбрасывать ошибку при некорректном JSON', async () => {
-    const mockKey = 'someKey'
+    const invalidJsonKey = 'someKey'
 
     const mockValue = 'invalid JSON' // невалидный JSON
     const getItemMock = jest
@@ -55,9 +55,11 @@ describe('getAsyncLocal', () => {
       .mockReturnValueOnce(mockValue)
 
     // вызываем функцию, которая должна выбросить ошибку при попытке распарсить невалидный JSON
-    await expect(getAsyncLocal(mockKey)).rejects.toThrowError(SyntaxError)
+    await expect(getAsyncLocal(invalidJsonKey)).rejects.toThrowError(
+      SyntaxError
+    )
 
-    expect(getItemMock).toHaveBeenCalledWith(mockKey)
+    expect(getItemMock).toHaveBeenCalledWith(invalidJsonKey)
 
     // восстанавливаем оригинальный метод
     getItemMock.mockRestore()

@@ -140,7 +140,7 @@ const MainItem: FC<Props> = ({ item, language }) => {
 
         <View style={styles.header}>
           <View style={styles.headerMain}>
-            {!!dateLabel ? <Text style={styles.date}>{dateLabel}</Text> : <></>}
+            {dateLabel ? <Text style={styles.date}>{dateLabel}</Text> : <></>}
 
             <View style={styles.metaGroup}>
               <View style={styles.wordsBadge}>

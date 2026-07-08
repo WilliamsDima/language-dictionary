@@ -7,11 +7,11 @@ export const useHiddenTabBar = () => {
   const { addListener, removeListener } = useAppNavigation()
 
   useEffect(() => {
-    const listenerFocus = addListener('focus', (e) => {
+    const listenerFocus = addListener('focus', () => {
       setHiddenTabBar(true)
     })
 
-    const listenerState = addListener('blur', (e) => {
+    const listenerState = addListener('blur', () => {
       setHiddenTabBar(false)
     })
 

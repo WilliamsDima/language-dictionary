@@ -50,12 +50,12 @@ const AboutBlock: FC = () => {
         <View style={styles.textBlock}>
           {t('settingsScreen.about.2.text')
             .split(' ')
-            .map((t, i) => {
-              const isAppName = aplication.appName === t
+            .map((word, i) => {
+              const isAppName = aplication.appName === word
 
               return (
                 <AboutWord key={i} isAppName={isAppName}>
-                  {t}{' '}
+                  {word}{' '}
                 </AboutWord>
               )
             })}
@@ -83,12 +83,12 @@ const AboutBlock: FC = () => {
         <View style={styles.textBlock}>
           {t('settingsScreen.about.4.text')
             .split(' ')
-            .map((t, i) => {
-              const isAppName = aplication.appName === t
+            .map((word, i) => {
+              const isAppName = aplication.appName === word
 
               return (
                 <AboutWord key={i} isAppName={isAppName}>
-                  {t}{' '}
+                  {word}{' '}
                 </AboutWord>
               )
             })}

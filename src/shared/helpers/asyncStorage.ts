@@ -21,7 +21,7 @@ export async function getAsyncLocal(
       // Если ключ найден, пытаемся распарсить JSON
       try {
         return res ? JSON.parse(res) : undefined
-      } catch (e) {
+      } catch {
         // Здесь выбрасываем SyntaxError
         throw new SyntaxError('Invalid JSON format')
       }

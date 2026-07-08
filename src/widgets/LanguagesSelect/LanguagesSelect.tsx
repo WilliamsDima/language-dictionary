@@ -40,7 +40,7 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         : null,
       classes?.select,
     ]
-  }, [classes?.select, error, theme.colors.palette.red])
+  }, [classes?.select, error, theme.colors.palette.red, theme.size.s1])
 
   const openModal = useCallback(() => {
     presentSheet()

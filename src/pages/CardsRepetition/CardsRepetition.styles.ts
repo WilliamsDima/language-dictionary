@@ -1,3 +1,3 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({}))
+export const styles = StyleSheet.create((_theme) => ({}))

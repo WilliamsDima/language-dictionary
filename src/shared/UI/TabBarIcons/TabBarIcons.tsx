@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
-import { styles } from './TabBarIcons.styles'
 import { RoutesTitle } from '@/app/Navigation/RoutesNames'
 import Svg, { G, Path } from 'react-native-svg'
 

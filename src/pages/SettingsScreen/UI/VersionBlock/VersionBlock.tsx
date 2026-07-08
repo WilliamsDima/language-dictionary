@@ -20,7 +20,7 @@ const VersionBlock: FC = () => {
     const currentVersion = DeviceInfo.getVersion()
 
     return currentVersion
-  }, [aplication])
+  }, [])
 
   const checkVersion = useMemo(() => {
     if (version === aplication?.version || !aplication?.version) {
@@ -30,7 +30,7 @@ const VersionBlock: FC = () => {
     if (version !== aplication?.version) {
       return t('settingsScreen.version_faild')
     }
-  }, [aplication, version])
+  }, [aplication, version, t])
 
   return (
     <View style={styles.container}>

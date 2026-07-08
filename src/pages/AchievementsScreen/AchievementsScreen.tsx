@@ -8,6 +8,7 @@ import Button from '@/shared/UI/Button/Button'
 import { useTranslation } from '@/shared/i18n/types'
 import { useAchievements } from '@/shared/hooks/useAchievements'
 import AchievementCard from './UI/AchievementCard/AchievementCard'
+import { useAppReviewGate } from './hooks/useAppReviewGate'
 
 // экран только отображает актуальный список — обнаружение свежих
 // разблокировок и показ модалки успеха вынесены в глобальный
@@ -17,6 +18,7 @@ const AchievementsScreen: FC = () => {
   const { t } = useTranslation()
 
   const { data, isLoading, isError, refetch } = useAchievements()
+  useAppReviewGate()
 
   const achievements = useMemo(() => data ?? [], [data])
 

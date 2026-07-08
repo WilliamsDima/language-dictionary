@@ -63,7 +63,7 @@ const ToastItem: FC<Props> = ({ config, top, onDismiss }) => {
 
     const timer = setTimeout(dismiss, config.duration ?? DEFAULT_DURATION)
     return () => clearTimeout(timer)
-  }, [dismiss, config.duration])
+  }, [dismiss, config.duration, opacity, translateY])
 
   const panResponder = useMemo(
     () =>

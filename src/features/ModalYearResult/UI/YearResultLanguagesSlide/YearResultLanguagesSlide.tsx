@@ -24,11 +24,11 @@ const YearResultLanguagesSlide: FC<Props> = ({
   return (
     <View style={styles.slide}>
       <View style={styles.titles}>
-        {!!title ? <Text style={styles.title}>{title}</Text> : <></>}
+        {title ? <Text style={styles.title}>{title}</Text> : <></>}
 
         <AnimatedCounter start={isActive} value={languages.length} />
 
-        {!!description ? (
+        {description ? (
           <Text style={styles.description}>{description}</Text>
         ) : (
           <></>

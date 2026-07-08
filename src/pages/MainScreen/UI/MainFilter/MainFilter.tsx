@@ -18,7 +18,7 @@ const MainFilter: FC<Props> = ({ onPress }) => {
   )
   const color = useMemo(
     () => (isActive ? theme.colors.action.primary : theme.colors.icon.primary),
-    [isActive]
+    [isActive, theme.colors.action.primary, theme.colors.icon.primary]
   )
 
   return (

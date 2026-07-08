@@ -49,7 +49,6 @@ const Layout: FC<Props> = (props) => {
     header,
     isSafeArea,
     scrollViewProps,
-    ...headerProps
   } = props
 
   const { hiddenTabBar } = useAppSelector((store) => store.app)

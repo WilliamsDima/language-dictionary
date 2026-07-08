@@ -6,7 +6,7 @@ import { useActions } from '@/shared/hooks/useActions'
 
 interface Props {}
 
-const SearchWords: FC<Props> = (props) => {
+const SearchWords: FC<Props> = () => {
   const { setSearch } = useActions()
   const { search } = useAppSelector((store) => store.items)
   return (

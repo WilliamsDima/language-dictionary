@@ -6,6 +6,7 @@ import { styles } from './Settings.styles'
 import Select from '@/shared/UI/Select/Select'
 import SaveData from '../SaveData/SaveData'
 import UpdateButton from '../UpdateButton/UpdateButton'
+import AppReviewButton from '../AppReviewButton/AppReviewButton'
 import { useTranslation } from '@/shared/i18n/types'
 import { MainButtonSide, ShowVariantList } from '@/shared/store/slice/userSlice'
 import {
@@ -18,7 +19,6 @@ import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
 const Settings: FC = () => {
   const { t } = useTranslation()
   const { setShowVariantList, setMainButtonSide } = useActions()
-  const { appLanguage } = useAppSelector((store) => store.app)
   const { isAuth } = useAppSelector((store) => store.app)
   const savedShowVariant = useAppSelector((store) => store.user.showVariantList)
   const savedMainButtonSide = useAppSelector((store) => store.user.mainButtonSide)
@@ -30,11 +30,11 @@ const Settings: FC = () => {
 
   const showVariantList = useMemo(() => {
     return getShowVariantsList(t)
-  }, [t, appLanguage])
+  }, [t])
 
   const mainButtonSidesList = useMemo(() => {
     return getMainButtonSidesList(t)
-  }, [t, appLanguage])
+  }, [t])
 
   const normalizedMainButtonSide = useMemo(() => {
     const normalizedValue = normalizeMainButtonSide(savedMainButtonSide)
@@ -96,6 +96,7 @@ const Settings: FC = () => {
 
       <SaveData />
       <UpdateButton />
+      <AppReviewButton />
     </View>
   )
 }

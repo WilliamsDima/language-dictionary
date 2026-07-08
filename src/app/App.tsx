@@ -18,6 +18,8 @@ import Toast from '@/shared/UI/Toast/ToastProvider'
 
 LogBox.ignoreLogs(['Remote debugger'])
 
+const flexStyle = { flex: 1 }
+
 const AppContent: FC = () => {
   const { isBootstrapping } = useAuth()
 
@@ -28,7 +30,7 @@ const AppContent: FC = () => {
   }, [isBootstrapping])
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={flexStyle}>
       <SafeAreaProvider>
         <BottomSheetModalProvider>
           <EventProvider>

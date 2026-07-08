@@ -39,6 +39,10 @@ export const useScaleAnim = ({
 
   useEffect(() => {
     startAnimate(active)
+    // startAnimate is recreated every render (not memoized); including it here
+    // would re-trigger the animation on every re-render instead of only when
+    // `active` changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active])
 
   return {

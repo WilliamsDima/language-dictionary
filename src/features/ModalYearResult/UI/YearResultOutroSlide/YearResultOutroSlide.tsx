@@ -31,8 +31,8 @@ const YearResultOutroSlide: FC<Props> = ({ title, description }) => {
   return (
     <View style={styles.slide}>
       <View style={styles.titles}>
-        {!!title ? <Text style={styles.title}>{title}</Text> : <></>}
-        {!!description ? (
+        {title ? <Text style={styles.title}>{title}</Text> : <></>}
+        {description ? (
           <Text style={styles.description}>{description}</Text>
         ) : (
           <></>

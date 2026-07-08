@@ -22,7 +22,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
 
-  const { appLanguage, aplication } = useAppSelector((store) => store.app)
+  const { aplication } = useAppSelector((store) => store.app)
   const { filterMain } = useAppSelector((store) => store.items)
 
   const sortByDate: SelectOption[] = useMemo(() => {
@@ -36,7 +36,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
         value: 'asc',
       },
     ]
-  }, [appLanguage, t])
+  }, [t])
 
   const defaultSortDateValue = sortByDate[0]
 

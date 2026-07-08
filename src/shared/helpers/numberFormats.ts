@@ -15,8 +15,8 @@ export const numberFormatter = (num: number, digits?: number) => {
   var item = lookup
     .slice()
     .reverse()
-    .find(function (item) {
-      return num >= item.value
+    .find(function (entry) {
+      return num >= entry.value
     })
   return item
     ? (num / item.value).toFixed(digits || 1).replace(rx, '$1') + item.symbol

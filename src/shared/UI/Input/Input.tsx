@@ -122,6 +122,9 @@ const Input: FC<InputProps> = (props) => {
     onChangeText &&
       customPlaceholder?.additionalLeft &&
       onChangeText(customPlaceholder?.additionalLeft)
+    // run once on mount to seed the initial "additionalLeft" text; re-running
+    // on every onChangeText/additionalLeft change would overwrite user input
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

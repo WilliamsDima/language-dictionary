@@ -15,7 +15,7 @@ import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
-const UserInfo: FC<Props> = (props) => {
+const UserInfo: FC<Props> = () => {
   const { t } = useTranslation()
   const { data: profile } = useMeProfile()
 

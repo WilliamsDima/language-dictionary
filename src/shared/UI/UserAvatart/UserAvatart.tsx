@@ -24,7 +24,7 @@ const UserAvatart: FC<Props> = (props) => {
 
   return (
     <View style={[styles.wrapper, classes?.wrapper]}>
-      {!!uri ? (
+      {uri ? (
         <FastImage
           style={[styles.avatar, classes?.image]}
           source={{ uri }}

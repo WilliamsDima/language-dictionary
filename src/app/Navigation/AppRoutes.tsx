@@ -8,6 +8,7 @@ import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
 import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 import ModalDailyStreakSuccess from '@/features/ModalDailyStreakSuccess/ModalDailyStreakSuccess'
 import ModalAchievementUnlocked from '@/features/ModalAchievementUnlocked/ModalAchievementUnlocked'
+import ModalAppReview from '@/features/ModalAppReview/ModalAppReview'
 import {RoutesNames} from './RoutesNames'
 import {navigationRef} from './ref'
 import {useNavTheme} from './hooks/useNavTheme'
@@ -39,6 +40,7 @@ const Routes = () => {
       <ModalYearResult />
       <ModalDailyStreakSuccess />
       <ModalAchievementUnlocked />
+      <ModalAppReview />
     </>
   )
 }

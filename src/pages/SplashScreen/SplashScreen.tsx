@@ -42,7 +42,7 @@ const SplashScreen: FC = () => {
         setReady(true)
       })()
     }
-  }, [aplication])
+  }, [aplication, setAppLanguage])
 
   useEffect(() => {
     const id = ready
@@ -55,7 +55,7 @@ const SplashScreen: FC = () => {
     return () => {
       id && clearTimeout(id)
     }
-  }, [replace, isAuth, ready])
+  }, [replace, isAuth, ready, setIsWatchSplash])
 
   return (
     <Layout>

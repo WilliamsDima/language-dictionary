@@ -1,8 +1,15 @@
-import React, { FC, memo, startTransition, useCallback, useEffect, useRef } from 'react'
+import React, {
+  FC,
+  memo,
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalAddItem.styles'
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
-import Text from '@/shared/UI/Text/Text'
 import Input from '@/shared/UI/Input/Input'
 import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
 import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
@@ -47,6 +54,16 @@ const ModalAddItem: FC<Props> = () => {
   const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
   const wasVisibleRef = useRef(false)
 
+  const scrollContentStyle = useMemo(
+    () => ({ paddingBottom: isOpen ? 150 : 24 }),
+    [isOpen]
+  )
+
+  const footerStyle = useMemo(
+    () => [styles.btns, isLoading ? { justifyContent: 'center' as const } : {}],
+    [isLoading]
+  )
+
   const handleConfirm = useCallback(() => {
     startTransition(onConfirm)
   }, [onConfirm])
@@ -72,20 +89,9 @@ const ModalAddItem: FC<Props> = () => {
       dynamicSizing={false}
       snapPoints={['88%']}
       scrollRef={scrollref}
-      scrollContentStyle={{
-        paddingBottom: isOpen ? 150 : 24,
-      }}
+      scrollContentStyle={scrollContentStyle}
       footer={
-        <View
-          style={[
-            styles.btns,
-            isLoading
-              ? {
-                  justifyContent: 'center',
-                }
-              : {},
-          ]}
-        >
+        <View style={footerStyle}>
           {isLoading ? (
             <ActivityIndicator
               size={'large'}

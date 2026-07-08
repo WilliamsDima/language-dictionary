@@ -99,6 +99,7 @@ type InitialState = {
   appLanguage: AppLanguageType | null
   showDailyStreakSuccessModal: boolean
   dailyStreakAnimation: { from: number; to: number } | null
+  showAppReviewModal: boolean
 }
 
 const initialState: InitialState = {
@@ -139,6 +140,7 @@ const initialState: InitialState = {
   appLanguage: defaultAppLanguage,
   showDailyStreakSuccessModal: false,
   dailyStreakAnimation: null,
+  showAppReviewModal: false,
 }
 
 export const appSlice = createSlice({
@@ -183,6 +185,9 @@ export const appSlice = createSlice({
       { payload }: PayloadAction<{ from: number; to: number } | null>
     ) => {
       state.dailyStreakAnimation = payload
+    },
+    setShowAppReviewModal: (state, { payload }: PayloadAction<boolean>) => {
+      state.showAppReviewModal = payload
     },
   },
 })

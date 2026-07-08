@@ -16,13 +16,7 @@ type Props = {
   setErrorItems: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ModalItemWords: FC<Props> = ({
-  item,
-  index,
-  errorItems,
-  setItems,
-  setErrorItems,
-}) => {
+const ModalItemWords: FC<Props> = ({ item, index, errorItems, setItems }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
 
@@ -54,7 +48,7 @@ const ModalItemWords: FC<Props> = ({
           ]
         : []),
     ]
-  }, [isErrorWord, theme.colors.palette.red])
+  }, [isErrorWord, theme.colors.palette.red, theme.size.s1])
 
   const translateInputStyles = useMemo(() => {
     return [
@@ -68,7 +62,7 @@ const ModalItemWords: FC<Props> = ({
           ]
         : []),
     ]
-  }, [isErrorTranslate, theme.colors.palette.red])
+  }, [isErrorTranslate, theme.colors.palette.red, theme.size.s1])
 
   const deleteItem = () => {
     setItems((prev) => {
@@ -76,13 +70,13 @@ const ModalItemWords: FC<Props> = ({
     })
   }
 
-  const onChangeWord = (t: string) => {
+  const onChangeWord = (value: string) => {
     setItems((prev) => {
       return prev.map((it) => {
         if (it.id === item.id) {
           return {
             ...it,
-            word: t,
+            word: value,
           }
         }
         return it
@@ -90,13 +84,13 @@ const ModalItemWords: FC<Props> = ({
     })
   }
 
-  const onChangeTranslate = (t: string) => {
+  const onChangeTranslate = (value: string) => {
     setItems((prev) => {
       return prev.map((it) => {
         if (it.id === item.id) {
           return {
             ...it,
-            translate: t,
+            translate: value,
           }
         }
         return it
