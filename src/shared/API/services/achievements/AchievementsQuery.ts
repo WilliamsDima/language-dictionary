@@ -19,12 +19,36 @@ export const achievementsAPI = baseApi.injectEndpoints({
     // Идемпотентно на бэкенде, вызывается спустя задержку после перехода в
     // стор из ModalAppReview — без реальной проверки того, что отзыв правда
     // оставлен. Инвалидируем achievements, чтобы ModalAchievementUnlocked
-    // сам подхватил новую разблокировку через сравнение снимков
+    // сам подхватил новую разблокировку (unlocked && !seen)
     submitAppReview: build.mutation<AchievementsResponse, void>({
       async queryFn() {
         return toRtkQueryResult(await achievementsService.submitAppReview())
       },
       invalidatesTags: ['achievements'],
+    }),
+
+    // подтверждает показ модалки разблокировки (seen = true). Ответ — тот же
+    // список, что и у GET /achievements, поэтому кладём его прямо в кэш
+    // getAchievements вместо лишнего рефетча. Ошибку глотаем: непомеченное
+    // достижение просто покажется снова при следующем запуске
+    markAchievementsSeen: build.mutation<AchievementsResponse, number[]>({
+      async queryFn(ids) {
+        return toRtkQueryResult(await achievementsService.markSeen(ids))
+      },
+      async onQueryStarted(_ids, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            achievementsAPI.util.upsertQueryData(
+              'getAchievements',
+              undefined,
+              data
+            )
+          )
+        } catch {
+          // мягкая обработка — см. комментарий выше
+        }
+      },
     }),
   }),
 })
@@ -33,4 +57,5 @@ export const {
   useGetAchievementsQuery,
   useLazyGetAchievementsQuery,
   useSubmitAppReviewMutation,
+  useMarkAchievementsSeenMutation,
 } = achievementsAPI

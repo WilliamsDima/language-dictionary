@@ -16,6 +16,7 @@ export type AchievementWithProgress = {
   progress_percent: number
   unlocked: boolean
   unlocked_at: string | null
+  seen: boolean
 }
 
 export type AchievementsResponse = {
