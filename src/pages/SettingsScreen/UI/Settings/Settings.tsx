@@ -16,6 +16,7 @@ import {
 } from './data'
 import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
 import InterfaceLanguageSwitch from '../InterfaceLanguageSwitch/InterfaceLanguageSwitch'
+import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
 
 const Settings: FC = () => {
   const { t } = useTranslation()
@@ -29,9 +30,11 @@ const Settings: FC = () => {
   const [mainButtonSideSelect, setMainButtonSideSelect] =
     useState<MainButtonSide | null>(null)
 
+  const { data: appConfig } = useGetAppConfigQuery()
+
   const showVariantList = useMemo(() => {
-    return getShowVariantsList(t)
-  }, [t])
+    return getShowVariantsList(t, appConfig?.showVariantsList)
+  }, [t, appConfig])
 
   const mainButtonSidesList = useMemo(() => {
     return getMainButtonSidesList(t)

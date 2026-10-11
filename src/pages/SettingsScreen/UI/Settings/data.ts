@@ -1,10 +1,12 @@
-import type { I18t } from '@/shared/i18n/types'
-import type {
-  MainButtonSide,
-  MainButtonSideValue,
-  ShowVariantList,
+import type { I18NKeys, I18t } from '@/shared/i18n/types'
+import {
+  isShowVariantListVale,
+  type MainButtonSide,
+  type MainButtonSideValue,
+  type ShowVariantList,
 } from '@/shared/store/slice/userSlice'
 import { SHOW_VARIANTS_LIST } from '@/shared/constants/showVariants'
+import type { AppConfigShowVariant } from '@/shared/API/services/appConfig/types'
 
 const translateSettingsList = <T extends { keyTranslate: Parameters<I18t>[0] }>(
   list: T[],
@@ -18,8 +20,55 @@ const translateSettingsList = <T extends { keyTranslate: Parameters<I18t>[0] }>(
   })
 }
 
-export const getShowVariantsList = (t: I18t): ShowVariantList[] => {
-  return translateSettingsList(SHOW_VARIANTS_LIST, t)
+// варианты из app config (showVariantsList, редактируется в админке):
+// label — ключ перевода, value — только известные клиенту значения,
+// остальные и дубли пропускаются. Пустой/отсутствующий конфиг — фолбэк на
+// зашитый SHOW_VARIANTS_LIST
+const fromConfigShowVariants = (
+  configList: AppConfigShowVariant[] | undefined
+): ShowVariantList[] => {
+  return (configList ?? []).reduce<ShowVariantList[]>((acc, it) => {
+    const value = it?.value
+
+    if (
+      typeof value !== 'string' ||
+      !isShowVariantListVale(value) ||
+      acc.some((variant) => variant.value === value)
+    ) {
+      return acc
+    }
+
+    const fallback = SHOW_VARIANTS_LIST.find((item) => item.value === value)
+    const keyTranslate =
+      typeof it.label === 'string' && it.label.trim()
+        ? (it.label.trim() as I18NKeys)
+        : fallback?.keyTranslate
+
+    if (!keyTranslate) {
+      return acc
+    }
+
+    return [
+      ...acc,
+      {
+        label: fallback?.label ?? value,
+        value,
+        keyTranslate,
+      },
+    ]
+  }, [])
+}
+
+export const getShowVariantsList = (
+  t: I18t,
+  configList?: AppConfigShowVariant[]
+): ShowVariantList[] => {
+  const fromConfig = fromConfigShowVariants(configList)
+
+  return translateSettingsList(
+    fromConfig.length ? fromConfig : SHOW_VARIANTS_LIST,
+    t
+  )
 }
 
 export const getMainButtonSidesList = (t: I18t): MainButtonSide[] => {

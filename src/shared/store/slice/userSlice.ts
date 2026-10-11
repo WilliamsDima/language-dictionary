@@ -17,7 +17,7 @@ export type ShowVariantList = {
   keyTranslate: I18NKeys
 }
 
-const isShowVariantListVale = (value: string): value is ShowVariantListVale => {
+export const isShowVariantListVale = (value: string): value is ShowVariantListVale => {
   return (
     value === 'translate_only' ||
     value === 'word_only' ||
