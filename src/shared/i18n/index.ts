@@ -1,3 +1,9 @@
+// Hermes не гарантирует Intl.PluralRules (или поддерживает не все локали),
+// а i18next с compatibilityJSON v4 выбирает суффиксы множественного числа
+// (_one/_few/_many/_other) именно через него — без полифила все языки
+// падают в упрощённое правило one/other. Полифил подменяет реализацию,
+// только если нативная отсутствует или неполная
+import 'intl-pluralrules'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
