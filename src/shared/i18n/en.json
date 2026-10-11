@@ -233,6 +233,61 @@
       "title": "Training Master",
       "description_one": "Complete {{count}} training session",
       "description_other": "Complete {{count}} training sessions"
+    },
+    "archivist": {
+      "title": "Archivist",
+      "description_one": "Create {{count}} card",
+      "description_other": "Create {{count}} cards"
+    },
+    "encyclopedia": {
+      "title": "Living Encyclopedia",
+      "description_one": "Create {{count}} card",
+      "description_other": "Create {{count}} cards"
+    },
+    "erudite": {
+      "title": "Erudite",
+      "description_one": "Learn {{count}} card",
+      "description_other": "Learn {{count}} cards"
+    },
+    "walking_dictionary": {
+      "title": "Walking Dictionary",
+      "description_one": "Learn {{count}} card",
+      "description_other": "Learn {{count}} cards"
+    },
+    "tireless": {
+      "title": "Tireless",
+      "description_one": "Complete {{count}} training session",
+      "description_other": "Complete {{count}} training sessions"
+    },
+    "training_legend": {
+      "title": "Training Legend",
+      "description_one": "Complete {{count}} training session",
+      "description_other": "Complete {{count}} training sessions"
+    },
+    "century_streak": {
+      "title": "Hundred Days",
+      "description_one": "Practice {{count}} day in a row",
+      "description_other": "Practice {{count}} days in a row"
+    },
+    "year_streak": {
+      "title": "A Year Without Breaks",
+      "description_one": "Practice {{count}} day in a row",
+      "description_other": "Practice {{count}} days in a row"
+    },
+    "hyperpolyglot": {
+      "title": "Hyperpolyglot",
+      "description_one": "Learn {{count}} language",
+      "description_other": "Learn {{count}} languages at the same time"
+    },
+    "review_marathon": {
+      "title": "Review Marathon",
+      "description_one": "Review cards {{count}} time",
+      "description_other": "Review cards {{count}} times"
+    },
+    "review_legend": {
+      "title": "Review Legend",
+      "description_one": "Review cards {{count}} time",
+      "description_other": "Review cards {{count}} times"
     }
   },
   "navigation": {

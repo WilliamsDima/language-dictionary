@@ -251,6 +251,83 @@
       "description_one": "Пройдите {{count}} тренировку",
       "description_many": "Пройдите {{count}} тренировок",
       "description_other": "Пройдите {{count}} тренировки"
+    },
+    "archivist": {
+      "title": "Архивариус",
+      "description_few": "Создайте {{count}} карточки",
+      "description_one": "Создайте {{count}} карточку",
+      "description_many": "Создайте {{count}} карточек",
+      "description_other": "Создайте {{count}} карточки"
+    },
+    "encyclopedia": {
+      "title": "Живая энциклопедия",
+      "description_few": "Создайте {{count}} карточки",
+      "description_one": "Создайте {{count}} карточку",
+      "description_many": "Создайте {{count}} карточек",
+      "description_other": "Создайте {{count}} карточки"
+    },
+    "erudite": {
+      "title": "Эрудит",
+      "description_few": "Выучите {{count}} карточки",
+      "description_one": "Выучите {{count}} карточку",
+      "description_many": "Выучите {{count}} карточек",
+      "description_other": "Выучите {{count}} карточки"
+    },
+    "walking_dictionary": {
+      "title": "Ходячий словарь",
+      "description_few": "Выучите {{count}} карточки",
+      "description_one": "Выучите {{count}} карточку",
+      "description_many": "Выучите {{count}} карточек",
+      "description_other": "Выучите {{count}} карточки"
+    },
+    "tireless": {
+      "title": "Неутомимый",
+      "description_few": "Пройдите {{count}} тренировки",
+      "description_one": "Пройдите {{count}} тренировку",
+      "description_many": "Пройдите {{count}} тренировок",
+      "description_other": "Пройдите {{count}} тренировки"
+    },
+    "training_legend": {
+      "title": "Легенда тренировок",
+      "description_few": "Пройдите {{count}} тренировки",
+      "description_one": "Пройдите {{count}} тренировку",
+      "description_many": "Пройдите {{count}} тренировок",
+      "description_other": "Пройдите {{count}} тренировки"
+    },
+    "century_streak": {
+      "title": "Сотня дней",
+      "description_few": "Занимайтесь {{count}} дня подряд",
+      "description_one": "Занимайтесь {{count}} день подряд",
+      "description_many": "Занимайтесь {{count}} дней подряд",
+      "description_other": "Занимайтесь {{count}} дня подряд"
+    },
+    "year_streak": {
+      "title": "Год без пропусков",
+      "description_few": "Занимайтесь {{count}} дня подряд",
+      "description_one": "Занимайтесь {{count}} день подряд",
+      "description_many": "Занимайтесь {{count}} дней подряд",
+      "description_other": "Занимайтесь {{count}} дня подряд"
+    },
+    "hyperpolyglot": {
+      "title": "Гиперполиглот",
+      "description_few": "Изучайте {{count}} языка одновременно",
+      "description_one": "Изучайте {{count}} язык",
+      "description_many": "Изучайте {{count}} языков одновременно",
+      "description_other": "Изучайте {{count}} языка одновременно"
+    },
+    "review_marathon": {
+      "title": "Марафон повторений",
+      "description_few": "Повторите карточки {{count}} раза",
+      "description_one": "Повторите карточки {{count}} раз",
+      "description_many": "Повторите карточки {{count}} раз",
+      "description_other": "Повторите карточки {{count}} раза"
+    },
+    "review_legend": {
+      "title": "Легенда повторений",
+      "description_few": "Повторите карточки {{count}} раза",
+      "description_one": "Повторите карточки {{count}} раз",
+      "description_many": "Повторите карточки {{count}} раз",
+      "description_other": "Повторите карточки {{count}} раза"
     }
   },
   "navigation": {
