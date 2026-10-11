@@ -12,6 +12,7 @@ import type { ILanguage } from '../API/services/languages/types'
 import type { IJSONLanguage, JsonData } from './types'
 import { setAsyncLocal } from '../helpers/asyncStorage'
 import { LOCAL_KEYS } from '../constants/localStorage'
+import { appStorage } from '../storage/mmkv.storage'
 import ru from './ru.json'
 import en from './en.json'
 
@@ -49,12 +50,31 @@ export const getLanguageJson = async (
   }
 }
 
+// стартовый язык до того, как SplashScreen применит выбранный язык с учётом
+// `GET /languages`: сохранённый язык пользователя, если для него есть
+// локальный бандл, иначе `en` (тот же дефолт, что выбирает SplashScreen для
+// нового пользователя). Нужен, чтобы тексты сплэша сразу были на нужном языке
+const DEFAULT_INITIAL_LANGUAGE: TranslationKeys = 'en'
+
+const getInitialLanguage = (): TranslationKeys => {
+  try {
+    const raw = appStorage.getString(LOCAL_KEYS.appLanguage)
+    const stored: unknown = raw ? JSON.parse(raw) : undefined
+
+    return typeof stored === 'string' && stored in localTranslations
+      ? (stored as TranslationKeys)
+      : DEFAULT_INITIAL_LANGUAGE
+  } catch {
+    return DEFAULT_INITIAL_LANGUAGE
+  }
+}
+
 export const initI18n = () => {
   if (i18n.isInitialized) return
 
   i18n.use(initReactI18next).init({
     compatibilityJSON: 'v4',
-    lng: 'ru',
+    lng: getInitialLanguage(),
     fallbackLng: 'ru',
     resources: {
       ru: {
