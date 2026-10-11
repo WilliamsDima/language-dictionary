@@ -19,6 +19,8 @@ type Props = {
   isFilterActive: boolean
   isInitialLoading: boolean
   isLoadingMore: boolean
+  isRefreshing?: boolean
+  onRefresh?: () => void
   items: IItem[] | null
   languagesByCode: Map<string, ILanguage>
   loadMoreItems: () => void
@@ -30,6 +32,8 @@ const MainList: FC<Props> = ({
   isFilterActive,
   isInitialLoading,
   isLoadingMore,
+  isRefreshing = false,
+  onRefresh,
   items,
   languagesByCode,
   loadMoreItems,
@@ -103,6 +107,8 @@ const MainList: FC<Props> = ({
             onScroll={handleScroll}
             scrollEventThrottle={16}
             keyboardShouldPersistTaps="handled"
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
           />
 
           <ListFooterLoader isLoading={isLoadingMore} />

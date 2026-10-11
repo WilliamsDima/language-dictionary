@@ -24,6 +24,7 @@ const MainStatusSlide: FC<Props> = ({
   const { search, filterMain } = useAppSelector((store) => store.items)
 
   const [page, setPage] = useState(1)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const debouncedSearch = useDebouncedValue(search, SEARCH_DEBOUNCE_MS)
 
@@ -43,7 +44,7 @@ const MainStatusSlide: FC<Props> = ({
     [status, debouncedSearch, filterMain?.sortDate, filterMain?.languages, page]
   )
 
-  const { data, isFetching } = useGetItemsQuery(queryArgs, {
+  const { data, isFetching, refetch } = useGetItemsQuery(queryArgs, {
     skip: !isAuth,
   })
 
@@ -69,6 +70,24 @@ const MainStatusSlide: FC<Props> = ({
     setPage((prev) => prev + 1)
   }, [isFetching, data?.lastVisible])
 
+  // pull-to-refresh: список мог поменяться вне приложения (например, импорт
+  // карточек в админке пересоздаёт их с новыми id) — перечитываем первую
+  // страницу; если уже подгружено несколько страниц, сброс page на 1 сам
+  // перезапросит список (forceRefetch по смене page, merge заменит items)
+  const onRefresh = useCallback(async () => {
+    setIsRefreshing(true)
+
+    try {
+      if (page === 1) {
+        await refetch()
+      } else {
+        setPage(1)
+      }
+    } finally {
+      setIsRefreshing(false)
+    }
+  }, [page, refetch])
+
   useEffect(() => {
     setPage(1)
   }, [status, debouncedSearch, filterMain?.sortDate, filterMain?.languages])
@@ -79,6 +98,8 @@ const MainStatusSlide: FC<Props> = ({
       isFilterActive={isFilterActive}
       isInitialLoading={isInitialLoading}
       isLoadingMore={isLoadingMore}
+      isRefreshing={isRefreshing}
+      onRefresh={onRefresh}
       items={items}
       languagesByCode={languagesByCode}
       loadMoreItems={loadMoreItems}
