@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useTranslation as useTranslationBase } from 'react-i18next'
 import ru from './ru.json'
 
@@ -20,8 +21,12 @@ export type I18t = (key: I18NKeys, options?: any) => string
 export const useTranslation = () => {
   const { t: tBase, ...rest } = useTranslationBase()
 
-  const t: I18t = (key: I18NKeys, options?: any) =>
-    tBase(key, options) as string
+  // стабильная ссылка: меняется только вместе с tBase (смена языка), чтобы
+  // useMemo/useCallback с зависимостью [t] пересчитывались по делу
+  const t = useCallback<I18t>(
+    (key: I18NKeys, options?: any) => tBase(key, options) as string,
+    [tBase]
+  )
 
   return { t, ...rest }
 }
