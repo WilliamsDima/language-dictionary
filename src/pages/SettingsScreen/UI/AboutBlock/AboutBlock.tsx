@@ -1,102 +1,70 @@
-import Text from '@/shared/UI/Text/Text'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { View } from 'react-native'
 import { styles } from './AboutBlock.styles'
-import { useTranslation } from '@/shared/i18n/types'
+import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
+import type { AppConfigAboutBlock } from '@/shared/API/services/appConfig/types'
+import AboutBlockItem from './UI/AboutBlockItem/AboutBlockItem'
 
-type AboutWordProps = {
-  children: React.ReactNode
-  isAppName: boolean
-}
-
-const AboutTitle: FC<AboutWordProps> = ({ children, isAppName }) => {
-  styles.useVariants({
-    isAppName,
-  })
-
-  return <Text style={styles.title}>{children}</Text>
-}
-
-const AboutWord: FC<AboutWordProps> = ({ children, isAppName }) => {
-  styles.useVariants({
-    isAppName,
-  })
-
-  return <Text style={styles.text}>{children}</Text>
-}
+// фолбэк, если app config не пришёл или в нём нет about.blocks — те же
+// ключи перевода, что раньше были зашиты прямо в разметке
+const DEFAULT_ABOUT_BLOCKS: AppConfigAboutBlock[] = [
+  {
+    id: 1,
+    blockName: 'settingsScreen.about.1.blockName',
+  },
+  {
+    id: 2,
+    blockName: 'settingsScreen.about.2.blockName',
+    text: 'settingsScreen.about.2.text',
+  },
+  {
+    id: 3,
+    blockName: 'settingsScreen.about.3.blockName',
+    punkts: [
+      'settingsScreen.about.3.punkts.1',
+      'settingsScreen.about.3.punkts.2',
+    ],
+  },
+  {
+    id: 4,
+    text: 'settingsScreen.about.4.text',
+  },
+]
 
 const AboutBlock: FC = () => {
-  const { t } = useTranslation()
   const { aplication } = useAppSelector((store) => store.app)
 
-  return aplication ? (
+  const { data: appConfig } = useGetAppConfigQuery()
+
+  // блоки рендерятся в том порядке и количестве, в каком пришли из конфига
+  const blocks = useMemo(() => {
+    const fromConfig = appConfig?.about?.blocks
+
+    return Array.isArray(fromConfig) && fromConfig.length
+      ? fromConfig
+      : DEFAULT_ABOUT_BLOCKS
+  }, [appConfig])
+
+  const appName = useMemo(
+    () => appConfig?.appName || aplication?.appName || '',
+    [appConfig, aplication]
+  )
+
+  return (
     <View style={styles.container}>
-      <View style={styles.item}>
-        <View style={styles.blockName}>
-          <AboutTitle isAppName>
-            {t('settingsScreen.about.1.blockName')}
-          </AboutTitle>
-        </View>
-      </View>
-
-      <View style={styles.item}>
-        <View style={styles.blockName}>
-          <Text style={[styles.title]}>
-            {t('settingsScreen.about.2.blockName')}
-          </Text>
-        </View>
-
-        <View style={styles.textBlock}>
-          {t('settingsScreen.about.2.text')
-            .split(' ')
-            .map((word, i) => {
-              const isAppName = aplication.appName === word
-
-              return (
-                <AboutWord key={i} isAppName={isAppName}>
-                  {word}{' '}
-                </AboutWord>
-              )
-            })}
-        </View>
-      </View>
-
-      <View style={styles.item}>
-        <View style={styles.blockName}>
-          <Text style={[styles.title]}>
-            {t('settingsScreen.about.3.blockName')}
-          </Text>
-        </View>
-
-        <View style={styles.punktsBlock}>
-          <Text style={styles.punkt}>
-            {t('settingsScreen.about.3.punkts.1')}
-          </Text>
-          <Text style={styles.punkt}>
-            {t('settingsScreen.about.3.punkts.2')}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.item}>
-        <View style={styles.textBlock}>
-          {t('settingsScreen.about.4.text')
-            .split(' ')
-            .map((word, i) => {
-              const isAppName = aplication.appName === word
-
-              return (
-                <AboutWord key={i} isAppName={isAppName}>
-                  {word}{' '}
-                </AboutWord>
-              )
-            })}
-        </View>
-      </View>
+      {blocks.map((block, index) => {
+        return (
+          <AboutBlockItem
+            key={`${index}-${block.id}`}
+            blockName={block.blockName}
+            text={block.text}
+            punkts={block.punkts}
+            appName={appName}
+          />
+        )
+      })}
     </View>
-  ) : (
-    <></>
   )
 }
 
