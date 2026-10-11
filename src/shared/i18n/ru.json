@@ -192,5 +192,78 @@
     "last_slide_title_1": "🌟 Это был твой год в языке.",
     "last_slide_title_2": "Ты растёшь, учишься и не сдаёшься.",
     "last_slide_title_3": "В {{date}} будет ещё больше достижений! 🚀"
+  },
+  "achievements": {
+    "polyglot": {
+      "title": "Полиглот",
+      "description_few": "Изучайте {{count}} языка одновременно",
+      "description_one": "Изучайте {{count}} язык",
+      "description_many": "Изучайте {{count}} языков одновременно",
+      "description_other": "Изучайте {{count}} языка одновременно"
+    },
+    "collector": {
+      "title": "Коллекционер",
+      "description_few": "Создайте {{count}} карточки",
+      "description_one": "Создайте {{count}} карточку",
+      "description_many": "Создайте {{count}} карточек",
+      "description_other": "Создайте {{count}} карточки"
+    },
+    "librarian": {
+      "title": "Библиотекарь",
+      "description_few": "Создайте {{count}} карточки",
+      "description_one": "Создайте {{count}} карточку",
+      "description_many": "Создайте {{count}} карточек",
+      "description_other": "Создайте {{count}} карточки"
+    },
+    "first_card": {
+      "title": "Первые шаги",
+      "description": "Создайте свою первую карточку"
+    },
+    "first_wins": {
+      "title": "Первые победы",
+      "description_few": "Выучите {{count}} карточки",
+      "description_one": "Выучите {{count}} карточку",
+      "description_many": "Выучите {{count}} карточек",
+      "description_other": "Выучите {{count}} карточки"
+    },
+    "week_streak": {
+      "title": "Серия дней: неделя",
+      "description_few": "Занимайтесь {{count}} дня подряд",
+      "description_one": "Занимайтесь {{count}} день подряд",
+      "description_many": "Занимайтесь {{count}} дней подряд",
+      "description_other": "Занимайтесь {{count}} дня подряд"
+    },
+    "word_master": {
+      "title": "Знаток слов",
+      "description_few": "Выучите {{count}} карточки",
+      "description_one": "Выучите {{count}} карточку",
+      "description_many": "Выучите {{count}} карточек",
+      "description_other": "Выучите {{count}} карточки"
+    },
+    "app_reviewer": {
+      "title": "Спасибо за отзыв!",
+      "description": "Оставьте отзыв о приложении в сторе"
+    },
+    "month_streak": {
+      "title": "Серия дней: месяц",
+      "description_few": "Занимайтесь {{count}} дня подряд",
+      "description_one": "Занимайтесь {{count}} день подряд",
+      "description_many": "Занимайтесь {{count}} дней подряд",
+      "description_other": "Занимайтесь {{count}} дня подряд"
+    },
+    "steady_practice": {
+      "title": "Постоянная практика",
+      "description_few": "Пройдите {{count}} тренировки",
+      "description_one": "Пройдите {{count}} тренировку",
+      "description_many": "Пройдите {{count}} тренировок",
+      "description_other": "Пройдите {{count}} тренировки"
+    },
+    "training_master": {
+      "title": "Мастер тренировок",
+      "description_few": "Пройдите {{count}} тренировки",
+      "description_one": "Пройдите {{count}} тренировку",
+      "description_many": "Пройдите {{count}} тренировок",
+      "description_other": "Пройдите {{count}} тренировки"
+    }
   }
 }

@@ -192,5 +192,60 @@
     "last_slide_title_1": "🌟 This was your year in language.",
     "last_slide_title_2": "You're growing, learning, and not giving up.",
     "last_slide_title_3": "In {{date}} there will be even more achievements! 🚀"
+  },
+  "achievements": {
+    "polyglot": {
+      "title": "Polyglot",
+      "description_one": "Learn {{count}} language",
+      "description_other": "Learn {{count}} languages at the same time"
+    },
+    "collector": {
+      "title": "Collector",
+      "description_one": "Create {{count}} card",
+      "description_other": "Create {{count}} cards"
+    },
+    "librarian": {
+      "title": "Librarian",
+      "description_one": "Create {{count}} card",
+      "description_other": "Create {{count}} cards"
+    },
+    "first_card": {
+      "title": "First Steps",
+      "description": "Create your first card"
+    },
+    "first_wins": {
+      "title": "First Wins",
+      "description_one": "Learn {{count}} card",
+      "description_other": "Learn {{count}} cards"
+    },
+    "week_streak": {
+      "title": "Streak: One Week",
+      "description_one": "Practice {{count}} day in a row",
+      "description_other": "Practice {{count}} days in a row"
+    },
+    "word_master": {
+      "title": "Word Master",
+      "description_one": "Learn {{count}} card",
+      "description_other": "Learn {{count}} cards"
+    },
+    "app_reviewer": {
+      "title": "Thanks for the review!",
+      "description": "Leave a review of the app in the store"
+    },
+    "month_streak": {
+      "title": "Streak: One Month",
+      "description_one": "Practice {{count}} day in a row",
+      "description_other": "Practice {{count}} days in a row"
+    },
+    "steady_practice": {
+      "title": "Steady Practice",
+      "description_one": "Complete {{count}} training session",
+      "description_other": "Complete {{count}} training sessions"
+    },
+    "training_master": {
+      "title": "Training Master",
+      "description_one": "Complete {{count}} training session",
+      "description_other": "Complete {{count}} training sessions"
+    }
   }
 }
