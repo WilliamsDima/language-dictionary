@@ -31,6 +31,7 @@
     "save_json": "Save cards as a JSON file",
     "save_json_success": "Cards saved to file: {{path}}",
     "save_json_error": "Failed to save the file. Data copied to clipboard",
+    "save_json_load_error": "Failed to load cards. Check your connection and try again",
     "about": {
       "1": {
         "blockName": "Nori"

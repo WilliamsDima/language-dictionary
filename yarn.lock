@@ -7419,6 +7419,11 @@ react-native-shadow-2@^7.1.1:
   dependencies:
     colord "2.9.2"
 
+react-native-share@^12.3.1:
+  version "12.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-12.3.1.tgz#beb36cf2d589335f93adc6f22bd34c8a950964b3"
+  integrity sha512-mRVRie0qKbtj+jWqJ2POPkeSd8SxnMp6aazFZVmq8ZbkUGtQLENR/L58ky8zH4VUEF/WYRmdBiBHWHVtzOewtQ==
+
 react-native-svg-transformer@^1.5.0:
   version "1.5.3"
   resolved "https://registry.npmjs.org/react-native-svg-transformer/-/react-native-svg-transformer-1.5.3.tgz"
