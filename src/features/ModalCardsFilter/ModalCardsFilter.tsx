@@ -141,7 +141,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
       sheetRef={sheetRef}
       onDismiss={resetFilters}
       title={t('modal.modalCardsFilter.title')}
-      subtitle="Настрой режим повторения перед стартом"
+      subtitle={t('modal.modalCardsFilter.subtitle')}
       dynamicSizing={false}
       snapPoints={['90%']}
       scrollContentStyle={styles.scrollContent}

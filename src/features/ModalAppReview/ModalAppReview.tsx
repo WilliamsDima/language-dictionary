@@ -28,6 +28,7 @@ import { REVIEW_RATING_VALUES, SUBMIT_APP_REVIEW_DELAY_MS } from './constants'
 import { getReviewEmotion } from './getReviewEmotion'
 import ReviewStar from './UI/ReviewStar/ReviewStar'
 import { styles } from './ModalAppReview.styles'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
@@ -48,6 +49,7 @@ const ModalAppReview: FC<Props> = () => {
   const [submitAppReview] = useSubmitAppReviewMutation()
 
   const { getAnimationStyles } = useScaleAnim({ active: showAppReviewModal })
+  const { t } = useTranslation()
 
   const submitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -117,9 +119,9 @@ const ModalAppReview: FC<Props> = () => {
               <Icon kind="svg" name="close-red-64" width={16} height={16} />
             </TouchableOpacity>
 
-            <Text style={styles.title}>Нравится Nori?</Text>
+            <Text style={styles.title}>{t('modal.modalAppReview.title')}</Text>
             <Text style={styles.subtitle}>
-              Оцените приложение — это помогает нам становиться лучше
+              {t('modal.modalAppReview.subtitle')}
             </Text>
 
             <View style={styles.stars}>
@@ -143,7 +145,7 @@ const ModalAppReview: FC<Props> = () => {
               disabled={isStoreButtonDisabled}
               onPress={onGoToStore}
             >
-              Оставить отзыв
+              {t('settingsScreen.rate_app')}
             </Button>
           </TouchableOpacity>
         </Animated.View>

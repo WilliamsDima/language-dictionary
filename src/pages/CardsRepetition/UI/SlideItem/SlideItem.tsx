@@ -13,6 +13,7 @@ import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { runOnJS } from 'react-native-reanimated'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {
   item: CardSlideType
@@ -76,6 +77,7 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
   const { scrollX, nextSlide, swipeSlide, liveItems } = useCardsRepetition()
+  const { t } = useTranslation()
 
   const inputRange = [(index - 1) * width, index * width, (index + 1) * width]
 
@@ -162,7 +164,7 @@ const SlideItem: FC<Props> = (props) => {
                 classes={{ textBtn: styles.btnText }}
                 onPress={flipCard}
               >
-                Проверить
+                {t('cardsRepetition.check')}
               </Button>
             </View>
           </Animated.View>

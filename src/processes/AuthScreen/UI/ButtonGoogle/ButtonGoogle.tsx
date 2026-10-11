@@ -20,7 +20,7 @@ const ButtonGoogle: FC<Props> = () => {
         await loginWithGoogle()
       } catch (error) {
         console.log('Google error', error)
-        toast.error('Не удалось войти через Google. Попробуйте снова.')
+        toast.error(t('auth.google_error'))
       }
       return null
     },

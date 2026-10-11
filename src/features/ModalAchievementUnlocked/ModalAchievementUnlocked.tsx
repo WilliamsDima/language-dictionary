@@ -142,7 +142,9 @@ const ModalAchievementUnlocked: FC<Props> = () => {
               <Text style={styles.icon}>{current.icon}</Text>
             </LinearGradient>
 
-            <Text style={styles.eyebrow}>Новое достижение!</Text>
+            <Text style={styles.eyebrow}>
+              {t('modal.modalAchievementUnlocked.title')}
+            </Text>
             <Text style={styles.title}>{titleText}</Text>
             <Text style={styles.description}>{descriptionText}</Text>
           </>
@@ -151,7 +153,7 @@ const ModalAchievementUnlocked: FC<Props> = () => {
         )}
 
         <Button type="PRIMERY" style={styles.btn} onPress={onDismiss}>
-          Отлично
+          {t('ui.great')}
         </Button>
       </View>
     </Modal>

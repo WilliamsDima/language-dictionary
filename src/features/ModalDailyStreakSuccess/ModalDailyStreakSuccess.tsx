@@ -9,6 +9,7 @@ import { AnimatedCounter } from '@/shared/UI/AnimatedCounter/AnimatedCounter'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { styles } from './ModalDailyStreakSuccess.styles'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
@@ -27,6 +28,8 @@ const ModalDailyStreakSuccess: FC<Props> = () => {
   )
 
   const [isCelebrationReady, setIsCelebrationReady] = useState(false)
+
+  const { t } = useTranslation()
 
   const fireworkRef = useRef<LottieView>(null)
 
@@ -94,10 +97,12 @@ const ModalDailyStreakSuccess: FC<Props> = () => {
           <></>
         )}
 
-        <Text style={styles.title}>Серия продолжается!</Text>
+        <Text style={styles.title}>
+          {t('modal.modalDailyStreakSuccess.title')}
+        </Text>
 
         <Button type="PRIMERY" style={styles.btn} onPress={onDismiss}>
-          Отлично
+          {t('ui.great')}
         </Button>
       </View>
     </Modal>

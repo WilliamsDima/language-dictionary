@@ -14,23 +14,24 @@ import { useUnistyles } from 'react-native-unistyles'
 
 import Text from '@/shared/UI/Text/Text'
 import { useMeProfile } from '@/shared/hooks/useMeProfile'
+import { type I18NKeys, useTranslation } from '@/shared/i18n/types'
 
 import { RouteName, RoutesNames, TabsKeys } from '../RoutesNames'
 import { styles } from './TabsHero.styles'
 
 type HeroConfig = {
-  kicker: string
-  title: string
+  kicker: I18NKeys
+  title: I18NKeys
 }
 
 const HERO_BY_TAB: Partial<Record<TabsKeys, HeroConfig>> = {
   [RoutesNames.settingsStack]: {
-    kicker: 'Тонкая настройка',
-    title: 'Сделай обучение удобным под себя',
+    kicker: 'tabsHero.settings.kicker',
+    title: 'tabsHero.settings.title',
   },
   [RoutesNames.profileStack]: {
-    kicker: 'Профиль ученика',
-    title: 'Твой темп и прогресс',
+    kicker: 'tabsHero.profile.kicker',
+    title: 'tabsHero.profile.title',
   },
 }
 
@@ -57,6 +58,7 @@ const TabsHero: FC<Props> = ({ activeScreen, tabName }) => {
 
   const { theme } = useUnistyles()
   const { data: profile } = useMeProfile()
+  const { t } = useTranslation()
 
   const rotation = useSharedValue(0)
   const scale = useSharedValue(1)
@@ -65,6 +67,13 @@ const TabsHero: FC<Props> = ({ activeScreen, tabName }) => {
     () => (profile?.name ? getInitials(profile.name) : ''),
     [profile?.name]
   )
+
+  const heroKicker = useMemo(
+    () => profile?.name ?? (hero ? t(hero.kicker) : ''),
+    [hero, profile?.name, t]
+  )
+
+  const heroTitle = useMemo(() => (hero ? t(hero.title) : ''), [hero, t])
 
   const rotateStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value}deg` }, { scale: scale.value }],
@@ -93,8 +102,8 @@ const TabsHero: FC<Props> = ({ activeScreen, tabName }) => {
   return (
     <View style={styles.hero}>
       <View style={styles.heroCopy}>
-        <Text style={styles.heroKicker}>{profile?.name ?? hero.kicker}</Text>
-        <Text style={styles.heroTitle}>{hero.title}</Text>
+        <Text style={styles.heroKicker}>{heroKicker}</Text>
+        <Text style={styles.heroTitle}>{heroTitle}</Text>
       </View>
 
       <View style={styles.heroPlaceholder}>

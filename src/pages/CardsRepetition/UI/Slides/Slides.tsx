@@ -18,6 +18,7 @@ import LottieView from 'lottie-react-native'
 import { useCards } from '@/shared/hooks/useCards'
 import type { IItem } from '@/entities/Item/model/item'
 import type { CardSlideType } from '../../CardsContext'
+import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
@@ -41,6 +42,7 @@ const Slides: FC<Props> = ({}) => {
   const { isAuth } = useAppSelector((store) => store.app)
 
   const { updateStatusHandler } = useCards()
+  const { t } = useTranslation()
 
   const [optimisticLiveItems, updateOptimisticStatus] = useOptimistic(
     liveItems,
@@ -91,9 +93,9 @@ const Slides: FC<Props> = ({}) => {
   const emptyText = useMemo(
     () =>
       isDailyMode
-        ? 'У вас нет карточек — добавьте карточки, чтобы пройти задание дня и не потерять серию'
-        : 'Ничего не найдено по выбранному фильтру',
-    [isDailyMode]
+        ? t('cardsRepetition.empty_daily')
+        : t('cardsRepetition.empty_filter'),
+    [isDailyMode, t]
   )
 
   const isLastSlide = useMemo(
@@ -182,7 +184,7 @@ const Slides: FC<Props> = ({}) => {
             style={styles.btn}
             classes={{ textBtn: styles.textBtn }}
           >
-            завершить
+            {t('ui.finish')}
           </Button>
         </View>
       </View>

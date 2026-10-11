@@ -86,7 +86,6 @@ const LanguagesSelect: FC<Props> = ({ classes, onSelect, language, error }) => {
         closeOnSelect
         withFooter={false}
         selects={language ? [language] : []}
-        subtitle="Выбери язык карточки для нового набора"
         onDismiss={dismissSheet}
         onConfirm={onConfirmLanguage}
       />

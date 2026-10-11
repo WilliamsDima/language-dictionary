@@ -1,12 +1,20 @@
 {
   "auth": {
     "title": "Sign in to use the app",
-    "googleBtn": "Sign in with Google"
+    "googleBtn": "Sign in with Google",
+    "choose_interface_language": "Choose the interface language",
+    "badge": "Language streak",
+    "subtitle": "Sign-in is minimal for now, but we're building learning as a lively, game-like experience.",
+    "controls_title": "We'll tailor learning to your language",
+    "language_footnote": "You can change this later in settings.",
+    "google_error": "Couldn't sign in with Google. Please try again."
   },
   "main": {
     "list_count": "Total found:",
     "filter_not_found": "Nothing found",
-    "added_words": "Add words to learn"
+    "added_words": "Add words to learn",
+    "filter_title": "Card filter",
+    "filter_subtitle": "Pick cards for the current session"
   },
   "settingsScreen": {
     "privacy_policy": "privacy policy",
@@ -80,7 +88,11 @@
     "languages_studied_not_select": "not selected",
     "native_language": "Native language: ",
     "native_language_card": "Native language",
-    "native_language_not_select": "not specified"
+    "native_language_not_select": "not specified",
+    "progress_caption": "PROGRESS",
+    "native_language_hint": "Choose one main profile language",
+    "languages_studied_hint": "Choose several languages for stats and card selection",
+    "date_registration_empty": "Not specified"
   },
   "ui": {
     "select_placeholder": "not selected",
@@ -100,7 +112,9 @@
     "cancel": "Cancel",
     "start": "Start",
     "delete": "delete",
-    "exit": "Exit"
+    "exit": "Exit",
+    "retry": "Retry",
+    "great": "Great"
   },
   "itemTooltip": {
     "ADD": "Card added!",
@@ -117,7 +131,8 @@
       "show_variants": "Display mode:",
       "status": "Card status",
       "limit_title": "How many cards to review",
-      "limit_all": "All"
+      "limit_all": "All",
+      "subtitle": "Set up the review mode before you start"
     },
     "modalDeleteItem": {
       "title": "Are you sure you want to delete this card?",
@@ -130,7 +145,8 @@
       "word_for_translate": "Word to translate",
       "word_for_translate_placeholder": "enter a word",
       "translate": "Translation",
-      "translate_placeholder": "enter the translation"
+      "translate_placeholder": "enter the translation",
+      "subtitle": "Build a card in a convenient format and send it straight to practice."
     },
     "modalDeleteAccaunt": {
       "title": "Are you sure you want to delete your account?",
@@ -138,6 +154,23 @@
     },
     "modalLogout": {
       "title": "Log out of your account?"
+    },
+    "modalLanguagesList": {
+      "subtitle": "Choose the card language for a new set"
+    },
+    "modalUpdateApp": {
+      "title": "A new update is available.",
+      "subtitle": "Install the latest version to get the newest improvements and fixes."
+    },
+    "modalAppReview": {
+      "title": "Enjoying Nori?",
+      "subtitle": "Rate the app — it helps us improve"
+    },
+    "modalDailyStreakSuccess": {
+      "title": "Your streak continues!"
+    },
+    "modalAchievementUnlocked": {
+      "title": "New achievement!"
     }
   },
   "cards": {
@@ -201,5 +234,43 @@
       "description_one": "Complete {{count}} training session",
       "description_other": "Complete {{count}} training sessions"
     }
+  },
+  "navigation": {
+    "main": "Words",
+    "settings": "Settings",
+    "profile": "Profile",
+    "practice": "Practice",
+    "auth": "Sign in"
+  },
+  "tabsHero": {
+    "settings": {
+      "kicker": "Fine-tuning",
+      "title": "Make learning work your way"
+    },
+    "profile": {
+      "kicker": "Learner profile",
+      "title": "Your pace and progress"
+    }
+  },
+  "achievementsScreen": {
+    "subtitle": "Your rewards, progress, and good reasons to come back to your cards are collected here.",
+    "load_error": "Failed to load achievements. Check your connection and try again.",
+    "unlocked": "Unlocked",
+    "unlocked_at": "Unlocked {{date}}",
+    "locked": "🔒 Locked",
+    "unlocked_badge": "✓ Unlocked"
+  },
+  "mainItem": {
+    "tap_hint": "Tap the card to reveal the translation",
+    "actions": "Actions",
+    "collapse": "Collapse"
+  },
+  "cardsRepetition": {
+    "empty_daily": "You have no cards — add some to complete today's task and keep your streak",
+    "empty_filter": "Nothing found for the selected filter",
+    "check": "Check"
+  },
+  "splash": {
+    "slogan": "Boosting your vocabulary with living flashcards"
   }
 }

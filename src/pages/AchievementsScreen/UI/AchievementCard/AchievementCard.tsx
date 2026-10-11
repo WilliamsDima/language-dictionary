@@ -35,7 +35,7 @@ const AchievementCard: FC<Props> = ({
   progressPercent,
   threshold,
 }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   styles.useVariants({ unlocked })
 
@@ -63,9 +63,17 @@ const AchievementCard: FC<Props> = ({
   )
 
   const unlockedDateText = useMemo(() => {
-    const formatted = dateFormat({ date: unlockedAt ?? undefined, type: 'FULL' })
-    return formatted ? `Открыто ${formatted}` : 'Открыто'
-  }, [unlockedAt])
+    const formatted = dateFormat({
+      date: unlockedAt ?? undefined,
+      type: 'FULL',
+      locale: i18n.language,
+    })
+    return formatted
+      ? t('achievementsScreen.unlocked_at', { date: formatted })
+      : t('achievementsScreen.unlocked')
+  }, [i18n.language, t, unlockedAt])
+
+  const lockedText = useMemo(() => t('achievementsScreen.locked'), [t])
 
   const progressText = useMemo(
     () => `${progressCurrent}/${threshold}`,
@@ -88,7 +96,7 @@ const AchievementCard: FC<Props> = ({
           <></>
         ) : (
           <View style={styles.lockBadge}>
-            <Text style={styles.lockBadgeText}>🔒 Заблокировано</Text>
+            <Text style={styles.lockBadgeText}>{lockedText}</Text>
           </View>
         )}
       </View>

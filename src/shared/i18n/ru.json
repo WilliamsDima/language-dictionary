@@ -1,12 +1,20 @@
 {
   "auth": {
     "title": "Авторизуйтесь, чтобы использовать приложение",
-    "googleBtn": "Войти с помощью Google"
+    "googleBtn": "Войти с помощью Google",
+    "choose_interface_language": "Выбери язык интерфейса",
+    "badge": "Language streak",
+    "subtitle": "Вход пока минимальный, но сам опыт изучения уже собираем как живую и игровую систему.",
+    "controls_title": "Подготовим обучение под твой язык",
+    "language_footnote": "Можно поменять позже в настройках.",
+    "google_error": "Не удалось войти через Google. Попробуйте снова."
   },
   "main": {
     "list_count": "Всего найдено:",
     "filter_not_found": "Ничего не найдено",
-    "added_words": "Добавьте слова для изучения"
+    "added_words": "Добавьте слова для изучения",
+    "filter_title": "Фильтр карточек",
+    "filter_subtitle": "Подбери карточки под текущую сессию"
   },
   "settingsScreen": {
     "privacy_policy": "политика конфиденциальности",
@@ -80,7 +88,11 @@
     "languages_studied_not_select": "не выбраны",
     "native_language": "Родной язык: ",
     "native_language_card": "Родной язык",
-    "native_language_not_select": "не указан"
+    "native_language_not_select": "не указан",
+    "progress_caption": "ПРОГРЕСС",
+    "native_language_hint": "Выбери один основной язык профиля",
+    "languages_studied_hint": "Выбери несколько языков для статистики и подбора карточек",
+    "date_registration_empty": "Не указана"
   },
   "ui": {
     "select_placeholder": "не выбрано",
@@ -100,7 +112,9 @@
     "cancel": "Отмена",
     "start": "Начать",
     "delete": "удалить",
-    "exit": "Выйти"
+    "exit": "Выйти",
+    "retry": "Повторить",
+    "great": "Отлично"
   },
   "itemTooltip": {
     "ADD": "Карточка добавлена!",
@@ -117,7 +131,8 @@
       "show_variants": "Вариант показа:",
       "status": "Статус карточек",
       "limit_title": "Сколько карточек повторить",
-      "limit_all": "Все"
+      "limit_all": "Все",
+      "subtitle": "Настрой режим повторения перед стартом"
     },
     "modalDeleteItem": {
       "title": "Вы уверены, что хотите удалить карточку?",
@@ -130,7 +145,8 @@
       "word_for_translate": "Слово для перевода",
       "word_for_translate_placeholder": "введите слово",
       "translate": "Перевод",
-      "translate_placeholder": "введите перевод для слова"
+      "translate_placeholder": "введите перевод для слова",
+      "subtitle": "Собери карточку в удобном формате и сразу отправь ее в тренировку."
     },
     "modalDeleteAccaunt": {
       "title": "Вы уверены, что хотите удалить аккаунт?",
@@ -138,6 +154,23 @@
     },
     "modalLogout": {
       "title": "Хотите выйти из аккаунта?"
+    },
+    "modalLanguagesList": {
+      "subtitle": "Выбери язык карточки для нового набора"
+    },
+    "modalUpdateApp": {
+      "title": "Доступно новое обновление.",
+      "subtitle": "Установи свежую версию, чтобы получить последние улучшения и исправления."
+    },
+    "modalAppReview": {
+      "title": "Нравится Nori?",
+      "subtitle": "Оцените приложение — это помогает нам становиться лучше"
+    },
+    "modalDailyStreakSuccess": {
+      "title": "Серия продолжается!"
+    },
+    "modalAchievementUnlocked": {
+      "title": "Новое достижение!"
     }
   },
   "cards": {
@@ -219,5 +252,43 @@
       "description_many": "Пройдите {{count}} тренировок",
       "description_other": "Пройдите {{count}} тренировки"
     }
+  },
+  "navigation": {
+    "main": "Слова",
+    "settings": "Настройки",
+    "profile": "Профиль",
+    "practice": "Практика",
+    "auth": "Вход"
+  },
+  "tabsHero": {
+    "settings": {
+      "kicker": "Тонкая настройка",
+      "title": "Сделай обучение удобным под себя"
+    },
+    "profile": {
+      "kicker": "Профиль ученика",
+      "title": "Твой темп и прогресс"
+    }
+  },
+  "achievementsScreen": {
+    "subtitle": "Здесь собираются ваши награды, прогресс и приятные поводы возвращаться к карточкам.",
+    "load_error": "Не удалось загрузить достижения. Проверьте соединение и попробуйте ещё раз.",
+    "unlocked": "Открыто",
+    "unlocked_at": "Открыто {{date}}",
+    "locked": "🔒 Заблокировано",
+    "unlocked_badge": "✓ Открыто"
+  },
+  "mainItem": {
+    "tap_hint": "Нажми на карточку, чтобы открыть перевод",
+    "actions": "Действия",
+    "collapse": "Свернуть"
+  },
+  "cardsRepetition": {
+    "empty_daily": "У вас нет карточек — добавьте карточки, чтобы пройти задание дня и не потерять серию",
+    "empty_filter": "Ничего не найдено по выбранному фильтру",
+    "check": "Проверить"
+  },
+  "splash": {
+    "slogan": "Прокачиваем словарный запас через живые карточки"
   }
 }

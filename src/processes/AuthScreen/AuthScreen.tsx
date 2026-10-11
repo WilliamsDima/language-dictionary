@@ -34,19 +34,19 @@ const AuthScreen: FC = () => {
 
   const selectorDescription = useMemo(() => {
     if (!appLanguage) {
-      return 'Выбери язык интерфейса'
+      return t('auth.choose_interface_language')
     }
 
     return appLanguage.name
-  }, [appLanguage])
+  }, [appLanguage, t])
 
   const selectorTitle = useMemo(() => {
     if (!appLanguage) {
-      return 'Язык не выбран'
+      return t('ui.language_not_select')
     }
 
     return appLanguage.nativeName
-  }, [appLanguage])
+  }, [appLanguage, t])
 
   useEffect(() => {
     Animated.loop(
@@ -79,11 +79,10 @@ const AuthScreen: FC = () => {
       <View style={styles.screen}>
         <View style={styles.heroCard}>
           <View style={styles.heroCopy}>
-            <Text style={styles.badge}>Language streak</Text>
+            <Text style={styles.badge}>{t('auth.badge')}</Text>
             <Text style={styles.title}>{t('auth.title')}</Text>
             <Text style={styles.subtitle}>
-              Вход пока минимальный, но сам опыт изучения уже собираем как
-              живую и игровую систему.
+              {t('auth.subtitle')}
             </Text>
           </View>
 
@@ -109,7 +108,7 @@ const AuthScreen: FC = () => {
 
         <View style={styles.controlsCard}>
           <Text style={styles.controlsTitle}>
-            Подготовим обучение под твой язык
+            {t('auth.controls_title')}
           </Text>
 
           <TouchableOpacity style={styles.selector} onPress={presentSheet}>
@@ -129,7 +128,7 @@ const AuthScreen: FC = () => {
           </TouchableOpacity>
 
           <Text style={styles.selectorFootnote}>
-            Можно поменять позже в настройках.
+            {t('auth.language_footnote')}
           </Text>
 
           <ButtonGoogle />

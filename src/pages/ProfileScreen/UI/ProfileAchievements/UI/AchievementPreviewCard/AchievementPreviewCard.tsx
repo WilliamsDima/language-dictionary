@@ -41,8 +41,9 @@ const AchievementPreviewCard: FC<Props> = ({
   const gradientEnd = useMemo(() => ({ x: 1, y: 1 }), [])
 
   const badgeText = useMemo(
-    () => (unlocked ? '✓ Открыто' : `${progressPercent}%`),
-    [unlocked, progressPercent]
+    () =>
+      unlocked ? t('achievementsScreen.unlocked_badge') : `${progressPercent}%`,
+    [t, unlocked, progressPercent]
   )
 
   return (

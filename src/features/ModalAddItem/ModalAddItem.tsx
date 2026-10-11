@@ -85,7 +85,7 @@ const ModalAddItem: FC<Props> = () => {
       sheetRef={sheetRef}
       onDismiss={onCancelHandler}
       title={t('modal.modalAddItem.title')}
-      subtitle="Собери карточку в удобном формате и сразу отправь ее в тренировку."
+      subtitle={t('modal.modalAddItem.subtitle')}
       dynamicSizing={false}
       snapPoints={['88%']}
       scrollRef={scrollref}

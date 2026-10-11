@@ -101,8 +101,8 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   return (
     <BottomSheet
       sheetRef={sheetRef}
-      title="Фильтр карточек"
-      subtitle="Подбери карточки под текущую сессию"
+      title={t('main.filter_title')}
+      subtitle={t('main.filter_subtitle')}
       dynamicSizing={false}
       snapPoints={['90%']}
       scrollContentStyle={styles.scrollContent}

@@ -14,6 +14,7 @@ import { getAsyncLocal, setAsyncLocal } from '@/shared/helpers/asyncStorage'
 import { LOCAL_KEYS } from '@/shared/constants/localStorage'
 import type { TranslationKeys } from '@/shared/store/slice/appSlice'
 import Text from '@/shared/UI/Text/Text'
+import { useTranslation } from '@/shared/i18n/types'
 
 const SplashScreen: FC = () => {
   useHiddenTabBar()
@@ -24,6 +25,7 @@ const SplashScreen: FC = () => {
 
   const { isAuth } = useAppSelector((store) => store.app)
   const { languages, apiLanguages } = useInterfaceLanguages()
+  const { t } = useTranslation()
 
   const { replace } = useAppNavigation()
 
@@ -65,9 +67,7 @@ const SplashScreen: FC = () => {
     <Layout>
       <View style={styles.screen}>
         <Text style={styles.title}>Nori</Text>
-        <Text style={styles.subtitle}>
-          Прокачиваем словарный запас через живые карточки
-        </Text>
+        <Text style={styles.subtitle}>{t('splash.slogan')}</Text>
         <LottieView
           style={styles.words}
           source={require('./anim-words.json')}

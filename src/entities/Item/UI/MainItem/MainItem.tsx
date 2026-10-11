@@ -29,7 +29,7 @@ type Props = {
 }
 
 const MainItem: FC<Props> = ({ item, language }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { theme } = useUnistyles()
   const { setModalDeleteItem, setItemEdit, setShowAddModal } = useActions()
   const { isAuth } = useAppSelector((store) => store.app)
@@ -57,8 +57,15 @@ const MainItem: FC<Props> = ({ item, language }) => {
   }, [item.items.length, t])
 
   const dateLabel = useMemo(() => {
-    return dateFormat({ date: item.date, type: 'FULL' }) || ''
-  }, [item.date])
+    return (
+      dateFormat({ date: item.date, type: 'FULL', locale: i18n.language }) || ''
+    )
+  }, [i18n.language, item.date])
+
+  const footerToggleText = useMemo(
+    () => (hiddenFooter ? t('mainItem.actions') : t('mainItem.collapse')),
+    [hiddenFooter, t]
+  )
 
   const statusDotStyle = useMemo(() => {
     return {
@@ -165,7 +172,7 @@ const MainItem: FC<Props> = ({ item, language }) => {
         {hiddenTranslate && (
           <View style={styles.tapHint}>
             <Text style={styles.tapHintText}>
-              Нажми на карточку, чтобы открыть перевод
+              {t('mainItem.tap_hint')}
             </Text>
           </View>
         )}
@@ -178,7 +185,7 @@ const MainItem: FC<Props> = ({ item, language }) => {
 
         <TouchableOpacity style={styles.showFooterBtn} onPress={onFooterPress}>
           <Text style={styles.showFooterText}>
-            {hiddenFooter ? 'Действия' : 'Свернуть'}
+            {footerToggleText}
           </Text>
           <Icon
             kind="svg"

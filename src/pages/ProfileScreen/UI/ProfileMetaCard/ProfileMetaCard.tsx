@@ -16,7 +16,7 @@ const ProfileMetaCard: FC<Props> = ({ registrationDate }) => {
       <Text style={styles.metaLabel}>
         {t('profileScreen.date_registration')}
       </Text>
-      <Text style={styles.metaValue}>{registrationDate || 'Не указана'}</Text>
+      <Text style={styles.metaValue}>{registrationDate || t('profileScreen.date_registration_empty')}</Text>
     </View>
   )
 }

@@ -14,6 +14,7 @@ import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 import DailyStreakBanner from '@/features/DailyStreakBanner/DailyStreakBanner'
 import { useStreakStatus } from '@/shared/hooks/useStreakStatus'
 import { useStartDailyChallenge } from '@/shared/hooks/useStartDailyChallenge'
+import { useTranslation } from '@/shared/i18n/types'
 
 const TabBar: FC<BottomTabBarProps> = (props) => {
   const { state, navigation } = props
@@ -28,6 +29,7 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
   const [cardsSheetRef, presentCardsSheet, onDismissCardsSheet] =
     useBottomSheet()
   const startDailyChallenge = useStartDailyChallenge()
+  const { t } = useTranslation()
 
   const colorShdow = useMemo(() => {
     return rt.themeName === 'dark'
@@ -51,11 +53,11 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
 
   const tabTitles = useMemo<Record<TabsKeys, string>>(() => {
     return {
-      mainStack: 'Слова',
-      settingsStack: 'Настройки',
-      profileStack: 'Профиль',
+      mainStack: t('navigation.main'),
+      settingsStack: t('navigation.settings'),
+      profileStack: t('navigation.profile'),
     }
-  }, [])
+  }, [t])
 
   const hasItems = useMemo(() => {
     return !!data?.total

@@ -37,6 +37,8 @@ type StatCardData = {
 
 const StatisticCard = memo(
   ({ label, value, colors, valueColor, valueIcon }: StatisticCardProps) => {
+    const { t } = useTranslation()
+
     const valueStyle = useMemo(
       () =>
         valueColor
@@ -55,7 +57,9 @@ const StatisticCard = memo(
         <View style={styles.statCardGlow} />
         <View style={styles.statCardTopRow}>
           <View style={styles.statCardDot} />
-          <Text style={styles.statCardCaption}>ПРОГРЕСС</Text>
+          <Text style={styles.statCardCaption}>
+            {t('profileScreen.progress_caption')}
+          </Text>
         </View>
         <View style={styles.statCardValueRow}>
           {valueIcon}
@@ -269,9 +273,9 @@ const UserStatistic: FC = () => {
 
   const languagesModalSubtitle = useMemo(() => {
     return isNativeLanguage
-      ? 'Выбери один основной язык профиля'
-      : 'Выбери несколько языков для статистики и подбора карточек'
-  }, [isNativeLanguage])
+      ? t('profileScreen.native_language_hint')
+      : t('profileScreen.languages_studied_hint')
+  }, [isNativeLanguage, t])
 
   return (
     <>

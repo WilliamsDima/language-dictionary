@@ -28,8 +28,7 @@ const AchievementsScreen: FC = () => {
         <View style={styles.hero}>
           <Text style={styles.heroTitle}>{t('profileScreen.achievements')}</Text>
           <Text style={styles.heroText}>
-            Здесь собираются ваши награды, прогресс и приятные поводы
-            возвращаться к карточкам.
+            {t('achievementsScreen.subtitle')}
           </Text>
         </View>
 
@@ -44,15 +43,14 @@ const AchievementsScreen: FC = () => {
         {!isLoading && isError ? (
           <View style={styles.errorBlock}>
             <Text style={styles.errorText}>
-              Не удалось загрузить достижения. Проверьте соединение и
-              попробуйте ещё раз.
+              {t('achievementsScreen.load_error')}
             </Text>
             <Button
               type="BORDER-TRANSPARENT"
               classes={{ btn: styles.retryBtn }}
               onPress={refetch}
             >
-              Повторить
+              {t('ui.retry')}
             </Button>
           </View>
         ) : (
