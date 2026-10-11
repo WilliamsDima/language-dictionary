@@ -51,6 +51,18 @@ export type GetItemsRequest = {
   lastVisible?: unknown
 }
 
+// поиск уже существующих похожих карточек (подсказка в модалке добавления)
+export type SearchSimilarItemsParams = {
+  search: string
+  language: string
+  limit: number
+}
+
+export type SearchSimilarItemsResponse = {
+  items: IItem[]
+  total: number
+}
+
 export type AddItemParams = {
   item: IItem
 }

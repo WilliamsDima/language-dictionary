@@ -9,6 +9,8 @@ import type {
   DeleteItemParams,
   GetItemsParams,
   GetItemsRequest,
+  SearchSimilarItemsParams,
+  SearchSimilarItemsResponse,
   UpdateItemParams,
   UpdateItemStatusParams,
 } from './types'
@@ -106,6 +108,32 @@ export const cardsServices = baseApi.injectEndpoints({
         return currentArg?.page !== previousArg?.page
       },
       providesTags: ['cards'],
+    }),
+    // поиск похожих карточек для подсказки в модалке добавления — отдельный
+    // эндпоинт без merge/кэша страниц getItems, чтобы не трогать список на
+    // главной; кэш не держим, каждый запрос идёт за свежими данными
+    searchSimilarItems: build.query<
+      SearchSimilarItemsResponse,
+      SearchSimilarItemsParams
+    >({
+      async queryFn({ search, language, limit }) {
+        const result = await cardsService.list({
+          search,
+          languages: [language],
+          limit,
+          offset: 0,
+        })
+
+        if (!result.ok) return toRtkQueryResult<SearchSimilarItemsResponse>(result)
+
+        return {
+          data: {
+            items: result.data.items.map(cardToItem),
+            total: result.data.total,
+          },
+        }
+      },
+      keepUnusedDataFor: 0,
     }),
     // добавление элемента
     addItem: build.mutation<IItem, AddItemParams>({
@@ -326,4 +354,5 @@ export const {
   useUpdateItemStatusMutation,
   useDeleteItemMutation,
   useLazyGetItemsQuery,
+  useLazySearchSimilarItemsQuery,
 } = cardsServices
