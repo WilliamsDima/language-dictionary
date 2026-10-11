@@ -8,6 +8,13 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.palette.white_alpha_015,
     borderRadius: theme.size.s18,
     marginBottom: theme.size.s10,
+    variants: {
+      locked: {
+        true: {
+          opacity: theme.opacity.o50,
+        },
+      },
+    },
   },
 
   index: {

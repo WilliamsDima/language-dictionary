@@ -146,7 +146,10 @@
       "word_for_translate_placeholder": "введите слово",
       "translate": "Перевод",
       "translate_placeholder": "введите перевод для слова",
-      "subtitle": "Собери карточку в удобном формате и сразу отправь ее в тренировку."
+      "subtitle": "Собери карточку в удобном формате и сразу отправь ее в тренировку.",
+      "select_language_first": "Сначала выберите язык",
+      "similar_exists": "Похоже, уже есть:",
+      "similar_more": "(+{{count}})"
     },
     "modalDeleteAccaunt": {
       "title": "Вы уверены, что хотите удалить аккаунт?",

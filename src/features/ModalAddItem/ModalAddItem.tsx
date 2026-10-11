@@ -11,6 +11,7 @@ import { useUnistyles } from 'react-native-unistyles'
 import { styles } from './ModalAddItem.styles'
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import Input from '@/shared/UI/Input/Input'
+import Text from '@/shared/UI/Text/Text'
 import ReadyIcon from '@/assets/icons/UI/ready-green-64.svg'
 import CloseIcon from '@/assets/icons/UI/close-red-64.svg'
 import PlusIcon from '@/assets/icons/UI/plus-green-64.svg'
@@ -48,11 +49,34 @@ const ModalAddItem: FC<Props> = () => {
     errorLanguage,
     setErrorItems,
     errorItems,
+    setActiveItemId,
+    activeItemId,
+    similarHint,
+    onSelectSimilar,
+    isLanguageLocked,
   } = useModalAddItem()
 
   const { t } = useTranslation()
   const [sheetRef, presentSheet, dismissSheet] = useBottomSheet()
   const wasVisibleRef = useRef(false)
+
+  styles.useVariants({
+    locked: isLanguageLocked,
+  })
+
+  // первый шаг — выбор языка: подсвечиваем селект, пока язык не выбран
+  // (ошибку «язык не выбран» не перекрываем — у неё своя красная рамка)
+  const languageSelectClasses = useMemo(
+    () => ({
+      select:
+        isLanguageLocked && !errorLanguage
+          ? styles.selectLangHighlight
+          : undefined,
+    }),
+    [isLanguageLocked, errorLanguage]
+  )
+
+  const descriptionClasses = useMemo(() => ({ input: styles.input }), [])
 
   const scrollContentStyle = useMemo(
     () => ({ paddingBottom: isOpen ? 150 : 24 }),
@@ -115,12 +139,33 @@ const ModalAddItem: FC<Props> = () => {
       }
     >
       <View>
+        <View style={styles.languageStep}>
+          <LanguagesSelect
+            classes={languageSelectClasses}
+            onSelect={onSelectLanguage}
+            language={language}
+            error={errorLanguage}
+          />
+
+          {isLanguageLocked ? (
+            <Text style={styles.languageHint}>
+              {t('modal.modalAddItem.select_language_first')}
+            </Text>
+          ) : (
+            <></>
+          )}
+        </View>
+
         {items.map((it, i) => {
           return (
             <ModalItemWords
               setErrorItems={setErrorItems}
               setItems={setItems}
+              setActiveItemId={setActiveItemId}
               errorItems={errorItems}
+              isLocked={isLanguageLocked}
+              similarHint={it.id === activeItemId ? similarHint : null}
+              onSelectSimilar={onSelectSimilar}
               index={i}
               key={it.id}
               item={it}
@@ -129,26 +174,23 @@ const ModalAddItem: FC<Props> = () => {
         })}
 
         <View style={styles.btnWrapper}>
-          <TouchableOpacity style={styles.btnAddItem} onPress={addItem}>
+          <TouchableOpacity
+            style={styles.btnAddItem}
+            onPress={addItem}
+            disabled={isLanguageLocked}
+          >
             <PlusIcon width={30} height={30} />
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.footer]}>
+        <View style={styles.footer}>
           <Input
             title={t('modal.modalAddItem.description')}
             placeholder={t('modal.modalAddItem.description_placeholder')}
             multiline
             value={description}
             onChangeText={setDescription}
-            classes={{ input: styles.input }}
-          />
-
-          <LanguagesSelect
-            classes={{ select: styles.selectLang }}
-            onSelect={onSelectLanguage}
-            language={language}
-            error={errorLanguage}
+            classes={descriptionClasses}
           />
         </View>
       </View>

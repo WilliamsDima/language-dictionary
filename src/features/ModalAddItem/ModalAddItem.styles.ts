@@ -63,6 +63,13 @@ export const styles = StyleSheet.create((theme, rt) => ({
     backgroundColor: theme.colors.background.input,
     borderWidth: theme.size.s1,
     borderColor: theme.colors.palette.border,
+    variants: {
+      locked: {
+        true: {
+          opacity: theme.opacity.o50,
+        },
+      },
+    },
   },
 
   input: {
@@ -108,7 +115,16 @@ export const styles = StyleSheet.create((theme, rt) => ({
     borderTopColor: theme.colors.palette.border,
   },
 
-  selectLang: {
-    marginTop: theme.size.s12,
+  languageStep: {
+    marginBottom: theme.size.s14,
+  },
+  selectLangHighlight: {
+    borderColor: theme.colors.palette.primery,
+    backgroundColor: theme.colors.palette.success_alpha_12,
+  },
+  languageHint: {
+    color: theme.colors.palette.primery,
+    fontSize: theme.fontSize.s12,
+    marginTop: theme.size.s6,
   },
 }))
