@@ -1,6 +1,5 @@
 import Layout from '@/shared/UI/Layout/Layout'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 import { View } from 'react-native'
 import { styles } from './SettingsScreen.styles'
 import VersionBlock from './UI/VersionBlock/VersionBlock'
@@ -10,15 +9,16 @@ import Button from '@/shared/UI/Button/Button'
 import openInBrowser from '@/shared/helpers/openInBrowser'
 import Settings from './UI/Settings/Settings'
 import { useTranslation } from '@/shared/i18n/types'
+import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
 
 const SettingsScreen: FC = () => {
   const { t } = useTranslation()
 
-  const { aplication } = useAppSelector((store) => store.app)
+  const { data: appConfig } = useGetAppConfigQuery()
 
-  const toPrivacyPolicy = () => {
-    openInBrowser(aplication?.privacy_policy_link || '')
-  }
+  const toPrivacyPolicy = useCallback(() => {
+    openInBrowser(appConfig?.privacy_policy_link || '')
+  }, [appConfig])
 
   return (
     <Layout isScroll>
