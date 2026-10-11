@@ -29,7 +29,6 @@
     "update_is_available": "Update available",
     "rate_app": "Leave a review",
     "save_json": "Save cards as a JSON file",
-    "save_json_success": "Cards saved to file: {{path}}",
     "save_json_error": "Failed to save the file. Data copied to clipboard",
     "save_json_load_error": "Failed to load cards. Check your connection and try again",
     "about": {
@@ -53,7 +52,6 @@
     },
     "developerInfo": {
       "title": "About the developer.",
-      "googlePlayLink": "Other apps by the developer",
       "socials": {
         "title": "Contact:"
       }
@@ -63,10 +61,7 @@
     "update": "Update"
   },
   "profileScreen": {
-    "start_repeating": "start review",
     "practice_cta": "Practice",
-    "practice_badge": "Quick start",
-    "practice_hint": "Choose cards and start training",
     "show_year_result": "View your {{date}} year in review 🎉",
     "logout": "log out",
     "delete_account": "delete account",
@@ -74,13 +69,9 @@
     "statistic": "Statistics:",
     "achievements": "Achievements",
     "achievements_subtitle": "Rewards for consistency, progress, and new language habits.",
-    "all_count": "Total words/rules/sentences:",
     "all_count_short": "Words and phrases",
-    "all_count_cards": "Total cards:",
     "all_count_cards_short": "Card sets",
-    "studied_count": "Learned:",
     "studied_count_short": "Learned",
-    "progress_count": "Learning:",
     "progress_count_short": "Learning",
     "streak_short": "Streak",
     "best_streak_short": "Best streak",
@@ -116,8 +107,7 @@
     "UPDATE": "Card updated!",
     "DELETE": "Card deleted!",
     "ERROR": "Something went wrong...",
-    "NOT_FOUND": "This card has already been deleted",
-    "default": "error text"
+    "NOT_FOUND": "This card has already been deleted"
   },
   "modal": {
     "modalCardsFilter": {
@@ -142,9 +132,6 @@
       "translate": "Translation",
       "translate_placeholder": "enter the translation"
     },
-    "modalAddLanguages": {
-      "title": "Language list:"
-    },
     "modalDeleteAccaunt": {
       "title": "Are you sure you want to delete your account?",
       "text": "You won't be able to restore your account data after deletion — it will be permanently deleted."
@@ -153,46 +140,12 @@
       "title": "Log out of your account?"
     }
   },
-  "time": {
-    "hours": "h",
-    "minutes": "min",
-    "secs": "sec",
-    "once_1": "time",
-    "once_2": "times"
-  },
   "cards": {
     "card_1": "card",
     "card_2": "cards",
     "card_3": "cards",
     "study": "study",
     "studied": "learned"
-  },
-  "advertising_1": "ad",
-  "advertising_2": "ads",
-  "advertising_3": "ads",
-  "yearsResult": {
-    "your": "your",
-    "language_year": "language year",
-    "active_days": "Active days",
-    "percent_1": "That's almost",
-    "percent_2": "of the whole year!",
-    "most_active_month": "Most active month",
-    "have_added_over_past_year": "✏️ This year you added",
-    "each_added_example_is_a_step_towards_fluency_in_the_language": "Every example you add is a step toward fluency",
-    "you_have_learned_this_year": "📚 This year you learned",
-    "now_you_can_say_more_than_ever": "Now you can say more than ever!",
-    "you_repeated_this_year": "🔁 This year you reviewed",
-    "repetition": "Repetition is the mother of learning. And you proved it!",
-    "launched_card_training_title": "🧠 This year you launched card training",
-    "launched_card_training_text": "Not every day, but steadily — your brain was working at full power!",
-    "open_app_title": "🚀 This year you opened the app",
-    "open_app_text": "Sometimes out of habit, sometimes on purpose — but always toward knowledge.",
-    "advertising_title": "📺 This year you watched",
-    "advertising_text_1": "Thank you — it helps us keep improving the app 💚",
-    "advertising_text_2": "You're a hero for surviving every one of those seconds 😅",
-    "last_slide_title_1": "🌟 This was your year in language.",
-    "last_slide_title_2": "You're growing, learning, and not giving up.",
-    "last_slide_title_3": "In {{date}} there will be even more achievements! 🚀"
   },
   "achievements": {
     "polyglot": {

@@ -29,7 +29,6 @@
     "update_is_available": "Доступно обновление",
     "rate_app": "Оставить отзыв",
     "save_json": "Сохранить карточки как JSON файл",
-    "save_json_success": "Карточки сохранены в файл: {{path}}",
     "save_json_error": "Не удалось сохранить файл. Данные скопированы в буфер обмена",
     "save_json_load_error": "Не удалось загрузить карточки. Проверьте соединение и попробуйте ещё раз",
     "about": {
@@ -53,7 +52,6 @@
     },
     "developerInfo": {
       "title": "Информация об авторе.",
-      "googlePlayLink": "Другие приложения автора",
       "socials": {
         "title": "Связь:"
       }
@@ -63,10 +61,7 @@
     "update": "Обновить"
   },
   "profileScreen": {
-    "start_repeating": "начать повторение",
     "practice_cta": "Практиковаться",
-    "practice_badge": "Быстрый старт",
-    "practice_hint": "Выбери карточки и начни тренировку",
     "show_year_result": "Посмотреть итоги {{date}} года 🎉",
     "logout": "выйти из аккаунта",
     "delete_account": "удалить аккаунт",
@@ -74,13 +69,9 @@
     "statistic": "Статистика:",
     "achievements": "Достижения",
     "achievements_subtitle": "Награды за регулярность, прогресс и новые языковые привычки.",
-    "all_count": "Всего слов/правил/предложений:",
     "all_count_short": "Слов и фраз",
-    "all_count_cards": "Всего карочек:",
     "all_count_cards_short": "Наборов карточек",
-    "studied_count": "Изучено:",
     "studied_count_short": "Изучено",
-    "progress_count": "В изучении:",
     "progress_count_short": "В изучении",
     "streak_short": "Серия",
     "best_streak_short": "Лучшая серия",
@@ -116,8 +107,7 @@
     "UPDATE": "Карточка обновлена!",
     "DELETE": "Карточка удалена!",
     "ERROR": "Что-то пошло не так...",
-    "NOT_FOUND": "Эта карточка уже удалена",
-    "default": "error text"
+    "NOT_FOUND": "Эта карточка уже удалена"
   },
   "modal": {
     "modalCardsFilter": {
@@ -142,9 +132,6 @@
       "translate": "Перевод",
       "translate_placeholder": "введите перевод для слова"
     },
-    "modalAddLanguages": {
-      "title": "Список языков:"
-    },
     "modalDeleteAccaunt": {
       "title": "Вы уверены, что хотите удалить аккаунт?",
       "text": "Вы не сможете восстановить данные аккаунта после удаления, ваши данные будут удалены навсегда."
@@ -153,46 +140,12 @@
       "title": "Хотите выйти из аккаунта?"
     }
   },
-  "time": {
-    "hours": "ч",
-    "minutes": "мин",
-    "secs": "сек",
-    "once_1": "раз",
-    "once_2": "раза"
-  },
   "cards": {
     "card_1": "карточку",
     "card_2": "карточки",
     "card_3": "карточек",
     "study": "учить",
     "studied": "изучено"
-  },
-  "advertising_1": "рекламу",
-  "advertising_2": "рекламы",
-  "advertising_3": "реклам",
-  "yearsResult": {
-    "your": "твой",
-    "language_year": "языковой год",
-    "active_days": "Активных дней",
-    "percent_1": "А это — почти",
-    "percent_2": "всего года!",
-    "most_active_month": "Самый активный месяц",
-    "have_added_over_past_year": "✏️ За этот год ты добавил",
-    "each_added_example_is_a_step_towards_fluency_in_the_language": "Каждый добавленный пример — шаг к свободному владению языком",
-    "you_have_learned_this_year": "📚 За этот год ты выучил",
-    "now_you_can_say_more_than_ever": "Теперь ты можешь сказать больше, чем когда-либо!",
-    "you_repeated_this_year": "🔁 За этот год ты повторил",
-    "repetition": "Повторение — мать учения. И ты это доказал!",
-    "launched_card_training_title": "🧠 За этот год ты запускал тренировки карточек",
-    "launched_card_training_text": "Не каждый день, но стабильно — мозг работал на полную!",
-    "open_app_title": "🚀 За этот год ты заходил в приложение",
-    "open_app_text": "Иногда по привычке, иногда с целью — но всегда к знаниям.",
-    "advertising_title": "📺 За этот год ты посмотрел",
-    "advertising_text_1": "Спасибо — это помогает нам развивать приложение 💚",
-    "advertising_text_2": "Ты герой, переживший все эти секунды 😅",
-    "last_slide_title_1": "🌟 Это был твой год в языке.",
-    "last_slide_title_2": "Ты растёшь, учишься и не сдаёшься.",
-    "last_slide_title_3": "В {{date}} будет ещё больше достижений! 🚀"
   },
   "achievements": {
     "polyglot": {
