@@ -5,9 +5,12 @@ import LinearGradient from 'react-native-linear-gradient'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import ScreenBackground from '@/shared/UI/Layout/ScreenBackground'
+import { useAppSelector } from '@/shared/hooks/useStore'
 import { useAchievements } from '@/shared/hooks/useAchievements'
-import { getNewlyUnlockedAchievements } from '@/shared/helpers/getNewlyUnlockedAchievements'
-import type { AchievementWithProgress } from '@/shared/API/services/achievements/types'
+import { useMarkAchievementsSeenMutation } from '@/shared/API/services/achievements/AchievementsQuery'
+import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
+import type { AppConfigDTO } from '@/shared/API/services/appConfig/types'
+import { getUnseenAchievements } from '@/shared/helpers/getUnseenAchievements'
 import { styles } from './ModalAchievementUnlocked.styles'
 import { useTranslation } from '@/shared/i18n/types'
 import {
@@ -23,30 +26,81 @@ const CELEBRATION_DELAY_MS = 450
 
 const TRANSPARENT_GRADIENT: [string, string] = ['transparent', 'transparent']
 
+const EMPTY_IDS: ReadonlySet<number> = new Set<number>()
+
+const GRADIENT_START = { x: 0, y: 0 }
+const GRADIENT_END = { x: 1, y: 1 }
+
+// то же условие наличия слайдов, что и в ModalYearResult: флаг showYearResult
+// может быть взведён, а сама модалка итогов года не показана (нет слайдов)
+const selectHasYearResultSlides = ({ data }: { data?: AppConfigDTO }) => ({
+  hasYearResultSlides: !!data?.year_in_review?.slides?.some(
+    (slide) => slide.enabled
+  ),
+})
+
 // глобальная модалка успеха разблокировки достижения. Разблокировка
 // (unlocked/unlocked_at) вычисляется и персистится бэкендом "на чтение"
-// (GET /achievements) — конкретное действие (тренировка/создание карточки/
-// смена статуса/стрик) лишь просит перечитать список через invalidatesTags.
-// Поэтому именно здесь, в единственном компоненте, всегда смонтированном в
-// корне навигации (см. AppRoutes), держим постоянную подписку на этот
-// запрос и сравниваем снимки между собой — это не привязывает обнаружение
-// разблокировки к жизненному циклу экрана достижений
+// (GET /achievements), а признак "модалку уже показали" (seen) хранится на
+// сервере. Поэтому показываем всё, что unlocked && !seen — в том числе на
+// самом первом снимке после запуска (например, если админ открыл достижение,
+// пока приложение было закрыто). По кнопке "Отлично" подтверждаем показ
+// через POST /achievements/seen. Компонент всегда смонтирован в корне
+// навигации (см. AppRoutes) и держит постоянную подписку на запрос
 const ModalAchievementUnlocked: FC<Props> = () => {
-  const { t } = useTranslation()
+  const {
+    isAuth,
+    isWatchSplash,
+    showDailyStreakSuccessModal,
+    showAppReviewModal,
+    showYearResult,
+  } = useAppSelector((store) => store.app)
 
-  const [queue, setQueue] = useState<AchievementWithProgress[]>([])
-  const [isCelebrationReady, setIsCelebrationReady] = useState(false)
+  // id, уже показанные (закрытые) в текущей сессии — не крутим их повторно,
+  // даже если сервер ещё не подтвердил seen или запрос упал
+  const [shownIds, setShownIds] = useState<ReadonlySet<number>>(EMPTY_IDS)
+
+  const [markAchievementsSeen] = useMarkAchievementsSeenMutation()
+  const { hasYearResultSlides } = useGetAppConfigQuery(undefined, {
+    skip: !isAuth,
+    selectFromResult: selectHasYearResultSlides,
+  })
 
   const { data } = useAchievements()
+  const { t } = useTranslation()
 
-  const previousAchievementsRef = useRef<AchievementWithProgress[] | undefined>(
-    undefined
-  )
   const fireworkRef = useRef<LottieView>(null)
 
   // показываем разблокировки по одной, даже если пересеклось сразу
   // несколько порогов за одно действие
+  const queue = useMemo(
+    () => getUnseenAchievements(data, shownIds),
+    [data, shownIds]
+  )
+
   const current = useMemo(() => queue[0], [queue])
+
+  const currentId = useMemo(() => current?.id, [current])
+
+  // не перекрываем другие глобальные модалки — покажемся после их закрытия
+  const isOtherModalVisible = useMemo(
+    () =>
+      showDailyStreakSuccessModal ||
+      showAppReviewModal ||
+      (showYearResult && hasYearResultSlides),
+    [
+      showDailyStreakSuccessModal,
+      showAppReviewModal,
+      showYearResult,
+      hasYearResultSlides,
+    ]
+  )
+
+  // isWatchSplash — не показываемся поверх сплэш-экрана при запуске
+  const isVisible = useMemo(
+    () => isAuth && isWatchSplash && !isOtherModalVisible && !!current,
+    [isAuth, isWatchSplash, isOtherModalVisible, current]
+  )
 
   const gradientColors = useMemo((): [string, string] => {
     return current ? [current.color_from, current.color_to] : TRANSPARENT_GRADIENT
@@ -69,51 +123,41 @@ const ModalAchievementUnlocked: FC<Props> = () => {
     [t, current]
   )
 
-  const gradientStart = useMemo(() => ({ x: 0, y: 0 }), [])
-  const gradientEnd = useMemo(() => ({ x: 1, y: 1 }), [])
-
   const onDismiss = useCallback(() => {
-    setQueue((prev) => prev.slice(1))
-  }, [])
+    if (currentId === undefined) return
 
+    setShownIds((prev) => new Set(prev).add(currentId))
+    // ошибка обрабатывается мягко в onQueryStarted мутации: в рамках сессии
+    // достижение не вернётся (shownIds), при следующем запуске — покажется
+    markAchievementsSeen([currentId])
+  }, [currentId, markAchievementsSeen])
+
+  // логаут/смена аккаунта: кэш сбрасывает resetApiState в useAuth, а
+  // локальное состояние сессии — здесь
   useEffect(() => {
-    if (!data) return
-
-    const newlyUnlocked = getNewlyUnlockedAchievements(
-      previousAchievementsRef.current,
-      data
-    )
-
-    if (newlyUnlocked.length) {
-      setQueue((prev) => [...prev, ...newlyUnlocked])
+    if (!isAuth) {
+      setShownIds(EMPTY_IDS)
     }
+  }, [isAuth])
 
-    previousAchievementsRef.current = data
-  }, [data])
-
+  // фейерверк — для каждого достижения в очереди (currentId меняется при
+  // открытой модалке), а также при повторном показе после другой модалки
   useEffect(() => {
-    if (!current) {
-      setIsCelebrationReady(false)
-      return
-    }
+    if (!isVisible || currentId === undefined) return
+
+    fireworkRef.current?.reset()
 
     const timeout = setTimeout(
-      () => setIsCelebrationReady(true),
+      () => fireworkRef.current?.play(),
       CELEBRATION_DELAY_MS
     )
 
     return () => clearTimeout(timeout)
-  }, [current])
-
-  useEffect(() => {
-    if (isCelebrationReady) {
-      fireworkRef.current?.play()
-    }
-  }, [isCelebrationReady])
+  }, [isVisible, currentId])
 
   return (
     <Modal
-      visible={!!current}
+      visible={isVisible}
       transparent
       animationType="fade"
       statusBarTranslucent
@@ -135,8 +179,8 @@ const ModalAchievementUnlocked: FC<Props> = () => {
           <>
             <LinearGradient
               colors={gradientColors}
-              start={gradientStart}
-              end={gradientEnd}
+              start={GRADIENT_START}
+              end={GRADIENT_END}
               style={styles.badge}
             >
               <Text style={styles.icon}>{current.icon}</Text>
