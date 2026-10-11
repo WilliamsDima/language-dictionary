@@ -32,6 +32,12 @@ describe('dateFormat', () => {
     expect(result).toBe('05.10.2023')
   })
 
+  it('должен форматировать дату в переданной локали', () => {
+    const date = new Date(2023, 9, 5)
+    const result = dateFormat({ date, type: 'FULL', locale: 'en' })
+    expect(result).toBe('10/05/2023')
+  })
+
   it('должен возвращать undefined для некорректной даты', () => {
     const result = dateFormat({ date: 'invalid-date' as any, type: 'FULL' })
     expect(result).toBeUndefined()

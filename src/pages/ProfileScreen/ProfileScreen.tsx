@@ -7,6 +7,7 @@ import ModalDeleteAccaunt from '@/features/ModalDeleteAccaunt/ModalDeleteAccaunt
 import UserStatistic from '@/entities/user/UserStatistic/UserStatistic'
 import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import { dateFormat } from '@/shared/helpers/dateFormat'
+import { useTranslation } from '@/shared/i18n/types'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
 import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import ProfileMetaCard from './UI/ProfileMetaCard/ProfileMetaCard'
@@ -23,9 +24,15 @@ const ProfileScreen: FC = () => {
   const [modalLogout, setModalLogout] = useState(false)
   const [modalDelete, setModalDelete] = useState(false)
 
+  const { i18n } = useTranslation()
+
   const registrationDate = useMemo(() => {
-    return dateFormat({ date: profile?.dateRegistration, type: 'FULL' })
-  }, [profile?.dateRegistration])
+    return dateFormat({
+      date: profile?.dateRegistration,
+      type: 'FULL',
+      locale: i18n.language,
+    })
+  }, [i18n.language, profile?.dateRegistration])
 
   const showModalLogout = useCallback(() => {
     setModalLogout(true)

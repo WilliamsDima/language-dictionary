@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useMemo } from 'react'
 import { View } from 'react-native'
 import { styles } from './UserInfo.styles'
 import UserAvatart from '@/shared/UI/UserAvatart/UserAvatart'
@@ -16,8 +16,18 @@ import { useTranslation } from '@/shared/i18n/types'
 type Props = {}
 
 const UserInfo: FC<Props> = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data: profile } = useMeProfile()
+
+  const registrationDate = useMemo(
+    () =>
+      dateFormat({
+        date: profile?.dateRegistration,
+        type: 'FULL',
+        locale: i18n.language,
+      }),
+    [i18n.language, profile?.dateRegistration]
+  )
 
   return (
     <View style={styles.wrapper}>
@@ -30,7 +40,7 @@ const UserInfo: FC<Props> = () => {
         <Text style={styles.name}>{profile?.name}</Text>
         <Text style={styles.date}>
           {t('profileScreen.date_registration')}
-          {dateFormat({ date: profile?.dateRegistration, type: 'FULL' })}
+          {registrationDate}
         </Text>
       </View>
     </View>

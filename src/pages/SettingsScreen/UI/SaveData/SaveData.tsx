@@ -23,7 +23,7 @@ import { cardsService } from '@/pages/MainScreen/api/CardsService'
 const EXPORT_FORMAT_VERSION = 1
 
 const SaveData: FC = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { setLastSaveData } = useActions()
   const { theme } = useUnistyles()
 
@@ -35,16 +35,22 @@ const SaveData: FC = () => {
 
   const dateSaveText = useMemo(() => {
     if (lastSaveData) {
-      const formattedDate = dateFormat({ date: lastSaveData, type: 'FULL' })
+      const formattedDate = dateFormat({
+        date: lastSaveData,
+        type: 'FULL',
+        locale: i18n.language,
+      })
 
       if (!formattedDate) {
         return ''
       }
 
-      return `${formattedDate} ${new Date(lastSaveData).toLocaleTimeString()}`
+      return `${formattedDate} ${new Date(lastSaveData).toLocaleTimeString(
+        i18n.language
+      )}`
     }
     return ''
-  }, [lastSaveData])
+  }, [i18n.language, lastSaveData])
 
   const buttonClasses = useMemo(() => ({ btn: styles.btn }), [])
 
