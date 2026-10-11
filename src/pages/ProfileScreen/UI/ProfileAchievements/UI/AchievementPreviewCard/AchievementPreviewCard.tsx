@@ -3,6 +3,8 @@ import { View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import Text from '@/shared/UI/Text/Text'
 import { styles } from './AchievementPreviewCard.styles'
+import { useTranslation } from '@/shared/i18n/types'
+import { translateAchievementTitle } from '@/shared/helpers/achievementText'
 
 type Props = {
   title: string
@@ -21,7 +23,14 @@ const AchievementPreviewCard: FC<Props> = ({
   unlocked,
   progressPercent,
 }) => {
+  const { t } = useTranslation()
+
   styles.useVariants({ unlocked })
+
+  const titleText = useMemo(
+    () => translateAchievementTitle(t, title),
+    [t, title]
+  )
 
   const gradientColors = useMemo(
     (): [string, string] => [colorFrom, colorTo],
@@ -49,7 +58,7 @@ const AchievementPreviewCard: FC<Props> = ({
 
       <View style={styles.footer}>
         <Text style={styles.title} numberOfLines={2}>
-          {title}
+          {titleText}
         </Text>
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{badgeText}</Text>

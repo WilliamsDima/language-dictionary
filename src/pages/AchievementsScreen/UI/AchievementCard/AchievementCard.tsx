@@ -4,6 +4,11 @@ import LinearGradient from 'react-native-linear-gradient'
 import Text from '@/shared/UI/Text/Text'
 import { dateFormat } from '@/shared/helpers/dateFormat'
 import { styles } from './AchievementCard.styles'
+import { useTranslation } from '@/shared/i18n/types'
+import {
+  translateAchievementDescription,
+  translateAchievementTitle,
+} from '@/shared/helpers/achievementText'
 
 type Props = {
   title: string
@@ -30,7 +35,19 @@ const AchievementCard: FC<Props> = ({
   progressPercent,
   threshold,
 }) => {
+  const { t } = useTranslation()
+
   styles.useVariants({ unlocked })
+
+  const titleText = useMemo(
+    () => translateAchievementTitle(t, title),
+    [t, title]
+  )
+
+  const descriptionText = useMemo(
+    () => translateAchievementDescription(t, description, threshold),
+    [t, description, threshold]
+  )
 
   const gradientColors = useMemo(
     (): [string, string] => [colorFrom, colorTo],
@@ -76,8 +93,8 @@ const AchievementCard: FC<Props> = ({
         )}
       </View>
 
-      <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={styles.cardText}>{description}</Text>
+      <Text style={styles.cardTitle}>{titleText}</Text>
+      <Text style={styles.cardText}>{descriptionText}</Text>
 
       {unlocked ? (
         <Text style={styles.unlockedText}>{unlockedDateText}</Text>

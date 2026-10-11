@@ -9,6 +9,11 @@ import { useAchievements } from '@/shared/hooks/useAchievements'
 import { getNewlyUnlockedAchievements } from '@/shared/helpers/getNewlyUnlockedAchievements'
 import type { AchievementWithProgress } from '@/shared/API/services/achievements/types'
 import { styles } from './ModalAchievementUnlocked.styles'
+import { useTranslation } from '@/shared/i18n/types'
+import {
+  translateAchievementDescription,
+  translateAchievementTitle,
+} from '@/shared/helpers/achievementText'
 
 type Props = {}
 
@@ -27,6 +32,8 @@ const TRANSPARENT_GRADIENT: [string, string] = ['transparent', 'transparent']
 // запрос и сравниваем снимки между собой — это не привязывает обнаружение
 // разблокировки к жизненному циклу экрана достижений
 const ModalAchievementUnlocked: FC<Props> = () => {
+  const { t } = useTranslation()
+
   const [queue, setQueue] = useState<AchievementWithProgress[]>([])
   const [isCelebrationReady, setIsCelebrationReady] = useState(false)
 
@@ -44,6 +51,23 @@ const ModalAchievementUnlocked: FC<Props> = () => {
   const gradientColors = useMemo((): [string, string] => {
     return current ? [current.color_from, current.color_to] : TRANSPARENT_GRADIENT
   }, [current])
+
+  const titleText = useMemo(
+    () => (current ? translateAchievementTitle(t, current.title) : ''),
+    [t, current]
+  )
+
+  const descriptionText = useMemo(
+    () =>
+      current
+        ? translateAchievementDescription(
+            t,
+            current.description,
+            current.threshold
+          )
+        : '',
+    [t, current]
+  )
 
   const gradientStart = useMemo(() => ({ x: 0, y: 0 }), [])
   const gradientEnd = useMemo(() => ({ x: 1, y: 1 }), [])
@@ -119,8 +143,8 @@ const ModalAchievementUnlocked: FC<Props> = () => {
             </LinearGradient>
 
             <Text style={styles.eyebrow}>Новое достижение!</Text>
-            <Text style={styles.title}>{current.title}</Text>
-            <Text style={styles.description}>{current.description}</Text>
+            <Text style={styles.title}>{titleText}</Text>
+            <Text style={styles.description}>{descriptionText}</Text>
           </>
         ) : (
           <></>
