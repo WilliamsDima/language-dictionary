@@ -58,7 +58,7 @@ Word Cards - <a href="https://wordcards-admin.duckdns.org/download" target="_bla
 
 | Секрет | Что это |
 |---|---|
-| `ANDROID_KEYSTORE_BASE64` | keystore подписи в base64 (тот же ключ, что и для Google Play) |
+| `ANDROID_KEYSTORE_BASE64` | keystore подписи в base64 (`wordcards-release.keystore`, alias `wordcards`; это новый ключ, не ключ из Google Play) |
 | `ANDROID_KEYSTORE_PASSWORD` | пароль keystore |
 | `ANDROID_KEY_ALIAS` | alias ключа |
 | `ANDROID_KEY_PASSWORD` | пароль ключа |
@@ -68,6 +68,10 @@ Word Cards - <a href="https://wordcards-admin.duckdns.org/download" target="_bla
 | `APK_UPLOAD_HOST` | адрес сервера |
 | `APK_UPLOAD_KNOWN_HOSTS` | строка known_hosts сервера (`<ip> ssh-ed25519 AAAA...`) |
 | `APP_CENTER_SECRET` | необязательный: App Center secret (если не задан — пустая строка, как в локальной сборке без него) |
+
+**Где хранятся оригиналы** (в репозиторий не попадают): keystore и его пароль — `dictionary-sicrets/keystore/` (`wordcards-release.keystore`, `password`; пароль ключа совпадает с паролем keystore), актуальный `google-services.json` — `dictionary-sicrets/google-services.json`. Если keystore потерять, новые версии нельзя будет поставить поверх установленной: придётся удалить приложение и подписывать новым ключом.
+
+**Firebase**: SHA-1 и SHA-256 этого ключа добавлены в Firebase → Project settings → Android app (без них не работает вход через Google). При смене ключа: добавить новые отпечатки (`keytool -list -v -keystore <файл>`), заново скачать `google-services.json` и обновить секрет `GOOGLE_SERVICES_JSON_BASE64`.
 
 `API_BASE_URL` секретом не является — воркфлоу сам пишет в `.env` прод `https://wordcards-api.duckdns.org`. Серверная часть (пользователь `wordcards-apk`, ключи, SHA сертификата в Firebase) описана в `dictionary-backend/deploy/DEPLOY.md`, §16.
 
