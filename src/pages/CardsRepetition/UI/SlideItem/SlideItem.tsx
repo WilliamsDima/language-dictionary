@@ -1,4 +1,11 @@
-import React, { FC, memo, useMemo, useRef, useState } from 'react'
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   Animated,
   ScrollView,
@@ -106,7 +113,7 @@ const SlideItem: FC<Props> = (props) => {
     })
   }, [swipeSlide])
 
-  const flipCard = () => {
+  const flipCard = useCallback(() => {
     if (isFlipAnimating.current) {
       return
     }
@@ -129,14 +136,20 @@ const SlideItem: FC<Props> = (props) => {
         isFlipAnimating.current = false
       })
     })
-  }
+  }, [flipAnimation])
+
+  const btnClasses = useMemo(() => ({ textBtn: styles.btnText }), [])
 
   return (
     <GestureDetector gesture={panGesture}>
       <View style={styles.wrapper}>
         <View style={styles.itemWrapper}>
           <Animated.View style={[styles.item, { opacity }]}>
-            <TouchableOpacity onPress={nextSlide} activeOpacity={1}>
+            <TouchableOpacity
+              style={styles.cardTouchable}
+              onPress={nextSlide}
+              activeOpacity={1}
+            >
               <ScrollView
                 style={styles.itemWords}
                 contentContainerStyle={styles.contentContainerStyle}
@@ -149,10 +162,12 @@ const SlideItem: FC<Props> = (props) => {
                   ]}
                 >
                   <CardContent isFlipped={isFlipped} {...props} />
-                  {!!currentItem?.description && isFlipped && (
+                  {!!currentItem?.description && isFlipped ? (
                     <Text style={styles.description}>
                       {currentItem?.description}
                     </Text>
+                  ) : (
+                    <></>
                   )}
                 </Animated.View>
               </ScrollView>
@@ -161,7 +176,7 @@ const SlideItem: FC<Props> = (props) => {
             <View style={styles.footer}>
               <Button
                 style={styles.btn}
-                classes={{ textBtn: styles.btnText }}
+                classes={btnClasses}
                 onPress={flipCard}
               >
                 {t('cardsRepetition.check')}

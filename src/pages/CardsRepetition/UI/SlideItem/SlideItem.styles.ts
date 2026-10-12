@@ -44,10 +44,18 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.size.s10,
   },
 
+  // зона карточки ужимается под доступную высоту слайда (карточка внутри
+  // скроллится), чтобы кнопка переворота под ней всегда оставалась видимой
+  cardTouchable: {
+    flexShrink: 1,
+    alignItems: 'center',
+  },
+
   footer: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    flexShrink: 0,
     marginTop: theme.size.s14,
   },
   description: {
@@ -59,6 +67,7 @@ export const styles = StyleSheet.create((theme) => ({
 
   itemWords: {
     flexGrow: 0,
+    flexShrink: 1,
     maxHeight: height / 1.38,
     width: width - theme.layout.appPadding * 2 - theme.size.s20,
   },

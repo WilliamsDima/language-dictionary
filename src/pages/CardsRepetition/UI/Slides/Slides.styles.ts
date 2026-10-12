@@ -73,8 +73,11 @@ export const styles = StyleSheet.create((theme, rt) => ({
     fontWeight: '600',
     color: theme.colors.base.black,
   },
+  // без alignItems: 'center' ячейки горизонтального списка растягиваются на
+  // всю высоту списка, и height: '100%' у слайда резолвится в реальную высоту —
+  // иначе слайд берёт высоту своего контента и обрезается границей списка
   contentContainerStyle: {
-    alignItems: 'center',
+    flexGrow: 1,
   },
   listWrapper: {
     flex: 1,
