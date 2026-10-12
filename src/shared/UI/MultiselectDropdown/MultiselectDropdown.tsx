@@ -9,6 +9,7 @@ import React, {
 import { useUnistyles } from 'react-native-unistyles'
 import { StyleProp, TextInput, TextStyle, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import CountryFlag from 'react-native-country-flag'
 import Text from '../Text/Text'
 import { MultiSelect } from 'react-native-element-dropdown'
 import { styles } from './MultiselectDropdown.styles'
@@ -25,29 +26,54 @@ interface Props {
   }
   labelField: string
   valueField: string
+  // поле опции с ISO-кодом страны (как emoji у языков интерфейса) —
+  // если задано, рядом с названием рисуется флаг через CountryFlag
+  flagField?: string
 }
+
+const FLAG_SIZE = 16
+
+type OptionFlagProps = {
+  code: string
+}
+
+const OptionFlag = memo(({ code }: OptionFlagProps) => {
+  const isoCode = useMemo(() => code.toLocaleLowerCase(), [code])
+
+  return (
+    <View style={styles.flag}>
+      <CountryFlag isoCode={isoCode} size={FLAG_SIZE} />
+    </View>
+  )
+})
 
 type DropdownItemProps = {
   active: boolean
   iconUrl?: string
+  flagCode?: string
   label: string
 }
 
-const DropdownItem = memo(({ active, iconUrl, label }: DropdownItemProps) => {
-  return (
-    <View style={[styles.item, active && styles.itemActive]}>
-      {!!iconUrl && <FastImage source={{ uri: iconUrl }} style={styles.icon} />}
-      <Text
-        style={[
-          styles.selectedTextStyle,
-          active && styles.selectedTextStyleActive,
-        ]}
-      >
-        {label}
-      </Text>
-    </View>
-  )
-})
+const DropdownItem = memo(
+  ({ active, iconUrl, flagCode, label }: DropdownItemProps) => {
+    return (
+      <View style={[styles.item, active && styles.itemActive]}>
+        {flagCode ? <OptionFlag code={flagCode} /> : <></>}
+        {!!iconUrl && (
+          <FastImage source={{ uri: iconUrl }} style={styles.icon} />
+        )}
+        <Text
+          style={[
+            styles.selectedTextStyle,
+            active && styles.selectedTextStyleActive,
+          ]}
+        >
+          {label}
+        </Text>
+      </View>
+    )
+  }
+)
 
 const MultiselectDropdown: FC<Props> = (props) => {
   const {
@@ -59,6 +85,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
     classes,
     labelField = 'label',
     valueField = 'value',
+    flagField,
   } = props
 
   const { t } = useTranslation()
@@ -100,6 +127,20 @@ const MultiselectDropdown: FC<Props> = (props) => {
     [t, theme.colors.palette.dark_placeholder, theme.colors.palette.primery]
   )
 
+  const renderItem = useCallback(
+    (item: Record<string, string | undefined>, active?: boolean) => {
+      return (
+        <DropdownItem
+          active={!!active}
+          iconUrl={item.iconUrl}
+          flagCode={flagField ? item[flagField] : undefined}
+          label={item[labelField] ?? ''}
+        />
+      )
+    },
+    [flagField, labelField]
+  )
+
   return (
     <View>
       {title ? (
@@ -137,15 +178,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
                 []
             )
           }}
-          renderItem={(item, active) => {
-            return (
-              <DropdownItem
-                active={!!active}
-                iconUrl={item.iconUrl}
-                label={item[labelField]}
-              />
-            )
-          }}
+          renderItem={renderItem}
         />
 
         {selectedOptions.length ? (
@@ -155,6 +188,11 @@ const MultiselectDropdown: FC<Props> = (props) => {
                 key={item[valueField] as string}
                 style={styles.selectedStyle}
               >
+                {flagField && item[flagField] ? (
+                  <OptionFlag code={item[flagField]} />
+                ) : (
+                  <></>
+                )}
                 <Text numberOfLines={1} style={styles.textSelectedStyle}>
                   {item[labelField]}
                 </Text>

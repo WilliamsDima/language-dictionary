@@ -242,6 +242,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
         options={languagesOptions}
         labelField="nativeName"
         valueField="code"
+        flagField="emoji"
         classes={{
           title: styles.titleSelect,
         }}

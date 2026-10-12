@@ -147,6 +147,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
           selects={languages}
           labelField="nativeName"
           valueField="code"
+          flagField="emoji"
           onSelects={onSelectLanguages}
           options={languagesOptions}
           placeholder={t('ui.language_selection')}
