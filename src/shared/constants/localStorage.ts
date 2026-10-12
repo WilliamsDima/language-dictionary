@@ -5,5 +5,4 @@ export enum LOCAL_KEYS {
   watchYearResult = 'watchYearResult',
   appLanguage = 'appLanguage', // en,ru ...
   showVariantList = 'showVariantList',
-  appReviewModalDismissed = 'appReviewModalDismissed',
 }

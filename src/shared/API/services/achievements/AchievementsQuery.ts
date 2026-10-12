@@ -15,18 +15,6 @@ export const achievementsAPI = baseApi.injectEndpoints({
       providesTags: ['achievements'],
     }),
 
-    // выдаёт достижение "оставил отзыв о приложении" (code = app_reviewer).
-    // Идемпотентно на бэкенде, вызывается спустя задержку после перехода в
-    // стор из ModalAppReview — без реальной проверки того, что отзыв правда
-    // оставлен. Инвалидируем achievements, чтобы ModalAchievementUnlocked
-    // сам подхватил новую разблокировку (unlocked && !seen)
-    submitAppReview: build.mutation<AchievementsResponse, void>({
-      async queryFn() {
-        return toRtkQueryResult(await achievementsService.submitAppReview())
-      },
-      invalidatesTags: ['achievements'],
-    }),
-
     // подтверждает показ модалки разблокировки (seen = true). Ответ — тот же
     // список, что и у GET /achievements, поэтому кладём его прямо в кэш
     // getAchievements вместо лишнего рефетча. Ошибку глотаем: непомеченное
@@ -56,6 +44,5 @@ export const achievementsAPI = baseApi.injectEndpoints({
 export const {
   useGetAchievementsQuery,
   useLazyGetAchievementsQuery,
-  useSubmitAppReviewMutation,
   useMarkAchievementsSeenMutation,
 } = achievementsAPI

@@ -52,7 +52,6 @@ const ModalAchievementUnlocked: FC<Props> = () => {
     isAuth,
     isWatchSplash,
     showDailyStreakSuccessModal,
-    showAppReviewModal,
     showYearResult,
   } = useAppSelector((store) => store.app)
 
@@ -85,15 +84,8 @@ const ModalAchievementUnlocked: FC<Props> = () => {
   // не перекрываем другие глобальные модалки — покажемся после их закрытия
   const isOtherModalVisible = useMemo(
     () =>
-      showDailyStreakSuccessModal ||
-      showAppReviewModal ||
-      (showYearResult && hasYearResultSlides),
-    [
-      showDailyStreakSuccessModal,
-      showAppReviewModal,
-      showYearResult,
-      hasYearResultSlides,
-    ]
+      showDailyStreakSuccessModal || (showYearResult && hasYearResultSlides),
+    [showDailyStreakSuccessModal, showYearResult, hasYearResultSlides]
   )
 
   // isWatchSplash — не показываемся поверх сплэш-экрана при запуске

@@ -35,7 +35,6 @@
       "right": "Right-handed"
     },
     "update_is_available": "Update available",
-    "rate_app": "Leave a review",
     "save_json": "Save cards as a JSON file",
     "save_json_error": "Failed to save the file. Data copied to clipboard",
     "save_json_load_error": "Failed to load cards. Check your connection and try again",
@@ -164,10 +163,6 @@
     "modalUpdateApp": {
       "title": "A new update is available.",
       "subtitle": "Install the latest version to get the newest improvements and fixes."
-    },
-    "modalAppReview": {
-      "title": "Enjoying Nori?",
-      "subtitle": "Rate the app — it helps us improve"
     },
     "modalDailyStreakSuccess": {
       "title": "Your streak continues!"

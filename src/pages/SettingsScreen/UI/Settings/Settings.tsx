@@ -6,7 +6,6 @@ import { styles } from './Settings.styles'
 import Select from '@/shared/UI/Select/Select'
 import SaveData from '../SaveData/SaveData'
 import UpdateButton from '../UpdateButton/UpdateButton'
-import AppReviewButton from '../AppReviewButton/AppReviewButton'
 import { useTranslation } from '@/shared/i18n/types'
 import { MainButtonSide, ShowVariantList } from '@/shared/store/slice/userSlice'
 import {
@@ -101,7 +100,6 @@ const Settings: FC = () => {
 
       <SaveData />
       <UpdateButton />
-      <AppReviewButton />
     </View>
   )
 }
