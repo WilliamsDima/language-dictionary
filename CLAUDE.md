@@ -37,7 +37,7 @@ yarn icons:svg          # regenerate SVG icon components + registry from src/ass
 yarn android-bundle     # produce a release Android JS bundle
 ```
 
-`postinstall` runs `patch-package` automatically after `yarn install`.
+Release APKs are built and published by `.github/workflows/release-apk.yml` on push to `main` (see README → «Релиз APK»). Text-to-speech is a local TurboModule (`src/shared/native/NativeTextToSpeech.ts` + `android/app/src/main/java/com/wordcards/tts/`), not a third-party library — don't patch `node_modules`.
 
 ## Architecture
 
@@ -64,7 +64,7 @@ Feature-Sliced Design (FSD), enforced top to bottom — `app → pages → widge
 
 ### Env / config
 
-`react-native-dotenv` maps `.env` → the `@env` module (VK app id, Google web client id, GitHub token/owner/repo used by in-app update checks). `app.json` holds the RN app name.
+`react-native-dotenv` maps `.env` → the `@env` module (VK app id, Google web client id; `GITHUB_*` are declared but unused — in-app update checks read `https://wordcards-admin.duckdns.org/apk/latest.json`). `app.json` holds the RN app name.
 
 ## Conventions (full detail in `RULES.md` — read it for non-trivial changes)
 

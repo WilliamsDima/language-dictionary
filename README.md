@@ -1,4 +1,4 @@
-Word Cards - <a href="https://play.google.com/store/apps/details?id=com.williamsdev.wordcards" target="_blank">Google Play</a>
+Word Cards - <a href="https://wordcards-admin.duckdns.org/download" target="_blank">скачать APK</a>
 
 <ul>
 	<li><a href="https://t.me/DyWilliams">front - Dmitry Williams</a></li>
@@ -38,6 +38,57 @@ Word Cards - <a href="https://play.google.com/store/apps/details?id=com.williams
 - `hooks` – кастомные хуки.
 - `store` – инициализация redux store.
 - `services` – инстанс api (axios, RTK Query, Firebase).
+
+## Релиз APK
+
+Приложение не публикуется в Google Play — оно распространяется APK-файлом со страницы https://wordcards-admin.duckdns.org/download.
+
+### Как это работает
+
+- Каждый push в `main` (и ручной запуск `workflow_dispatch`) запускает `.github/workflows/release-apk.yml`: собирает подписанный release APK (только `armeabi-v7a` и `arm64-v8a`) и по SSH загружает его на VPS вместе с `release.json`. Сервер сам проверяет релиз, публикует его, ротирует старые версии и возвращает опубликованный `latest.json` — он выводится в summary джоба вместе с SHA-256 сертификата подписи.
+- Экран настроек (`VersionBlock`) читает https://wordcards-admin.duckdns.org/apk/latest.json и, если его `versionCode` больше установленного, показывает «Доступна версия X» и кнопку «Обновить», ведущую на страницу скачивания.
+- `versionCode` = `baseVersionCode` из `android/app/build.gradle` (последний versionCode из Google Play) + номер запуска воркфлоу (`github.run_number`). Он передаётся в Gradle как `-PWORDCARDS_VERSION_CODE`, файл в репозитории не меняется. Перезапуск того же запуска («Re-run jobs») публикует тот же код повторно — сервер это допускает. Если воркфлоу удалить или переименовать, `run_number` начнётся заново — тогда поднимите `baseVersionCode` выше опубликованного кода.
+- `versionName` берётся из `versionName "..."` в `android/app/build.gradle` (поле `version` в `package.json` для релиза не используется).
+
+### Как поднять версию
+
+Поменяйте `versionName` в `android/app/build.gradle` (допустимы латиница, цифры, `.`, `_`, `-`, до 32 символов, например `2.1.0`) и запушьте в `main`. `versionCode` растёт сам. `baseVersionCode` и `versionName` должны оставаться простыми литералами — воркфлоу читает их из файла.
+
+### GitHub Secrets
+
+| Секрет | Что это |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | keystore подписи в base64 (тот же ключ, что и для Google Play) |
+| `ANDROID_KEYSTORE_PASSWORD` | пароль keystore |
+| `ANDROID_KEY_ALIAS` | alias ключа |
+| `ANDROID_KEY_PASSWORD` | пароль ключа |
+| `GOOGLE_SERVICES_JSON_BASE64` | `android/app/google-services.json` в base64 |
+| `GOOGLE_WEB_CLIENT_ID` | значение `GOOGLE_WEB_CLIENT_ID` из `.env` |
+| `APK_UPLOAD_SSH_KEY` | приватный ed25519-ключ пользователя `wordcards-apk` на сервере |
+| `APK_UPLOAD_HOST` | адрес сервера |
+| `APK_UPLOAD_KNOWN_HOSTS` | строка known_hosts сервера (`<ip> ssh-ed25519 AAAA...`) |
+| `APP_CENTER_SECRET` | необязательный: App Center secret (если не задан — пустая строка, как в локальной сборке без него) |
+
+`API_BASE_URL` секретом не является — воркфлоу сам пишет в `.env` прод `https://wordcards-api.duckdns.org`. Серверная часть (пользователь `wordcards-apk`, ключи, SHA сертификата в Firebase) описана в `dictionary-backend/deploy/DEPLOY.md`, §16.
+
+Base64 из файла в PowerShell (результат сразу в буфер обмена):
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\path\to\release.keystore")) | Set-Clipboard
+```
+
+### Локальная release-сборка
+
+Подпись настраивается Gradle-свойствами — добавьте в `%USERPROFILE%\.gradle\gradle.properties` (не в репозиторий):
+
+```properties
+WORDCARDS_UPLOAD_STORE_FILE=C:/path/to/release.keystore
+WORDCARDS_UPLOAD_STORE_PASSWORD=...
+WORDCARDS_UPLOAD_KEY_ALIAS=...
+WORDCARDS_UPLOAD_KEY_PASSWORD=...
+```
+
+Без этих свойств `assembleRelease` подписывает APK debug-ключом, как раньше (в CI подпись обязательна — без ключа сборка падает).
 
 ## Возможные ошибки и исправления
 
