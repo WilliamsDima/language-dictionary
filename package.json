@@ -13,7 +13,6 @@
     "icons:svg:gen": "svgr --config-file src/assets/icons/svg/.svgrrc.cjs --out-dir src/assets/icons/svg/components --no-index src/assets/icons/svg/src",
     "icons:svg:register": "node scripts/generate-icon-registry.js",
     "icons:svg": "yarn icons:svg:gen && yarn icons:svg:register",
-    "postinstall": "patch-package",
     "android-bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
@@ -38,7 +37,6 @@
     "intl-pluralrules": "^2.0.1",
     "js-base64": "^3.7.8",
     "lottie-react-native": "^7.1.0",
-    "patch-package": "^8.0.0",
     "react": "19.2.3",
     "react-i18next": "^16.0.1",
     "react-native": "0.84.1",
