@@ -73,6 +73,36 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 def appCenterSecret = project.hasProperty("APP_CENTER_SECRET") ? project.APP_CENTER_SECRET : ""
 
+/**
+ * Release signing. The keystore and its passwords are never committed: they come
+ * from Gradle properties - locally from ~/.gradle/gradle.properties
+ * (%USERPROFILE%/.gradle/gradle.properties on Windows) or -P..., in CI from
+ * ORG_GRADLE_PROJECT_* env vars (see README, "Релиз APK").
+ * Without them a release build falls back to the debug key, so a local
+ * assembleRelease keeps working; CI sets WORDCARDS_REQUIRE_RELEASE_SIGNING=true
+ * so a missing key fails the build instead of publishing a debug-signed APK.
+ */
+def releaseStoreFile = findProperty("WORDCARDS_UPLOAD_STORE_FILE")
+def releaseStorePassword = findProperty("WORDCARDS_UPLOAD_STORE_PASSWORD")
+def releaseKeyAlias = findProperty("WORDCARDS_UPLOAD_KEY_ALIAS")
+def releaseKeyPassword = findProperty("WORDCARDS_UPLOAD_KEY_PASSWORD")
+def hasReleaseSigning = [releaseStoreFile, releaseStorePassword, releaseKeyAlias, releaseKeyPassword].every { it }
+def requireReleaseSigning = findProperty("WORDCARDS_REQUIRE_RELEASE_SIGNING") == "true"
+
+if (requireReleaseSigning && !hasReleaseSigning) {
+    throw new GradleException("Release signing is required, but WORDCARDS_UPLOAD_* properties are not set")
+}
+
+/**
+ * baseVersionCode = versionCode of the last Google Play build. CI publishes
+ * versionCode = baseVersionCode + run number and passes it as -PWORDCARDS_VERSION_CODE,
+ * without editing this file (see .github/workflows/release-apk.yml). The CI job reads
+ * baseVersionCode and versionName from this file - keep both as plain literals.
+ * Bump versionName below for a new release.
+ */
+def baseVersionCode = 26
+def versionCodeOverride = findProperty("WORDCARDS_VERSION_CODE")
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -83,7 +113,7 @@ android {
         applicationId "com.williamsdev.wordcards"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 26
+        versionCode versionCodeOverride ? versionCodeOverride.toString().toInteger() : baseVersionCode
         versionName "2.0.0"
         buildConfigField "String", "APP_CENTER_SECRET", "\"${appCenterSecret}\""
     }
@@ -94,15 +124,22 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        if (hasReleaseSigning) {
+            release {
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // real key when WORDCARDS_UPLOAD_* properties are set, debug key otherwise (see above)
+            signingConfig hasReleaseSigning ? signingConfigs.release : signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             buildConfigField "String", "APP_CENTER_SECRET", "\"${appCenterSecret}\""

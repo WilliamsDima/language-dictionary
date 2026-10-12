@@ -1,0 +1,307 @@
+# Builds a signed release APK and publishes it to the production VPS, where it
+# is served from https://wordcards-admin.duckdns.org/download (the app checks
+# https://wordcards-admin.duckdns.org/apk/latest.json for updates).
+#
+# The runner only streams a tar (app.apk + release.json) over SSH: on the server
+# the wordcards-apk key is bound to a forced command that validates, publishes
+# and rotates releases, then prints the published latest.json to stdout.
+# How it works, the secrets list and how to bump the version: README.md,
+# section "Релиз APK". Server side: dictionary-backend/deploy/DEPLOY.md, §16.
+name: Release APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One publication at a time; a newer push waits instead of cancelling a
+# half-finished upload (versionCode must only grow on the server).
+concurrency:
+  group: release-apk
+  cancel-in-progress: false
+
+env:
+  # production API baked into the JS bundle via react-native-dotenv (.env)
+  API_BASE_URL: https://wordcards-api.duckdns.org
+  LATEST_JSON_URL: https://wordcards-admin.duckdns.org/apk/latest.json
+  # real devices only: drops x86/x86_64 emulator libs, roughly halving APK size
+  # and native build time
+  REACT_NATIVE_ARCHITECTURES: armeabi-v7a,arm64-v8a
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Check required secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          APK_UPLOAD_SSH_KEY: ${{ secrets.APK_UPLOAD_SSH_KEY }}
+          APK_UPLOAD_HOST: ${{ secrets.APK_UPLOAD_HOST }}
+          APK_UPLOAD_KNOWN_HOSTS: ${{ secrets.APK_UPLOAD_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS \
+            ANDROID_KEY_PASSWORD GOOGLE_SERVICES_JSON_BASE64 GOOGLE_WEB_CLIENT_ID \
+            APK_UPLOAD_SSH_KEY APK_UPLOAD_HOST APK_UPLOAD_KNOWN_HOSTS; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository secret $name is not set (see README.md, \"Релиз APK\")"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: version
+        run: |
+          set -euo pipefail
+          gradle_file=android/app/build.gradle
+
+          base_code="$(sed -nE 's/^def baseVersionCode = ([0-9]+)[[:space:]]*$/\1/p' "$gradle_file")"
+          version_name="$(sed -nE 's/^[[:space:]]*versionName "([^"]+)"[[:space:]]*$/\1/p' "$gradle_file")"
+
+          if [ -z "$base_code" ] || [ -z "$version_name" ]; then
+            echo "::error::Cannot read baseVersionCode/versionName from $gradle_file"
+            exit 1
+          fi
+
+          # versionCode = last Google Play versionCode + workflow run number:
+          # run_number grows with every run of this workflow and stays the same
+          # on "Re-run jobs", so a re-run republishes the same code (allowed by
+          # the server for the same versionName) and a new run is always higher.
+          version_code=$(( base_code + GITHUB_RUN_NUMBER ))
+
+          if ! printf '%s' "$version_name" | grep -Eq '^[0-9A-Za-z][0-9A-Za-z._-]{0,31}$'; then
+            echo "::error::versionName \"$version_name\" does not match ^[0-9A-Za-z][0-9A-Za-z._-]{0,31}\$"
+            exit 1
+          fi
+          if [ "$version_code" -lt 1 ] || [ "$version_code" -gt 2100000000 ]; then
+            echo "::error::versionCode $version_code is out of range 1..2100000000"
+            exit 1
+          fi
+
+          echo "Release $version_name ($version_code)"
+          echo "name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "code=$version_code" >> "$GITHUB_OUTPUT"
+
+      # Fail fast (before a long build) if the server already has a newer
+      # release. The server enforces this anyway; 404 = nothing published yet.
+      - name: Check published version
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+        run: |
+          set -euo pipefail
+          if ! published="$(curl -fsS --max-time 20 -H 'Cache-Control: no-cache' "$LATEST_JSON_URL")"; then
+            echo "No published latest.json yet (or it is unreachable) - skipping the check"
+            exit 0
+          fi
+
+          published_code="$(printf '%s' "$published" | jq -r '.versionCode // empty')"
+          published_name="$(printf '%s' "$published" | jq -r '.versionName // empty')"
+          echo "Published: $published_name ($published_code)"
+
+          if [ -z "$published_code" ]; then
+            exit 0
+          fi
+          if [ "$VERSION_CODE" -lt "$published_code" ] || \
+             { [ "$VERSION_CODE" -eq "$published_code" ] && [ "$VERSION_NAME" != "$published_name" ]; }; then
+            echo "::error::versionCode $VERSION_CODE ($VERSION_NAME) is not greater than published $published_code ($published_name). Raise baseVersionCode in android/app/build.gradle."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Restore build secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          set -euo pipefail
+
+          # tr strips CR/LF/spaces in case base64 was pasted wrapped or with
+          # Windows line endings
+          keystore="$RUNNER_TEMP/wordcards-release/release.keystore"
+          install -d -m 700 "$(dirname "$keystore")"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d '\r\n\t ' | base64 -d > "$keystore"
+          chmod 600 "$keystore"
+          echo "KEYSTORE_FILE=$keystore" >> "$GITHUB_ENV"
+
+          printf '%s' "$GOOGLE_SERVICES_JSON_BASE64" | tr -d '\r\n\t ' | base64 -d > android/app/google-services.json
+          jq -e . android/app/google-services.json > /dev/null
+
+          {
+            printf 'API_BASE_URL=%s\n' "$API_BASE_URL"
+            printf 'GOOGLE_WEB_CLIENT_ID=%s\n' "$(printf '%s' "$GOOGLE_WEB_CLIENT_ID" | tr -d '\r\n')"
+          } > .env
+
+      - name: Build signed release APK
+        working-directory: android
+        env:
+          # Gradle maps ORG_GRADLE_PROJECT_<name> to project properties, so the
+          # passwords never appear on the command line
+          ORG_GRADLE_PROJECT_WORDCARDS_UPLOAD_STORE_FILE: ${{ env.KEYSTORE_FILE }}
+          ORG_GRADLE_PROJECT_WORDCARDS_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_WORDCARDS_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ORG_GRADLE_PROJECT_WORDCARDS_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_APP_CENTER_SECRET: ${{ secrets.APP_CENTER_SECRET }}
+        run: |
+          ./gradlew assembleRelease \
+            --no-daemon \
+            --stacktrace \
+            -PWORDCARDS_REQUIRE_RELEASE_SIGNING=true \
+            -PWORDCARDS_VERSION_CODE=${{ steps.version.outputs.code }} \
+            -PreactNativeArchitectures="$REACT_NATIVE_ARCHITECTURES"
+
+      - name: Verify APK
+        id: apk
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+        run: |
+          set -euo pipefail
+          apk=android/app/build/outputs/apk/release/app-release.apk
+          build_tools="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n 1)"
+
+          # first line only ("package: ... versionCode=... versionName=..."); no
+          # "| head" - with pipefail an early-closed pipe would fail the step
+          badging="$("$build_tools/aapt2" dump badging "$apk")"
+          badging="${badging%%$'\n'*}"
+          echo "$badging"
+          grep -q "versionCode='$VERSION_CODE'" <<< "$badging" || { echo "::error::APK versionCode mismatch"; exit 1; }
+          grep -q "versionName='$VERSION_NAME'" <<< "$badging" || { echo "::error::APK versionName mismatch"; exit 1; }
+
+          certs="$("$build_tools/apksigner" verify --print-certs "$apk")"
+          echo "$certs"
+          # "Signer #1 ..." or "V2 Signer: ..." depending on apksigner version/schemes
+          cert_sha256="$(grep -m 1 -oiE 'certificate SHA-256 digest: [0-9a-f]+' <<< "$certs" | awk '{print $NF}' || true)"
+          if [ -z "$cert_sha256" ]; then
+            echo "::error::Cannot read the APK signing certificate"
+            exit 1
+          fi
+
+          # never publish an APK signed with the repo debug key
+          debug_sha256="$(keytool -list -v -keystore android/app/debug.keystore -storepass android \
+            -alias androiddebugkey | sed -nE 's/^[[:space:]]*SHA256: //p' | tr -d ':' | tr 'A-F' 'a-f')"
+          if [ "$cert_sha256" = "$debug_sha256" ]; then
+            echo "::error::APK is signed with the debug key"
+            exit 1
+          fi
+          echo "cert_sha256=$cert_sha256" >> "$GITHUB_OUTPUT"
+
+          size="$(stat -c %s "$apk")"
+          if [ "$size" -ge $((250 * 1024 * 1024)) ]; then
+            echo "::error::APK is $size bytes, the server accepts up to 250 MB"
+            exit 1
+          fi
+          echo "APK size: $size bytes"
+
+      - name: Prepare upload
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+        run: |
+          set -euo pipefail
+          upload_dir="$RUNNER_TEMP/apk-upload"
+          install -d "$upload_dir"
+          cp android/app/build/outputs/apk/release/app-release.apk "$upload_dir/app.apk"
+
+          commit="$(git rev-parse HEAD | tr 'A-F' 'a-f')"
+          changelog="$(git log -1 --format=%s)"
+
+          jq -n \
+            --arg versionName "$VERSION_NAME" \
+            --argjson versionCode "$VERSION_CODE" \
+            --arg commit "$commit" \
+            --arg changelog "$changelog" \
+            '{versionName: $versionName, versionCode: $versionCode, commit: $commit, changelog: $changelog[0:4000]}' \
+            > "$upload_dir/release.json"
+
+          cat "$upload_dir/release.json"
+          echo "UPLOAD_DIR=$upload_dir" >> "$GITHUB_ENV"
+
+      - name: Upload to server
+        env:
+          APK_UPLOAD_SSH_KEY: ${{ secrets.APK_UPLOAD_SSH_KEY }}
+          APK_UPLOAD_HOST: ${{ secrets.APK_UPLOAD_HOST }}
+          APK_UPLOAD_KNOWN_HOSTS: ${{ secrets.APK_UPLOAD_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+
+          ssh_dir="$RUNNER_TEMP/apk-ssh"
+          install -d -m 700 "$ssh_dir"
+          KEY="$ssh_dir/key"
+          KNOWN="$ssh_dir/known_hosts"
+          # tr strips CR in case a secret was pasted with Windows line endings
+          printf '%s\n' "$APK_UPLOAD_SSH_KEY" | tr -d '\r' > "$KEY"
+          printf '%s\n' "$APK_UPLOAD_KNOWN_HOSTS" | tr -d '\r' > "$KNOWN"
+          chmod 600 "$KEY" "$KNOWN"
+
+          # Uncompressed tar on stdin, no remote command (forced on the
+          # server). Server log goes to stderr, the published latest.json to
+          # stdout; exit 0 = published.
+          tar -C "$UPLOAD_DIR" -cf - app.apk release.json | ssh -T \
+            -i "$KEY" \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$KNOWN" \
+            -o GlobalKnownHostsFile=/dev/null \
+            -o HostKeyAlgorithms=ssh-ed25519 \
+            -o ConnectTimeout=20 \
+            -o ServerAliveInterval=30 \
+            "wordcards-apk@$APK_UPLOAD_HOST" > "$RUNNER_TEMP/latest.json"
+
+          # already published at this point (ssh exited 0); stdout that is not
+          # valid JSON is only printed as is, it does not fail the job
+          jq . "$RUNNER_TEMP/latest.json" 2>/dev/null || cat "$RUNNER_TEMP/latest.json"
+
+      - name: Job summary
+        if: success()
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+          CERT_SHA256: ${{ steps.apk.outputs.cert_sha256 }}
+        run: |
+          {
+            echo "## APK $VERSION_NAME ($VERSION_CODE) published"
+            echo
+            echo "- Download page: https://wordcards-admin.duckdns.org/download"
+            echo "- Signing certificate SHA-256: \`$CERT_SHA256\`"
+            echo
+            echo "### latest.json"
+            echo
+            echo '```json'
+            jq . "$RUNNER_TEMP/latest.json" 2>/dev/null || cat "$RUNNER_TEMP/latest.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove secrets from the runner
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/apk-ssh" "$RUNNER_TEMP/wordcards-release" "$RUNNER_TEMP/apk-upload"
+          rm -f .env android/app/google-services.json
