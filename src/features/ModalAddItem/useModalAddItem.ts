@@ -15,6 +15,7 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { useCards } from '@/shared/hooks/useCards'
 import { useLanguageByCode } from '@/shared/hooks/useLanguageByCode'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import { IItem } from '@/entities/Item/model/item'
 import { useSimilarItems } from './useSimilarItems'
 
@@ -51,7 +52,15 @@ export const useModalAddItem = () => {
   // строка, слово в которой редактировали последней, — для неё ищем похожие карточки
   const [activeItemId, setActiveItemId] = useState<number | null>(null)
 
+  const { data: profile } = useMeProfile()
   const itemEditLanguage = useLanguageByCode(itemEdit?.language)
+
+  // если в профиле выбран ровно один изучаемый язык — при создании карточки
+  // подставляем его сразу, чтобы не выбирать вручную каждый раз
+  const singleProfileLanguage = useMemo(
+    () => (profile?.languages.length === 1 ? profile.languages[0] : undefined),
+    [profile?.languages]
+  )
 
   const similarHint = useSimilarItems({
     items,
@@ -177,6 +186,14 @@ export const useModalAddItem = () => {
       setLanguage(itemEditLanguage)
     }
   }, [itemEdit, itemEditLanguage])
+
+  // язык по умолчанию — только для новой карточки и только пока модалка
+  // открыта: onCancelHandler при закрытии сбрасывает язык в undefined
+  useEffect(() => {
+    if (showAddModal && !itemEdit && !language && singleProfileLanguage) {
+      setLanguage(singleProfileLanguage)
+    }
+  }, [showAddModal, itemEdit, language, singleProfileLanguage])
 
   return {
     onSelectLanguage,
