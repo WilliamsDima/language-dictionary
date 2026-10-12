@@ -87,6 +87,7 @@ const ModalDailyStreakSuccess: FC<Props> = () => {
         {dailyStreakAnimation ? (
           <AnimatedCounter
             mode="slide"
+            withHaptic
             start={isCelebrationReady}
             from={dailyStreakAnimation.from}
             value={dailyStreakAnimation.to}

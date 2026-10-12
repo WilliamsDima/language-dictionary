@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Animated, View } from 'react-native'
+import { Animated, Vibration, View } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import Text from '../Text/Text'
 
@@ -11,7 +11,13 @@ interface AnimatedCounterProps {
   colorFrom?: string
   colorTo?: string
   mode?: 'count' | 'slide'
+  // короткая вибрация в момент смены цифры (только для mode="slide":
+  // в режиме count цифра меняется десятки раз за анимацию)
+  withHaptic?: boolean
 }
+
+// длительность «тика» на Android; VIBRATE уже есть в AndroidManifest
+const HAPTIC_TICK_MS = 30
 
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
@@ -21,6 +27,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   colorFrom,
   colorTo,
   mode = 'count',
+  withHaptic = false,
 }) => {
   const { theme } = useUnistyles()
 
@@ -57,7 +64,15 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         }),
       ]).start()
 
-      return
+      if (!withHaptic || from === value) return
+
+      // старая и новая цифры пересекаются ровно на середине слайда —
+      // в этот момент и даём короткий тактильный «тик»
+      const hapticTimeout = setTimeout(() => {
+        Vibration.vibrate(HAPTIC_TICK_MS)
+      }, resolvedDuration / 2)
+
+      return () => clearTimeout(hapticTimeout)
     }
 
     animatedValue.setValue(from)
@@ -86,6 +101,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     colorProgress,
     isSlideMode,
     slideProgress,
+    withHaptic,
   ])
 
   useEffect(() => {
