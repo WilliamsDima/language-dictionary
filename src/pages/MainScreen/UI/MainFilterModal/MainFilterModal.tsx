@@ -9,7 +9,8 @@ import Button from '@/shared/UI/Button/Button'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
 import type { SelectOption } from '@/shared/UI/types'
 import { useTranslation } from '@/shared/i18n/types'
-import type { AppLanguageType } from '@/shared/store/slice/appSlice'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
@@ -22,7 +23,6 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
 
-  const { aplication } = useAppSelector((store) => store.app)
   const { filterMain } = useAppSelector((store) => store.items)
 
   const sortByDate: SelectOption[] = useMemo(() => {
@@ -42,15 +42,17 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
 
   const [sortDateValue, setSortDateValue] =
     useState<SelectOption>(defaultSortDateValue)
-  const [languages, setLanguages] = useState<AppLanguageType[]>([])
-
-  const languagesOptions = useMemo(() => {
-    return aplication?.appLanguages
-      ? Object.values(aplication?.appLanguages)
-      : []
-  }, [aplication])
-
+  const [languages, setLanguages] = useState<ILanguage[]>([])
   const [isLoading, setIsLoading] = useState(false)
+
+  const { data: profile } = useMeProfile()
+
+  // изучаемые языки пользователя — карточки фильтруются по их code
+  // (IItem.language), а не по языкам интерфейса
+  const languagesOptions = useMemo(
+    () => profile?.languages ?? [],
+    [profile?.languages]
+  )
 
   const syncFromStore = useCallback(() => {
     const sortOption =
@@ -58,11 +60,14 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
       defaultSortDateValue
     setSortDateValue(sortOption)
 
+    // коды, которых нет среди изучаемых языков (например, сохранённые ранее
+    // ru/en языков интерфейса или удалённый из профиля язык), просто
+    // отбрасываются — применение фильтра перезапишет их в сторе
     const selectedLanguages = filterMain?.languages ?? []
     setLanguages(
       selectedLanguages
         .map((code) => languagesOptions.find((lang) => lang.code === code))
-        .filter((lang): lang is AppLanguageType => !!lang)
+        .filter((lang): lang is ILanguage => !!lang)
     )
   }, [defaultSortDateValue, filterMain, languagesOptions, sortByDate])
 
@@ -84,7 +89,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
     setSortDateValue(value)
   }
 
-  const onSelectLanguages = (value: AppLanguageType[]) => {
+  const onSelectLanguages = (value: ILanguage[]) => {
     setLanguages(value)
   }
 
@@ -145,9 +150,9 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
         <MultiselectDropdown
           title={t('ui.language')}
           selects={languages}
-          labelField="nativeName"
+          labelField="name"
           valueField="code"
-          flagField="emoji"
+          emojiField="emoji"
           onSelects={onSelectLanguages}
           options={languagesOptions}
           placeholder={t('ui.language_selection')}

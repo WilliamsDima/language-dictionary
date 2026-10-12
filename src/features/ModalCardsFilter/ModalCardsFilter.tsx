@@ -13,8 +13,8 @@ import { ShowVariantListVale } from '@/shared/store/slice/userSlice'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
 import { SelectOption } from '@/shared/UI/types'
 import { useTranslation } from '@/shared/i18n/types'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import type { AppLanguageType } from '@/shared/store/slice/appSlice'
+import { useMeProfile } from '@/shared/hooks/useMeProfile'
+import type { ILanguage } from '@/shared/API/services/languages/types'
 import type { CardsLimitValue } from '@/shared/store/slice/itemsSlice'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -71,9 +71,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useUnistyles()
 
-  const { aplication } = useAppSelector((store) => store.app)
-
-  const [languages, setLanguages] = useState<AppLanguageType[]>([])
+  const [languages, setLanguages] = useState<ILanguage[]>([])
   const [statusSelect, setStatusSelect] = useState<StatusItem>('STUDY')
   const [limitSelect, setLimitSelect] = useState<CardsLimitValue>('ALL')
 
@@ -93,6 +91,8 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
   const [showVariantSelect, setShowVariantSelect] =
     useState<SelectOption | null>(() => showVariantListOptions[0])
 
+  const { data: profile } = useMeProfile()
+
   const limitOptions: { label: string; value: CardsLimitValue }[] = useMemo(
     () => [
       { label: t('modal.modalCardsFilter.limit_all'), value: 'ALL' },
@@ -103,13 +103,14 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
     [t]
   )
 
-  const languagesOptions = useMemo(() => {
-    return aplication?.appLanguages
-      ? Object.values(aplication?.appLanguages)
-      : []
-  }, [aplication])
+  // изучаемые языки пользователя — карточки фильтруются по их code
+  // (IItem.language), а не по языкам интерфейса
+  const languagesOptions = useMemo(
+    () => profile?.languages ?? [],
+    [profile?.languages]
+  )
 
-  const onSelectLanguages = (value: AppLanguageType[]) => {
+  const onSelectLanguages = (value: ILanguage[]) => {
     setLanguages(value)
   }
 
@@ -240,9 +241,9 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
         selects={languages}
         onSelects={onSelectLanguages}
         options={languagesOptions}
-        labelField="nativeName"
+        labelField="name"
         valueField="code"
-        flagField="emoji"
+        emojiField="emoji"
         classes={{
           title: styles.titleSelect,
         }}

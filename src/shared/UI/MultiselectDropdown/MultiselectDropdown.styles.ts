@@ -93,15 +93,10 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  flag: {
-    width: theme.size.s20,
-    height: theme.size.s20,
-    borderRadius: theme.size.s20 / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
+  emoji: {
+    fontSize: theme.fontSize.s16,
+    lineHeight: theme.lineHeights.md,
     marginRight: theme.size.s8,
-    backgroundColor: theme.colors.palette.surface_light,
   },
   icon: {
     width: theme.size.s15,

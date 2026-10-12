@@ -9,7 +9,6 @@ import React, {
 import { useUnistyles } from 'react-native-unistyles'
 import { StyleProp, TextInput, TextStyle, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import CountryFlag from 'react-native-country-flag'
 import Text from '../Text/Text'
 import { MultiSelect } from 'react-native-element-dropdown'
 import { styles } from './MultiselectDropdown.styles'
@@ -26,39 +25,23 @@ interface Props {
   }
   labelField: string
   valueField: string
-  // поле опции с ISO-кодом страны (как emoji у языков интерфейса) —
-  // если задано, рядом с названием рисуется флаг через CountryFlag
-  flagField?: string
+  // поле опции с эмодзи (например, флаг у ILanguage.emoji) — если задано,
+  // эмодзи рисуется перед названием опции
+  emojiField?: string
 }
-
-const FLAG_SIZE = 16
-
-type OptionFlagProps = {
-  code: string
-}
-
-const OptionFlag = memo(({ code }: OptionFlagProps) => {
-  const isoCode = useMemo(() => code.toLocaleLowerCase(), [code])
-
-  return (
-    <View style={styles.flag}>
-      <CountryFlag isoCode={isoCode} size={FLAG_SIZE} />
-    </View>
-  )
-})
 
 type DropdownItemProps = {
   active: boolean
   iconUrl?: string
-  flagCode?: string
+  emoji?: string
   label: string
 }
 
 const DropdownItem = memo(
-  ({ active, iconUrl, flagCode, label }: DropdownItemProps) => {
+  ({ active, iconUrl, emoji, label }: DropdownItemProps) => {
     return (
       <View style={[styles.item, active && styles.itemActive]}>
-        {flagCode ? <OptionFlag code={flagCode} /> : <></>}
+        {emoji ? <Text style={styles.emoji}>{emoji}</Text> : <></>}
         {!!iconUrl && (
           <FastImage source={{ uri: iconUrl }} style={styles.icon} />
         )}
@@ -85,7 +68,7 @@ const MultiselectDropdown: FC<Props> = (props) => {
     classes,
     labelField = 'label',
     valueField = 'value',
-    flagField,
+    emojiField,
   } = props
 
   const { t } = useTranslation()
@@ -133,12 +116,12 @@ const MultiselectDropdown: FC<Props> = (props) => {
         <DropdownItem
           active={!!active}
           iconUrl={item.iconUrl}
-          flagCode={flagField ? item[flagField] : undefined}
+          emoji={emojiField ? item[emojiField] : undefined}
           label={item[labelField] ?? ''}
         />
       )
     },
-    [flagField, labelField]
+    [emojiField, labelField]
   )
 
   return (
@@ -188,8 +171,8 @@ const MultiselectDropdown: FC<Props> = (props) => {
                 key={item[valueField] as string}
                 style={styles.selectedStyle}
               >
-                {flagField && item[flagField] ? (
-                  <OptionFlag code={item[flagField]} />
+                {emojiField && item[emojiField] ? (
+                  <Text style={styles.emoji}>{item[emojiField]}</Text>
                 ) : (
                   <></>
                 )}
