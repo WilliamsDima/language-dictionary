@@ -63,7 +63,7 @@
         "title": "Связь:"
       }
     },
-    "version_faild": "Ваша версия приложения устарела",
+    "version_available": "Доступна версия {{version}}",
     "version": "Версия:",
     "update": "Обновить"
   },

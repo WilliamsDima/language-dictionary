@@ -63,7 +63,7 @@
         "title": "Contact:"
       }
     },
-    "version_faild": "Your app version is outdated",
+    "version_available": "Version {{version}} is available",
     "version": "Version:",
     "update": "Update"
   },

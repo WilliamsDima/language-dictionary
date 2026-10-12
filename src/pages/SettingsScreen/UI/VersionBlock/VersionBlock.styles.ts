@@ -18,7 +18,7 @@ export const styles = StyleSheet.create((theme) => ({
     textAlign: 'center',
   },
 
-  versionInvalid: {
+  versionAvailable: {
     fontSize: theme.fontSize.s14,
     color: theme.colors.palette.red,
     textAlign: 'center',

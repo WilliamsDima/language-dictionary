@@ -3,34 +3,40 @@ import React, { FC, useMemo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { styles } from './VersionBlock.styles'
 import openInBrowser from '@/shared/helpers/openInBrowser'
-import { GOOGLE_PLAY } from '@/shared/constants/app'
+import { APP_DOWNLOAD_PAGE_URL } from '@/shared/constants/app'
 import DeviceInfo from 'react-native-device-info'
 import { useTranslation } from '@/shared/i18n/types'
-import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
-import { compareVersions } from '@/shared/helpers/compareVersions'
+import { useGetLatestReleaseQuery } from '@/shared/API/services/appRelease/AppReleaseQuery'
+import { isNewerRelease } from '@/shared/API/services/appRelease/helpers'
 
 const toUpdate = () => {
-  openInBrowser(GOOGLE_PLAY)
+  openInBrowser(APP_DOWNLOAD_PAGE_URL)
 }
 
 // на экране — версия реально установленной сборки (versionName нативного
-// билда); version из app config (задаётся в админке) — актуальная версия
-// приложения, с ней сравнивается установленная для подсказки «обновить»
+// билда). Наличие обновления определяется по latest.json опубликованного
+// APK: его versionCode сравнивается с versionCode установленной сборки
+// (getBuildNumber). Нет манифеста/сети — просто показываем текущую версию
 const VersionBlock: FC = () => {
   const { t } = useTranslation()
 
-  const { data: appConfig } = useGetAppConfigQuery()
+  const { data: latestRelease } = useGetLatestReleaseQuery()
 
   const version = useMemo(() => DeviceInfo.getVersion(), [])
 
-  const latestVersion = useMemo(
-    () => appConfig?.version?.trim() ?? '',
-    [appConfig]
-  )
+  const buildNumber = useMemo(() => DeviceInfo.getBuildNumber(), [])
 
   const isOutdated = useMemo(
-    () => !!latestVersion && compareVersions(version, latestVersion) < 0,
-    [version, latestVersion]
+    () => isNewerRelease(latestRelease, buildNumber),
+    [latestRelease, buildNumber]
+  )
+
+  const availableVersionText = useMemo(
+    () =>
+      t('settingsScreen.version_available', {
+        version: latestRelease?.versionName ?? '',
+      }),
+    [t, latestRelease]
   )
 
   return (
@@ -41,9 +47,7 @@ const VersionBlock: FC = () => {
 
       {isOutdated ? (
         <>
-          <Text style={styles.versionInvalid}>
-            {t('settingsScreen.version_faild')}
-          </Text>
+          <Text style={styles.versionAvailable}>{availableVersionText}</Text>
           <TouchableOpacity onPress={toUpdate}>
             <Text style={styles.versionUpdate}>
               {t('settingsScreen.update')}

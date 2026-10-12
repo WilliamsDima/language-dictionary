@@ -72,7 +72,6 @@ export type AppConfigDTO = {
   // ключ может отсутствовать в старом закэшированном конфиге — трактуем это
   // как «фича выключена»
   year_in_review?: YearInReviewConfig
-  version?: string
   appName?: string
   socials?: AppConfigSocial[]
   about?: {
