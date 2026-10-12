@@ -28,6 +28,8 @@ import MainStatusSlide from './UI/MainStatusSlide/MainStatusSlide'
 import { normalizeMainButtonSide } from '../SettingsScreen/UI/Settings/data'
 import { useGetLanguagesQuery } from '@/shared/API/services/languages/LanguagesQuery'
 import type { ILanguage } from '@/shared/API/services/languages/types'
+import { useFocusEffect } from '@react-navigation/native'
+import { stopTextToSpeech } from '@/shared/helpers/textToSpeech'
 
 const MainScreen: FC = () => {
   const { setFilterByStatus } = useActions()
@@ -75,6 +77,13 @@ const MainScreen: FC = () => {
   useEffect(() => {
     currentStatusRef.current = filterByStatus
   }, [filterByStatus])
+
+  // озвучка слова с карточки не должна продолжаться после ухода с экрана
+  useFocusEffect(
+    useCallback(() => {
+      return stopTextToSpeech
+    }, [])
+  )
 
   const renderSlide = useCallback<ListRenderItem<(typeof tabs)[number]>>(
     ({ item }) => {

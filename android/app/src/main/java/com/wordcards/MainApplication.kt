@@ -9,13 +9,17 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
+import com.williamsdev.wordcards.tts.TextToSpeechPackage
 
 class MainApplication : Application(), ReactApplication {
 
     override val reactNativeHost: ReactNativeHost =
         object : DefaultReactNativeHost(this) {
             override fun getPackages(): List<ReactPackage> =
-                PackageList(this).packages.apply {}
+                PackageList(this).packages.apply {
+                    // локальный TurboModule озвучки (см. tts/TextToSpeechModule)
+                    add(TextToSpeechPackage())
+                }
 
             override fun getJSMainModuleName(): String = "index"
 

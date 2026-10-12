@@ -90,6 +90,14 @@
     "react-test-renderer": "19.2.3",
     "typescript": "^5.8.3"
   },
+  "codegenConfig": {
+    "name": "WordCardsSpecs",
+    "type": "modules",
+    "jsSrcsDir": "src/shared/native",
+    "android": {
+      "javaPackageName": "com.williamsdev.wordcards.specs"
+    }
+  },
   "engines": {
     "node": ">= 22.18.0"
   },

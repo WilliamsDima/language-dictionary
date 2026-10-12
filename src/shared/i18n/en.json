@@ -330,5 +330,10 @@
   },
   "splash": {
     "slogan": "Boosting your vocabulary with living flashcards"
+  },
+  "tts": {
+    "no_engine": "Speech is unavailable: no text-to-speech engine found on the device",
+    "lang_unavailable": "No voice for this language — install it in text-to-speech settings",
+    "error": "Could not pronounce the word"
   }
 }
