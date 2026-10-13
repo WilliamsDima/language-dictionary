@@ -5,4 +5,6 @@ export enum LOCAL_KEYS {
   watchYearResult = 'watchYearResult',
   appLanguage = 'appLanguage', // en,ru ...
   showVariantList = 'showVariantList',
+  // versionName релиза, отложенного кнопкой «Позже» в модалке обновления
+  skippedUpdateVersion = 'skippedUpdateVersion',
 }

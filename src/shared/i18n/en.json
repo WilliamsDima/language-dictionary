@@ -162,7 +162,12 @@
     },
     "modalUpdateApp": {
       "title": "A new update is available.",
-      "subtitle": "Install the latest version to get the newest improvements and fixes."
+      "subtitle": "Install the latest version to get the newest improvements and fixes.",
+      "version": "New version: {{version}}",
+      "required_title": "Update required",
+      "required_subtitle": "This version of the app is outdated. Install the new version to keep using the app.",
+      "later": "Later",
+      "whats_new": "What's new"
     },
     "modalDailyStreakSuccess": {
       "title": "Your streak continues!"

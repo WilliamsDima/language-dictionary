@@ -7,4 +7,11 @@ export type LatestReleaseDTO = {
   versionName: string
   // android versionCode опубликованного APK — сравнивается с установленным
   versionCode: number
+  // «Что нового» по языкам интерфейса. На сервере это поле changelog: CI
+  // кладёт туда JSON из release-notes/<versionName>.json. В старых
+  // latest.json (changelog — заголовок коммита или пусто) поля нет
+  notes?: ReleaseNotes
 }
+
+// код языка интерфейса (ru, en, ...) → непустой список пунктов
+export type ReleaseNotes = Partial<Record<string, string[]>>

@@ -7,7 +7,7 @@ import { APP_DOWNLOAD_PAGE_URL } from '@/shared/constants/app'
 import DeviceInfo from 'react-native-device-info'
 import { useTranslation } from '@/shared/i18n/types'
 import { useGetLatestReleaseQuery } from '@/shared/API/services/appRelease/AppReleaseQuery'
-import { isNewerRelease } from '@/shared/API/services/appRelease/helpers'
+import { hasAvailableUpdate } from '@/shared/API/services/appRelease/helpers'
 
 const toUpdate = () => {
   openInBrowser(APP_DOWNLOAD_PAGE_URL)
@@ -15,8 +15,10 @@ const toUpdate = () => {
 
 // на экране — версия реально установленной сборки (versionName нативного
 // билда). Наличие обновления определяется по latest.json опубликованного
-// APK: его versionCode сравнивается с versionCode установленной сборки
-// (getBuildNumber). Нет манифеста/сети — просто показываем текущую версию
+// APK (hasAvailableUpdate): semver versionName, при равных — versionCode
+// (getBuildNumber). Показывается при любом доступном обновлении, в т.ч.
+// отложенном кнопкой «Позже» в ModalUpdateApp. Нет манифеста/сети —
+// просто показываем текущую версию
 const VersionBlock: FC = () => {
   const { t } = useTranslation()
 
@@ -27,23 +29,29 @@ const VersionBlock: FC = () => {
   const buildNumber = useMemo(() => DeviceInfo.getBuildNumber(), [])
 
   const isOutdated = useMemo(
-    () => isNewerRelease(latestRelease, buildNumber),
-    [latestRelease, buildNumber]
+    () => hasAvailableUpdate(latestRelease, version, buildNumber),
+    [latestRelease, version, buildNumber]
+  )
+
+  // «2.1.0 (157)»: versionName и номер билда (versionCode, его ставит CI)
+  const versionText = useMemo(
+    () => `${t('settingsScreen.version')} ${version} (${buildNumber})`,
+    [t, version, buildNumber]
   )
 
   const availableVersionText = useMemo(
     () =>
       t('settingsScreen.version_available', {
-        version: latestRelease?.versionName ?? '',
+        version: latestRelease
+          ? `${latestRelease.versionName} (${latestRelease.versionCode})`
+          : '',
       }),
     [t, latestRelease]
   )
 
   return (
     <View style={styles.container}>
-      <Text style={styles.version}>
-        {t('settingsScreen.version')} {version}
-      </Text>
+      <Text style={styles.version}>{versionText}</Text>
 
       {isOutdated ? (
         <>

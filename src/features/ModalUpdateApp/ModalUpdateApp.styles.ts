@@ -36,6 +36,12 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.palette.gray_text,
   },
 
+  version: {
+    fontSize: theme.fontSize.s14,
+    color: theme.colors.text.primary,
+    fontFamily: 'Mulish-Bold',
+  },
+
   btns: {
     marginTop: theme.size.s20,
     flexDirection: 'row',

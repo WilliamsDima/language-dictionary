@@ -19,6 +19,9 @@ type Props = {
   title?: string
   subtitle?: string
   showClose?: boolean
+  // false — шторку нельзя закрыть пользователем: ни свайпом вниз, ни тапом
+  // по фону, ни крестиком (кнопку «назад» Android блокирует вызывающий код)
+  dismissible?: boolean
   children: ReactNode
   footer?: ReactNode
   snapPoints?: Array<string | number>
@@ -34,6 +37,7 @@ const BottomSheet: FC<Props> = ({
   title,
   subtitle,
   showClose = true,
+  dismissible = true,
   children,
   footer,
   snapPoints,
@@ -68,11 +72,11 @@ const BottomSheet: FC<Props> = ({
         disappearsOnIndex={-1}
         appearsOnIndex={0}
         opacity={0.5}
-        pressBehavior="close"
+        pressBehavior={dismissible ? 'close' : 'none'}
         style={styles.backdrop}
       />
     ),
-    []
+    [dismissible]
   )
 
   const header = useMemo(() => {
@@ -88,25 +92,27 @@ const BottomSheet: FC<Props> = ({
             {!!subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
           </View>
 
-          {showClose && (
+          {showClose && dismissible ? (
             <TouchableOpacity
               style={styles.closeButton}
               onPress={handleClosePress}
             >
               <CloseIcon width={22} height={22} />
             </TouchableOpacity>
+          ) : (
+            <></>
           )}
         </View>
       </View>
     )
-  }, [handleClosePress, showClose, subtitle, title])
+  }, [dismissible, handleClosePress, showClose, subtitle, title])
 
   return (
     <BottomSheetModal
       ref={sheetRef}
       onChange={handleChange}
       stackBehavior="push"
-      enablePanDownToClose
+      enablePanDownToClose={dismissible}
       backdropComponent={renderBackdrop}
       handleIndicatorStyle={styles.handleIndicator}
       backgroundStyle={styles.background}
