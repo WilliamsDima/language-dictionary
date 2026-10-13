@@ -4,4 +4,5 @@
 		<color name="status_bar_color">#08111F</color>
 		<color name="splash_bg">#08111F</color>
 		<color name="bootsplash_background">#08111F</color>
+		<color name="notification_color">#7CFF6B</color>
 </resources>

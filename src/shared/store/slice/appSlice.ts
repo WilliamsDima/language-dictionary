@@ -96,6 +96,10 @@ type InitialState = {
   appLanguage: AppLanguageType | null
   showDailyStreakSuccessModal: boolean
   dailyStreakAnimation: { from: number; to: number } | null
+  // системное разрешение на уведомления; null — ещё не проверяли
+  hasNotificationPermission: boolean | null
+  // pre-prompt / «уведомления отключены» перед включением напоминаний
+  showReminderPermissionModal: boolean
 }
 
 const initialState: InitialState = {
@@ -123,6 +127,8 @@ const initialState: InitialState = {
   appLanguage: defaultAppLanguage,
   showDailyStreakSuccessModal: false,
   dailyStreakAnimation: null,
+  hasNotificationPermission: null,
+  showReminderPermissionModal: false,
 }
 
 export const appSlice = createSlice({
@@ -167,6 +173,18 @@ export const appSlice = createSlice({
       { payload }: PayloadAction<{ from: number; to: number } | null>
     ) => {
       state.dailyStreakAnimation = payload
+    },
+    setHasNotificationPermission: (
+      state,
+      { payload }: PayloadAction<boolean>
+    ) => {
+      state.hasNotificationPermission = payload
+    },
+    setShowReminderPermissionModal: (
+      state,
+      { payload }: PayloadAction<boolean>
+    ) => {
+      state.showReminderPermissionModal = payload
     },
   },
 })

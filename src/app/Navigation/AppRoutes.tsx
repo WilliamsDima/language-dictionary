@@ -8,6 +8,10 @@ import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
 import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 import ModalDailyStreakSuccess from '@/features/ModalDailyStreakSuccess/ModalDailyStreakSuccess'
 import ModalAchievementUnlocked from '@/features/ModalAchievementUnlocked/ModalAchievementUnlocked'
+import ModalReminderPermission from '@/features/ModalReminderPermission/ModalReminderPermission'
+import { usePushDeviceRegistration } from '@/shared/hooks/usePushDeviceRegistration'
+import { useNotificationPermissionSync } from '@/shared/hooks/useNotificationPermissionSync'
+import { useOpenReminderPush } from './hooks/useOpenReminderPush'
 import {RoutesNames} from './RoutesNames'
 import {navigationRef} from './ref'
 import {useNavTheme} from './hooks/useNavTheme'
@@ -19,6 +23,9 @@ const Stack = createNativeStackNavigator<RootStackParams>()
 const Routes = () => {
   const { isAuth } = useAppSelector((store) => store.app)
   const navTheme = useNavTheme()
+  usePushDeviceRegistration()
+  useNotificationPermissionSync()
+  useOpenReminderPush()
 
   return (
     <>
@@ -39,6 +46,7 @@ const Routes = () => {
       <ModalYearResult />
       <ModalDailyStreakSuccess />
       <ModalAchievementUnlocked />
+      <ModalReminderPermission />
     </>
   )
 }

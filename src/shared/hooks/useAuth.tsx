@@ -15,6 +15,8 @@ import { signInWithGoogle, signOutFirebase } from '../firebase/auth'
 import { baseApi } from '../API/baseApi'
 import { useGetMeQuery, useDeleteMeMutation } from '../API/services/me/MeQuery'
 import { useGoogleSyncMutation } from '../API/services/auth/AuthQuery'
+import { useDeleteDeviceMutation } from '../API/services/notifications/NotificationsQuery'
+import { getFcmToken } from '../firebase/messaging'
 
 type IContext = {
   loginWithGoogle: () => Promise<void>
@@ -36,6 +38,7 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
 
   const [deleteMe] = useDeleteMeMutation()
   const [googleSync] = useGoogleSyncMutation()
+  const [deleteDevice] = useDeleteDeviceMutation()
 
   // Firebase persists the signed-in session natively; onAuthStateChanged
   // fires once at startup with the restored user (or null) once that
@@ -82,25 +85,53 @@ export const AuthProvider: FC<AuthProviderType> = ({ children }) => {
     setIsAuth(true)
   }, [googleSync, setIsAuth])
 
-  const logoutHandler = useCallback(async () => {
-    try {
-      await signOutFirebase()
-    } catch (error) {
-      console.log('error signOutFirebase: ', error)
-    } finally {
-      dispatch(baseApi.util.resetApiState())
-      setIsAuth(false)
-      clearLocalSettings()
-    }
-  }, [dispatch, clearLocalSettings, setIsAuth])
+  // отвязываем устройство от аккаунта, пока Firebase-сессия ещё жива (запросу
+  // нужен ID-токен), иначе напоминания продолжат приходить разлогиненному
+  // пользователю. Ошибка не мешает выходу
+  const unregisterDevice = useCallback(async () => {
+    const token = await getFcmToken()
+
+    if (!token) return
+
+    await deleteDevice(token)
+      .unwrap()
+      .catch(() => undefined)
+  }, [deleteDevice])
+
+  // removeDevice: false — при удалении аккаунта устройства бэкенд уже удалил
+  // каскадом, а DELETE /me/devices для удалённого пользователя вернул бы 404
+  const signOut = useCallback(
+    async (removeDevice: boolean) => {
+      if (removeDevice) {
+        await unregisterDevice()
+      }
+
+      try {
+        await signOutFirebase()
+      } catch (error) {
+        console.log('error signOutFirebase: ', error)
+      } finally {
+        dispatch(baseApi.util.resetApiState())
+        setIsAuth(false)
+        clearLocalSettings()
+      }
+    },
+    [dispatch, clearLocalSettings, setIsAuth, unregisterDevice]
+  )
+
+  const logoutHandler = useCallback(() => signOut(true), [signOut])
 
   const deleteAccaunt = useCallback(async () => {
     try {
       await deleteMe().unwrap()
-    } finally {
-      await logoutHandler()
+    } catch (error) {
+      // аккаунт не удалился — устройство отвязываем вручную
+      await signOut(true)
+      throw error
     }
-  }, [deleteMe, logoutHandler])
+
+    await signOut(false)
+  }, [deleteMe, signOut])
 
   const value = useMemo(() => {
     return {

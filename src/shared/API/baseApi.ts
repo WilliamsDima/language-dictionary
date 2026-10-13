@@ -12,6 +12,7 @@ export const baseApi = createApi({
     'streak',
     'dailyChallenge',
     'achievements',
+    'notificationSettings',
   ],
   endpoints: () => ({}),
 })

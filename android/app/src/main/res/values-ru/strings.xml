@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="daily_reminder_channel_name">Напоминания</string>
+    <string name="daily_reminder_channel_description">Ежедневное напоминание о задании дня</string>
+</resources>

@@ -3,6 +3,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Android 13+: runtime-разрешение на показ ежедневных push-напоминаний (FCM) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <!-- Android 11+ (package visibility): без этого TextToSpeech не видит
@@ -35,6 +37,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- монохромная иконка FCM-уведомлений в статус-баре; канал по умолчанию
+             и цвет иконки задаются в firebase.json (messaging_android_*) -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

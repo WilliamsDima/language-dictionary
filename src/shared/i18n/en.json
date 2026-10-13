@@ -65,7 +65,9 @@
     },
     "version_available": "Version {{version}} is available",
     "version": "Version:",
-    "update": "Update"
+    "update": "Update",
+    "reminders": "Reminders",
+    "reminders_subtitle": "Every day at {{time}} if the challenge of the day isn't done yet"
   },
   "profileScreen": {
     "practice_cta": "Practice",
@@ -174,6 +176,15 @@
     },
     "modalAchievementUnlocked": {
       "title": "New achievement!"
+    },
+    "modalReminderPermission": {
+      "title": "Turn on reminders?",
+      "subtitle": "We'll remind you at {{time}} if you haven't practiced today",
+      "enable": "Turn on",
+      "later": "Not now",
+      "blocked_title": "Notifications are turned off in phone settings",
+      "blocked_subtitle": "To get reminders, allow notifications for the app in your phone settings",
+      "open_settings": "Open settings"
     }
   },
   "cards": {

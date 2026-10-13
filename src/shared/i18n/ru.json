@@ -65,7 +65,9 @@
     },
     "version_available": "Доступна версия {{version}}",
     "version": "Версия:",
-    "update": "Обновить"
+    "update": "Обновить",
+    "reminders": "Напоминания",
+    "reminders_subtitle": "Каждый день в {{time}}, если задание дня ещё не выполнено"
   },
   "profileScreen": {
     "practice_cta": "Практиковаться",
@@ -174,6 +176,15 @@
     },
     "modalAchievementUnlocked": {
       "title": "Новое достижение!"
+    },
+    "modalReminderPermission": {
+      "title": "Включить напоминания?",
+      "subtitle": "Напомним в {{time}}, если ты ещё не занимался сегодня",
+      "enable": "Включить",
+      "later": "Не сейчас",
+      "blocked_title": "Уведомления отключены в настройках телефона",
+      "blocked_subtitle": "Чтобы получать напоминания, разреши уведомления для приложения в настройках телефона",
+      "open_settings": "Открыть настройки"
     }
   },
   "cards": {

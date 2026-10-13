@@ -4,4 +4,6 @@
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
     <integer name="com_vk_sdk_AppId">52498415</integer>
+    <string name="daily_reminder_channel_name">Reminders</string>
+    <string name="daily_reminder_channel_description">Daily reminder about the challenge of the day</string>
 </resources>
