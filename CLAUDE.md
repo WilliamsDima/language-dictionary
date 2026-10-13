@@ -37,7 +37,7 @@ yarn icons:svg          # regenerate SVG icon components + registry from src/ass
 yarn android-bundle     # produce a release Android JS bundle
 ```
 
-Release APKs are built and published by `.github/workflows/release-apk.yml` on push to `main` (see README → «Релиз APK»). Text-to-speech is a local TurboModule (`src/shared/native/NativeTextToSpeech.ts` + `android/app/src/main/java/com/wordcards/tts/`), not a third-party library — don't patch `node_modules`.
+Release APKs are built and published by `.github/workflows/release-apk.yml` on push to `main` (see README → «Релиз APK»). Every push to `main` is a release: bump `versionName` in `android/app/build.gradle` by semver (MAJOR = forced update for everyone, the update modal can't be closed — only when old versions break, e.g. incompatible API contract; MINOR = new features; PATCH = fixes/small stuff) and add `release-notes/<versionName>.json` with user-facing `ru` and `en` items (`{"ru": [...], "en": [...]}`) — CI sends it as `changelog` to `latest.json` and the update modal shows it as «Что нового». `versionCode` (build number) is set by CI — never edit it. Text-to-speech is a local TurboModule (`src/shared/native/NativeTextToSpeech.ts` + `android/app/src/main/java/com/wordcards/tts/`), not a third-party library — don't patch `node_modules`.
 
 ## Architecture
 
