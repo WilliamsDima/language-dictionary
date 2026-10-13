@@ -95,6 +95,46 @@ jobs:
           echo "name=$version_name" >> "$GITHUB_OUTPUT"
           echo "code=$version_code" >> "$GITHUB_OUTPUT"
 
+      # "What's new" for the in-app update modal: release-notes/<versionName>.json
+      # ({"ru": ["..."], "en": ["..."]}) goes to the server as the release.json
+      # "changelog" string (compact JSON) - the server copies it to latest.json
+      # as is, so no server change is needed. No file = no notes (warning, the
+      # commit subject is sent as before); an invalid file fails before the build.
+      - name: Read release notes
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+        run: |
+          set -euo pipefail
+          notes_file="release-notes/$VERSION_NAME.json"
+
+          if [ ! -f "$notes_file" ]; then
+            echo "::warning::$notes_file not found - the release is published without \"What's new\" notes"
+            exit 0
+          fi
+
+          if ! jq -e '
+            type == "object"
+            and has("ru") and has("en")
+            and all(to_entries[];
+              (.key | test("^[a-z]{2}$"))
+              and (.value | type == "array" and length > 0
+                and all(.[]; type == "string" and test("\\S"))))
+          ' "$notes_file" > /dev/null; then
+            echo "::error::$notes_file must be {\"ru\": [\"...\"], \"en\": [\"...\"], ...}: two-letter language codes, ru and en required, non-empty arrays of non-empty strings"
+            exit 1
+          fi
+
+          notes="$(jq -c . "$notes_file")"
+          # the server accepts changelog up to 4000 characters
+          notes_length="$(printf '%s' "$notes" | jq -Rs 'length')"
+          if [ "$notes_length" -gt 4000 ]; then
+            echo "::error::$notes_file is $notes_length characters as compact JSON, the limit is 4000"
+            exit 1
+          fi
+
+          echo "$notes"
+          printf '%s' "$notes" > "$RUNNER_TEMP/release-notes.json"
+
       # Fail fast (before a long build) if the server already has a newer
       # release. The server enforces this anyway; 404 = nothing published yet.
       - name: Check published version
@@ -119,6 +159,12 @@ jobs:
              { [ "$VERSION_CODE" -eq "$published_code" ] && [ "$VERSION_NAME" != "$published_name" ]; }; then
             echo "::error::versionCode $VERSION_CODE ($VERSION_NAME) is not greater than published $published_code ($published_name). Raise baseVersionCode in android/app/build.gradle."
             exit 1
+          fi
+          # every push to main should raise versionName (README.md, "Релиз
+          # APK"); a new build with the same name is still published, but the
+          # in-app update modal compares versionName and will not offer it
+          if [ "$VERSION_CODE" -ne "$published_code" ] && [ "$VERSION_NAME" = "$published_name" ]; then
+            echo "::warning::versionName $VERSION_NAME is already published - bump versionName in android/app/build.gradle and add release-notes/<versionName>.json"
           fi
 
       - uses: actions/setup-node@v4
@@ -231,7 +277,13 @@ jobs:
           cp android/app/build/outputs/apk/release/app-release.apk "$upload_dir/app.apk"
 
           commit="$(git rev-parse HEAD | tr 'A-F' 'a-f')"
-          changelog="$(git log -1 --format=%s)"
+          # release notes JSON (see "Read release notes"), else the commit
+          # subject as before - the app only treats a JSON object as notes
+          if [ -s "$RUNNER_TEMP/release-notes.json" ]; then
+            changelog="$(cat "$RUNNER_TEMP/release-notes.json")"
+          else
+            changelog="$(git log -1 --format=%s)"
+          fi
 
           jq -n \
             --arg versionName "$VERSION_NAME" \
@@ -303,5 +355,5 @@ jobs:
       - name: Remove secrets from the runner
         if: always()
         run: |
-          rm -rf "$RUNNER_TEMP/apk-ssh" "$RUNNER_TEMP/wordcards-release" "$RUNNER_TEMP/apk-upload"
+          rm -rf "$RUNNER_TEMP/apk-ssh" "$RUNNER_TEMP/wordcards-release" "$RUNNER_TEMP/apk-upload" "$RUNNER_TEMP/release-notes.json"
           rm -f .env android/app/google-services.json
