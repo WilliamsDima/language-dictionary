@@ -1,4 +1,4 @@
-import { height, width } from '@/shared/helpers/ScaleUtils'
+import { width } from '@/shared/helpers/ScaleUtils'
 
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -32,23 +32,23 @@ export const styles = StyleSheet.create((theme) => ({
     fontWeight: '600',
   },
 
+  // карточка занимает всё место между счётчиком и кнопкой «Проверить»
+  // (flex: 1) и никогда не выходит за его границы; если слова не помещаются,
+  // скроллится содержимое внутри карточки, а не сама карточка — так рамка и
+  // скругления всегда видны целиком на любом экране
   card: {
+    flex: 1,
     width: '100%',
-    minHeight: height / 1.85,
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: 'hidden',
     backgroundColor: theme.colors.background.surface,
     borderRadius: theme.size.s28,
     borderWidth: theme.size.s2,
     borderColor: theme.colors.palette.border,
-    gap: theme.size.s10,
   },
 
-  // зона карточки ужимается под доступную высоту слайда (карточка внутри
-  // скроллится), чтобы кнопка переворота под ней всегда оставалась видимой
   cardTouchable: {
-    flexShrink: 1,
-    alignItems: 'center',
+    flex: 1,
+    width: '100%',
   },
 
   footer: {
@@ -66,13 +66,14 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   itemWords: {
-    flexGrow: 0,
-    flexShrink: 1,
-    maxHeight: height / 1.38,
-    width: width - theme.layout.appPadding * 2 - theme.size.s20,
+    flex: 1,
+    width: '100%',
   },
   contentContainerStyle: {
+    flexGrow: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
+    padding: theme.size.s10,
     gap: theme.size.s10,
   },
 
@@ -114,6 +115,12 @@ export const styles = StyleSheet.create((theme) => ({
       isFlipped: {
         true: {
           color: theme.colors.palette.blue,
+        },
+      },
+      // длинные фразы чуть мельче, чтобы реже переносились и не раздували карточку
+      isLong: {
+        true: {
+          fontSize: theme.fontSize.s20,
         },
       },
     },

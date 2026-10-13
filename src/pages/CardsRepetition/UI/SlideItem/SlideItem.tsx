@@ -27,31 +27,44 @@ type Props = {
   index: number
 }
 
+// с какой длины фраза считается длинной и рендерится уменьшенным шрифтом
+const LONG_TEXT_LENGTH = 20
+
 type CardWordRowProps = {
   firstText: string
   secondText: string
   isFlipped: boolean
 }
 
-const CardWordRow: FC<CardWordRowProps> = ({
+const CardWordRowBase: FC<CardWordRowProps> = ({
   firstText,
   secondText,
   isFlipped,
 }) => {
+  const text = useMemo(
+    () => (isFlipped ? secondText : firstText),
+    [isFlipped, firstText, secondText]
+  )
+
+  const isLong = useMemo(() => text.length > LONG_TEXT_LENGTH, [text])
+
   styles.useVariants({
     isFlipped,
+    isLong,
   })
 
   return (
     <View style={styles.itemWordWrapper}>
       <View style={styles.itemWord}>
         <View style={styles.wrapperText}>
-          <Text style={styles.text}>{isFlipped ? secondText : firstText}</Text>
+          <Text style={styles.text}>{text}</Text>
         </View>
       </View>
     </View>
   )
 }
+
+const CardWordRow = memo(CardWordRowBase)
 
 const CardContent: FC<Props & { isFlipped: boolean }> = ({
   item,
@@ -83,29 +96,35 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
+  const [isFlipped, setIsFlipped] = useState(false)
   const { scrollX, nextSlide, swipeSlide, liveItems } = useCardsRepetition()
   const { t } = useTranslation()
 
-  const inputRange = [(index - 1) * width, index * width, (index + 1) * width]
+  const flipAnimation = useRef(new Animated.Value(0)).current
+  const isFlipAnimating = useRef(false)
 
   const currentItem = useMemo(() => {
     return liveItems.find((it) => it.id === item?.item.id)
   }, [item, liveItems])
 
-  const opacity = scrollX.interpolate({
-    inputRange,
-    outputRange: [0.1, 1, 0.1],
-    extrapolate: 'clamp',
-  })
+  const opacity = useMemo(
+    () =>
+      scrollX.interpolate({
+        inputRange: [(index - 1) * width, index * width, (index + 1) * width],
+        outputRange: [0.1, 1, 0.1],
+        extrapolate: 'clamp',
+      }),
+    [scrollX, index]
+  )
 
-  const [isFlipped, setIsFlipped] = useState(false)
-  const flipAnimation = useRef(new Animated.Value(0)).current
-  const isFlipAnimating = useRef(false)
-
-  const rotateY = flipAnimation.interpolate({
-    inputRange: [-1, 0, 1],
-    outputRange: ['-90deg', '0deg', '90deg'],
-  })
+  const rotateY = useMemo(
+    () =>
+      flipAnimation.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: ['-90deg', '0deg', '90deg'],
+      }),
+    [flipAnimation]
+  )
 
   const panGesture = useMemo(() => {
     return Gesture.Pan().onEnd((event) => {
@@ -140,26 +159,28 @@ const SlideItem: FC<Props> = (props) => {
 
   const btnClasses = useMemo(() => ({ textBtn: styles.btnText }), [])
 
+  const itemStyle = useMemo(() => [styles.item, { opacity }], [opacity])
+
+  const cardStyle = useMemo(
+    () => [styles.card, { transform: [{ perspective: 1200 }, { rotateY }] }],
+    [rotateY]
+  )
+
   return (
     <GestureDetector gesture={panGesture}>
       <View style={styles.wrapper}>
         <View style={styles.itemWrapper}>
-          <Animated.View style={[styles.item, { opacity }]}>
+          <Animated.View style={itemStyle}>
             <TouchableOpacity
               style={styles.cardTouchable}
               onPress={nextSlide}
               activeOpacity={1}
             >
-              <ScrollView
-                style={styles.itemWords}
-                contentContainerStyle={styles.contentContainerStyle}
-                showsVerticalScrollIndicator
-              >
-                <Animated.View
-                  style={[
-                    styles.card,
-                    { transform: [{ perspective: 1200 }, { rotateY }] },
-                  ]}
+              <Animated.View style={cardStyle}>
+                <ScrollView
+                  style={styles.itemWords}
+                  contentContainerStyle={styles.contentContainerStyle}
+                  showsVerticalScrollIndicator
                 >
                   <CardContent isFlipped={isFlipped} {...props} />
                   {!!currentItem?.description && isFlipped ? (
@@ -169,8 +190,8 @@ const SlideItem: FC<Props> = (props) => {
                   ) : (
                     <></>
                   )}
-                </Animated.View>
-              </ScrollView>
+                </ScrollView>
+              </Animated.View>
             </TouchableOpacity>
 
             <View style={styles.footer}>
