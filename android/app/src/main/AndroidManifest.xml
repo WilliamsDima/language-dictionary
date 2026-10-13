@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -39,10 +40,20 @@
         </activity>
 
         <!-- монохромная иконка FCM-уведомлений в статус-баре; канал по умолчанию
-             и цвет иконки задаются в firebase.json (messaging_android_*) -->
+             задаётся в firebase.json (messaging_android_notification_channel_id) -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
+
+        <!-- цвет иконки FCM-уведомлений. Не через firebase.json
+             (messaging_android_notification_color): RNFB подставляет его в манифест
+             библиотеки, где ресурса app @color/notification_color нет, и линковка
+             ресурсов release падает (AAPT: color/notification_color not found).
+             tools:replace перекрывает дефолт библиотеки (@color/white) -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_color"
+            tools:replace="android:resource" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
