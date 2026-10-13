@@ -1,0 +1,12 @@
+{
+  "ru": [
+    "Ежедневные напоминания о задании дня — включаются в настройках",
+    "Уведомление о выходе новой версии со списком изменений",
+    "Номер сборки рядом с версией приложения в настройках"
+  ],
+  "en": [
+    "Daily reminders about the daily task — turn them on in settings",
+    "New version alert with a list of what's new",
+    "Build number next to the app version in settings"
+  ]
+}

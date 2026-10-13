@@ -98,7 +98,8 @@ if (requireReleaseSigning && !hasReleaseSigning) {
  * versionCode = baseVersionCode + run number and passes it as -PWORDCARDS_VERSION_CODE,
  * without editing this file (see .github/workflows/release-apk.yml). The CI job reads
  * baseVersionCode and versionName from this file - keep both as plain literals.
- * Bump versionName below for a new release.
+ * Bump versionName below on every push to main (semver, see README.md "Релиз APK")
+ * and add release-notes/<versionName>.json.
  */
 def baseVersionCode = 26
 def versionCodeOverride = findProperty("WORDCARDS_VERSION_CODE")
@@ -114,7 +115,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode versionCodeOverride ? versionCodeOverride.toString().toInteger() : baseVersionCode
-        versionName "2.0.0"
+        versionName "2.1.0"
         buildConfigField "String", "APP_CENTER_SECRET", "\"${appCenterSecret}\""
     }
     signingConfigs {
