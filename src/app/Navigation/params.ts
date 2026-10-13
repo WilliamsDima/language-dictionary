@@ -7,9 +7,10 @@ export type StartStackParams = {
 }
 
 // undefined — обычный вход в практику по текущему фильтру списка (как сегодня),
-// { mode: 'daily', cards } — вход из баннера серии с уже готовым набором карточек
+// { mode: 'daily', cards } — вход из баннера серии с уже готовым набором карточек,
+// challengeMode — режим показа задания дня из ответа бэкенда (может отсутствовать)
 export type CardsRepetitionParams =
-  | { mode: 'daily'; cards: CardDTO[] }
+  | { mode: 'daily'; cards: CardDTO[]; challengeMode?: string }
   | undefined
 
 export type MainStackParams = {

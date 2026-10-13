@@ -28,6 +28,8 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { useGetItemsQuery, cardToItem } from '@/pages/MainScreen/api/cardsServices'
 import { useCompleteStreakMutation } from '@/shared/API/services/streak/StreakQuery'
 import { useLogMetricEventMutation } from '@/shared/API/services/metrics/MetricsQuery'
+import type { ShowVariantListVale } from '@/shared/store/slice/userSlice'
+import { getDailyChallengeModeBehavior } from './dailyChallengeModes'
 
 export type CardSlideType = {
   index: number
@@ -44,6 +46,7 @@ type IContext = {
   currentSlideData?: CardSlideType
   count: number
   isDailyMode: boolean
+  showVariant: ShowVariantListVale | null
   swipeSlide: (translationX: number) => void
   updateCurrentSlideIndex: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
   nextSlide: () => void
@@ -108,6 +111,19 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const liveItems = useMemo(
     () => (isDailyMode ? dailyItems : (queryData?.items ?? [])),
     [isDailyMode, dailyItems, queryData?.items]
+  )
+
+  // в задании дня направление показа задаёт бэкенд (mode ответа
+  // /streak/daily-challenge); если режима нет или он незнакомый — локальная
+  // настройка практики. filterCardsModal при этом не перезаписывается
+  const dailyBehavior = useMemo(
+    () => getDailyChallengeModeBehavior(dailyParams?.challengeMode),
+    [dailyParams?.challengeMode]
+  )
+
+  const showVariant = useMemo(
+    () => dailyBehavior?.showVariant ?? filterCardsModal.showVariant,
+    [dailyBehavior, filterCardsModal.showVariant]
   )
 
   const currentSlideData = useMemo(() => {
@@ -215,6 +231,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       isLoading: isDailyMode ? false : isFetching,
       count: data.length,
       isDailyMode,
+      showVariant,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
@@ -228,6 +245,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     currentSlideData,
     isFetching,
     isDailyMode,
+    showVariant,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,

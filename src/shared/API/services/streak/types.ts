@@ -16,7 +16,15 @@ export type CompleteStreakResponse = StreakStatus & {
   previous_streak: number
 }
 
+// режимы задания дня, которые клиент уже умеет показывать; бэкенд меняет
+// режим по кругу каждый день и со временем добавит новые (аудирование,
+// произношение, сопоставление), поэтому в ответе поле — любая строка
+export type DailyChallengeKnownMode = 'WORD_TO_TRANSLATE' | 'TRANSLATE_TO_WORD'
+
 export type DailyChallengeResponse = {
   cards: CardDTO[]
   completed_today: boolean
+  // необязательно: старый бэкенд поле не отдаёт, незнакомое значение —
+  // не ошибка, клиент откатывается на локальную настройку показа
+  mode?: string
 }

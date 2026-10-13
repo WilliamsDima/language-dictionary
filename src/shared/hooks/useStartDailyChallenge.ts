@@ -16,6 +16,7 @@ export const useStartDailyChallenge = () => {
         navigate(RoutesNames.cardsRepetition, {
           mode: 'daily',
           cards: result.cards,
+          challengeMode: result.mode,
         })
       })
       .catch(() => {

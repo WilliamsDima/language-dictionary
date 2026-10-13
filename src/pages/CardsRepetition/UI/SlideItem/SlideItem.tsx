@@ -18,7 +18,6 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { CardSlideType, useCardsRepetition } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
-import { useAppSelector } from '@/shared/hooks/useStore'
 import { runOnJS } from 'react-native-reanimated'
 import { useTranslation } from '@/shared/i18n/types'
 
@@ -70,18 +69,16 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
   item,
   isFlipped,
 }) => {
-  const { filterCardsModal } = useAppSelector((store) => store.items)
-  const { liveItems } = useCardsRepetition()
+  // showVariant уже учитывает режим задания дня (см. CardsContext)
+  const { liveItems, showVariant } = useCardsRepetition()
 
   const currentItem = useMemo(() => {
     return liveItems.find((it) => it.id === item?.item.id)
   }, [item, liveItems])
 
   return currentItem?.items.map((it) => {
-    const firstText =
-      filterCardsModal.showVariant === 'word_only' ? it.word : it.translate
-    const secondText =
-      filterCardsModal.showVariant === 'word_only' ? it.translate : it.word
+    const firstText = showVariant === 'word_only' ? it.word : it.translate
+    const secondText = showVariant === 'word_only' ? it.translate : it.word
 
     return (
       <CardWordRow
