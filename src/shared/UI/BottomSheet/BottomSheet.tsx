@@ -88,8 +88,12 @@ const BottomSheet: FC<Props> = ({
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View style={styles.headerTextBlock}>
-            {!!title && <Text style={styles.title}>{title}</Text>}
-            {!!subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+            {title ? <Text style={styles.title}>{title}</Text> : <></>}
+            {subtitle ? (
+              <Text style={styles.subtitle}>{subtitle}</Text>
+            ) : (
+              <></>
+            )}
           </View>
 
           {showClose && dismissible ? (
@@ -107,6 +111,17 @@ const BottomSheet: FC<Props> = ({
     )
   }, [dismissible, handleClosePress, showClose, subtitle, title])
 
+  // без футера низ прокручиваемого контента сам отступает от системной
+  // навигации; футеры добавляют rt.insets.bottom в своих стилях
+  const scrollContentContainerStyle = useMemo(
+    () => [
+      styles.scrollContent,
+      footer ? undefined : styles.scrollContentSafe,
+      scrollContentStyle,
+    ],
+    [footer, scrollContentStyle]
+  )
+
   return (
     <BottomSheetModal
       ref={sheetRef}
@@ -123,15 +138,14 @@ const BottomSheet: FC<Props> = ({
       android_keyboardInputMode="adjustResize"
       {...rest}
     >
-      {header}
-
       {variant === 'scroll' ? (
         <>
+          {header}
           <BottomSheetScrollView
             ref={scrollRef}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
-            contentContainerStyle={[styles.scrollContent, scrollContentStyle]}
+            contentContainerStyle={scrollContentContainerStyle}
             showsVerticalScrollIndicator={false}
           >
             {children}
@@ -139,9 +153,14 @@ const BottomSheet: FC<Props> = ({
           {footer}
         </>
       ) : (
-        <BottomSheetView style={styles.content}>
-          {children}
-          {footer}
+        // шапка внутри BottomSheetView — иначе enableDynamicSizing не учитывает
+        // её высоту и шторка получается ниже контента (кнопки наезжают на текст)
+        <BottomSheetView>
+          {header}
+          <View style={styles.content}>
+            {children}
+            {footer}
+          </View>
         </BottomSheetView>
       )}
     </BottomSheetModal>

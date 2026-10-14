@@ -21,11 +21,13 @@ export const styles = StyleSheet.create((theme) => ({
   },
   textBtnCancel: {
     textTransform: 'uppercase',
+    textAlign: 'center',
     fontSize: theme.fontSize.s13,
     color: theme.colors.text.primary,
   },
   textBtnConfirm: {
     textTransform: 'uppercase',
+    textAlign: 'center',
     fontSize: theme.fontSize.s13,
     color: theme.colors.base.black,
   },

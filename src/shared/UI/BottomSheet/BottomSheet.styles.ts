@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create((theme, rt) => ({
   backdrop: {
     backgroundColor: theme.colors.overlay.modal,
   },
@@ -23,12 +23,15 @@ export const styles = StyleSheet.create((theme) => ({
   content: {
     paddingHorizontal: theme.size.s18,
     paddingTop: theme.size.s10,
-    paddingBottom: theme.size.s24,
+    paddingBottom: rt.insets.bottom + theme.size.s24,
   },
   scrollContent: {
     paddingHorizontal: theme.size.s18,
     paddingTop: theme.size.s10,
     paddingBottom: theme.size.s24,
+  },
+  scrollContentSafe: {
+    paddingBottom: rt.insets.bottom + theme.size.s24,
   },
   header: {
     paddingHorizontal: theme.size.s18,
