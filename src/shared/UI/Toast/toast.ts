@@ -19,4 +19,9 @@ export const toast = {
   success: (message: string, duration?: number): void => {
     _refHolder.current?.show({ message, type: 'success', duration })
   },
+  // нейтральное сообщение с необязательным заголовком (например, пуш,
+  // пришедший при открытом приложении)
+  info: (message: string, title?: string, duration?: number): void => {
+    _refHolder.current?.show({ message, title, type: 'info', duration })
+  },
 }

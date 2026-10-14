@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useEffect, useMemo, useRef } from 'react'
-import { Animated, PanResponder } from 'react-native'
+import { Animated, PanResponder, View } from 'react-native'
 import { styles } from './ToastItem.styles'
 import Text from '@/shared/UI/Text/Text'
 import { Icon } from '@/assets/icons/Icon'
@@ -10,6 +10,8 @@ const DEFAULT_DURATION = 3000
 const EXIT_OFFSET = -200
 const DISMISS_SWIPE_THRESHOLD = 50
 const DISMISS_VELOCITY_THRESHOLD = 0.8
+const DEFAULT_MESSAGE_LINES = 2
+const INFO_MESSAGE_LINES = 5
 
 type Props = {
   config: ToastConfig
@@ -27,6 +29,14 @@ const ToastItem: FC<Props> = ({ config, top, onDismiss }) => {
   const { theme } = useUnistyles()
 
   styles.useVariants({ type: config.type })
+
+  const isInfo = useMemo(() => config.type === 'info', [config.type])
+
+  // текст info-тоста (например, сообщение из админки) бывает длиннее
+  const messageLines = useMemo(
+    () => (isInfo ? INFO_MESSAGE_LINES : DEFAULT_MESSAGE_LINES),
+    [isInfo]
+  )
 
   const dismiss = useCallback(() => {
     if (isExiting.current) return
@@ -100,22 +110,35 @@ const ToastItem: FC<Props> = ({ config, top, onDismiss }) => {
       ]}
       {...panResponder.panHandlers}
     >
-      <Icon
-        kind="svg"
-        name={
-          config.type === 'error' ? 'error-circle-red-64' : 'done-primery-64'
-        }
-        width={25}
-        color={
-          config.type === 'error'
-            ? theme.colors.action.danger
-            : theme.colors.action.success
-        }
-        height={25}
-      />
-      <Text style={styles.message} numberOfLines={2}>
-        {config.message}
-      </Text>
+      {isInfo ? (
+        <></>
+      ) : (
+        <Icon
+          kind="svg"
+          name={
+            config.type === 'error' ? 'error-circle-red-64' : 'done-primery-64'
+          }
+          width={25}
+          color={
+            config.type === 'error'
+              ? theme.colors.action.danger
+              : theme.colors.action.success
+          }
+          height={25}
+        />
+      )}
+      <View style={styles.content}>
+        {config.title ? (
+          <Text style={styles.title} numberOfLines={1}>
+            {config.title}
+          </Text>
+        ) : (
+          <></>
+        )}
+        <Text style={styles.message} numberOfLines={messageLines}>
+          {config.message}
+        </Text>
+      </View>
     </Animated.View>
   )
 }

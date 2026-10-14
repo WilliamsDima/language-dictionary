@@ -26,11 +26,21 @@ export const styles = StyleSheet.create((theme) => ({
         success: {
           borderLeftColor: theme.colors.action.primary,
         },
+        info: {
+          borderLeftColor: theme.colors.action.info,
+        },
       },
     },
   },
-  message: {
+  content: {
     flex: 1,
+    gap: theme.size.s4,
+  },
+  title: {
+    fontWeight: '600',
+    lineHeight: theme.lineHeights.sm,
+  },
+  message: {
     lineHeight: theme.lineHeights.sm,
   },
 }))
