@@ -115,7 +115,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode versionCodeOverride ? versionCodeOverride.toString().toInteger() : baseVersionCode
-        versionName "2.1.0"
+        versionName "2.2.0"
         buildConfigField "String", "APP_CENTER_SECRET", "\"${appCenterSecret}\""
     }
     signingConfigs {

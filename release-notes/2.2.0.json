@@ -1,0 +1,12 @@
+{
+  "ru": [
+    "Сообщения от команды Word Cards — теперь видны и при открытом приложении",
+    "Отдельный канал уведомлений «Сообщения» — его можно настроить отдельно от напоминаний",
+    "Исправлено отображение окон напоминаний и обновления: кнопки больше не наезжают на текст и не уходят под панель навигации"
+  ],
+  "en": [
+    "Messages from the Word Cards team — now shown even while the app is open",
+    "A separate \"Messages\" notification channel you can set up apart from reminders",
+    "Fixed the reminder and update windows: buttons no longer overlap the text or hide under the navigation bar"
+  ]
+}
