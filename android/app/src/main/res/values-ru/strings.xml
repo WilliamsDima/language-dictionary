@@ -2,4 +2,6 @@
 <resources>
     <string name="daily_reminder_channel_name">Напоминания</string>
     <string name="daily_reminder_channel_description">Ежедневное напоминание о задании дня</string>
+    <string name="general_channel_name">Сообщения</string>
+    <string name="general_channel_description">Новости и сообщения о приложении</string>
 </resources>

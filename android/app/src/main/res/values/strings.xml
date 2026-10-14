@@ -6,4 +6,6 @@
     <integer name="com_vk_sdk_AppId">52498415</integer>
     <string name="daily_reminder_channel_name">Reminders</string>
     <string name="daily_reminder_channel_description">Daily reminder about the challenge of the day</string>
+    <string name="general_channel_name">Messages</string>
+    <string name="general_channel_description">News and messages about the app</string>
 </resources>

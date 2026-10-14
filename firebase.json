@@ -1,5 +1,5 @@
 {
   "react-native": {
-    "messaging_android_notification_channel_id": "daily_reminder"
+    "messaging_android_notification_channel_id": "general"
   }
 }

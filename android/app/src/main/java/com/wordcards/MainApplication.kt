@@ -41,15 +41,21 @@ class MainApplication : Application(), ReactApplication {
         createNotificationChannels()
     }
 
-    // канал ежедневных напоминаний: бэкенд шлёт FCM-пуш с android.channel_id
-    // "daily_reminder" (он же канал по умолчанию в firebase.json). Создаём его
-    // сами при старте, иначе FCM положит пуш в безымянный fallback-канал.
-    // Название локализовано через values / values-ru и следует языку системы;
+    // каналы уведомлений. Создаём их сами при старте (Application.onCreate
+    // выполняется и когда процесс поднимает FCM для пуша в фоне), иначе FCM
+    // положит пуш в безымянный fallback-канал.
+    // - "daily_reminder": бэкенд шлёт ежедневное напоминание с этим
+    //   android.channel_id;
+    // - "general": канал по умолчанию в firebase.json
+    //   (messaging_android_notification_channel_id) — для пушей без channel_id,
+    //   например ручных сообщений из админки (data.type = "admin_message").
+    //   Отдельный канал, чтобы выключение напоминаний не глушило сообщения.
+    // Названия локализованы через values / values-ru и следуют языку системы;
     // повторное создание существующего канала только обновляет имя/описание
     private fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
-        val channel = NotificationChannel(
+        val dailyReminderChannel = NotificationChannel(
             DAILY_REMINDER_CHANNEL_ID,
             getString(R.string.daily_reminder_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT
@@ -57,10 +63,21 @@ class MainApplication : Application(), ReactApplication {
             description = getString(R.string.daily_reminder_channel_description)
         }
 
-        getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
+        val generalChannel = NotificationChannel(
+            GENERAL_CHANNEL_ID,
+            getString(R.string.general_channel_name),
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = getString(R.string.general_channel_description)
+        }
+
+        getSystemService(NotificationManager::class.java)?.createNotificationChannels(
+            listOf(dailyReminderChannel, generalChannel)
+        )
     }
 
     private companion object {
         const val DAILY_REMINDER_CHANNEL_ID = "daily_reminder"
+        const val GENERAL_CHANNEL_ID = "general"
     }
 }
