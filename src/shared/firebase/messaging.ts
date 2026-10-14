@@ -5,6 +5,7 @@ import {
   getMessaging,
   getToken,
   hasPermission,
+  onMessage,
   onNotificationOpenedApp,
   onTokenRefresh,
   setBackgroundMessageHandler,
@@ -83,6 +84,12 @@ export const getInitialPushMessage = async (): Promise<RemoteMessage | null> => 
 export const subscribePushOpened = (
   listener: (message: RemoteMessage) => void
 ) => onNotificationOpenedApp(getMessaging(), listener)
+
+// пуш, пришедший при открытом приложении: в foreground Android сам
+// уведомление не показывает
+export const subscribeForegroundPush = (
+  listener: (message: RemoteMessage) => void
+) => onMessage(getMessaging(), listener)
 
 // пуши с notification-блоком Android показывает сам, JS-обработка в фоне не
 // нужна; пустой обработчик регистрируем только чтобы RNFB не ругался

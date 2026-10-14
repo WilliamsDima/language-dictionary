@@ -13,3 +13,27 @@ export const toDeviceLocale = (languageCode?: string | null): DeviceLocale =>
 export const isDailyReminderPush = (
   data?: Record<string, unknown> | null
 ): boolean => data?.type === DAILY_REMINDER_PUSH_TYPE
+
+export type PushToastContent = {
+  title?: string
+  body: string
+}
+
+// что показать тостом, если пуш пришёл при открытом приложении.
+// Ежедневное напоминание в foreground не показываем (пользователь и так в
+// приложении); остальные типы — admin_message и будущие/неизвестные —
+// показываем, если в пуше есть текст. Без body заголовок становится текстом
+export const getForegroundPushToast = (
+  notification?: { title?: string; body?: string } | null,
+  data?: Record<string, unknown> | null
+): PushToastContent | null => {
+  if (isDailyReminderPush(data)) return null
+
+  const title = notification?.title?.trim()
+  const body = notification?.body?.trim()
+
+  if (body) return title ? { title, body } : { body }
+  if (title) return { body: title }
+
+  return null
+}

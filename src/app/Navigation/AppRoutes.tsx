@@ -11,6 +11,7 @@ import ModalAchievementUnlocked from '@/features/ModalAchievementUnlocked/ModalA
 import ModalReminderPermission from '@/features/ModalReminderPermission/ModalReminderPermission'
 import { usePushDeviceRegistration } from '@/shared/hooks/usePushDeviceRegistration'
 import { useNotificationPermissionSync } from '@/shared/hooks/useNotificationPermissionSync'
+import { useForegroundPushToast } from '@/shared/hooks/useForegroundPushToast'
 import { useOpenReminderPush } from './hooks/useOpenReminderPush'
 import {RoutesNames} from './RoutesNames'
 import {navigationRef} from './ref'
@@ -26,6 +27,7 @@ const Routes = () => {
   usePushDeviceRegistration()
   useNotificationPermissionSync()
   useOpenReminderPush()
+  useForegroundPushToast()
 
   return (
     <>

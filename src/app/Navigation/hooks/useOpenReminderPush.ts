@@ -13,8 +13,10 @@ import { navigationRef } from '../ref'
 // Холодный старт (getInitialNotification) и выход из фона
 // (onNotificationOpenedApp) только запоминают намерение; переход выполняется,
 // когда пользователь авторизован, сплэш показан (MainTabRoutes уже без
-// сплэша) и навигация готова. Пуш в foreground не показываем — onMessage
-// не слушаем
+// сплэша) и навигация готова. Нажатие на пуш любого другого типа
+// (admin_message, неизвестные) только открывает приложение — Android делает
+// это сам, здесь такие пуши игнорируются. Пуши в foreground показывает
+// useForegroundPushToast
 export const useOpenReminderPush = () => {
   const { isAuth, isWatchSplash } = useAppSelector((store) => store.app)
 
