@@ -3,6 +3,8 @@ import {
   appLanguagesList,
   defaultAppLanguage,
 } from '@/shared/constants/appLanguages'
+import type { StreakFrozenInfo } from '@/shared/API/services/streak/types'
+import { mergeStreakFrozenInfo } from '@/shared/helpers/streakFreeze'
 
 export type ThemeApp = 'dark' | 'light'
 
@@ -100,6 +102,18 @@ type InitialState = {
   hasNotificationPermission: boolean | null
   // pre-prompt / «уведомления отключены» перед включением напоминаний
   showReminderPermissionModal: boolean
+  // модалка «Стрик заморожен»: null — показывать нечего
+  streakFrozen: StreakFrozenInfo | null
+  // даты заморозок, уже показанных в этой сессии, — не показываем их
+  // повторно, даже если сервер ещё не подтвердил seen или запрос упал
+  streakFrozenShownDates: string[]
+  // заморозки в ответе completeStreak: earned — тост «+1 заморозка» после
+  // модалки успеха; motivationAt — день следующей заморозки (мотивация на
+  // 15, 45, 75… день серии)
+  dailyStreakFreeze: { earned: boolean; motivationAt: number | null } | null
+  // тост «+1 заморозка» на экране — модалки достижений ждут, пока он
+  // не скроется (RN Modal перекрыл бы тост)
+  isStreakFreezeToastActive: boolean
 }
 
 const initialState: InitialState = {
@@ -129,6 +143,10 @@ const initialState: InitialState = {
   dailyStreakAnimation: null,
   hasNotificationPermission: null,
   showReminderPermissionModal: false,
+  streakFrozen: null,
+  streakFrozenShownDates: [],
+  dailyStreakFreeze: null,
+  isStreakFreezeToastActive: false,
 }
 
 export const appSlice = createSlice({
@@ -185,6 +203,37 @@ export const appSlice = createSlice({
       { payload }: PayloadAction<boolean>
     ) => {
       state.showReminderPermissionModal = payload
+    },
+    showStreakFrozen: (state, { payload }: PayloadAction<StreakFrozenInfo>) => {
+      state.streakFrozen = mergeStreakFrozenInfo(
+        state.streakFrozen,
+        payload,
+        state.streakFrozenShownDates
+      )
+    },
+    dismissStreakFrozen: (state) => {
+      if (state.streakFrozen) {
+        state.streakFrozenShownDates.push(...state.streakFrozen.dates)
+      }
+      state.streakFrozen = null
+    },
+    resetStreakFrozen: (state) => {
+      state.streakFrozen = null
+      state.streakFrozenShownDates = []
+    },
+    setDailyStreakFreeze: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{ earned: boolean; motivationAt: number | null } | null>
+    ) => {
+      state.dailyStreakFreeze = payload
+    },
+    setIsStreakFreezeToastActive: (
+      state,
+      { payload }: PayloadAction<boolean>
+    ) => {
+      state.isStreakFreezeToastActive = payload
     },
   },
 })

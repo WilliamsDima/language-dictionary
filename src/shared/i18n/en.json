@@ -69,6 +69,10 @@
     "reminders": "Reminders",
     "reminders_subtitle": "Every day at {{time}} if the challenge of the day isn't done yet"
   },
+  "streakFreeze": {
+    "earned_title": "+1 streak freeze ❄️",
+    "earned_message": "It will keep your streak if you miss a day"
+  },
   "profileScreen": {
     "practice_cta": "Practice",
     "show_year_result": "View your {{date}} year in review 🎉",
@@ -83,6 +87,7 @@
     "studied_count_short": "Learned",
     "progress_count_short": "Learning",
     "streak_short": "Streak",
+    "streak_frozen_short": "Streak frozen",
     "best_streak_short": "Best streak",
     "languages_studied": "Languages you're learning: ",
     "languages_studied_card": "Languages you're learning",
@@ -172,7 +177,31 @@
       "whats_new": "What's new"
     },
     "modalDailyStreakSuccess": {
-      "title": "Your streak continues!"
+      "title": "Your streak continues!",
+      "freeze_motivation": "Keep it up! On day {{value}} you'll earn a streak freeze"
+    },
+    "modalStreakFrozen": {
+      "title": "Streak frozen",
+      "subtitle": "Streak freezes kept your streak safe while you were away",
+      "spent_one": "{{count}} freeze used",
+      "spent_other": "{{count}} freezes used",
+      "left_one": "{{count}} left",
+      "left_other": "{{count}} left",
+      "summary": "{{spent}}, {{left}}",
+      "ok": "Continue"
+    },
+    "modalStreakFreezeInfo": {
+      "title": "Streak freeze",
+      "subtitle": "Keeps your streak if you miss a day",
+      "available": "Freezes available",
+      "next": "Next one on day {{value}} of your streak",
+      "max": "You have the maximum number of freezes",
+      "rule_cover": "One freeze covers one missed day, so your streak doesn't burn out",
+      "rule_pause": "Your streak doesn't grow on frozen days and continues when you're back",
+      "rule_earn": "Every {{period}} days of streak — +1 freeze",
+      "rule_max": "You can keep up to {{max}} freezes",
+      "rule_break": "If you miss more days than you have freezes, the streak resets and your freezes are kept",
+      "ok": "Got it"
     },
     "modalAchievementUnlocked": {
       "title": "New achievement!"

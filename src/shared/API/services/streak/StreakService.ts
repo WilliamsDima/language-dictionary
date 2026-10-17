@@ -2,6 +2,7 @@ import { request } from '@/shared/API/request'
 import type {
   CompleteStreakResponse,
   DailyChallengeResponse,
+  MarkFrozenDaysSeenResponse,
   StreakStatus,
 } from './types'
 
@@ -21,6 +22,13 @@ class StreakService {
     return request<CompleteStreakResponse>('/streak/complete', {
       method: 'POST',
       json: { date },
+    })
+  }
+
+  markFrozenDaysSeen(dates: string[]) {
+    return request<MarkFrozenDaysSeenResponse>('/streak/freezes/seen', {
+      method: 'POST',
+      json: { dates },
     })
   }
 }

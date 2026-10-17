@@ -17,6 +17,14 @@ import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
 import LanguageStatisticItem from './UI/LanguageStatisticItem/LanguageStatisticItem'
 import LinearGradient from 'react-native-linear-gradient'
 import { useMeProfile } from '@/shared/hooks/useMeProfile'
+import ModalStreakFreezeInfo from '@/features/ModalStreakFreezeInfo/ModalStreakFreezeInfo'
+import StreakFreezeCounter from './UI/StreakFreezeCounter/StreakFreezeCounter'
+
+// плитка серии в состоянии frozen: пропуск покрыт заморозками, а
+// пользователь ещё не вернулся — «ледяные» цвета вместо огненных
+const STREAK_COLORS = ['#FFD200', '#FFD66B']
+const STREAK_FROZEN_COLORS = ['#D9F3FF', '#7CC8FF']
+const STREAK_FROZEN_VALUE_COLOR = '#1D5F8C'
 
 type StatisticCardProps = {
   label: string
@@ -24,6 +32,7 @@ type StatisticCardProps = {
   colors: string[]
   valueColor?: string
   valueIcon?: ReactNode
+  accessory?: ReactNode
 }
 
 type StatCardData = {
@@ -33,10 +42,18 @@ type StatCardData = {
   colors: string[]
   valueColor?: string
   valueIcon?: ReactNode
+  accessory?: ReactNode
 }
 
 const StatisticCard = memo(
-  ({ label, value, colors, valueColor, valueIcon }: StatisticCardProps) => {
+  ({
+    label,
+    value,
+    colors,
+    valueColor,
+    valueIcon,
+    accessory,
+  }: StatisticCardProps) => {
     const { t } = useTranslation()
 
     const valueStyle = useMemo(
@@ -60,6 +77,7 @@ const StatisticCard = memo(
           <Text style={styles.statCardCaption}>
             {t('profileScreen.progress_caption')}
           </Text>
+          {accessory}
         </View>
         <View style={styles.statCardValueRow}>
           {valueIcon}
@@ -101,6 +119,7 @@ const UserStatistic: FC = () => {
   const [isNativeLanguage, setIsNativeLanguage] = useState(false)
   const [languagesSheetRef, presentLanguagesSheet, onDismissLanguagesSheet] =
     useBottomSheet()
+  const [freezeInfoSheetRef, presentFreezeInfoSheet] = useBottomSheet()
 
   const [updateMeLanguages, { isLoading: isSavingLanguages }] =
     useUpdateMeLanguagesMutation()
@@ -148,7 +167,31 @@ const UserStatistic: FC = () => {
     [streakStatus?.current_streak]
   )
 
+  const isStreakFrozen = useMemo(
+    () => streakStatus?.streak_state === 'frozen',
+    [streakStatus?.streak_state]
+  )
+
+  const freezesAvailable = useMemo(
+    () => streakStatus?.freezes_available,
+    [streakStatus?.freezes_available]
+  )
+
+  const maxFreezes = useMemo(
+    () => streakStatus?.max_freezes,
+    [streakStatus?.max_freezes]
+  )
+
+  const nextFreezeAt = useMemo(
+    () => streakStatus?.next_freeze_at_streak ?? null,
+    [streakStatus?.next_freeze_at_streak]
+  )
+
   const streakIcon = useMemo(() => {
+    if (isStreakFrozen) {
+      return <Text style={styles.streakEmoji}>🧊</Text>
+    }
+
     return streakStatus?.completed_today ? (
       <LottieView
         source={require('../../../shared/json/fire.json')}
@@ -159,14 +202,46 @@ const UserStatistic: FC = () => {
     ) : (
       <Text style={styles.streakEmoji}>🔥</Text>
     )
-  }, [streakStatus?.completed_today])
+  }, [isStreakFrozen, streakStatus?.completed_today])
 
-  const streakValueColor = useMemo(
+  const streakValueColor = useMemo(() => {
+    if (isStreakFrozen) {
+      return STREAK_FROZEN_VALUE_COLOR
+    }
+
+    return streakStatus?.completed_today
+      ? theme.colors.palette.black
+      : 'rgba(4, 7, 13, 0.35)'
+  }, [isStreakFrozen, streakStatus?.completed_today, theme.colors.palette.black])
+
+  const streakColors = useMemo(
+    () => (isStreakFrozen ? STREAK_FROZEN_COLORS : STREAK_COLORS),
+    [isStreakFrozen]
+  )
+
+  const streakLabel = useMemo(
     () =>
-      streakStatus?.completed_today
-        ? theme.colors.palette.black
-        : 'rgba(4, 7, 13, 0.35)',
-    [streakStatus?.completed_today, theme.colors.palette.black]
+      isStreakFrozen
+        ? t('profileScreen.streak_frozen_short')
+        : t('profileScreen.streak_short'),
+    [isStreakFrozen, t]
+  )
+
+  const onShowFreezeInfo = useCallback(() => {
+    presentFreezeInfoSheet()
+  }, [presentFreezeInfoSheet])
+
+  // бэкенд без заморозок полей не отдаёт — счётчик не показываем
+  const streakAccessory = useMemo(
+    () =>
+      freezesAvailable !== undefined && maxFreezes !== undefined ? (
+        <StreakFreezeCounter
+          available={freezesAvailable}
+          max={maxFreezes}
+          onPress={onShowFreezeInfo}
+        />
+      ) : undefined,
+    [freezesAvailable, maxFreezes, onShowFreezeInfo]
   )
 
   const longestStreakValue = useMemo(
@@ -202,11 +277,12 @@ const UserStatistic: FC = () => {
       },
       {
         id: 'streak',
-        label: t('profileScreen.streak_short'),
+        label: streakLabel,
         value: streakValue,
-        colors: ['#FFD200', '#FFD66B'],
+        colors: streakColors,
         valueColor: streakValueColor,
         valueIcon: streakIcon,
+        accessory: streakAccessory,
       },
       {
         id: 'longestStreak',
@@ -225,6 +301,9 @@ const UserStatistic: FC = () => {
     streakValue,
     streakValueColor,
     streakIcon,
+    streakLabel,
+    streakColors,
+    streakAccessory,
     longestStreakValue,
   ])
 
@@ -292,6 +371,7 @@ const UserStatistic: FC = () => {
                 value={item.value}
                 valueColor={item.valueColor}
                 valueIcon={item.valueIcon}
+                accessory={item.accessory}
               />
             )
           })}
@@ -339,6 +419,17 @@ const UserStatistic: FC = () => {
           withFooter={!isNativeLanguage}
           closeOnSelect={isNativeLanguage}
         />
+
+        {freezesAvailable !== undefined && maxFreezes !== undefined ? (
+          <ModalStreakFreezeInfo
+            sheetRef={freezeInfoSheetRef}
+            available={freezesAvailable}
+            max={maxFreezes}
+            nextFreezeAt={nextFreezeAt}
+          />
+        ) : (
+          <></>
+        )}
       </View>
 
       {loading && (

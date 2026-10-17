@@ -366,6 +366,10 @@ const colorsLight = {
   streak: {
     bright: lightPalette.gold,
     dim: '#51637D',
+    // заморозка серии: «ледяные» цифры, подсветка и блик
+    frozen: '#2A9FD8',
+    frozenLight: '#E3F6FF',
+    frozenGlow: 'rgba(127, 212, 255, 0.35)',
   },
 } as const
 
@@ -418,6 +422,10 @@ const colorsDark = {
   streak: {
     bright: darkPalette.gold,
     dim: darkPalette.gray_text,
+    // заморозка серии: «ледяные» цифры, подсветка и блик
+    frozen: '#7FD4FF',
+    frozenLight: '#E3F6FF',
+    frozenGlow: 'rgba(127, 212, 255, 0.35)',
   },
 } as const
 

@@ -1,10 +1,15 @@
 import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { appActions } from '@/shared/store/slice/appSlice'
+import {
+  getStreakFreezeMotivationTarget,
+  getStreakFrozenInfo,
+} from '@/shared/helpers/streakFreeze'
 import { streakService } from './StreakService'
 import type {
   CompleteStreakResponse,
   DailyChallengeResponse,
+  MarkFrozenDaysSeenResponse,
   StreakStatus,
 } from './types'
 
@@ -15,6 +20,18 @@ export const streakAPI = baseApi.injectEndpoints({
         return toRtkQueryResult(await streakService.getStatus(date))
       },
       providesTags: ['streak'],
+      // потраченные заморозки, о которых ещё не сказали (например, задание
+      // выполнено на другом устройстве или прошлый POST seen не дошёл), —
+      // показываем модалку «Стрик заморожен»; повторы отсекает appSlice
+      async onQueryStarted(_date, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled.catch(() => ({ data: null }))
+        if (!data) return
+
+        const frozen = getStreakFrozenInfo(data, data.current_streak)
+        if (frozen) {
+          dispatch(appActions.showStreakFrozen(frozen))
+        }
+      },
     }),
 
     getDailyChallenge: build.query<DailyChallengeResponse, string>({
@@ -38,6 +55,20 @@ export const streakAPI = baseApi.injectEndpoints({
         const { data } = await queryFulfilled.catch(() => ({ data: null }))
         if (!data) return
 
+        // заморозки тратятся только при выполнении задания после пропуска —
+        // модалка «Стрик заморожен» показывается раньше модалки успеха
+        // (та ждёт её закрытия) и показывает серию до сегодняшнего +1
+        const frozen = getStreakFrozenInfo(data, data.previous_streak)
+        if (frozen) {
+          dispatch(appActions.showStreakFrozen(frozen))
+        }
+
+        dispatch(
+          appActions.setDailyStreakFreeze({
+            earned: data.freeze_earned === true,
+            motivationAt: getStreakFreezeMotivationTarget(data),
+          })
+        )
         dispatch(
           appActions.setDailyStreakAnimation({
             from: data.previous_streak,
@@ -45,6 +76,15 @@ export const streakAPI = baseApi.injectEndpoints({
           })
         )
         dispatch(appActions.setShowDailyStreakSuccessModal(true))
+      },
+    }),
+
+    // подтверждение показа модалки «Стрик заморожен»; идемпотентно. Ошибка
+    // не критична: в этой сессии даты не вернутся (appSlice), при следующем
+    // запуске GET /streak снова отдаст их и модалка покажется ещё раз
+    markFrozenDaysSeen: build.mutation<MarkFrozenDaysSeenResponse, string[]>({
+      async queryFn(dates) {
+        return toRtkQueryResult(await streakService.markFrozenDaysSeen(dates))
       },
     }),
   }),
@@ -55,4 +95,5 @@ export const {
   useGetDailyChallengeQuery,
   useLazyGetDailyChallengeQuery,
   useCompleteStreakMutation,
+  useMarkFrozenDaysSeenMutation,
 } = streakAPI

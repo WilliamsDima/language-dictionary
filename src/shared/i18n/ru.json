@@ -69,6 +69,10 @@
     "reminders": "Напоминания",
     "reminders_subtitle": "Каждый день в {{time}}, если задание дня ещё не выполнено"
   },
+  "streakFreeze": {
+    "earned_title": "+1 заморозка ❄️",
+    "earned_message": "Она сохранит серию, если пропустишь день"
+  },
   "profileScreen": {
     "practice_cta": "Практиковаться",
     "show_year_result": "Посмотреть итоги {{date}} года 🎉",
@@ -83,6 +87,7 @@
     "studied_count_short": "Изучено",
     "progress_count_short": "В изучении",
     "streak_short": "Серия",
+    "streak_frozen_short": "Серия заморожена",
     "best_streak_short": "Лучшая серия",
     "languages_studied": "Изучаемые языки: ",
     "languages_studied_card": "Изучаемые языки",
@@ -172,7 +177,35 @@
       "whats_new": "Что нового"
     },
     "modalDailyStreakSuccess": {
-      "title": "Серия продолжается!"
+      "title": "Серия продолжается!",
+      "freeze_motivation": "Держи темп! На {{value}}-й день получишь заморозку"
+    },
+    "modalStreakFrozen": {
+      "title": "Стрик заморожен",
+      "subtitle": "Заморозки сохранили твою серию, пока тебя не было",
+      "spent_one": "Потрачена {{count}} заморозка",
+      "spent_few": "Потрачено {{count}} заморозки",
+      "spent_many": "Потрачено {{count}} заморозок",
+      "spent_other": "Потрачено {{count}} заморозки",
+      "left_one": "осталась {{count}}",
+      "left_few": "осталось {{count}}",
+      "left_many": "осталось {{count}}",
+      "left_other": "осталось {{count}}",
+      "summary": "{{spent}}, {{left}}",
+      "ok": "Продолжить"
+    },
+    "modalStreakFreezeInfo": {
+      "title": "Заморозка серии",
+      "subtitle": "Сохраняет серию, если пропустишь день",
+      "available": "Доступно заморозок",
+      "next": "Следующая — на {{value}}-й день серии",
+      "max": "У тебя максимум заморозок",
+      "rule_cover": "Одна заморозка покрывает один пропущенный день — серия не сгорит",
+      "rule_pause": "В замороженные дни серия не растёт и продолжится, когда вернёшься",
+      "rule_earn": "За каждые {{period}} дней серии — +1 заморозка",
+      "rule_max": "Можно накопить не больше {{max}} заморозок",
+      "rule_break": "Если пропустишь больше дней, чем есть заморозок, серия обнулится, а заморозки останутся",
+      "ok": "Понятно"
     },
     "modalAchievementUnlocked": {
       "title": "Новое достижение!"

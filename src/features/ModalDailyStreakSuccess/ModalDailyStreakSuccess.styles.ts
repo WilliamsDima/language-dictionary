@@ -30,6 +30,30 @@ export const styles = StyleSheet.create((theme) => ({
     color: theme.colors.text.primary,
     textAlign: 'center',
   },
+  // мотивация «скоро заморозка» — в «ледяных» цветах, как и всё, что
+  // связано с заморозками серии
+  motivation: {
+    marginTop: theme.spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.radius.xl,
+    borderWidth: theme.size.s1,
+    borderColor: theme.colors.streak.frozenGlow,
+    backgroundColor: theme.colors.palette.info_alpha_16,
+  },
+  motivationIcon: {
+    fontSize: theme.fontSizes.lg,
+  },
+  motivationText: {
+    flexShrink: 1,
+    fontSize: theme.fontSizes.sm,
+    lineHeight: theme.lineHeights.md,
+    fontFamily: theme.fonts.bold,
+    color: theme.colors.streak.frozen,
+  },
   btn: {
     marginTop: theme.spacing.xxxl,
     minWidth: theme.size.s180,

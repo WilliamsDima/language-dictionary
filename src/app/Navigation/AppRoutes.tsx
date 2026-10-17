@@ -6,6 +6,7 @@ import TabNavigation from './TabRoutes/TabRoutes'
 import {useAppSelector} from '@/shared/hooks/useStore'
 import ModalUpdateApp from '@/features/ModalUpdateApp/ModalUpdateApp'
 import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
+import ModalStreakFrozen from '@/features/ModalStreakFrozen/ModalStreakFrozen'
 import ModalDailyStreakSuccess from '@/features/ModalDailyStreakSuccess/ModalDailyStreakSuccess'
 import ModalAchievementUnlocked from '@/features/ModalAchievementUnlocked/ModalAchievementUnlocked'
 import ModalReminderPermission from '@/features/ModalReminderPermission/ModalReminderPermission'
@@ -46,6 +47,7 @@ const Routes = () => {
 
       <ModalUpdateApp />
       <ModalYearResult />
+      <ModalStreakFrozen />
       <ModalDailyStreakSuccess />
       <ModalAchievementUnlocked />
       <ModalReminderPermission />
