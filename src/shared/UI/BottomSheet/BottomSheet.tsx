@@ -153,8 +153,12 @@ const BottomSheet: FC<Props> = ({
           {footer}
         </>
       ) : (
-        // шапка внутри BottomSheetView — иначе enableDynamicSizing не учитывает
-        // её высоту и шторка получается ниже контента (кнопки наезжают на текст)
+        // шапка обязательно внутри BottomSheetView: в @gorhom/bottom-sheet v5 он
+        // `position: absolute; top: 0`, поэтому шапка рядом с ним рисовалась бы
+        // под контентом (текст поверх заголовка), а enableDynamicSizing мерит
+        // только его высоту — шторка без шапки получалась бы ниже контента и
+        // кнопки уходили бы под панель навигации. Внутри — BottomSheetScrollView
+        // нельзя: он перезаписывает измеренную высоту своей
         <BottomSheetView>
           {header}
           <View style={styles.content}>

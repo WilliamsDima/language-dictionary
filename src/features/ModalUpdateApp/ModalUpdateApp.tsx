@@ -172,6 +172,9 @@ const ModalUpdateApp: FC = () => {
       dismissible={!isRequired}
       variant="view"
       dynamicSizing
+      // шторку тянут за ручку: перетаскивание за контент перехватывало бы
+      // прокрутку длинного списка «Что нового»
+      enableContentPanningGesture={false}
     >
       <Text style={styles.version}>{versionText}</Text>
 
