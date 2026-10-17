@@ -11,8 +11,7 @@ import WordItems from '../WordItems/WordItems'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import { useCardsContext } from '@/shared/hooks/useCardsContext'
-import { useTranslation } from '@/shared/i18n/types'
-import { declOfNum } from '@/shared/helpers/textFormat'
+import { type I18NKeys, useTranslation } from '@/shared/i18n/types'
 import { dateFormat } from '@/shared/helpers/dateFormat'
 import Animated, {
   cancelAnimation,
@@ -48,13 +47,16 @@ const MainItem: FC<Props> = ({ item, language }) => {
 
   const { updateStatusHandler } = useCardsContext()
 
-  const wordsLabel = useMemo(() => {
-    return declOfNum(item.items.length, [
-      t('cards.card_1'),
-      t('cards.card_2'),
-      t('cards.card_3'),
-    ])
-  }, [item.items.length, t])
+  // плюральные ключи cards.count_one/_few/_many/_other: форму выбирает
+  // i18next по правилам языка (ru: 1/21 карточка, 2 карточки, 5/11 карточек;
+  // en: 1 card, 21 cards). Базового ключа без суффикса в JSON нет — отсюда каст.
+  // Новые ключи, а не исправленные card_1..3: перевод с бэкенда
+  // (`GET /languages`) мерджится поверх локального и всё ещё содержит
+  // «карточку» в card_1, а отсутствующие в нём ключи берутся из бандла
+  const wordsLabel = useMemo(
+    () => t('cards.count' as I18NKeys, { count: item.items.length }),
+    [item.items.length, t]
+  )
 
   const dateLabel = useMemo(() => {
     return (
@@ -152,7 +154,7 @@ const MainItem: FC<Props> = ({ item, language }) => {
             <View style={styles.metaGroup}>
               <View style={styles.wordsBadge}>
                 <Text style={styles.wordsBadgeText}>
-                  {item.items.length} {wordsLabel}
+                  {wordsLabel}
                 </Text>
               </View>
 

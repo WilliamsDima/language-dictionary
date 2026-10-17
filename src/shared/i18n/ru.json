@@ -188,9 +188,10 @@
     }
   },
   "cards": {
-    "card_1": "карточку",
-    "card_2": "карточки",
-    "card_3": "карточек",
+    "count_one": "{{count}} карточка",
+    "count_few": "{{count}} карточки",
+    "count_many": "{{count}} карточек",
+    "count_other": "{{count}} карточки",
     "study": "учить",
     "studied": "изучено"
   },

@@ -188,9 +188,8 @@
     }
   },
   "cards": {
-    "card_1": "card",
-    "card_2": "cards",
-    "card_3": "cards",
+    "count_one": "{{count}} card",
+    "count_other": "{{count}} cards",
     "study": "study",
     "studied": "learned"
   },
