@@ -12,4 +12,7 @@ export enum LOCAL_KEYS {
   notificationPermissionBlocked = 'notificationPermissionBlocked',
   // предложение включить напоминания после первого задания дня уже показано
   reminderPromptShown = 'reminderPromptShown',
+  // префикс ключа `${prefix}:${userId}` — id достижений, для которых уже
+  // показано уведомление «Половина пути» (ModalAchievementHalfway)
+  achievementHalfwayShown = 'achievementHalfwayShown',
 }

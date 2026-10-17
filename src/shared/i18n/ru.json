@@ -210,6 +210,11 @@
     "modalAchievementUnlocked": {
       "title": "Новое достижение!"
     },
+    "modalAchievementHalfway": {
+      "title": "Половина пути!",
+      "progress": "{{current}} из {{total}}",
+      "remaining": "Осталось {{value}}"
+    },
     "modalReminderPermission": {
       "title": "Включить напоминания?",
       "subtitle": "Напомним в {{time}}, если ты ещё не занимался сегодня",

@@ -9,6 +9,7 @@ import ModalYearResult from '@/features/ModalYearResult/ModalYearResult'
 import ModalStreakFrozen from '@/features/ModalStreakFrozen/ModalStreakFrozen'
 import ModalDailyStreakSuccess from '@/features/ModalDailyStreakSuccess/ModalDailyStreakSuccess'
 import ModalAchievementUnlocked from '@/features/ModalAchievementUnlocked/ModalAchievementUnlocked'
+import ModalAchievementHalfway from '@/features/ModalAchievementHalfway/ModalAchievementHalfway'
 import ModalReminderPermission from '@/features/ModalReminderPermission/ModalReminderPermission'
 import { usePushDeviceRegistration } from '@/shared/hooks/usePushDeviceRegistration'
 import { useNotificationPermissionSync } from '@/shared/hooks/useNotificationPermissionSync'
@@ -50,6 +51,7 @@ const Routes = () => {
       <ModalStreakFrozen />
       <ModalDailyStreakSuccess />
       <ModalAchievementUnlocked />
+      <ModalAchievementHalfway />
       <ModalReminderPermission />
     </>
   )

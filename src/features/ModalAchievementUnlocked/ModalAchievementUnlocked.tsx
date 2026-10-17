@@ -9,7 +9,7 @@ import { useAppSelector } from '@/shared/hooks/useStore'
 import { useAchievements } from '@/shared/hooks/useAchievements'
 import { useMarkAchievementsSeenMutation } from '@/shared/API/services/achievements/AchievementsQuery'
 import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
-import type { AppConfigDTO } from '@/shared/API/services/appConfig/types'
+import { selectHasYearResultSlides } from '@/shared/API/services/appConfig/selectors'
 import { getUnseenAchievements } from '@/shared/helpers/getUnseenAchievements'
 import { styles } from './ModalAchievementUnlocked.styles'
 import { useTranslation } from '@/shared/i18n/types'
@@ -31,14 +31,6 @@ const EMPTY_IDS: ReadonlySet<number> = new Set<number>()
 const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 1 }
 
-// то же условие наличия слайдов, что и в ModalYearResult: флаг showYearResult
-// может быть взведён, а сама модалка итогов года не показана (нет слайдов)
-const selectHasYearResultSlides = ({ data }: { data?: AppConfigDTO }) => ({
-  hasYearResultSlides: !!data?.year_in_review?.slides?.some(
-    (slide) => slide.enabled
-  ),
-})
-
 // глобальная модалка успеха разблокировки достижения. Разблокировка
 // (unlocked/unlocked_at) вычисляется и персистится бэкендом "на чтение"
 // (GET /achievements), а признак "модалку уже показали" (seen) хранится на
@@ -53,6 +45,8 @@ const ModalAchievementUnlocked: FC<Props> = () => {
     isWatchSplash,
     showDailyStreakSuccessModal,
     showYearResult,
+    streakFrozen,
+    isStreakFreezeToastActive,
   } = useAppSelector((store) => store.app)
 
   // id, уже показанные (закрытые) в текущей сессии — не крутим их повторно,
@@ -81,11 +75,21 @@ const ModalAchievementUnlocked: FC<Props> = () => {
 
   const currentId = useMemo(() => current?.id, [current])
 
-  // не перекрываем другие глобальные модалки — покажемся после их закрытия
+  // не перекрываем другие глобальные модалки — покажемся после их закрытия;
+  // тост «+1 заморозка» тоже ждём, иначе RN Modal его закроет
   const isOtherModalVisible = useMemo(
     () =>
-      showDailyStreakSuccessModal || (showYearResult && hasYearResultSlides),
-    [showDailyStreakSuccessModal, showYearResult, hasYearResultSlides]
+      showDailyStreakSuccessModal ||
+      !!streakFrozen ||
+      isStreakFreezeToastActive ||
+      (showYearResult && hasYearResultSlides),
+    [
+      showDailyStreakSuccessModal,
+      streakFrozen,
+      isStreakFreezeToastActive,
+      showYearResult,
+      hasYearResultSlides,
+    ]
   )
 
   // isWatchSplash — не показываемся поверх сплэш-экрана при запуске

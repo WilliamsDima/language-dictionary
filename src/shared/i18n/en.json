@@ -206,6 +206,11 @@
     "modalAchievementUnlocked": {
       "title": "New achievement!"
     },
+    "modalAchievementHalfway": {
+      "title": "Halfway there!",
+      "progress": "{{current}} of {{total}}",
+      "remaining": "{{value}} to go"
+    },
     "modalReminderPermission": {
       "title": "Turn on reminders?",
       "subtitle": "We'll remind you at {{time}} if you haven't practiced today",
