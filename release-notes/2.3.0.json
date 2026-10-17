@@ -1,0 +1,18 @@
+{
+  "ru": [
+    "Заморозки серии: до 3 заморозок, каждая спасает серию в пропущенный день",
+    "+1 заморозка за каждые 30 дней серии; счётчик ❄️ в профиле с пояснением",
+    "Новый экран «Серия заморожена» и мотивация каждые 15 дней серии",
+    "Достижения: когда вы на полпути к достижению, показываем ваш прогресс",
+    "Исправлены окончания на карточке группы слов: «1 карточка» вместо «1 карточку», а также в английском",
+    "Окно обновления: длинный список «Что нового» теперь прокручивается, а кнопки всегда на виду"
+  ],
+  "en": [
+    "Streak freezes: up to 3 freezes, each one saves your streak on a missed day",
+    "+1 freeze for every 30 days of streak; a ❄️ counter in your profile with an explanation",
+    "New \"Streak frozen\" screen and motivation every 15 days of your streak",
+    "Achievements: when you're halfway to an achievement, we show your progress",
+    "Fixed the card count wording on word groups (e.g. \"21 cards\")",
+    "Update window: a long \"What's new\" list now scrolls, and the buttons are always visible"
+  ]
+}
