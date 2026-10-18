@@ -301,6 +301,11 @@
       "description_one": "Learn {{count}} card",
       "description_other": "Learn {{count}} cards"
     },
+    "iron_memory": {
+      "title": "Iron Memory",
+      "description_one": "Bring {{count}} card to the final repetition stage",
+      "description_other": "Bring {{count}} cards to the final repetition stage"
+    },
     "tireless": {
       "title": "Tireless",
       "description_one": "Complete {{count}} training session",

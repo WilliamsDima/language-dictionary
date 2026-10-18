@@ -333,6 +333,13 @@
       "description_many": "Выучите {{count}} карточек",
       "description_other": "Выучите {{count}} карточки"
     },
+    "iron_memory": {
+      "title": "Железная память",
+      "description_few": "Доведите {{count}} карточки до последней ступени повторения",
+      "description_one": "Доведите {{count}} карточку до последней ступени повторения",
+      "description_many": "Доведите {{count}} карточек до последней ступени повторения",
+      "description_other": "Доведите {{count}} карточки до последней ступени повторения"
+    },
     "tireless": {
       "title": "Неутомимый",
       "description_few": "Пройдите {{count}} тренировки",
