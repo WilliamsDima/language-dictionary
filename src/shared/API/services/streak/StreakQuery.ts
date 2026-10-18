@@ -11,6 +11,8 @@ import type {
   DailyChallengeResponse,
   MarkFrozenDaysSeenResponse,
   StreakStatus,
+  SubmitDailyChallengeResultsParams,
+  SubmitDailyChallengeResultsResponse,
 } from './types'
 
 export const streakAPI = baseApi.injectEndpoints({
@@ -39,6 +41,23 @@ export const streakAPI = baseApi.injectEndpoints({
         return toRtkQueryResult(await streakService.getDailyChallenge(date))
       },
       providesTags: ['dailyChallenge'],
+    }),
+
+    // ответы «Помню»/«Не помню» задания дня одним пакетом. Бэкенд сам двигает
+    // карточки по коробкам и меняет их статус: кэш списков карточек по ответу
+    // синхронизирует CardsRepetition (syncItemsStatusInCache), а смена статуса
+    // может пересечь порог достижений CARDS_READY и CARDS_MASTERED (карточка
+    // дошла до последней ступени повторения)
+    submitDailyChallengeResults: build.mutation<
+      SubmitDailyChallengeResultsResponse,
+      SubmitDailyChallengeResultsParams
+    >({
+      async queryFn(params) {
+        return toRtkQueryResult(
+          await streakService.submitDailyChallengeResults(params)
+        )
+      },
+      invalidatesTags: ['achievements'],
     }),
 
     // завершение задания дня — по контракту бэкенда идемпотентно для одной
@@ -95,5 +114,6 @@ export const {
   useGetDailyChallengeQuery,
   useLazyGetDailyChallengeQuery,
   useCompleteStreakMutation,
+  useSubmitDailyChallengeResultsMutation,
   useMarkFrozenDaysSeenMutation,
 } = streakAPI

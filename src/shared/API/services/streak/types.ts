@@ -3,7 +3,7 @@
 // NOTE: единственное исключение из порядка слоёв FSD в проекте — это
 // type-only импорт (стирается на этапе компиляции, не создаёт рантайм-связи
 // shared -> pages), сделанный сознательно, чтобы не плодить второй тип карточки.
-import type { CardDTO } from '@/pages/MainScreen/api/types'
+import type { CardDTO, CardStatus } from '@/pages/MainScreen/api/types'
 
 // none — ни разу не выполнял; completed — выполнено сегодня; active —
 // выполнено вчера; frozen — пропуск покрыт заморозками, но с тех пор задание
@@ -54,10 +54,51 @@ export type StreakFrozenInfo = {
 // произношение, сопоставление), поэтому в ответе поле — любая строка
 export type DailyChallengeKnownMode = 'WORD_TO_TRANSLATE' | 'TRANSLATE_TO_WORD'
 
+// состояние карточки в системе интервальных повторений (Лейтнер):
+// box — текущая коробка, is_new — карточка ещё ни разу не повторялась
+export type CardReviewDTO = {
+  box: number
+  is_new: boolean
+}
+
+// карточка задания дня — обычная CardDTO плюс состояние повторения;
+// review необязательно, чтобы клиент не падал на ответе без него
+export type DailyChallengeCardDTO = CardDTO & {
+  review?: CardReviewDTO
+}
+
 export type DailyChallengeResponse = {
-  cards: CardDTO[]
+  // 15/20/25/30 карточек (меньше, если в колоде мало), порядок уже
+  // перемешан бэкендом
+  cards: DailyChallengeCardDTO[]
   completed_today: boolean
   // необязательно: старый бэкенд поле не отдаёт, незнакомое значение —
   // не ошибка, клиент откатывается на локальную настройку показа
   mode?: string
+}
+
+// ответ пользователя по одной карточке задания дня: correct — «Помню»
+export type DailyChallengeResult = {
+  card_id: number
+  correct: boolean
+}
+
+// POST /streak/daily-challenge/results — не больше 100 элементов, по одному
+// на карточку; пустой results бэкенд отклоняет (400), поэтому не отправляется
+export type SubmitDailyChallengeResultsParams = {
+  date: string
+  results: DailyChallengeResult[]
+}
+
+// новое состояние карточки после ответа: статус бэкенд меняет сам
+// (box >= 5 → READY, «Не помню» у READY → STUDY)
+export type DailyChallengeResultState = {
+  card_id: number
+  box: number
+  due_date: string
+  status: CardStatus
+}
+
+export type SubmitDailyChallengeResultsResponse = {
+  results: DailyChallengeResultState[]
 }

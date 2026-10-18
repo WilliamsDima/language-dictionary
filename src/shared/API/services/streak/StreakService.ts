@@ -4,6 +4,8 @@ import type {
   DailyChallengeResponse,
   MarkFrozenDaysSeenResponse,
   StreakStatus,
+  SubmitDailyChallengeResultsParams,
+  SubmitDailyChallengeResultsResponse,
 } from './types'
 
 class StreakService {
@@ -15,6 +17,13 @@ class StreakService {
     return request<DailyChallengeResponse>(
       `/streak/daily-challenge?date=${date}`,
       { method: 'GET' }
+    )
+  }
+
+  submitDailyChallengeResults(params: SubmitDailyChallengeResultsParams) {
+    return request<SubmitDailyChallengeResultsResponse>(
+      '/streak/daily-challenge/results',
+      { method: 'POST', json: params }
     )
   }
 
