@@ -3,6 +3,7 @@ import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { cardsService } from './CardsService'
 import type { FilterMain } from '@/shared/store/slice/itemsSlice'
+import type { AppDispatch, RootState } from '@/shared/store/store'
 import type {
   AddItemParams,
   CardDTO,
@@ -356,3 +357,63 @@ export const {
   useLazyGetItemsQuery,
   useLazySearchSimilarItemsQuery,
 } = cardsServices
+
+// карточка с новым статусом, который бэкенд выставил сам (например, по
+// итогам задания дня), в одном закэшированном списке getItems: в списке
+// она обновляется на месте; из списка с другим статусом-фильтром убирается;
+// в список с её новым статусом добавляется, только если он фильтрует именно
+// по статусу (без поиска и с подходящим языком) — в «Все» карточка уже
+// посчитана, даже если её страница ещё не подгружена
+const applyItemStatusToCachedList = (
+  draft: GetItemsRequest,
+  args: GetItemsParams,
+  item: IItem
+) => {
+  const filterStatus = args.filter?.status
+  const isStatusFilter = !!filterStatus && filterStatus !== 'ALL'
+  const languages = args.filter?.filter?.languages
+  const index = draft.items.findIndex((it) => it.id === item.id)
+
+  if (index !== -1) {
+    if (isStatusFilter && filterStatus !== item.status) {
+      draft.items.splice(index, 1)
+      draft.total -= 1
+    } else {
+      draft.items[index].status = item.status
+    }
+    return
+  }
+
+  const canInsert =
+    isStatusFilter &&
+    filterStatus === item.status &&
+    !args.filter?.search &&
+    (!languages?.length || languages.includes(item.language))
+
+  if (canInsert) {
+    draft.items.unshift(item)
+    draft.total += 1
+  }
+}
+
+// синхронизирует в кэше списков карточки, статус которых сменил бэкенд —
+// точечно, без инвалидации тега 'cards': перезапрос постраничного списка
+// по последней странице дописал бы её повторно (merge в getItems).
+// items — только карточки, у которых статус действительно поменялся
+export const syncItemsStatusInCache =
+  (items: IItem[]) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!items.length) return
+
+    const cachedArgs = cardsServices.util.selectCachedArgsForQuery(
+      getState(),
+      'getItems'
+    )
+
+    cachedArgs.forEach((args) => {
+      dispatch(
+        cardsServices.util.updateQueryData('getItems', args, (draft) => {
+          items.forEach((item) => applyItemStatusToCachedList(draft, args, item))
+        })
+      )
+    })
+  }

@@ -1,5 +1,5 @@
 import { RoutesNames } from './RoutesNames'
-import type { CardDTO } from '@/pages/MainScreen/api/types'
+import type { DailyChallengeCardDTO } from '@/shared/API/services/streak/types'
 
 export type StartStackParams = {
   [RoutesNames.auth]: undefined
@@ -10,7 +10,11 @@ export type StartStackParams = {
 // { mode: 'daily', cards } — вход из баннера серии с уже готовым набором карточек,
 // challengeMode — режим показа задания дня из ответа бэкенда (может отсутствовать)
 export type CardsRepetitionParams =
-  | { mode: 'daily'; cards: CardDTO[]; challengeMode?: string }
+  | {
+      mode: 'daily'
+      cards: DailyChallengeCardDTO[]
+      challengeMode?: string
+    }
   | undefined
 
 export type MainStackParams = {

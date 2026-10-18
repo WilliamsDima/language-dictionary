@@ -3,6 +3,7 @@ import { useUnistyles } from 'react-native-unistyles'
 import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
 import type { ListRenderItem } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
+import DailySummary from '../DailySummary/DailySummary'
 import { styles } from './Slides.styles'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { useCardsRepetition } from '../../CardsContext'
@@ -34,6 +35,7 @@ const Slides: FC<Props> = ({}) => {
     currentSlide,
     count,
     isDailyMode,
+    isDailyFinished,
     onEnd,
     nextSlide,
     updateCurrentSlideIndex,
@@ -98,10 +100,12 @@ const Slides: FC<Props> = ({}) => {
     [isDailyMode, t]
   )
 
-  const isLastSlide = useMemo(
-    () => currentSlide === count - 1,
-    [currentSlide, count]
-  )
+  const finishClasses = useMemo(() => ({ textBtn: styles.textBtn }), [])
+
+  // задание дня отвечено целиком — вместо слайдов итог с кнопкой завершения
+  if (isDailyFinished) {
+    return <DailySummary />
+  }
 
   return (
     <View style={styles.container}>
@@ -148,44 +152,55 @@ const Slides: FC<Props> = ({}) => {
         </GestureHandlerRootView>
 
         <View style={styles.footer}>
-          {!!data.length && (
+          {data.length ? (
             <View style={styles.btns}>
-              {/* учить или на повторение сделать ввиде иконки */}
-              <Button
-                isText={false}
-                style={styles.btnGroup}
-                onPress={handleChangeStatus}
-              >
-                {isLoading ? (
-                  <ActivityIndicator
-                    size={'small'}
-                    color={theme.colors.palette.primery}
-                  />
-                ) : (
-                  <>
-                    {currentItem?.status === 'STUDY' ? (
-                      <DoneIcon width={24} height={24} />
-                    ) : (
-                      <RepeatIcon width={24} height={24} />
-                    )}
-                  </>
-                )}
-              </Button>
+              {/* в задании дня статус карточки меняет бэкенд по ответам
+                  «Помню»/«Не помню» — ручного переключения статуса там нет */}
+              {isDailyMode ? (
+                <></>
+              ) : (
+                <Button
+                  isText={false}
+                  style={styles.btnGroup}
+                  onPress={handleChangeStatus}
+                >
+                  {isLoading ? (
+                    <ActivityIndicator
+                      size={'small'}
+                      color={theme.colors.palette.primery}
+                    />
+                  ) : (
+                    <>
+                      {currentItem?.status === 'STUDY' ? (
+                        <DoneIcon width={24} height={24} />
+                      ) : (
+                        <RepeatIcon width={24} height={24} />
+                      )}
+                    </>
+                  )}
+                </Button>
+              )}
 
               <Button isText={false} style={styles.btnGroup} onPress={editItem}>
                 <EditIcon width={24} height={24} />
               </Button>
             </View>
+          ) : (
+            <></>
           )}
 
-          <Button
-            onPress={onEnd}
-            disabled={isDailyMode && !isLastSlide}
-            style={styles.btn}
-            classes={{ textBtn: styles.textBtn }}
-          >
-            {t('ui.finish')}
-          </Button>
+          {/* задание дня завершается только из итога (DailySummary) */}
+          {isDailyMode ? (
+            <></>
+          ) : (
+            <Button
+              onPress={onEnd}
+              style={styles.btn}
+              classes={finishClasses}
+            >
+              {t('ui.finish')}
+            </Button>
+          )}
         </View>
       </View>
 

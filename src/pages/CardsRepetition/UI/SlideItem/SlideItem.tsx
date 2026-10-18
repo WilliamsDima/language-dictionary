@@ -20,6 +20,7 @@ import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
 import { runOnJS } from 'react-native-reanimated'
 import { useTranslation } from '@/shared/i18n/types'
+import DailyAnswerButtons from '../DailyAnswerButtons/DailyAnswerButtons'
 
 type Props = {
   item: CardSlideType
@@ -94,7 +95,14 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
   const [isFlipped, setIsFlipped] = useState(false)
-  const { scrollX, nextSlide, swipeSlide, liveItems } = useCardsRepetition()
+  const {
+    scrollX,
+    nextSlide,
+    swipeSlide,
+    liveItems,
+    isDailyMode,
+    newCardIds,
+  } = useCardsRepetition()
   const { t } = useTranslation()
 
   const flipAnimation = useRef(new Animated.Value(0)).current
@@ -154,6 +162,23 @@ const SlideItem: FC<Props> = (props) => {
     })
   }, [flipAnimation])
 
+  // в задании дня тап по карточке переворачивает её (ответ — кнопками
+  // «Помню»/«Не помню» после переворота), в обычной практике — следующая
+  const onCardPress = useMemo(
+    () => (isDailyMode ? flipCard : nextSlide),
+    [isDailyMode, flipCard, nextSlide]
+  )
+
+  const isNew = useMemo(
+    () => newCardIds.has(item.item.id),
+    [newCardIds, item.item.id]
+  )
+
+  const isAnswerVisible = useMemo(
+    () => isDailyMode && isFlipped,
+    [isDailyMode, isFlipped]
+  )
+
   const btnClasses = useMemo(() => ({ textBtn: styles.btnText }), [])
 
   const itemStyle = useMemo(() => [styles.item, { opacity }], [opacity])
@@ -170,10 +195,20 @@ const SlideItem: FC<Props> = (props) => {
           <Animated.View style={itemStyle}>
             <TouchableOpacity
               style={styles.cardTouchable}
-              onPress={nextSlide}
+              onPress={onCardPress}
               activeOpacity={1}
             >
               <Animated.View style={cardStyle}>
+                {isNew ? (
+                  <View style={styles.newBadge}>
+                    <Text style={styles.newBadgeText}>
+                      {t('cardsRepetition.new_card')}
+                    </Text>
+                  </View>
+                ) : (
+                  <></>
+                )}
+
                 <ScrollView
                   style={styles.itemWords}
                   contentContainerStyle={styles.contentContainerStyle}
@@ -192,13 +227,17 @@ const SlideItem: FC<Props> = (props) => {
             </TouchableOpacity>
 
             <View style={styles.footer}>
-              <Button
-                style={styles.btn}
-                classes={btnClasses}
-                onPress={flipCard}
-              >
-                {t('cardsRepetition.check')}
-              </Button>
+              {isAnswerVisible ? (
+                <DailyAnswerButtons cardId={item.item.id} />
+              ) : (
+                <Button
+                  style={styles.btn}
+                  classes={btnClasses}
+                  onPress={flipCard}
+                >
+                  {t('cardsRepetition.check')}
+                </Button>
+              )}
             </View>
           </Animated.View>
         </View>

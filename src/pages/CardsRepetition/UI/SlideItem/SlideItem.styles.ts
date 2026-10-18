@@ -46,6 +46,23 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.palette.border,
   },
 
+  // метка «Новое» у карточки задания дня, которая ещё не повторялась
+  newBadge: {
+    position: 'absolute',
+    top: theme.size.s12,
+    right: theme.size.s12,
+    zIndex: 1,
+    paddingHorizontal: theme.size.s10,
+    paddingVertical: theme.size.s4,
+    borderRadius: theme.size.s999,
+    backgroundColor: theme.colors.palette.success_alpha_16,
+  },
+  newBadgeText: {
+    fontSize: theme.fontSize.s12,
+    fontWeight: '600',
+    color: theme.colors.palette.green,
+  },
+
   cardTouchable: {
     flex: 1,
     width: '100%',

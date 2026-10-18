@@ -370,7 +370,18 @@
   "cardsRepetition": {
     "empty_daily": "You have no cards — add some to complete today's task and keep your streak",
     "empty_filter": "Nothing found for the selected filter",
-    "check": "Check"
+    "check": "Check",
+    "remember": "I remember",
+    "dont_remember": "Don't remember",
+    "new_card": "New",
+    "summary": {
+      "title": "Today's task is done!",
+      "known": "Knew",
+      "unknown": "Didn't know",
+      "repeat_tomorrow_one": "We'll review {{count}} card tomorrow",
+      "repeat_tomorrow_other": "We'll review {{count}} cards tomorrow",
+      "all_known": "Great — you remembered every card!"
+    }
   },
   "splash": {
     "slogan": "Boosting your vocabulary with living flashcards"

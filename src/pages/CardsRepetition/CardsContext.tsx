@@ -24,12 +24,27 @@ import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
 import { getLocalDateString } from '@/shared/helpers/localDate'
 import { shuffleArray } from '@/shared/helpers/shuffleArray'
-import { useAppSelector } from '@/shared/hooks/useStore'
-import { useGetItemsQuery, cardToItem } from '@/pages/MainScreen/api/cardsServices'
-import { useCompleteStreakMutation } from '@/shared/API/services/streak/StreakQuery'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/useStore'
+import {
+  useGetItemsQuery,
+  cardToItem,
+  syncItemsStatusInCache,
+} from '@/pages/MainScreen/api/cardsServices'
+import {
+  useCompleteStreakMutation,
+  useSubmitDailyChallengeResultsMutation,
+} from '@/shared/API/services/streak/StreakQuery'
+import type { SubmitDailyChallengeResultsResponse } from '@/shared/API/services/streak/types'
 import { useLogMetricEventMutation } from '@/shared/API/services/metrics/MetricsQuery'
 import type { ShowVariantListVale } from '@/shared/store/slice/userSlice'
 import { getDailyChallengeModeBehavior } from './dailyChallengeModes'
+import {
+  DailyAnswers,
+  DailyAnswersStats,
+  getDailyAnswersStats,
+  getNextUnansweredIndex,
+  toDailyChallengeResults,
+} from './dailyAnswers'
 
 export type CardSlideType = {
   index: number
@@ -47,9 +62,17 @@ type IContext = {
   count: number
   isDailyMode: boolean
   showVariant: ShowVariantListVale | null
+  // задание дня: ответы «Помню» (true) / «Не помню» (false) по id карточки
+  dailyAnswers: DailyAnswers
+  dailyStats: DailyAnswersStats
+  // задание дня: отвечены все карточки — вместо слайдов показывается итог
+  isDailyFinished: boolean
+  // задание дня: карточки, которые ещё ни разу не повторялись (review.is_new)
+  newCardIds: Set<number>
   swipeSlide: (translationX: number) => void
   updateCurrentSlideIndex: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
   nextSlide: () => void
+  answerCard: (cardId: number, correct: boolean) => void
   onEnd: () => void
 }
 
@@ -67,6 +90,7 @@ type CardsRepetitionRoute = RouteProp<
 export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const { goBack } = useNavigation<NavigateStack>()
   const route = useRoute<CardsRepetitionRoute>()
+  const dispatch = useAppDispatch()
   const flatList = useRef<FlatList>(null)
   const scrollX = useRef(new Animated.Value(0)).current
 
@@ -75,6 +99,11 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [data, setData] = useState<CardSlideType[]>([])
+  // ответы задания дня живут только в памяти и уходят одним запросом в
+  // onEnd; если приложение закрыли посреди задания — ответы теряются
+  // (осознанное решение, без офлайн-буфера)
+  const [dailyAnswers, setDailyAnswers] = useState<DailyAnswers>({})
+  const [isDailyFinished, setIsDailyFinished] = useState(false)
 
   const dailyParams = route.params?.mode === 'daily' ? route.params : undefined
   const isDailyMode = !!dailyParams
@@ -101,10 +130,21 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   })
 
   const [completeStreak] = useCompleteStreakMutation()
+  const [submitDailyResults] = useSubmitDailyChallengeResultsMutation()
   const [logMetricEvent] = useLogMetricEventMutation()
 
   const dailyItems = useMemo(
     () => dailyParams?.cards.map(cardToItem) ?? [],
+    [dailyParams]
+  )
+
+  const newCardIds = useMemo(
+    () =>
+      new Set(
+        (dailyParams?.cards ?? [])
+          .filter((card) => card.review?.is_new)
+          .map((card) => card.id)
+      ),
     [dailyParams]
   )
 
@@ -130,11 +170,53 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     return data.find((it, i) => i === currentSlide)
   }, [currentSlide, data])
 
+  const dailyStats = useMemo(
+    () => getDailyAnswersStats(dailyAnswers),
+    [dailyAnswers]
+  )
+
+  // бэкенд сам сменил статус части карточек (box >= 5 → READY, «Не помню»
+  // у READY → STUDY) — переносим это в кэш списков карточек
+  const syncDailyStatuses = useCallback(
+    (response: SubmitDailyChallengeResultsResponse) => {
+      const changedItems = response.results.reduce<IItem[]>((acc, result) => {
+        const item = dailyItems.find((it) => it.id === result.card_id)
+        return item && item.status !== result.status
+          ? [...acc, { ...item, status: result.status }]
+          : acc
+      }, [])
+
+      dispatch(syncItemsStatusInCache(changedItems))
+    },
+    [dailyItems, dispatch]
+  )
+
+  // ответы задания дня уходят до POST /streak/complete, но завершение
+  // задания от их успеха не зависит: ошибка отправки ответов не блокирует
+  // ни выход, ни стрик. Пустой набор не отправляется (бэкенд ответит 400).
+  // Статус этих карточек меняет сам бэкенд — PUT /cards/{id}/status в
+  // задании дня не вызывается
+  const finishDailyChallenge = useCallback(async () => {
+    const date = getLocalDateString()
+    const results = toDailyChallengeResults(dailyAnswers)
+
+    if (results.length) {
+      try {
+        const response = await submitDailyResults({ date, results }).unwrap()
+        syncDailyStatuses(response)
+      } catch {
+        // ответы этого захода теряются — задание всё равно засчитываем
+      }
+    }
+
+    completeStreak(date)
+  }, [completeStreak, dailyAnswers, submitDailyResults, syncDailyStatuses])
+
   const onEnd = useCallback(() => {
     // завершение задания дня фиксируем ровно в момент, когда пользователь
     // выходит из практики — идемпотентно на бэкенде, поэтому не ждём ответ.
     if (isDailyMode) {
-      completeStreak(getLocalDateString())
+      finishDailyChallenge()
     }
 
     // training_opened — единственное реальное событие, которое двигает
@@ -145,29 +227,47 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
     setCurrentSlide(0)
     goBack()
-  }, [completeStreak, goBack, isDailyMode, logMetricEvent])
+  }, [finishDailyChallenge, goBack, isDailyMode, logMetricEvent])
+
+  const goToSlide = useCallback((slideIndex: number) => {
+    flatList.current?.scrollToOffset({ offset: slideIndex * width })
+    setCurrentSlide(slideIndex)
+  }, [])
 
   const prevSlide = useCallback(() => {
-    const prevSlideIndex = currentSlide - 1
-    const offset = prevSlideIndex * width
-
     if (currentSlide !== 0) {
-      flatList.current?.scrollToOffset({ offset })
-      setCurrentSlide(prevSlideIndex)
+      goToSlide(currentSlide - 1)
     }
-  }, [currentSlide])
+  }, [currentSlide, goToSlide])
 
   const nextSlide = useCallback(() => {
     const nexSlideIndex = currentSlide + 1
-    const offset = nexSlideIndex * width
 
     if (nexSlideIndex !== data.length) {
-      flatList.current?.scrollToOffset({ offset })
-      setCurrentSlide(nexSlideIndex)
+      goToSlide(nexSlideIndex)
     } else {
       // долистал до конца
     }
-  }, [currentSlide, data.length])
+  }, [currentSlide, data.length, goToSlide])
+
+  // повторный ответ по той же карточке перезаписывает прежний; дальше —
+  // следующая неотвеченная карточка, а когда отвечены все — итог задания
+  const answerCard = useCallback(
+    (cardId: number, correct: boolean) => {
+      const nextAnswers = { ...dailyAnswers, [cardId]: correct }
+      const fromIndex = data.findIndex((it) => it.item.id === cardId)
+      const nextIndex = getNextUnansweredIndex(data, nextAnswers, fromIndex)
+
+      setDailyAnswers(nextAnswers)
+
+      if (nextIndex === -1) {
+        setIsDailyFinished(true)
+      } else {
+        goToSlide(nextIndex)
+      }
+    },
+    [dailyAnswers, data, goToSlide]
+  )
 
   const swipeSlide = useCallback(
     (translationX: number) => {
@@ -232,9 +332,14 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       count: data.length,
       isDailyMode,
       showVariant,
+      dailyAnswers,
+      dailyStats,
+      isDailyFinished,
+      newCardIds,
       updateCurrentSlideIndex,
       nextSlide,
       swipeSlide,
+      answerCard,
       onEnd,
     }
   }, [
@@ -246,9 +351,14 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     isFetching,
     isDailyMode,
     showVariant,
+    dailyAnswers,
+    dailyStats,
+    isDailyFinished,
+    newCardIds,
     updateCurrentSlideIndex,
     nextSlide,
     swipeSlide,
+    answerCard,
     onEnd,
   ])
 
