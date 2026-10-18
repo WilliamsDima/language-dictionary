@@ -1,0 +1,20 @@
+{
+  "ru": [
+    "Задание дня теперь работает как интервальное повторение: переверните карточку и ответьте «Помню» или «Не помню»",
+    "Невспомненные карточки вернутся завтра, а хорошо выученные будут попадаться всё реже",
+    "Карточка, которую вы вспомнили 5 раз подряд в разные дни, становится изученной; «Не помню» возвращает изученную карточку на изучение",
+    "Размер задания дня теперь меняется от 15 до 30 карточек",
+    "В конце задания — итог «Знал» / «Не знал»",
+    "Новые карточки в задании отмечены меткой «Новое»",
+    "Новое достижение «Железная память»"
+  ],
+  "en": [
+    "The daily task now works as spaced repetition: flip a card and answer \"I remember\" or \"Don't remember\"",
+    "Cards you didn't remember come back tomorrow, while well-learned ones show up less and less often",
+    "A card you remember 5 times in a row on different days becomes learned; \"Don't remember\" sends a learned card back to learning",
+    "The daily task size now varies from 15 to 30 cards",
+    "A summary at the end of the task: \"Knew\" and \"Didn't know\"",
+    "New cards in the task are marked \"New\"",
+    "New achievement: \"Iron Memory\""
+  ]
+}
