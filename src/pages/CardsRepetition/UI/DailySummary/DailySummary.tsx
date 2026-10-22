@@ -1,5 +1,6 @@
 import React, { FC, memo, useMemo } from 'react'
-import { View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
+import { useUnistyles } from 'react-native-unistyles'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import { I18NKeys, useTranslation } from '@/shared/i18n/types'
@@ -7,10 +8,13 @@ import { useCardsRepetition } from '../../CardsContext'
 import { styles } from './DailySummary.styles'
 
 // итог задания дня: сколько карточек вспомнил / не вспомнил. Кнопка
-// завершения отправляет ответы и закрывает задание (onEnd)
+// завершения отправляет ответы и закрывает задание (onEnd); пока запросы
+// идут — лоадер на кнопке, при ошибке — сообщение и «Повторить»
 const DailySummary: FC = () => {
-  const { dailyStats, onEnd } = useCardsRepetition()
+  const { dailyStats, isDailyCompleting, isDailyCompleteError, onEnd } =
+    useCardsRepetition()
   const { t } = useTranslation()
+  const { theme } = useUnistyles()
 
   // «не помню» откатывает карточку в первую коробку — она вернётся завтра
   const hint = useMemo(
@@ -21,6 +25,11 @@ const DailySummary: FC = () => {
           })
         : t('cardsRepetition.summary.all_known'),
     [dailyStats.unknown, t]
+  )
+
+  const btnText = useMemo(
+    () => (isDailyCompleteError ? t('ui.retry') : t('ui.finish')),
+    [isDailyCompleteError, t]
   )
 
   const btnClasses = useMemo(() => ({ textBtn: styles.textBtn }), [])
@@ -47,8 +56,26 @@ const DailySummary: FC = () => {
 
       <Text style={styles.hint}>{hint}</Text>
 
-      <Button style={styles.btn} classes={btnClasses} onPress={onEnd}>
-        {t('ui.finish')}
+      {isDailyCompleteError ? (
+        <Text style={styles.error}>
+          {t('cardsRepetition.summary.complete_error')}
+        </Text>
+      ) : (
+        <></>
+      )}
+
+      <Button
+        style={styles.btn}
+        classes={btnClasses}
+        isText={!isDailyCompleting}
+        disabled={isDailyCompleting}
+        onPress={onEnd}
+      >
+        {isDailyCompleting ? (
+          <ActivityIndicator size={'small'} color={theme.colors.base.black} />
+        ) : (
+          btnText
+        )}
       </Button>
     </View>
   )

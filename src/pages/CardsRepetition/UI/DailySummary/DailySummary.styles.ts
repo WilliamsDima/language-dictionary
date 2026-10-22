@@ -56,6 +56,13 @@ export const styles = StyleSheet.create((theme, rt) => ({
     color: theme.colors.text.primary,
   },
 
+  error: {
+    textAlign: 'center',
+    fontSize: theme.fontSize.s14,
+    fontWeight: '600',
+    color: theme.colors.palette.red,
+  },
+
   btn: {
     minWidth: theme.size.s180,
     paddingVertical: theme.size.s16,

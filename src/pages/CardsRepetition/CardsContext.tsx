@@ -67,6 +67,11 @@ type IContext = {
   dailyStats: DailyAnswersStats
   // задание дня: отвечены все карточки — вместо слайдов показывается итог
   isDailyFinished: boolean
+  // задание дня: идёт отправка ответов и завершение серии (кнопка итога
+  // показывает лоадер и не нажимается повторно)
+  isDailyCompleting: boolean
+  // задание дня: завершить серию не удалось — итог предлагает повторить
+  isDailyCompleteError: boolean
   // задание дня: карточки, которые ещё ни разу не повторялись (review.is_new)
   newCardIds: Set<number>
   swipeSlide: (translationX: number) => void
@@ -104,6 +109,14 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   // (осознанное решение, без офлайн-буфера)
   const [dailyAnswers, setDailyAnswers] = useState<DailyAnswers>({})
   const [isDailyFinished, setIsDailyFinished] = useState(false)
+  const [isDailyCompleting, setIsDailyCompleting] = useState(false)
+  const [isDailyCompleteError, setIsDailyCompleteError] = useState(false)
+  // синхронная защита от двойного нажатия «Завершить» — state обновится
+  // только на следующем рендере
+  const isDailyCompletingRef = useRef(false)
+  // ответы уже приняты бэкендом — при повторе после ошибки завершения серии
+  // второй раз их не шлём
+  const isDailyResultsSentRef = useRef(false)
 
   const dailyParams = route.params?.mode === 'daily' ? route.params : undefined
   const isDailyMode = !!dailyParams
@@ -195,30 +208,26 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   // задания от их успеха не зависит: ошибка отправки ответов не блокирует
   // ни выход, ни стрик. Пустой набор не отправляется (бэкенд ответит 400).
   // Статус этих карточек меняет сам бэкенд — PUT /cards/{id}/status в
-  // задании дня не вызывается
+  // задании дня не вызывается. Ошибка POST /streak/complete пробрасывается
+  // наружу — её показывает итог задания с возможностью повторить
   const finishDailyChallenge = useCallback(async () => {
     const date = getLocalDateString()
     const results = toDailyChallengeResults(dailyAnswers)
 
-    if (results.length) {
+    if (results.length && !isDailyResultsSentRef.current) {
       try {
         const response = await submitDailyResults({ date, results }).unwrap()
+        isDailyResultsSentRef.current = true
         syncDailyStatuses(response)
       } catch {
         // ответы этого захода теряются — задание всё равно засчитываем
       }
     }
 
-    completeStreak(date)
+    await completeStreak(date).unwrap()
   }, [completeStreak, dailyAnswers, submitDailyResults, syncDailyStatuses])
 
-  const onEnd = useCallback(() => {
-    // завершение задания дня фиксируем ровно в момент, когда пользователь
-    // выходит из практики — идемпотентно на бэкенде, поэтому не ждём ответ.
-    if (isDailyMode) {
-      finishDailyChallenge()
-    }
-
+  const leaveRepetition = useCallback(() => {
     // training_opened — единственное реальное событие, которое двигает
     // метрику trainings_count на бэкенде (достижения "Постоянная практика",
     // "Мастер тренировок"); это фоновая метрика, не блокирует выход из
@@ -227,7 +236,34 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
 
     setCurrentSlide(0)
     goBack()
-  }, [finishDailyChallenge, goBack, isDailyMode, logMetricEvent])
+  }, [goBack, logMetricEvent])
+
+  // свободная практика ничего не ждёт от сервера — выходим сразу. Задание
+  // дня закрываем только после ответа POST /streak/complete: пока запросы
+  // идут, кнопка итога показывает лоадер, иначе пользователь видит главный
+  // экран без продлённой серии, а модалка успеха всплывает через пару секунд
+  const onEnd = useCallback(async () => {
+    if (!isDailyMode) {
+      leaveRepetition()
+      return
+    }
+
+    if (isDailyCompletingRef.current) return
+
+    isDailyCompletingRef.current = true
+    setIsDailyCompleting(true)
+    setIsDailyCompleteError(false)
+
+    try {
+      await finishDailyChallenge()
+      leaveRepetition()
+    } catch {
+      setIsDailyCompleteError(true)
+    } finally {
+      isDailyCompletingRef.current = false
+      setIsDailyCompleting(false)
+    }
+  }, [finishDailyChallenge, isDailyMode, leaveRepetition])
 
   const goToSlide = useCallback((slideIndex: number) => {
     flatList.current?.scrollToOffset({ offset: slideIndex * width })
@@ -335,6 +371,8 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       dailyAnswers,
       dailyStats,
       isDailyFinished,
+      isDailyCompleting,
+      isDailyCompleteError,
       newCardIds,
       updateCurrentSlideIndex,
       nextSlide,
@@ -354,6 +392,8 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     dailyAnswers,
     dailyStats,
     isDailyFinished,
+    isDailyCompleting,
+    isDailyCompleteError,
     newCardIds,
     updateCurrentSlideIndex,
     nextSlide,

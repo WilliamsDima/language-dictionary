@@ -385,7 +385,8 @@
       "unknown": "Didn't know",
       "repeat_tomorrow_one": "We'll review {{count}} card tomorrow",
       "repeat_tomorrow_other": "We'll review {{count}} cards tomorrow",
-      "all_known": "Great — you remembered every card!"
+      "all_known": "Great — you remembered every card!",
+      "complete_error": "Couldn't save your result. Check your connection and try again"
     }
   },
   "splash": {
