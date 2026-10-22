@@ -5,6 +5,7 @@ import { Icon } from '@/assets/icons/Icon'
 import Text from '@/shared/UI/Text/Text'
 import { useTranslation } from '@/shared/i18n/types'
 import { useAchievements } from '@/shared/hooks/useAchievements'
+import { sortAchievementsByUnlock } from '@/shared/helpers/sortAchievementsByUnlock'
 import { styles } from './ProfileAchievements.styles'
 import AchievementPreviewCard from './UI/AchievementPreviewCard/AchievementPreviewCard'
 
@@ -20,8 +21,13 @@ const ProfileAchievements: FC<Props> = ({ onPress }) => {
 
   const { data } = useAchievements()
 
+  // тот же порядок, что на экране достижений: открытые — первыми, в порядке
+  // открытия, за ними неоткрытые
   const achievementsPreview = useMemo(() => {
-    return (data ?? []).slice(0, PREVIEW_ACHIEVEMENTS_COUNT)
+    return sortAchievementsByUnlock(data ?? []).slice(
+      0,
+      PREVIEW_ACHIEVEMENTS_COUNT
+    )
   }, [data])
 
   return (

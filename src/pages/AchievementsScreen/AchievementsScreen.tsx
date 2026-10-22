@@ -8,6 +8,7 @@ import Button from '@/shared/UI/Button/Button'
 import { useTranslation } from '@/shared/i18n/types'
 import { useAchievements } from '@/shared/hooks/useAchievements'
 import AchievementCard from './UI/AchievementCard/AchievementCard'
+import { sortAchievementsByUnlock } from '@/shared/helpers/sortAchievementsByUnlock'
 
 // экран только отображает актуальный список — обнаружение свежих
 // разблокировок и показ модалки успеха вынесены в глобальный
@@ -18,7 +19,11 @@ const AchievementsScreen: FC = () => {
 
   const { data, isLoading, isError, refetch } = useAchievements()
 
-  const achievements = useMemo(() => data ?? [], [data])
+  // открытые — первыми, в порядке открытия; за ними неоткрытые
+  const achievements = useMemo(
+    () => sortAchievementsByUnlock(data ?? []),
+    [data]
+  )
 
   return (
     <Layout isScroll>
