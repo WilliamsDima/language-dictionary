@@ -6,15 +6,13 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {
-  Animated,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Animated, Text, View } from 'react-native'
 import { styles } from './SlideItem.styles'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import {
+  Gesture,
+  GestureDetector,
+  ScrollView,
+} from 'react-native-gesture-handler'
 import { CardSlideType, useCardsRepetition } from '../../CardsContext'
 import { width } from '@/shared/helpers/ScaleUtils'
 import Button from '@/shared/UI/Button/Button'
@@ -29,6 +27,13 @@ type Props = {
 
 // с какой длины фраза считается длинной и рендерится уменьшенным шрифтом
 const LONG_TEXT_LENGTH = 20
+
+// пороги жестов карточки (px): горизонтальный свайп включается после
+// SWIPE_ACTIVE_OFFSET_X по X и отменяется, если палец раньше ушёл на
+// SWIPE_FAIL_OFFSET_Y по Y (это скролл); тап — не дальше TAP_MAX_DISTANCE
+const SWIPE_ACTIVE_OFFSET_X: [number, number] = [-20, 20]
+const SWIPE_FAIL_OFFSET_Y: [number, number] = [-12, 12]
+const TAP_MAX_DISTANCE = 10
 
 type CardWordRowProps = {
   firstText: string
@@ -131,10 +136,16 @@ const SlideItem: FC<Props> = (props) => {
     [flipAnimation]
   )
 
+  // свайп между карточками — только горизонтальный: без activeOffsetX /
+  // failOffsetY пан активировался от любого движения пальца и перехватывал
+  // вертикальный скролл содержимого карточки
   const panGesture = useMemo(() => {
-    return Gesture.Pan().onEnd((event) => {
-      runOnJS(swipeSlide)(event.translationX)
-    })
+    return Gesture.Pan()
+      .activeOffsetX(SWIPE_ACTIVE_OFFSET_X)
+      .failOffsetY(SWIPE_FAIL_OFFSET_Y)
+      .onEnd((event) => {
+        runOnJS(swipeSlide)(event.translationX)
+      })
   }, [swipeSlide])
 
   const flipCard = useCallback(() => {
@@ -169,6 +180,21 @@ const SlideItem: FC<Props> = (props) => {
     [isDailyMode, flipCard, nextSlide]
   )
 
+  // тап по карточке — жестом RNGH, а не TouchableOpacity вокруг ScrollView:
+  // так тап, скролл содержимого (ScrollView из RNGH) и свайп разруливает
+  // один обработчик жестов. Сдвиг пальца дальше TAP_MAX_DISTANCE или начало
+  // скролла отменяют тап
+  const tapGesture = useMemo(() => {
+    return Gesture.Tap()
+      .maxDistance(TAP_MAX_DISTANCE)
+      .runOnJS(true)
+      .onEnd((_event, success) => {
+        if (success) {
+          onCardPress()
+        }
+      })
+  }, [onCardPress])
+
   const isNew = useMemo(
     () => newCardIds.has(item.item.id),
     [newCardIds, item.item.id]
@@ -193,38 +219,36 @@ const SlideItem: FC<Props> = (props) => {
       <View style={styles.wrapper}>
         <View style={styles.itemWrapper}>
           <Animated.View style={itemStyle}>
-            <TouchableOpacity
-              style={styles.cardTouchable}
-              onPress={onCardPress}
-              activeOpacity={1}
-            >
-              <Animated.View style={cardStyle}>
-                {isNew ? (
-                  <View style={styles.newBadge}>
-                    <Text style={styles.newBadgeText}>
-                      {t('cardsRepetition.new_card')}
-                    </Text>
-                  </View>
-                ) : (
-                  <></>
-                )}
-
-                <ScrollView
-                  style={styles.itemWords}
-                  contentContainerStyle={styles.contentContainerStyle}
-                  showsVerticalScrollIndicator
-                >
-                  <CardContent isFlipped={isFlipped} {...props} />
-                  {!!currentItem?.description && isFlipped ? (
-                    <Text style={styles.description}>
-                      {currentItem?.description}
-                    </Text>
+            <GestureDetector gesture={tapGesture}>
+              <View style={styles.cardTouchable}>
+                <Animated.View style={cardStyle}>
+                  {isNew ? (
+                    <View style={styles.newBadge}>
+                      <Text style={styles.newBadgeText}>
+                        {t('cardsRepetition.new_card')}
+                      </Text>
+                    </View>
                   ) : (
                     <></>
                   )}
-                </ScrollView>
-              </Animated.View>
-            </TouchableOpacity>
+
+                  <ScrollView
+                    style={styles.itemWords}
+                    contentContainerStyle={styles.contentContainerStyle}
+                    showsVerticalScrollIndicator
+                  >
+                    <CardContent isFlipped={isFlipped} {...props} />
+                    {!!currentItem?.description && isFlipped ? (
+                      <Text style={styles.description}>
+                        {currentItem?.description}
+                      </Text>
+                    ) : (
+                      <></>
+                    )}
+                  </ScrollView>
+                </Animated.View>
+              </View>
+            </GestureDetector>
 
             <View style={styles.footer}>
               {isAnswerVisible ? (
