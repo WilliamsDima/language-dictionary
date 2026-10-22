@@ -1,0 +1,14 @@
+{
+  "ru": [
+    "В фильтре на главной появилась сортировка: «Сначала больше слов», «Сначала меньше слов», «Сначала новые» и «Сначала старые»",
+    "Открытые достижения в профиле и в списке теперь идут в порядке открытия",
+    "Длинное содержимое карточки в задании дня и в практике снова можно прокручивать",
+    "При завершении задания дня показывается загрузка, а если нет сети — сообщение и кнопка «Повторить»"
+  ],
+  "en": [
+    "New sorting options in the home screen filter: \"Most words first\", \"Fewest words first\", \"Newest first\" and \"Oldest first\"",
+    "Unlocked achievements in your profile and in the list are now shown in the order you earned them",
+    "Long card content can be scrolled again in the daily task and in practice",
+    "Finishing the daily task now shows a loading indicator, and if there's no connection, a message with a \"Retry\" button"
+  ]
+}
