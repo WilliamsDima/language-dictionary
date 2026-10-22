@@ -8,6 +8,7 @@ import Select from '@/shared/UI/Select/Select'
 import Button from '@/shared/UI/Button/Button'
 import MultiselectDropdown from '@/shared/UI/MultiselectDropdown/MultiselectDropdown'
 import type { SelectOption } from '@/shared/UI/types'
+import type { CardsSort } from '@/shared/store/slice/itemsSlice'
 import { useTranslation } from '@/shared/i18n/types'
 import { useMeProfile } from '@/shared/hooks/useMeProfile'
 import type { ILanguage } from '@/shared/API/services/languages/types'
@@ -25,23 +26,33 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
 
   const { filterMain } = useAppSelector((store) => store.items)
 
-  const sortByDate: SelectOption[] = useMemo(() => {
+  // одна сортировка за раз: по дате создания или по количеству слов в
+  // карточке — бэкенд принимает одно значение `sort`
+  const sortOptions: SelectOption[] = useMemo(() => {
     return [
       {
-        label: t('ui.desc'),
-        value: 'desc',
+        label: t('ui.sort_date_desc'),
+        value: 'date_desc',
       },
       {
-        label: t('ui.asc'),
-        value: 'asc',
+        label: t('ui.sort_date_asc'),
+        value: 'date_asc',
+      },
+      {
+        label: t('ui.sort_items_desc'),
+        value: 'items_desc',
+      },
+      {
+        label: t('ui.sort_items_asc'),
+        value: 'items_asc',
       },
     ]
   }, [t])
 
-  const defaultSortDateValue = sortByDate[0]
+  // sortOptions мемоизирован — ссылка на первый вариант стабильна
+  const defaultSortValue = sortOptions[0]
 
-  const [sortDateValue, setSortDateValue] =
-    useState<SelectOption>(defaultSortDateValue)
+  const [sortValue, setSortValue] = useState<SelectOption>(defaultSortValue)
   const [languages, setLanguages] = useState<ILanguage[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -56,9 +67,9 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
 
   const syncFromStore = useCallback(() => {
     const sortOption =
-      sortByDate.find((it) => it.value === filterMain?.sortDate) ??
-      defaultSortDateValue
-    setSortDateValue(sortOption)
+      sortOptions.find((it) => it.value === filterMain?.sort) ??
+      defaultSortValue
+    setSortValue(sortOption)
 
     // коды, которых нет среди изучаемых языков (например, сохранённые ранее
     // ru/en языков интерфейса или удалённый из профиля язык), просто
@@ -69,7 +80,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
         .map((code) => languagesOptions.find((lang) => lang.code === code))
         .filter((lang): lang is ILanguage => !!lang)
     )
-  }, [defaultSortDateValue, filterMain, languagesOptions, sortByDate])
+  }, [defaultSortValue, filterMain, languagesOptions, sortOptions])
 
   const onChangeSheet = useCallback(
     (index: number) => {
@@ -81,12 +92,12 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   )
 
   const onCancel = () => {
-    setSortDateValue(defaultSortDateValue)
+    setSortValue(defaultSortValue)
     setLanguages([])
   }
 
-  const onSelectSortDate = (value: SelectOption) => {
-    setSortDateValue(value)
+  const onSelectSort = (value: SelectOption) => {
+    setSortValue(value)
   }
 
   const onSelectLanguages = (value: ILanguage[]) => {
@@ -96,7 +107,7 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
   const onSubmit = () => {
     setIsLoading(true)
     setFilterMain({
-      sortDate: sortDateValue.value as 'asc' | 'desc',
+      sort: sortValue.value as CardsSort,
       languages: languages.map((it) => it.code),
     })
     sheetRef.current?.dismiss()
@@ -141,10 +152,10 @@ const MainFilterModal: FC<Props> = ({ sheetRef }) => {
     >
       <View style={styles.options}>
         <Select
-          title={t('ui.sort_by_date')}
-          select={sortDateValue}
-          options={sortByDate}
-          onSelect={onSelectSortDate}
+          title={t('ui.sort')}
+          select={sortValue}
+          options={sortOptions}
+          onSelect={onSelectSort}
         />
 
         <MultiselectDropdown

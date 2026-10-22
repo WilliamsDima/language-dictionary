@@ -1,11 +1,12 @@
 import { request } from '@/shared/API/request'
+import type { CardsSort } from '@/shared/store/slice/itemsSlice'
 import type { CardDTO, CardStatus, GetCardsResponseDTO } from './types'
 
 type ListQuery = {
   search?: string
   status?: CardStatus
   languages?: string[]
-  sort?: 'date_asc' | 'date_desc'
+  sort?: CardsSort
   limit?: number
   offset?: number
   // при true бэкенд игнорирует limit/offset и отдаёт весь список одним ответом

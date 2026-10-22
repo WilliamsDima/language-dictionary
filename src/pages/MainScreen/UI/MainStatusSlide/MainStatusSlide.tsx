@@ -34,14 +34,14 @@ const MainStatusSlide: FC<Props> = ({
         status,
         search: debouncedSearch,
         filter: {
-          sortDate: filterMain?.sortDate || 'desc',
+          sort: filterMain?.sort ?? 'date_desc',
           languages: filterMain?.languages,
         },
       },
       limitCount: 10,
       page,
     }),
-    [status, debouncedSearch, filterMain?.sortDate, filterMain?.languages, page]
+    [status, debouncedSearch, filterMain?.sort, filterMain?.languages, page]
   )
 
   const { data, isFetching, refetch } = useGetItemsQuery(queryArgs, {
@@ -90,7 +90,7 @@ const MainStatusSlide: FC<Props> = ({
 
   useEffect(() => {
     setPage(1)
-  }, [status, debouncedSearch, filterMain?.sortDate, filterMain?.languages])
+  }, [status, debouncedSearch, filterMain?.sort, filterMain?.languages])
 
   return (
     <MainList

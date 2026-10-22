@@ -2,7 +2,6 @@ import { IItem } from '@/entities/Item/model/item'
 import { baseApi } from '@/shared/API/baseApi'
 import { toRtkQueryResult } from '@/shared/API/RTK/rtk'
 import { cardsService } from './CardsService'
-import type { FilterMain } from '@/shared/store/slice/itemsSlice'
 import type { AppDispatch, RootState } from '@/shared/store/store'
 import type {
   AddItemParams,
@@ -48,10 +47,6 @@ const itemToUpdatePayload = (item: Partial<IItem>) => ({
   })),
 })
 
-const toSortParam = (
-  sortDate: FilterMain['sortDate']
-): 'date_asc' | 'date_desc' => (sortDate === 'asc' ? 'date_asc' : 'date_desc')
-
 const toListQuery = (params: GetItemsParams) => {
   const limit = params.limitCount ?? 20
   const page = params.page ?? 1
@@ -61,7 +56,9 @@ const toListQuery = (params: GetItemsParams) => {
     search: params.filter?.search,
     status: status && status !== 'ALL' ? status : undefined,
     languages: params.filter?.filter?.languages,
-    sort: toSortParam(params.filter?.filter?.sortDate),
+    // сортировку (в т.ч. по количеству слов) делает бэкенд — список
+    // постраничный, сортировать на клиенте подгруженные страницы нельзя
+    sort: params.filter?.filter?.sort ?? 'date_desc',
     // при all=true бэкенд сам игнорирует limit/offset, поэтому их вообще не шлём
     ...(params.all ? { all: true } : { limit, offset: (page - 1) * limit }),
   }

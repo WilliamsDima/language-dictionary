@@ -2,8 +2,13 @@ import { IItem, StatusItem } from '@/entities/Item/model/item'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ShowVariantListVale } from './userSlice'
 
+// сортировка списка карточек на главной — значение уходит как есть в
+// параметр `sort` GET /cards: по дате создания или по количеству слов
+// (пар слово/перевод) внутри карточки
+export type CardsSort = 'date_desc' | 'date_asc' | 'items_desc' | 'items_asc'
+
 export type FilterMain = {
-  sortDate?: 'asc' | 'desc'
+  sort?: CardsSort
   languages?: string[]
 }
 
@@ -33,7 +38,7 @@ const initialState: InitialState = {
   search: '',
   showFilterMain: false,
   filterMain: {
-    sortDate: 'desc',
+    sort: 'date_desc',
   },
   filterCardsModal: {
     status: 'STUDY',
