@@ -71,13 +71,26 @@ export const requestNotificationPermission =
     return 'denied'
   }
 
+// RNFB отдаёт initial notification только первому вызову (дальше null), а
+// читают его несколько хуков (useOpenReminderPush, useOpenAppUpdatePush) —
+// запрашиваем один раз за запуск JS и раздаём всем один и тот же результат
+const initialPushHolder: { current: Promise<RemoteMessage | null> | null } = {
+  current: null,
+}
+
 // пуш, по нажатию на который приложение запустилось из закрытого состояния
-export const getInitialPushMessage = async (): Promise<RemoteMessage | null> => {
-  try {
-    return await getInitialNotification(getMessaging())
-  } catch {
-    return null
+export const getInitialPushMessage = (): Promise<RemoteMessage | null> => {
+  if (!initialPushHolder.current) {
+    initialPushHolder.current = (async () => {
+      try {
+        return await getInitialNotification(getMessaging())
+      } catch {
+        return null
+      }
+    })()
   }
+
+  return initialPushHolder.current
 }
 
 // нажатие на пуш, когда приложение было в фоне
