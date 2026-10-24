@@ -16,6 +16,7 @@ import {
 import ThemeSwitch from '../ThemeSwitch/ThemeSwitch'
 import InterfaceLanguageSwitch from '../InterfaceLanguageSwitch/InterfaceLanguageSwitch'
 import ReminderSwitch from '../ReminderSwitch/ReminderSwitch'
+import AppUpdateSwitch from '../AppUpdateSwitch/AppUpdateSwitch'
 import { useGetAppConfigQuery } from '@/shared/API/services/appConfig/AppConfigQuery'
 
 const Settings: FC = () => {
@@ -81,6 +82,7 @@ const Settings: FC = () => {
       <ThemeSwitch />
       <InterfaceLanguageSwitch />
       <ReminderSwitch />
+      <AppUpdateSwitch />
 
       <Select
         title={t('settingsScreen.show_varian')}

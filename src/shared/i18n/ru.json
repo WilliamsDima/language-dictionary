@@ -67,7 +67,9 @@
     "version": "Версия:",
     "update": "Обновить",
     "reminders": "Напоминания",
-    "reminders_subtitle": "Каждый день в {{time}}, если задание дня ещё не выполнено"
+    "reminders_subtitle": "Каждый день в {{time}}, если задание дня ещё не выполнено",
+    "app_updates": "Обновления приложения",
+    "app_updates_subtitle": "Сообщать о выходе новой версии"
   },
   "streakFreeze": {
     "earned_title": "+1 заморозка ❄️",

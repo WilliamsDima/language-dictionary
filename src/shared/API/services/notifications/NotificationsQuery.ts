@@ -32,8 +32,9 @@ export const notificationsAPI = baseApi.injectEndpoints({
       providesTags: ['notificationSettings'],
     }),
 
-    // оптимистично переключаем флаг, чтобы свитч в настройках реагировал
-    // сразу; при ошибке откатываем, при успехе кладём ответ сервера
+    // частичный PUT: шлём только меняемый флаг. Оптимистично переключаем его,
+    // чтобы свитч в настройках реагировал сразу; при ошибке откатываем, при
+    // успехе кладём ответ сервера (полный объект настроек)
     updateNotificationSettings: build.mutation<
       NotificationSettings,
       UpdateNotificationSettingsPayload
@@ -41,16 +42,13 @@ export const notificationsAPI = baseApi.injectEndpoints({
       async queryFn(payload) {
         return toRtkQueryResult(await notificationsService.updateSettings(payload))
       },
-      async onQueryStarted(
-        { daily_reminder_enabled },
-        { dispatch, queryFulfilled }
-      ) {
+      async onQueryStarted(payload, { dispatch, queryFulfilled }) {
         const patch = dispatch(
           notificationsAPI.util.updateQueryData(
             'getNotificationSettings',
             undefined,
             (draft) => {
-              draft.daily_reminder_enabled = daily_reminder_enabled
+              Object.assign(draft, payload)
             }
           )
         )

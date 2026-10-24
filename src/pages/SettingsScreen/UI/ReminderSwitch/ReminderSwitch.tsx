@@ -1,8 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react'
-import { Switch, View } from 'react-native'
-import { useUnistyles } from 'react-native-unistyles'
-import { styles } from './ReminderSwitch.styles'
-import Text from '@/shared/UI/Text/Text'
+import NotificationSwitch from '../NotificationSwitch/NotificationSwitch'
 import { useActions } from '@/shared/hooks/useActions'
 import { useAppSelector } from '@/shared/hooks/useStore'
 import { useTranslation } from '@/shared/i18n/types'
@@ -24,7 +21,6 @@ const ReminderSwitch: FC = () => {
   const [updateSettings] = useUpdateNotificationSettingsMutation()
 
   const { t } = useTranslation()
-  const { theme } = useUnistyles()
 
   const isEnabled = useMemo(
     () => !!settings?.daily_reminder_enabled && !!hasNotificationPermission,
@@ -39,14 +35,6 @@ const ReminderSwitch: FC = () => {
         time: settings?.daily_reminder_time || DEFAULT_DAILY_REMINDER_TIME,
       }),
     [settings?.daily_reminder_time, t]
-  )
-
-  const trackColor = useMemo(
-    () => ({
-      false: theme.colors.palette.border,
-      true: theme.colors.palette.primery,
-    }),
-    [theme.colors.palette.border, theme.colors.palette.primery]
   )
 
   const onToggle = useCallback(
@@ -67,21 +55,13 @@ const ReminderSwitch: FC = () => {
   )
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{t('settingsScreen.reminders')}</Text>
-
-      <View style={styles.row}>
-        <Text style={styles.text}>{description}</Text>
-
-        <Switch
-          value={isEnabled}
-          disabled={isDisabled}
-          onValueChange={onToggle}
-          trackColor={trackColor}
-          thumbColor={theme.colors.base.white}
-        />
-      </View>
-    </View>
+    <NotificationSwitch
+      title={t('settingsScreen.reminders')}
+      description={description}
+      value={isEnabled}
+      disabled={isDisabled}
+      onValueChange={onToggle}
+    />
   )
 }
 

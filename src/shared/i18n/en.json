@@ -67,7 +67,9 @@
     "version": "Version:",
     "update": "Update",
     "reminders": "Reminders",
-    "reminders_subtitle": "Every day at {{time}} if the challenge of the day isn't done yet"
+    "reminders_subtitle": "Every day at {{time}} if the challenge of the day isn't done yet",
+    "app_updates": "App updates",
+    "app_updates_subtitle": "Notify me when a new version is out"
   },
   "streakFreeze": {
     "earned_title": "+1 streak freeze ❄️",
