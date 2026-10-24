@@ -36,6 +36,20 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
+      - uses: actions/checkout@v4
+
+      # Telegram: one message per run - "started" here, edited to the result by
+      # the last step. No TELEGRAM_* secrets = skipped; errors never fail or
+      # hold up the build (README.md, "Релиз APK" -> GitHub Secrets).
+      - name: Notify Telegram (start)
+        continue-on-error: true
+        timeout-minutes: 1
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: bash .github/scripts/telegram-notify.sh start || true
+
       - name: Check required secrets
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -59,8 +73,6 @@ jobs:
             fi
           done
           exit "$missing"
-
-      - uses: actions/checkout@v4
 
       - name: Resolve version
         id: version
@@ -357,3 +369,17 @@ jobs:
         run: |
           rm -rf "$RUNNER_TEMP/apk-ssh" "$RUNNER_TEMP/wordcards-release" "$RUNNER_TEMP/apk-upload" "$RUNNER_TEMP/release-notes.json"
           rm -f .env android/app/google-services.json
+
+      # must stay the last step
+      - name: Notify Telegram (result)
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 1
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+          JOB_STATUS: ${{ job.status }}
+        run: bash .github/scripts/telegram-notify.sh finish "$JOB_STATUS" || true
