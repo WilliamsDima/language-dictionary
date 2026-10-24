@@ -308,6 +308,21 @@
       "description_one": "Bring {{count}} card to the final repetition stage",
       "description_other": "Bring {{count}} cards to the final repetition stage"
     },
+    "flawless": {
+      "title": "Flawless",
+      "description_one": "Complete the challenge of the day without a single mistake",
+      "description_other": "Complete the challenge of the day without mistakes {{count}} times"
+    },
+    "sharpshooter": {
+      "title": "Sharpshooter",
+      "description_one": "Complete the challenge of the day without mistakes {{count}} time",
+      "description_other": "Complete the challenge of the day without mistakes {{count}} times"
+    },
+    "perfectionist": {
+      "title": "Perfectionist",
+      "description_one": "Complete the challenge of the day without mistakes {{count}} time",
+      "description_other": "Complete the challenge of the day without mistakes {{count}} times"
+    },
     "tireless": {
       "title": "Tireless",
       "description_one": "Complete {{count}} training session",

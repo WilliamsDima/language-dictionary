@@ -342,6 +342,27 @@
       "description_many": "Доведите {{count}} карточек до последней ступени повторения",
       "description_other": "Доведите {{count}} карточки до последней ступени повторения"
     },
+    "flawless": {
+      "title": "Без промаха",
+      "description_few": "Пройдите задание дня без ошибок {{count}} раза",
+      "description_one": "Пройдите задание дня без единой ошибки",
+      "description_many": "Пройдите задание дня без ошибок {{count}} раз",
+      "description_other": "Пройдите задание дня без ошибок {{count}} раза"
+    },
+    "sharpshooter": {
+      "title": "Снайпер",
+      "description_few": "Пройдите задание дня без ошибок {{count}} раза",
+      "description_one": "Пройдите задание дня без ошибок {{count}} раз",
+      "description_many": "Пройдите задание дня без ошибок {{count}} раз",
+      "description_other": "Пройдите задание дня без ошибок {{count}} раза"
+    },
+    "perfectionist": {
+      "title": "Перфекционист",
+      "description_few": "Пройдите задание дня без ошибок {{count}} раза",
+      "description_one": "Пройдите задание дня без ошибок {{count}} раз",
+      "description_many": "Пройдите задание дня без ошибок {{count}} раз",
+      "description_other": "Пройдите задание дня без ошибок {{count}} раза"
+    },
     "tireless": {
       "title": "Неутомимый",
       "description_few": "Пройдите {{count}} тренировки",
