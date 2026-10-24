@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { AppState } from 'react-native'
 import { getTimeZone } from 'react-native-localize'
+import DeviceInfo from 'react-native-device-info'
 import { useAppSelector } from './useStore'
 import { useRegisterDeviceMutation } from '@/shared/API/services/notifications/NotificationsQuery'
 import {
@@ -24,8 +25,10 @@ export const usePushDeviceRegistration = () => {
 
   const [registerDevice] = useRegisterDeviceMutation()
 
-  // последняя успешно отправленная связка token|timezone|locale — не шлём
-  // одинаковый upsert повторно
+  // последняя успешно отправленная связка token|timezone|locale|app_version —
+  // не шлём одинаковый upsert повторно. Ref живёт только в памяти, поэтому
+  // после обновления приложения (новый процесс) устройство перерегистрируется
+  // с новой app_version на первом же старте
   const lastRegisteredRef = useRef<string | null>(null)
 
   const isEnabled = useMemo(
@@ -40,8 +43,18 @@ export const usePushDeviceRegistration = () => {
 
   const register = useCallback(
     async (token: string) => {
-      const payload = { token, timezone: getTimeZone(), locale }
-      const key = `${payload.token}|${payload.timezone}|${payload.locale}`
+      const payload = {
+        token,
+        timezone: getTimeZone(),
+        locale,
+        app_version: DeviceInfo.getVersion(),
+      }
+      const key = [
+        payload.token,
+        payload.timezone,
+        payload.locale,
+        payload.app_version,
+      ].join('|')
 
       if (lastRegisteredRef.current === key) return
 
