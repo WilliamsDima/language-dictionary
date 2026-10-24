@@ -8,4 +8,6 @@
     <string name="daily_reminder_channel_description">Daily reminder about the challenge of the day</string>
     <string name="general_channel_name">Messages</string>
     <string name="general_channel_description">News and messages about the app</string>
+    <string name="app_update_channel_name">App updates</string>
+    <string name="app_update_channel_description">Notifications about new app versions</string>
 </resources>

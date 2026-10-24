@@ -49,7 +49,9 @@ class MainApplication : Application(), ReactApplication {
     // - "general": канал по умолчанию в firebase.json
     //   (messaging_android_notification_channel_id) — для пушей без channel_id,
     //   например ручных сообщений из админки (data.type = "admin_message").
-    //   Отдельный канал, чтобы выключение напоминаний не глушило сообщения.
+    //   Отдельный канал, чтобы выключение напоминаний не глушило сообщения;
+    // - "app_update": бэкенд шлёт пуш «Доступна новая версия» с этим
+    //   android.channel_id (data.type = "app_update").
     // Названия локализованы через values / values-ru и следуют языку системы;
     // повторное создание существующего канала только обновляет имя/описание
     private fun createNotificationChannels() {
@@ -71,13 +73,22 @@ class MainApplication : Application(), ReactApplication {
             description = getString(R.string.general_channel_description)
         }
 
+        val appUpdateChannel = NotificationChannel(
+            APP_UPDATE_CHANNEL_ID,
+            getString(R.string.app_update_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = getString(R.string.app_update_channel_description)
+        }
+
         getSystemService(NotificationManager::class.java)?.createNotificationChannels(
-            listOf(dailyReminderChannel, generalChannel)
+            listOf(dailyReminderChannel, generalChannel, appUpdateChannel)
         )
     }
 
     private companion object {
         const val DAILY_REMINDER_CHANNEL_ID = "daily_reminder"
         const val GENERAL_CHANNEL_ID = "general"
+        const val APP_UPDATE_CHANNEL_ID = "app_update"
     }
 }

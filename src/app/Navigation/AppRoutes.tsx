@@ -15,6 +15,7 @@ import { usePushDeviceRegistration } from '@/shared/hooks/usePushDeviceRegistrat
 import { useNotificationPermissionSync } from '@/shared/hooks/useNotificationPermissionSync'
 import { useForegroundPushToast } from '@/shared/hooks/useForegroundPushToast'
 import { useOpenReminderPush } from './hooks/useOpenReminderPush'
+import { useOpenAppUpdatePush } from './hooks/useOpenAppUpdatePush'
 import {RoutesNames} from './RoutesNames'
 import {navigationRef} from './ref'
 import {useNavTheme} from './hooks/useNavTheme'
@@ -29,6 +30,7 @@ const Routes = () => {
   usePushDeviceRegistration()
   useNotificationPermissionSync()
   useOpenReminderPush()
+  useOpenAppUpdatePush()
   useForegroundPushToast()
 
   return (

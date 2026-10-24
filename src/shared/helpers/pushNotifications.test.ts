@@ -1,5 +1,6 @@
 import {
   getForegroundPushToast,
+  isAppUpdatePush,
   isDailyReminderPush,
   toDeviceLocale,
 } from './pushNotifications'
@@ -35,6 +36,19 @@ describe('isDailyReminderPush', () => {
   })
 })
 
+describe('isAppUpdatePush', () => {
+  it('detects the app update push', () => {
+    expect(isAppUpdatePush({ type: 'app_update', version: '2.4.0' })).toBe(true)
+  })
+
+  it('ignores other or empty payloads', () => {
+    expect(isAppUpdatePush({ type: 'daily_reminder' })).toBe(false)
+    expect(isAppUpdatePush({})).toBe(false)
+    expect(isAppUpdatePush(undefined)).toBe(false)
+    expect(isAppUpdatePush(null)).toBe(false)
+  })
+})
+
 describe('getForegroundPushToast', () => {
   const notification = { title: 'Привет', body: 'Новые карточки уже доступны' }
 
@@ -58,6 +72,15 @@ describe('getForegroundPushToast', () => {
   it('skips the daily reminder', () => {
     expect(
       getForegroundPushToast(notification, { type: 'daily_reminder' })
+    ).toBeNull()
+  })
+
+  it('skips the app update push (it opens the update modal instead)', () => {
+    expect(
+      getForegroundPushToast(notification, {
+        type: 'app_update',
+        version: '2.4.0',
+      })
     ).toBeNull()
   })
 

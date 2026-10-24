@@ -14,4 +14,5 @@ export const appReleaseAPI = baseApi.injectEndpoints({
   }),
 })
 
-export const { useGetLatestReleaseQuery } = appReleaseAPI
+export const { useGetLatestReleaseQuery, useLazyGetLatestReleaseQuery } =
+  appReleaseAPI
