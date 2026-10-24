@@ -1,0 +1,12 @@
+{
+  "ru": [
+    "Приложение присылает уведомление, когда выходит новая версия, — нажатие на него открывает окно обновления",
+    "В настройках появился переключатель «Обновления приложения», чтобы отключить такие уведомления",
+    "Новые достижения за задание дня без единой ошибки: «Без промаха», «Снайпер» и «Перфекционист»"
+  ],
+  "en": [
+    "You now get a notification when a new version of the app is out — tap it to open the update dialog",
+    "New \"App updates\" toggle in settings to turn these notifications off",
+    "New achievements for completing the daily task without a single mistake: \"Flawless\", \"Sharpshooter\" and \"Perfectionist\""
+  ]
+}
