@@ -1,0 +1,16 @@
+{
+  "ru": [
+    "Новая вкладка «Практика» с режимами тренировки",
+    "Режим «Карточки»: отвечайте «Помню» или «Не помню» и смотрите итог",
+    "Новый режим «Найди пары»: соединяйте слова с переводами на время",
+    "В итогах задания дня теперь показывается процент верных ответов",
+    "Исправлена шкала прогресса в окне достижения"
+  ],
+  "en": [
+    "New “Practice” tab with training modes",
+    "“Flashcards” mode: answer “I remember” or “Don't remember” and see your results",
+    "New “Match the pairs” mode: match words with translations against the clock",
+    "The daily challenge summary now shows your percentage of correct answers",
+    "Fixed the progress bar in the achievement window"
+  ]
+}
