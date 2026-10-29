@@ -1,12 +1,15 @@
 import type { DailyChallengeResult } from '@/shared/API/services/streak/types'
+import {
+  AnswersByCard,
+  AnswersStats,
+  getAnswersStats,
+  getSuccessPercent,
+} from '@/shared/helpers/answersStats'
 
 // ответы задания дня по id карточки: true — «Помню», false — «Не помню»
-export type DailyAnswers = Record<number, boolean>
+export type DailyAnswers = AnswersByCard
 
-export type DailyAnswersStats = {
-  known: number
-  unknown: number
-}
+export type DailyAnswersStats = AnswersStats
 
 type SlideWithItemId = {
   item: { id: number }
@@ -21,16 +24,10 @@ export const toDailyChallengeResults = (
     correct,
   }))
 
-export const getDailyAnswersStats = (
-  answers: DailyAnswers
-): DailyAnswersStats =>
-  Object.values(answers).reduce<DailyAnswersStats>(
-    (acc, correct) =>
-      correct
-        ? { ...acc, known: acc.known + 1 }
-        : { ...acc, unknown: acc.unknown + 1 },
-    { known: 0, unknown: 0 }
-  )
+export const getDailyAnswersStats = getAnswersStats
+
+// доля ответов «Помню» в процентах, округлённая до целого (0, если ответов нет)
+export const getDailySuccessPercent = getSuccessPercent
 
 // индекс следующей неотвеченной карточки после fromIndex (по кругу —
 // пропущенные свайпом карточки тоже нужно ответить); -1 — отвечены все

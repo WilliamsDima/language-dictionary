@@ -3,11 +3,13 @@ import { ActivityIndicator, View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
+import AnswersResult from '@/shared/UI/AnswersResult/AnswersResult'
 import { I18NKeys, useTranslation } from '@/shared/i18n/types'
 import { useCardsRepetition } from '../../CardsContext'
 import { styles } from './DailySummary.styles'
 
-// итог задания дня: сколько карточек вспомнил / не вспомнил. Кнопка
+// итог задания дня: процент успешных ответов и сколько карточек вспомнил /
+// не вспомнил (AnswersResult). Кнопка
 // завершения отправляет ответы и закрывает задание (onEnd); пока запросы
 // идут — лоадер на кнопке, при ошибке — сообщение и «Повторить»
 const DailySummary: FC = () => {
@@ -38,21 +40,7 @@ const DailySummary: FC = () => {
     <View style={styles.wrapper}>
       <Text style={styles.title}>{t('cardsRepetition.summary.title')}</Text>
 
-      <View style={styles.stats}>
-        <View style={styles.stat}>
-          <Text style={styles.statValueKnown}>{dailyStats.known}</Text>
-          <Text style={styles.statLabel}>
-            {t('cardsRepetition.summary.known')}
-          </Text>
-        </View>
-
-        <View style={styles.stat}>
-          <Text style={styles.statValueUnknown}>{dailyStats.unknown}</Text>
-          <Text style={styles.statLabel}>
-            {t('cardsRepetition.summary.unknown')}
-          </Text>
-        </View>
-      </View>
+      <AnswersResult stats={dailyStats} />
 
       <Text style={styles.hint}>{hint}</Text>
 
