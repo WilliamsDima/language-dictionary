@@ -1,5 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Animated, Vibration, View } from 'react-native'
+import {
+  Animated,
+  EasingFunction,
+  StyleProp,
+  TextStyle,
+  Vibration,
+  View,
+} from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 import Text from '../Text/Text'
 
@@ -14,6 +21,12 @@ interface AnimatedCounterProps {
   // короткая вибрация в момент смены цифры (только для mode="slide":
   // в режиме count цифра меняется десятки раз за анимацию)
   withHaptic?: boolean
+  // только для mode="count": текст после числа (например, «%»), кривая
+  // анимации (по умолчанию — стандартная у Animated.timing) и стиль текста
+  // поверх базового
+  suffix?: string
+  easing?: EasingFunction
+  textStyle?: StyleProp<TextStyle>
 }
 
 // длительность «тика» на Android; VIBRATE уже есть в AndroidManifest
@@ -28,6 +41,9 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   colorTo,
   mode = 'count',
   withHaptic = false,
+  suffix = '',
+  easing,
+  textStyle: textStyleProp,
 }) => {
   const { theme } = useUnistyles()
 
@@ -81,6 +97,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     Animated.timing(animatedValue, {
       toValue: value,
       duration: resolvedDuration,
+      easing,
       useNativeDriver: false,
     }).start()
 
@@ -102,6 +119,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     isSlideMode,
     slideProgress,
     withHaptic,
+    easing,
   ])
 
   useEffect(() => {
@@ -121,9 +139,20 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     })
   }, [hasColorAnimation, colorFrom, colorTo, colorProgress])
 
+  const baseTextStyle = useMemo(
+    () => (textStyleProp ? [styles.text, textStyleProp] : styles.text),
+    [textStyleProp]
+  )
+
   const textStyle = useMemo(
-    () => (animatedColor ? [styles.text, { color: animatedColor }] : styles.text),
-    [animatedColor]
+    () =>
+      animatedColor ? [baseTextStyle, { color: animatedColor }] : baseTextStyle,
+    [animatedColor, baseTextStyle]
+  )
+
+  const countText = useMemo(
+    () => `${displayValue}${suffix}`,
+    [displayValue, suffix]
   )
 
   const oldSlideStyle = useMemo(
@@ -178,9 +207,9 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
           </Animated.View>
         </View>
       ) : hasColorAnimation ? (
-        <Animated.Text style={textStyle}>{displayValue}</Animated.Text>
+        <Animated.Text style={textStyle}>{countText}</Animated.Text>
       ) : (
-        <Text style={styles.text}>{displayValue}</Text>
+        <Text style={baseTextStyle}>{countText}</Text>
       )}
     </View>
   )
