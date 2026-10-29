@@ -53,7 +53,7 @@ export const styles = StyleSheet.create((theme) => ({
     overflow: 'hidden',
   },
   progressFill: {
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
     borderRadius: theme.radius.pill,
     overflow: 'hidden',
   },

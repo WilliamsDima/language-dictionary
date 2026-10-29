@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Modal, View } from 'react-native'
+import { LayoutChangeEvent, Modal, View } from 'react-native'
 import Animated, {
   Easing,
   cancelAnimation,
@@ -115,6 +115,8 @@ const ModalAchievementHalfway: FC<Props> = () => {
   const { t } = useTranslation()
 
   const progress = useSharedValue(0)
+  // ширина дорожки в px — заливка сдвигается по ней через translateX
+  const trackWidth = useSharedValue(0)
 
   // пока не загружены сохранённые id текущего пользователя — очередь пуста
   const shownIds = useMemo(
@@ -222,13 +224,25 @@ const ModalAchievementHalfway: FC<Props> = () => {
     [t, current]
   )
 
+  // заливка во всю ширину дорожки, уезжающая влево на непройденную часть:
+  // анимируем transform, а не layout-свойство width — анимированный width
+  // в процентах не применялся, и полоса оставалась пустой. Пока дорожка не
+  // измерена, заливку прячем, чтобы не мигнула полной
   const fillAnimatedStyle = useAnimatedStyle(() => ({
-    width: `${progress.value * 100}%`,
+    opacity: trackWidth.value > 0 ? 1 : 0,
+    transform: [{ translateX: (progress.value - 1) * trackWidth.value }],
   }))
 
   const progressFillStyle = useMemo(
     () => [styles.progressFill, fillAnimatedStyle],
     [fillAnimatedStyle]
+  )
+
+  const onTrackLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      trackWidth.value = event.nativeEvent.layout.width
+    },
+    [trackWidth]
   )
 
   const onDismiss = useCallback(() => {
@@ -337,7 +351,7 @@ const ModalAchievementHalfway: FC<Props> = () => {
             <Text style={styles.description}>{descriptionText}</Text>
 
             <View style={styles.progressBlock}>
-              <View style={styles.progressTrack}>
+              <View style={styles.progressTrack} onLayout={onTrackLayout}>
                 <Animated.View style={progressFillStyle}>
                   <LinearGradient
                     colors={gradientColors}
