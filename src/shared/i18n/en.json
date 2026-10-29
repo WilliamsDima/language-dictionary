@@ -376,7 +376,47 @@
     "profile": {
       "kicker": "Learner profile",
       "title": "Your pace and progress"
+    },
+    "practice": {
+      "kicker": "Training",
+      "title": "Choose how to review your words"
     }
+  },
+  "practiceScreen": {
+    "subtitle": "Pick a mode — you'll choose the cards and how many right before you start",
+    "coming_soon": "Soon",
+    "not_enough_cards": "Add more cards — this mode needs at least {{count}}",
+    "modes": {
+      "flashcards": {
+        "title": "Flashcards",
+        "description": "Flip the cards and mark whether you remember the translation"
+      },
+      "matching": {
+        "title": "Match the pairs",
+        "description": "Quickly match words with their translations"
+      },
+      "listening": {
+        "title": "Listen and choose",
+        "description": "Listen to a word and pick the right translation"
+      },
+      "sentence": {
+        "title": "Build a sentence",
+        "description": "Put shuffled words together into a sentence"
+      },
+      "pronunciation": {
+        "title": "Pronunciation",
+        "description": "Say the words out loud and check yourself"
+      }
+    }
+  },
+  "practiceSession": {
+    "summary_title": "Practice complete!",
+    "again": "Again",
+    "back": "Back",
+    "time": "Time",
+    "mistakes": "Mistakes",
+    "round_mistakes": "Mistakes: {{count}}",
+    "not_enough_cards": "{{available}} cards match the selected language and status, but this mode needs at least {{count}}. Add more cards or change the filter"
   },
   "achievementsScreen": {
     "subtitle": "Your rewards, progress, and good reasons to come back to your cards are collected here.",
@@ -402,6 +442,7 @@
       "title": "Today's task is done!",
       "known": "Knew",
       "unknown": "Didn't know",
+      "success": "correct answers",
       "repeat_tomorrow_one": "We'll review {{count}} card tomorrow",
       "repeat_tomorrow_other": "We'll review {{count}} cards tomorrow",
       "all_known": "Great — you remembered every card!",

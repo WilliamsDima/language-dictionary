@@ -7,7 +7,7 @@ type IContext = {
   updateStatusHandler: (
     item: IItem,
     status: 'READY' | 'STUDY'
-  ) => Promise<void> | undefined
+  ) => Promise<boolean> | undefined
   addItemHandler: (item: IItem) => Promise<void> | undefined
   deleteItemHandler: (item: IItem) => Promise<void> | undefined
 }

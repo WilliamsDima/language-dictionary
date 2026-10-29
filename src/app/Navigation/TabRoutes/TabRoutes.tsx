@@ -11,6 +11,7 @@ import { RouteName, RoutesNames, TabsKeys } from '../RoutesNames'
 import TabBar from '@/shared/UI/TabBar/TabBar'
 import SettingsTabRoutes from '../TabStacks/SettingsTabRoutes'
 import ProfileTabRoutes from '../TabStacks/ProfileTabRoutes'
+import PracticeTabRoutes from '../TabStacks/PracticeTabRoutes'
 import type { TabParamsList } from '../params'
 import { tabScreenOptions } from '../config'
 import VariableSafeAreaView from '@/shared/UI/VariableSafeAreaView/VariableSafeAreaView'
@@ -20,6 +21,7 @@ import TabsHero from './TabsHero'
 const Tab = createBottomTabNavigator<TabParamsList>()
 const TAB_DEFAULT_SCREEN_BY_STACK: Record<TabsKeys, RouteName> = {
   [RoutesNames.mainStack]: RoutesNames.main,
+  [RoutesNames.practiceStack]: RoutesNames.practice,
   [RoutesNames.settingsStack]: RoutesNames.settings,
   [RoutesNames.profileStack]: RoutesNames.profile,
 }
@@ -71,6 +73,17 @@ const HomeTabsScreen = () => {
                 updateActiveScreen(RoutesNames.mainStack, route)
               },
               state: () => updateActiveScreen(RoutesNames.mainStack, route),
+            })}
+          />
+          <Tab.Screen
+            name={RoutesNames.practiceStack}
+            component={PracticeTabRoutes}
+            listeners={({ route }) => ({
+              focus: () => {
+                setActiveTab(RoutesNames.practiceStack)
+                updateActiveScreen(RoutesNames.practiceStack, route)
+              },
+              state: () => updateActiveScreen(RoutesNames.practiceStack, route),
             })}
           />
           <Tab.Screen

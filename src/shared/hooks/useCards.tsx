@@ -106,25 +106,33 @@ export const useCards = () => {
     }
   }
 
-  // изменение статуса карточки
-  const updateStatusHandler = async (item: IItem, status: 'READY' | 'STUDY') => {
+  // изменение статуса карточки; true — бэкенд принял новый статус (нужно
+  // вызывающей стороне, чтобы откатить свой оптимистичный статус при ошибке)
+  const updateStatusHandler = async (
+    item: IItem,
+    status: 'READY' | 'STUDY'
+  ): Promise<boolean> => {
     try {
       if (isAuth && item?.id) {
         await updateItemStatus({
           id: item.id,
           status,
         }).unwrap()
+        return true
       }
+
+      return false
     } catch (error) {
       console.error('[useCards] updateStatusHandler error', error)
 
       if (isNotFoundError(error)) {
         dropStaleItem(item.id)
         toast.error(t('itemTooltip.NOT_FOUND'))
-        return
+        return false
       }
 
       toast.error(t('itemTooltip.ERROR'))
+      return false
     }
   }
 

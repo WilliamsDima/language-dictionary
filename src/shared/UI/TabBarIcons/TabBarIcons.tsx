@@ -30,6 +30,16 @@ const TabBarIcons: FC<ButtonTabBar> = ({ routeName, isFocused }) => {
         </Svg>
       )
 
+    case 'practiceStack':
+      return (
+        <Svg width={24} height={24} viewBox="0 0 24 24">
+          <Path
+            fill={isFocused ? activeColor : inactiveColor}
+            d="M13.6 1.6c.5-.6 1.4-.1 1.2.6L13.3 9h6c.7 0 1.1.8.6 1.4l-9.5 12c-.5.6-1.4.1-1.2-.6l1.5-6.8h-6c-.7 0-1.1-.8-.6-1.4l9.5-12Z"
+          />
+        </Svg>
+      )
+
     case 'settingsStack':
       return (
         <Svg

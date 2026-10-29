@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useMemo } from 'react'
+import React, { FC, memo, useMemo } from 'react'
 import { View } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 import { type BottomTabBarProps } from '@react-navigation/bottom-tabs'
@@ -7,8 +7,6 @@ import { TabsKeys } from '@/app/Navigation/RoutesNames'
 import { Shadow } from 'react-native-shadow-2'
 import ButtonTabBar from '../ButtonTabBar/ButtonTabBar'
 import { useAppSelector } from '@/shared/hooks/useStore'
-import { useBottomSheet } from '@/shared/UI/BottomSheet/hooks/useBottomSheet'
-import ModalCardsFilter from '@/features/ModalCardsFilter/ModalCardsFilter'
 import PracticeButton from '../PracticeButton/PracticeButton'
 import { useGetItemsQuery } from '@/pages/MainScreen/api/cardsServices'
 import DailyStreakBanner from '@/features/DailyStreakBanner/DailyStreakBanner'
@@ -26,8 +24,6 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
   )
   const { data: streakData } = useStreakStatus()
   const { theme, rt } = useUnistyles()
-  const [cardsSheetRef, presentCardsSheet, onDismissCardsSheet] =
-    useBottomSheet()
   const startDailyChallenge = useStartDailyChallenge()
   const { t } = useTranslation()
 
@@ -54,6 +50,7 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
   const tabTitles = useMemo<Record<TabsKeys, string>>(() => {
     return {
       mainStack: t('navigation.main'),
+      practiceStack: t('navigation.practice'),
       settingsStack: t('navigation.settings'),
       profileStack: t('navigation.profile'),
     }
@@ -67,20 +64,17 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
     return !!streakData && !streakData.completed_today
   }, [streakData])
 
-  const onOpenPractice = useCallback(() => {
-    if (isDailyChallengePending) {
-      startDailyChallenge()
-      return
-    }
-
-    presentCardsSheet()
-  }, [isDailyChallengePending, startDailyChallenge, presentCardsSheet])
+  // плавающая кнопка над таб-баром — вход в задание дня, пока оно не
+  // пройдено; свободная практика и её режимы — во вкладке «Практика»
+  const isPracticeVisible = useMemo(() => {
+    return hasItems && isDailyChallengePending
+  }, [hasItems, isDailyChallengePending])
 
   return !hiddenTabBar ? (
     <View style={styles.wrapper}>
-      {hasItems ? (
+      {isPracticeVisible ? (
         <View style={styles.practiceContainer}>
-          <PracticeButton onPress={onOpenPractice} />
+          <PracticeButton onPress={startDailyChallenge} />
           <DailyStreakBanner />
         </View>
       ) : (
@@ -123,11 +117,6 @@ const TabBar: FC<BottomTabBarProps> = (props) => {
           )
         })}
       </Shadow>
-
-      <ModalCardsFilter
-        sheetRef={cardsSheetRef}
-        onDismiss={onDismissCardsSheet}
-      />
     </View>
   ) : (
     <></>

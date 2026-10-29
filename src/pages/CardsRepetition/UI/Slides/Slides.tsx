@@ -1,6 +1,5 @@
-import React, { FC, startTransition, useActionState, useCallback, useMemo, useOptimistic } from 'react'
-import { useUnistyles } from 'react-native-unistyles'
-import { ActivityIndicator, Animated, FlatList, View } from 'react-native'
+import React, { FC, useCallback } from 'react'
+import { Animated, FlatList, View } from 'react-native'
 import type { ListRenderItem } from 'react-native'
 import SlideItem from '../SlideItem/SlideItem'
 import DailySummary from '../DailySummary/DailySummary'
@@ -10,49 +9,29 @@ import { useCardsRepetition } from '../../CardsContext'
 import Text from '@/shared/UI/Text/Text'
 import Button from '@/shared/UI/Button/Button'
 import EditIcon from '@/assets/icons/UI/edit-green-64.svg'
-import DoneIcon from '@/assets/icons/UI/done-primery-64.svg'
-import RepeatIcon from '@/assets/icons/UI/repeat-64-orange.svg'
-import { useAppSelector } from '@/shared/hooks/useStore'
 import { useActions } from '@/shared/hooks/useActions'
 import ModalAddItem from '@/features/ModalAddItem/ModalAddItem'
 import LottieView from 'lottie-react-native'
-import { useCards } from '@/shared/hooks/useCards'
-import type { IItem } from '@/entities/Item/model/item'
 import type { CardSlideType } from '../../CardsContext'
 import { useTranslation } from '@/shared/i18n/types'
 
 type Props = {}
 
+// слайды задания дня (свободная практика — вкладка «Практика»)
 const Slides: FC<Props> = ({}) => {
-  const { theme } = useUnistyles()
   const { setItemEdit, setShowAddModal } = useActions()
   const {
     data,
-    liveItems,
     flatList,
     scrollX,
     currentSlideData,
     currentSlide,
     count,
-    isDailyMode,
     isDailyFinished,
-    onEnd,
-    nextSlide,
     updateCurrentSlideIndex,
   } = useCardsRepetition()
 
-  const { isAuth } = useAppSelector((store) => store.app)
-
-  const { updateStatusHandler } = useCards()
   const { t } = useTranslation()
-
-  const [optimisticLiveItems, updateOptimisticStatus] = useOptimistic(
-    liveItems,
-    (current: IItem[], update: { id: number; status: 'READY' | 'STUDY' }) =>
-      current.map((it) =>
-        it.id === update.id ? { ...it, status: update.status } : it
-      ),
-  )
 
   const editItem = () => {
     if (currentSlideData?.item) {
@@ -61,46 +40,10 @@ const Slides: FC<Props> = ({}) => {
     }
   }
 
-  const currentItem = useMemo(() => {
-    return (
-      currentSlideData &&
-      optimisticLiveItems.find((it) => it.id === currentSlideData.item.id)
-    )
-  }, [currentSlideData, optimisticLiveItems])
-
-  const [, changeStatusAction, isLoading] = useActionState(
-    async (_prevState: null) => {
-      if (!isAuth || !currentSlideData?.item.id || !currentItem) return null
-
-      const nextStatus = currentItem.status === 'READY' ? 'STUDY' : 'READY'
-      updateOptimisticStatus({ id: currentItem.id, status: nextStatus })
-
-      await updateStatusHandler(currentItem, nextStatus)
-
-      nextSlide()
-      return null
-    },
-    null,
-  )
-
-  const handleChangeStatus = useCallback(() => {
-    startTransition(changeStatusAction)
-  }, [changeStatusAction])
-
   const renderItem: ListRenderItem<CardSlideType> = useCallback(
     ({ item, index }) => <SlideItem index={index} item={item} />,
     []
   )
-
-  const emptyText = useMemo(
-    () =>
-      isDailyMode
-        ? t('cardsRepetition.empty_daily')
-        : t('cardsRepetition.empty_filter'),
-    [isDailyMode, t]
-  )
-
-  const finishClasses = useMemo(() => ({ textBtn: styles.textBtn }), [])
 
   // задание дня отвечено целиком — вместо слайдов итог с кнопкой завершения
   if (isDailyFinished) {
@@ -145,7 +88,9 @@ const Slides: FC<Props> = ({}) => {
                   loop
                 />
 
-                <Text style={styles.emptyText}>{emptyText}</Text>
+                <Text style={styles.emptyText}>
+                  {t('cardsRepetition.empty_daily')}
+                </Text>
               </View>
             }
           />
@@ -154,33 +99,8 @@ const Slides: FC<Props> = ({}) => {
         <View style={styles.footer}>
           {data.length ? (
             <View style={styles.btns}>
-              {/* в задании дня статус карточки меняет бэкенд по ответам
-                  «Помню»/«Не помню» — ручного переключения статуса там нет */}
-              {isDailyMode ? (
-                <></>
-              ) : (
-                <Button
-                  isText={false}
-                  style={styles.btnGroup}
-                  onPress={handleChangeStatus}
-                >
-                  {isLoading ? (
-                    <ActivityIndicator
-                      size={'small'}
-                      color={theme.colors.palette.primery}
-                    />
-                  ) : (
-                    <>
-                      {currentItem?.status === 'STUDY' ? (
-                        <DoneIcon width={24} height={24} />
-                      ) : (
-                        <RepeatIcon width={24} height={24} />
-                      )}
-                    </>
-                  )}
-                </Button>
-              )}
-
+              {/* статус карточки меняет бэкенд по ответам «Помню»/«Не помню»
+                  — ручного переключения статуса в задании дня нет */}
               <Button isText={false} style={styles.btnGroup} onPress={editItem}>
                 <EditIcon width={24} height={24} />
               </Button>
@@ -190,17 +110,6 @@ const Slides: FC<Props> = ({}) => {
           )}
 
           {/* задание дня завершается только из итога (DailySummary) */}
-          {isDailyMode ? (
-            <></>
-          ) : (
-            <Button
-              onPress={onEnd}
-              style={styles.btn}
-              classes={finishClasses}
-            >
-              {t('ui.finish')}
-            </Button>
-          )}
         </View>
       </View>
 

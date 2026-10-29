@@ -18,10 +18,13 @@ import type { ILanguage } from '@/shared/API/services/languages/types'
 import type { CardsLimitValue } from '@/shared/store/slice/itemsSlice'
 import BottomSheet from '@/shared/UI/BottomSheet/BottomSheet'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import type { PracticeModeId } from '@/entities/PracticeMode/model/practiceMode'
 
 type Props = {
   sheetRef: RefObject<BottomSheetModal | null>
   onDismiss: () => void
+  // режим практики, сессию которого запускает «Начать»
+  modeId: PracticeModeId
 }
 
 type FilterChipProps<T> = {
@@ -65,7 +68,7 @@ const FilterChipInner = <T,>({
 
 const FilterChip = memo(FilterChipInner) as typeof FilterChipInner
 
-const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
+const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss, modeId }) => {
   const { setFilterCardsModal } = useActions()
   const { navigate } = useAppNavigation()
   const { t } = useTranslation()
@@ -133,7 +136,7 @@ const ModalCardsFilter: FC<Props> = ({ sheetRef, onDismiss }) => {
       limit: limitSelect,
     })
 
-    navigate(RoutesNames.cardsRepetition)
+    navigate(RoutesNames.practiceSession, { modeId })
     onDismiss()
   }
 

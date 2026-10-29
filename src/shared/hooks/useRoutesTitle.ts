@@ -8,6 +8,7 @@ export const useRoutesTitle = (title?: RoutesTitle) => {
   const titles = useMemo<Partial<Record<RoutesTitle, string>>>(() => {
     return {
       [RoutesNames.main]: t('navigation.main'),
+      [RoutesNames.practice]: t('navigation.practice'),
       [RoutesNames.settings]: t('navigation.settings'),
       [RoutesNames.profile]: t('navigation.profile'),
       [RoutesNames.cardsRepetition]: t('navigation.practice'),

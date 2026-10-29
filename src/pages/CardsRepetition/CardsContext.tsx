@@ -23,10 +23,8 @@ import { RoutesNames } from '@/app/Navigation/RoutesNames'
 import { IItem } from '@/entities/Item/model/item'
 import { width } from '@/shared/helpers/ScaleUtils'
 import { getLocalDateString } from '@/shared/helpers/localDate'
-import { shuffleArray } from '@/shared/helpers/shuffleArray'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/useStore'
 import {
-  useGetItemsQuery,
   cardToItem,
   syncItemsStatusInCache,
 } from '@/pages/MainScreen/api/cardsServices'
@@ -57,10 +55,8 @@ type IContext = {
   flatList: RefObject<FlatList | null>
   currentSlide: number
   scrollX: Animated.Value
-  isLoading: boolean
   currentSlideData?: CardSlideType
   count: number
-  isDailyMode: boolean
   showVariant: ShowVariantListVale | null
   // задание дня: ответы «Помню» (true) / «Не помню» (false) по id карточки
   dailyAnswers: DailyAnswers
@@ -100,7 +96,6 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   const scrollX = useRef(new Animated.Value(0)).current
 
   const { filterCardsModal } = useAppSelector((store) => store.items)
-  const { isAuth } = useAppSelector((store) => store.app)
 
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [data, setData] = useState<CardSlideType[]>([])
@@ -118,60 +113,37 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
   // второй раз их не шлём
   const isDailyResultsSentRef = useRef(false)
 
-  const dailyParams = route.params?.mode === 'daily' ? route.params : undefined
-  const isDailyMode = !!dailyParams
-
-  const queryArgs = useMemo(
-    () => ({
-      filter: {
-        status: filterCardsModal.status,
-        filter: {
-          languages: filterCardsModal?.languages,
-        },
-      },
-      // практика должна работать по всему набору карточек, подходящих
-      // под фильтр, а не только по первой странице
-      all: true,
-    }),
-    [filterCardsModal.status, filterCardsModal.languages]
-  )
-
-  // в режиме задания дня карточки уже пришли параметром, отдельный запрос
-  // списка карточек по фильтру для практики не нужен
-  const { data: queryData, isFetching } = useGetItemsQuery(queryArgs, {
-    skip: !isAuth || isDailyMode,
-  })
+  // экран — только задание дня: карточки уже пришли параметром. Свободная
+  // практика живёт во вкладке «Практика» (pages/PracticeSession)
+  const dailyParams = route.params
 
   const [completeStreak] = useCompleteStreakMutation()
   const [submitDailyResults] = useSubmitDailyChallengeResultsMutation()
   const [logMetricEvent] = useLogMetricEventMutation()
 
   const dailyItems = useMemo(
-    () => dailyParams?.cards.map(cardToItem) ?? [],
+    () => dailyParams.cards.map(cardToItem),
     [dailyParams]
   )
 
   const newCardIds = useMemo(
     () =>
       new Set(
-        (dailyParams?.cards ?? [])
+        dailyParams.cards
           .filter((card) => card.review?.is_new)
           .map((card) => card.id)
       ),
     [dailyParams]
   )
 
-  const liveItems = useMemo(
-    () => (isDailyMode ? dailyItems : (queryData?.items ?? [])),
-    [isDailyMode, dailyItems, queryData?.items]
-  )
+  const liveItems = dailyItems
 
   // в задании дня направление показа задаёт бэкенд (mode ответа
   // /streak/daily-challenge); если режима нет или он незнакомый — локальная
   // настройка практики. filterCardsModal при этом не перезаписывается
   const dailyBehavior = useMemo(
-    () => getDailyChallengeModeBehavior(dailyParams?.challengeMode),
-    [dailyParams?.challengeMode]
+    () => getDailyChallengeModeBehavior(dailyParams.challengeMode),
+    [dailyParams.challengeMode]
   )
 
   const showVariant = useMemo(
@@ -238,16 +210,11 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     goBack()
   }, [goBack, logMetricEvent])
 
-  // свободная практика ничего не ждёт от сервера — выходим сразу. Задание
-  // дня закрываем только после ответа POST /streak/complete: пока запросы
-  // идут, кнопка итога показывает лоадер, иначе пользователь видит главный
-  // экран без продлённой серии, а модалка успеха всплывает через пару секунд
+  // задание дня закрываем только после ответа POST /streak/complete: пока
+  // запросы идут, кнопка итога показывает лоадер, иначе пользователь видит
+  // главный экран без продлённой серии, а модалка успеха всплывает через
+  // пару секунд
   const onEnd = useCallback(async () => {
-    if (!isDailyMode) {
-      leaveRepetition()
-      return
-    }
-
     if (isDailyCompletingRef.current) return
 
     isDailyCompletingRef.current = true
@@ -263,7 +230,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       isDailyCompletingRef.current = false
       setIsDailyCompleting(false)
     }
-  }, [finishDailyChallenge, isDailyMode, leaveRepetition])
+  }, [finishDailyChallenge, leaveRepetition])
 
   const goToSlide = useCallback((slideIndex: number) => {
     flatList.current?.scrollToOffset({ offset: slideIndex * width })
@@ -325,36 +292,13 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     []
   )
 
-  // карточки для тренировки собираются один раз при заходе на экран,
-  // дальше статус каждой карточки уже обновляется реактивно через liveItems.
-  // в режиме задания дня порядок карточек уже случайный на бэкенде —
-  // клиентский reshuffle для этого пути сознательно пропускается
+  // карточки задания дня собираются один раз при заходе на экран; порядок
+  // уже случайный на бэкенде — клиентский reshuffle сознательно не делается
   useEffect(() => {
-    if (data.length) return
+    if (data.length || !dailyItems.length) return
 
-    if (isDailyMode) {
-      if (dailyItems.length) {
-        setData(dailyItems.map((it, index) => ({ index, item: it })))
-      }
-      return
-    }
-
-    if (queryData?.items.length) {
-      const shuffledItems = shuffleArray(queryData.items)
-      const limitedItems =
-        filterCardsModal.limit === 'ALL'
-          ? shuffledItems
-          : shuffledItems.slice(0, filterCardsModal.limit)
-
-      setData(limitedItems.map((it, index) => ({ index, item: it })))
-    }
-  }, [
-    queryData?.items,
-    data.length,
-    isDailyMode,
-    dailyItems,
-    filterCardsModal.limit,
-  ])
+    setData(dailyItems.map((it, index) => ({ index, item: it })))
+  }, [data.length, dailyItems])
 
   const value = useMemo(() => {
     return {
@@ -364,9 +308,7 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
       currentSlide,
       scrollX,
       currentSlideData,
-      isLoading: isDailyMode ? false : isFetching,
       count: data.length,
-      isDailyMode,
       showVariant,
       dailyAnswers,
       dailyStats,
@@ -386,8 +328,6 @@ export const CardsProvider: FC<CardsProviderType> = ({ children }) => {
     currentSlide,
     scrollX,
     currentSlideData,
-    isFetching,
-    isDailyMode,
     showVariant,
     dailyAnswers,
     dailyStats,

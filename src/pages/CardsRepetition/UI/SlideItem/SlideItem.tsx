@@ -100,14 +100,7 @@ const CardContent: FC<Props & { isFlipped: boolean }> = ({
 const SlideItem: FC<Props> = (props) => {
   const { item, index } = props
   const [isFlipped, setIsFlipped] = useState(false)
-  const {
-    scrollX,
-    nextSlide,
-    swipeSlide,
-    liveItems,
-    isDailyMode,
-    newCardIds,
-  } = useCardsRepetition()
+  const { scrollX, swipeSlide, liveItems, newCardIds } = useCardsRepetition()
   const { t } = useTranslation()
 
   const flipAnimation = useRef(new Animated.Value(0)).current
@@ -173,14 +166,8 @@ const SlideItem: FC<Props> = (props) => {
     })
   }, [flipAnimation])
 
-  // в задании дня тап по карточке переворачивает её (ответ — кнопками
-  // «Помню»/«Не помню» после переворота), в обычной практике — следующая
-  const onCardPress = useMemo(
-    () => (isDailyMode ? flipCard : nextSlide),
-    [isDailyMode, flipCard, nextSlide]
-  )
-
-  // тап по карточке — жестом RNGH, а не TouchableOpacity вокруг ScrollView:
+  // тап по карточке переворачивает её (ответ — кнопками «Помню»/«Не помню»
+  // после переворота). Тап — жестом RNGH, а не TouchableOpacity вокруг ScrollView:
   // так тап, скролл содержимого (ScrollView из RNGH) и свайп разруливает
   // один обработчик жестов. Сдвиг пальца дальше TAP_MAX_DISTANCE или начало
   // скролла отменяют тап
@@ -190,19 +177,14 @@ const SlideItem: FC<Props> = (props) => {
       .runOnJS(true)
       .onEnd((_event, success) => {
         if (success) {
-          onCardPress()
+          flipCard()
         }
       })
-  }, [onCardPress])
+  }, [flipCard])
 
   const isNew = useMemo(
     () => newCardIds.has(item.item.id),
     [newCardIds, item.item.id]
-  )
-
-  const isAnswerVisible = useMemo(
-    () => isDailyMode && isFlipped,
-    [isDailyMode, isFlipped]
   )
 
   const btnClasses = useMemo(() => ({ textBtn: styles.btnText }), [])
@@ -251,7 +233,7 @@ const SlideItem: FC<Props> = (props) => {
             </GestureDetector>
 
             <View style={styles.footer}>
-              {isAnswerVisible ? (
+              {isFlipped ? (
                 <DailyAnswerButtons cardId={item.item.id} />
               ) : (
                 <Button

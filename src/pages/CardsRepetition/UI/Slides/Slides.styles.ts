@@ -61,18 +61,6 @@ export const styles = StyleSheet.create((theme, rt) => ({
     padding: theme.size.s10,
     borderRadius: theme.size.s24,
   },
-  btn: {
-    minWidth: theme.size.s180,
-    paddingVertical: theme.size.s16,
-    backgroundColor: theme.colors.palette.primery,
-    borderColor: theme.colors.palette.transparent,
-  },
-  textBtn: {
-    textTransform: 'uppercase',
-    fontSize: theme.fontSize.s16,
-    fontWeight: '600',
-    color: theme.colors.base.black,
-  },
   // без alignItems: 'center' ячейки горизонтального списка растягиваются на
   // всю высоту списка, и height: '100%' у слайда резолвится в реальную высоту —
   // иначе слайд берёт высоту своего контента и обрезается границей списка

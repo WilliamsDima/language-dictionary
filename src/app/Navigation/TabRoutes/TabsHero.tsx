@@ -25,6 +25,10 @@ type HeroConfig = {
 }
 
 const HERO_BY_TAB: Partial<Record<TabsKeys, HeroConfig>> = {
+  [RoutesNames.practiceStack]: {
+    kicker: 'tabsHero.practice.kicker',
+    title: 'tabsHero.practice.title',
+  },
   [RoutesNames.settingsStack]: {
     kicker: 'tabsHero.settings.kicker',
     title: 'tabsHero.settings.title',
@@ -35,7 +39,10 @@ const HERO_BY_TAB: Partial<Record<TabsKeys, HeroConfig>> = {
   },
 }
 
-const TABS_HERO_HIDDEN_ROUTES: RouteName[] = [RoutesNames.cardsRepetition]
+const TABS_HERO_HIDDEN_ROUTES: RouteName[] = [
+  RoutesNames.cardsRepetition,
+  RoutesNames.practiceSession,
+]
 
 const getInitials = (name: string): string => {
   const parts = name.trim().split(/\s+/)
