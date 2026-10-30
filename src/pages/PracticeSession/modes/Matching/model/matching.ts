@@ -1,5 +1,10 @@
 import type { IItem } from '@/entities/Item/model/item'
 import type { AnswersByCard } from '@/shared/helpers/answersStats'
+import {
+  getCardTranslationText,
+  getCardWordText,
+  toTextKey,
+} from '../../../model/cardTexts'
 
 // карточек в одном раунде «Найди пары»
 export const MATCHING_GROUP_SIZE = 5
@@ -39,22 +44,6 @@ export const initialMatchingState: MatchingState = {
   mistakes: 0,
   missedCardIds: [],
 }
-
-const joinTexts = (texts: string[]): string =>
-  texts
-    .map((it) => it.trim())
-    .filter(Boolean)
-    .join(', ')
-
-// текст плитки: все слова / переводы карточки через запятую
-export const getCardWordText = (card: IItem): string =>
-  joinTexts(card.items.map((it) => it.word))
-
-export const getCardTranslationText = (card: IItem): string =>
-  joinTexts(card.items.map((it) => it.translate))
-
-const toTextKey = (text: string): string =>
-  text.replace(/\s+/g, ' ').toLocaleLowerCase()
 
 // у карточек одинаковое слово или перевод — в одной группе их плитки
 // неотличимы, поэтому подходит любая из них

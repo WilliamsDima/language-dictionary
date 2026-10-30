@@ -25,7 +25,13 @@ type PracticeSessionRoute = RouteProp<
   typeof RoutesNames.practiceSession
 >
 
-type SessionView = 'loading' | 'empty' | 'not_enough' | 'question' | 'summary'
+type SessionView =
+  | 'loading'
+  | 'empty'
+  | 'not_enough'
+  | 'no_playable'
+  | 'question'
+  | 'summary'
 
 // экран сессии практики: движок (usePracticeSession) + вопрос выбранного
 // режима из PRACTICE_QUESTIONS. Задание дня сюда не относится — это
@@ -38,6 +44,7 @@ const PracticeSession: FC = () => {
     isLoading,
     isFinished,
     isTimed,
+    hasNoPlayableCards,
     total,
     poolSize,
     currentIndex,
@@ -64,11 +71,20 @@ const PracticeSession: FC = () => {
 
   const view = useMemo<SessionView>(() => {
     if (isLoading) return 'loading'
+    if (hasNoPlayableCards) return 'no_playable'
     if (!mode || !questionEntry || !total) return 'empty'
     if (!hasEnoughCardsForMode(mode, poolSize)) return 'not_enough'
     if (isFinished) return 'summary'
     return 'question'
-  }, [questionEntry, isFinished, isLoading, mode, poolSize, total])
+  }, [
+    hasNoPlayableCards,
+    questionEntry,
+    isFinished,
+    isLoading,
+    mode,
+    poolSize,
+    total,
+  ])
 
   const notEnoughText = useMemo(
     () =>
@@ -77,6 +93,12 @@ const PracticeSession: FC = () => {
         available: poolSize,
       }),
     [mode?.minCards, poolSize, t]
+  )
+
+  const noPlayableText = useMemo(
+    () =>
+      t('practiceSession.no_playable_cards', { count: mode?.minCards ?? 0 }),
+    [mode?.minCards, t]
   )
 
   const barStyle = useMemo(
@@ -114,6 +136,12 @@ const PracticeSession: FC = () => {
 
         {view === 'not_enough' ? (
           <PracticeMessage text={notEnoughText} onBack={finish} />
+        ) : (
+          <></>
+        )}
+
+        {view === 'no_playable' ? (
+          <PracticeMessage text={noPlayableText} onBack={finish} />
         ) : (
           <></>
         )}

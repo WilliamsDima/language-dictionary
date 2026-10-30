@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { IItem } from '@/entities/Item/model/item'
 import { useAppNavigation } from '@/shared/hooks/useNavigation'
 import { useAppSelector } from '@/shared/hooks/useStore'
@@ -12,6 +12,8 @@ import {
   buildSessionCards,
   buildSessionSteps,
   getNextQuestionIndex,
+  getPlayableCards,
+  getSessionCompletedEvent,
 } from '../model/practiceSession'
 import type { PracticeQuestionEntry, PracticeTiming } from '../model/types'
 import { PRACTICE_QUESTIONS } from '../modes/practiceQuestions'
@@ -20,10 +22,13 @@ import type { PracticeModeId } from '@/entities/PracticeMode/model/practiceMode'
 type SessionState = {
   // шаги сессии: по карточке или группа карточек (buildSessionSteps)
   steps: IItem[][]
-  // сколько карточек подходило под фильтр на старте — по нему проверяется
-  // minCards режима (позже пул может уменьшиться: смена статуса карточки
-  // убирает её из кэша списка с фильтром по статусу)
+  // сколько карточек было в пуле на старте — по нему проверяется minCards
+  // режима (позже пул может уменьшиться: смена статуса карточки убирает её из
+  // кэша списка с фильтром по статусу)
   poolSize: number
+  // сколько карточек подходило под фильтр на старте: есть такие, а шагов нет —
+  // режиму не из чего составить вопрос (isCardPlayable)
+  candidatesCount: number
   startedAt: number
 }
 
@@ -31,7 +36,8 @@ type SessionState = {
 // filterCardsModal (язык, статус, количество), шаги режима, прогресс, ответы,
 // ошибки/время (режимы с isTimed) и итог. Ответы живут только в памяти и
 // никуда не отправляются — практика не участвует в интервальных повторениях
-// задания дня (card_reviews)
+// задания дня (card_reviews); на бэкенд уходит только факт пройденной сессии
+// (practice_session_completed) для достижений по режимам
 export const usePracticeSession = (modeId: PracticeModeId) => {
   const { goBack } = useAppNavigation()
 
@@ -43,6 +49,9 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
   const [answers, setAnswers] = useState<AnswersByCard>({})
   const [mistakes, setMistakes] = useState(0)
   const [finishedAt, setFinishedAt] = useState<number | null>(null)
+
+  // сессия, о прохождении которой уже сообщили бэкенду
+  const reportedSessionRef = useRef<SessionState | null>(null)
 
   const queryArgs = useMemo(
     () => ({
@@ -59,16 +68,51 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
     [filterCardsModal.status, filterCardsModal.languages]
   )
 
-  const { data, isError } = useGetItemsQuery(queryArgs, { skip: !isAuth })
-  const [logMetricEvent] = useLogMetricEventMutation()
-
   // вопрос режима из реестра; нет в реестре — режим не готов
   const entry = useMemo<PracticeQuestionEntry | undefined>(
     () => PRACTICE_QUESTIONS[modeId],
     [modeId]
   )
 
+  const usesLanguagesPool = useMemo(
+    () => entry?.kind === 'card' && !!entry.isCardPlayable,
+    [entry]
+  )
+
+  // пул режимов с вариантами ответа: все карточки выбранных языков, статус
+  // ограничивает только карточки для вопросов
+  const languagesPoolArgs = useMemo(
+    () => ({
+      filter: {
+        status: 'ALL' as const,
+        filter: {
+          languages: filterCardsModal.languages,
+        },
+      },
+      all: true,
+    }),
+    [filterCardsModal.languages]
+  )
+
+  const { data, isError } = useGetItemsQuery(queryArgs, { skip: !isAuth })
+  const { data: languagesPoolData, isError: isLanguagesPoolError } =
+    useGetItemsQuery(languagesPoolArgs, {
+      skip: !isAuth || !usesLanguagesPool,
+    })
+  const [logMetricEvent] = useLogMetricEventMutation()
+
   const pool = useMemo(() => data?.items ?? [], [data?.items])
+
+  // не загрузился пул языков — варианты берутся из карточек под фильтр
+  const questionPool = useMemo(
+    () => (usesLanguagesPool ? languagesPoolData?.items ?? pool : pool),
+    [languagesPoolData?.items, pool, usesLanguagesPool]
+  )
+
+  const isQuestionPoolReady = useMemo(
+    () => !usesLanguagesPool || !!languagesPoolData || isLanguagesPoolError,
+    [isLanguagesPoolError, languagesPoolData, usesLanguagesPool]
+  )
 
   const poolById = useMemo(
     () => new Map(pool.map((it) => [it.id, it])),
@@ -82,6 +126,11 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
 
   const startedAt = useMemo(() => session?.startedAt ?? 0, [session])
 
+  const hasNoPlayableCards = useMemo(
+    () => !!session && !session.steps.length && session.candidatesCount > 0,
+    [session]
+  )
+
   const isLoading = useMemo(() => !session, [session])
 
   const isFinished = useMemo(
@@ -90,6 +139,11 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
   )
 
   const isTimed = useMemo(() => !!entry?.isTimed, [entry?.isTimed])
+
+  const sessionCompletedEvent = useMemo(
+    () => getSessionCompletedEvent(modeId),
+    [modeId]
+  )
 
   // карточки шага из снимка сессии, но с актуальными данными из кэша (правка
   // карточки во время практики сразу видна); если карточка выпала из кэша
@@ -122,12 +176,16 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
   )
 
   const createSession = useCallback(
-    (items: IItem[]): SessionState => ({
+    (items: IItem[], itemsPool: IItem[]): SessionState => ({
       steps: buildSessionSteps(
-        buildSessionCards(items, filterCardsModal.limit),
+        buildSessionCards(
+          getPlayableCards(items, itemsPool, entry),
+          filterCardsModal.limit
+        ),
         entry
       ),
-      poolSize: items.length,
+      poolSize: itemsPool.length,
+      candidatesCount: items.length,
       startedAt: Date.now(),
     }),
     [entry, filterCardsModal.limit]
@@ -154,12 +212,12 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
 
   // новый заход по тем же карточкам фильтра в новом случайном порядке
   const restart = useCallback(() => {
-    setSession(createSession(pool))
+    setSession(createSession(pool, questionPool))
     setAnswers({})
     setMistakes(0)
     setFinishedAt(null)
     setCurrentIndex(0)
-  }, [createSession, pool])
+  }, [createSession, pool, questionPool])
 
   const finish = useCallback(() => {
     // training_opened двигает метрику trainings_count на бэкенде (достижения
@@ -174,23 +232,47 @@ export const usePracticeSession = (modeId: PracticeModeId) => {
     if (session) return
 
     if (data) {
-      setSession(createSession(data.items))
+      if (isQuestionPoolReady) {
+        setSession(createSession(data.items, questionPool))
+      }
     } else if (isError) {
-      setSession({ steps: [], poolSize: 0, startedAt: Date.now() })
+      setSession({
+        steps: [],
+        poolSize: 0,
+        candidatesCount: 0,
+        startedAt: Date.now(),
+      })
     }
-  }, [createSession, data, isError, session])
+  }, [createSession, data, isError, isQuestionPoolReady, questionPool, session])
+
+  // сессия дошла до итогов — сообщаем один раз на объект сессии: перерисовки и
+  // повторный запуск эффекта ничего не шлют, а «Ещё раз» создаёт новую сессию.
+  // Фоновый запрос: ошибка не влияет на экран итогов, достижения обновятся по
+  // инвалидации тега в logMetricEvent
+  useEffect(() => {
+    if (!isFinished || !session || reportedSessionRef.current === session) {
+      return
+    }
+
+    reportedSessionRef.current = session
+
+    if (sessionCompletedEvent) {
+      logMetricEvent(sessionCompletedEvent)
+    }
+  }, [isFinished, logMetricEvent, session, sessionCompletedEvent])
 
   return {
     questionEntry: entry,
     isLoading,
     isFinished,
     isTimed,
+    hasNoPlayableCards,
     total,
     poolSize,
     currentIndex,
     currentCards,
     stepKey,
-    pool,
+    pool: questionPool,
     showVariant: filterCardsModal.showVariant,
     stats,
     mistakes,

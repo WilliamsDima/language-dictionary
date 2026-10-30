@@ -1,10 +1,12 @@
 import type { IItem } from '@/entities/Item/model/item'
 import {
+  getCardTranslationText,
+  getCardWordText,
+} from '../../../model/cardTexts'
+import {
   MatchingState,
   MatchingTile,
   buildMatchingGroups,
-  getCardTranslationText,
-  getCardWordText,
   getMatchingAnswers,
   getMatchingGroupSizes,
   getMatchingTileState,

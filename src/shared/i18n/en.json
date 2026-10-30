@@ -69,7 +69,9 @@
     "reminders": "Reminders",
     "reminders_subtitle": "Every day at {{time}} if the challenge of the day isn't done yet",
     "app_updates": "App updates",
-    "app_updates_subtitle": "Notify me when a new version is out"
+    "app_updates_subtitle": "Notify me when a new version is out",
+    "game_vibration": "Vibration in games",
+    "game_vibration_subtitle": "A short vibration on a wrong answer"
   },
   "streakFreeze": {
     "earned_title": "+1 streak freeze ❄️",
@@ -359,6 +361,36 @@
       "title": "Review Legend",
       "description_one": "Review cards {{count}} time",
       "description_other": "Review cards {{count}} times"
+    },
+    "card_flipper": {
+      "title": "Card Flipper",
+      "description_one": "Complete {{count}} training session in “Flashcards” mode",
+      "description_other": "Complete {{count}} training sessions in “Flashcards” mode"
+    },
+    "deck_master": {
+      "title": "Deck Master",
+      "description_one": "Complete {{count}} training session in “Flashcards” mode",
+      "description_other": "Complete {{count}} training sessions in “Flashcards” mode"
+    },
+    "pair_finder": {
+      "title": "Pair Finder",
+      "description_one": "Complete {{count}} training session in “Match the pairs” mode",
+      "description_other": "Complete {{count}} training sessions in “Match the pairs” mode"
+    },
+    "match_master": {
+      "title": "Match Master",
+      "description_one": "Complete {{count}} training session in “Match the pairs” mode",
+      "description_other": "Complete {{count}} training sessions in “Match the pairs” mode"
+    },
+    "good_listener": {
+      "title": "Good Listener",
+      "description_one": "Complete {{count}} training session in “Listen and choose” mode",
+      "description_other": "Complete {{count}} training sessions in “Listen and choose” mode"
+    },
+    "sharp_ear": {
+      "title": "Sharp Ear",
+      "description_one": "Complete {{count}} training session in “Listen and choose” mode",
+      "description_other": "Complete {{count}} training sessions in “Listen and choose” mode"
     }
   },
   "navigation": {
@@ -416,7 +448,13 @@
     "time": "Time",
     "mistakes": "Mistakes",
     "round_mistakes": "Mistakes: {{count}}",
-    "not_enough_cards": "{{available}} cards match the selected language and status, but this mode needs at least {{count}}. Add more cards or change the filter"
+    "not_enough_cards": "{{available}} cards match the selected language and status, but this mode needs at least {{count}}. Add more cards or change the filter",
+    "no_playable_cards": "This mode needs at least {{count}} cards of one language with different words and translations. Add more cards or change the filter",
+    "next": "Next",
+    "listening": {
+      "prompt": "Listen to the word and choose the translation",
+      "replay": "Listen again"
+    }
   },
   "achievementsScreen": {
     "subtitle": "Your rewards, progress, and good reasons to come back to your cards are collected here.",

@@ -28,6 +28,7 @@ describe('toTtsLocale', () => {
     const { toTtsLocale } = loadModule()
 
     expect(toTtsLocale('en')).toBe('en-US')
+    expect(toTtsLocale('ru')).toBe('ru-RU')
     expect(toTtsLocale('DE')).toBe('de-DE')
     expect(toTtsLocale('zh')).toBe('zh-CN')
   })
@@ -136,5 +137,18 @@ describe('stopTextToSpeech', () => {
     stopTextToSpeech()
 
     expect(mockTts.stop).toHaveBeenCalledTimes(1)
+  })
+
+  it('не должен озвучивать фразу, которая ждала инициализацию до остановки', async () => {
+    const { stopTextToSpeech, textToSpeech } = loadModule()
+
+    const speech = textToSpeech({ text: 'house', lang: 'en' })
+    stopTextToSpeech()
+
+    await expect(speech).resolves.toBe('ok')
+    expect(mockTts.speak).not.toHaveBeenCalled()
+
+    await textToSpeech({ text: 'cat', lang: 'en' })
+    expect(mockTts.speak).toHaveBeenCalledWith('cat', 'en-US')
   })
 })

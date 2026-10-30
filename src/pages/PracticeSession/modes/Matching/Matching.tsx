@@ -9,14 +9,17 @@ import React, {
 } from 'react'
 import { View } from 'react-native'
 import type { IItem } from '@/entities/Item/model/item'
+import { vibrateOnWrongAnswer } from '@/shared/helpers/gameVibration'
 import { shuffleArray } from '@/shared/helpers/shuffleArray'
 import type { PracticeGroupQuestionProps } from '../../model/types'
+import {
+  getCardTranslationText,
+  getCardWordText,
+} from '../../model/cardTexts'
 import {
   MatchingSide,
   MatchingTile as MatchingTileValue,
   MatchingTileState,
-  getCardTranslationText,
-  getCardWordText,
   getMatchingAnswers,
   getMatchingTileState,
   initialMatchingState,
@@ -139,6 +142,13 @@ const Matching: FC<PracticeGroupQuestionProps> = ({
       onMistake()
     }
   }, [onMistake, state.mistakes])
+
+  // редьюсер чистый, поэтому отклик на неверную пару — здесь
+  useEffect(() => {
+    if (state.mistakes) {
+      vibrateOnWrongAnswer()
+    }
+  }, [state.mistakes])
 
   useEffect(() => {
     if (!isComplete) return

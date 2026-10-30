@@ -46,7 +46,6 @@ export const PRACTICE_MODES: PracticeModeConfig[] = [
     title: 'practiceScreen.modes.listening.title',
     description: 'practiceScreen.modes.listening.description',
     minCards: MULTIPLE_CHOICE_MIN_CARDS,
-    isComingSoon: true,
   },
   {
     id: 'sentence',

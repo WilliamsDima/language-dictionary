@@ -11,8 +11,8 @@ import type { AnswersByCard } from '@/shared/helpers/answersStats'
 export type PracticeQuestionProps = {
   // текущая карточка — актуальные данные из кэша списка карточек
   card: IItem
-  // все карточки под выбранный фильтр — источник неправильных вариантов для
-  // режимов с выбором ответа
+  // все карточки под выбранный фильтр; для режимов с isCardPlayable — все
+  // карточки выбранных языков любого статуса (источник неправильных вариантов)
   pool: IItem[]
   // что показывать вопросом: слово или перевод (ModalCardsFilter)
   showVariant: ShowVariantListVale | null
@@ -45,6 +45,11 @@ export type PracticeQuestionEntry =
       kind: 'card'
       Question: PracticeQuestionComponent
       isTimed?: boolean
+      // режим с вариантами ответа из других карточек: фильтр по статусу
+      // отбирает только карточки для вопросов, а pool — все карточки выбранных
+      // языков; в сессию попадают карточки, для которых есть из чего составить
+      // вопрос
+      isCardPlayable?: (card: IItem, pool: IItem[]) => boolean
     }
   | {
       kind: 'group'

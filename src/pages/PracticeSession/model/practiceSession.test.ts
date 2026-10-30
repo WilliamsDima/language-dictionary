@@ -1,9 +1,12 @@
 import type { IItem } from '@/entities/Item/model/item'
+import { PRACTICE_MODES } from '@/entities/PracticeMode/model/practiceMode'
 import {
   buildSessionCards,
   buildSessionSteps,
   formatDuration,
   getNextQuestionIndex,
+  getPlayableCards,
+  getSessionCompletedEvent,
 } from './practiceSession'
 
 const makeItem = (id: number): IItem => ({
@@ -16,6 +19,31 @@ const makeItem = (id: number): IItem => ({
 })
 
 const items = Array.from({ length: 30 }, (_, i) => makeItem(i + 1))
+
+describe('getSessionCompletedEvent', () => {
+  it.each(['flashcards', 'matching', 'listening'] as const)(
+    'reports the %s mode with its contract value',
+    (modeId) => {
+      expect(getSessionCompletedEvent(modeId)).toEqual({
+        type: 'practice_session_completed',
+        meta: { mode: modeId },
+      })
+    }
+  )
+
+  it.each(['sentence', 'pronunciation'] as const)(
+    'does not report the %s mode the backend does not accept',
+    (modeId) => {
+      expect(getSessionCompletedEvent(modeId)).toBeNull()
+    }
+  )
+
+  it('makes the decision for every ready mode', () => {
+    PRACTICE_MODES.forEach((mode) => {
+      expect(!!getSessionCompletedEvent(mode.id)).toBe(!mode.isComingSoon)
+    })
+  })
+})
 
 describe('practiceSession', () => {
   it('keeps every card when the limit is ALL', () => {
@@ -60,6 +88,24 @@ describe('practiceSession', () => {
         buildGroups: (cards) => [cards.slice(0, 2), cards.slice(2)],
       }).map((it) => it.length)
     ).toEqual([2, 2])
+  })
+
+  it('keeps only playable cards when the mode has a condition', () => {
+    const source = items.slice(0, 4)
+    const Question = () => null
+
+    expect(getPlayableCards(source, source, undefined)).toBe(source)
+    expect(getPlayableCards(source, source, { kind: 'card', Question })).toBe(
+      source
+    )
+    expect(
+      getPlayableCards(source, items, {
+        kind: 'card',
+        Question,
+        isCardPlayable: (card, pool) =>
+          card.id % 2 === 0 && pool.length === items.length,
+      }).map((it) => it.id)
+    ).toEqual([2, 4])
   })
 
   it('formats durations as m:ss', () => {

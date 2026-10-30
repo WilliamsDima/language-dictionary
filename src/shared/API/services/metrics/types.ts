@@ -4,12 +4,25 @@
 // card_created/card_reviewed/app_open больше не шлются клиентом — бэкенд
 // теперь считает их сам внутри уже существующих хендлеров и отклонит эти
 // типы события 400-й ошибкой
-export type MetricEventType = 'training_opened'
+export type MetricEventType = 'training_opened' | 'practice_session_completed'
 
-export type LogEventPayload = {
-  type: MetricEventType
-  meta?: Record<string, unknown>
+// режимы практики, которые принимает бэкенд (domain.PracticeModeMetrics):
+// другое значение mode он отклонит 400-й ошибкой
+export type PracticeMetricMode = 'flashcards' | 'matching' | 'listening'
+
+// сессия практики дошла до итогов — двигает счётчик режима на бэкенде
+// (достижения по режимам). Событие не идемпотентно: каждый вызов — новая сессия
+export type PracticeSessionCompletedEvent = {
+  type: 'practice_session_completed'
+  meta: { mode: PracticeMetricMode }
 }
+
+export type LogEventPayload =
+  | {
+      type: Exclude<MetricEventType, PracticeSessionCompletedEvent['type']>
+      meta?: Record<string, unknown>
+    }
+  | PracticeSessionCompletedEvent
 
 export type YearStatsMetric = {
   total: number

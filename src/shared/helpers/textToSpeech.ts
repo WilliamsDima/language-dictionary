@@ -72,6 +72,10 @@ const LANG_UNAVAILABLE_CODE = 'lang_unavailable'
 // пользователь установил/включил TTS-движок, не перезапуская приложение)
 const initHolder: { current: Promise<void> | null } = { current: null }
 
+// счётчик остановок: фраза, которая ещё ждала инициализацию движка, после
+// stopTextToSpeech не должна прозвучать (пользователь уже ушёл с экрана)
+const stopCounter = { current: 0 }
+
 const getErrorCode = (error: unknown): string | undefined =>
   typeof error === 'object' && error !== null
     ? (error as TtsErrorLike).code
@@ -108,6 +112,8 @@ const ensureTtsReady = (): Promise<void> => {
 // останавливает текущую озвучку (уход с экрана и т.п.); ошибки игнорируем —
 // если движок не поднялся, останавливать и так нечего
 export const stopTextToSpeech = (): void => {
+  stopCounter.current += 1
+
   if (!initHolder.current || !NativeTextToSpeech) {
     return
   }
@@ -125,10 +131,16 @@ export const textToSpeech = async ({
     return 'ok'
   }
 
+  const stopsBeforeInit = stopCounter.current
+
   try {
     await ensureTtsReady()
   } catch {
     return 'no_engine'
+  }
+
+  if (stopCounter.current !== stopsBeforeInit) {
+    return 'ok'
   }
 
   try {
