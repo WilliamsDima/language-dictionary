@@ -12,9 +12,9 @@ type Props = {
   onValueChange: (value: boolean) => void
 }
 
-// строка настроек уведомлений: заголовок, пояснение и переключатель.
-// Логику включения (разрешения, запрос на сервер) держат сами переключатели
-// (ReminderSwitch, AppUpdateSwitch)
+// строка настроек: заголовок, пояснение и переключатель. Логику включения
+// (разрешения, запрос на сервер, хранение) держат сами переключатели
+// (ReminderSwitch, AppUpdateSwitch, GameVibrationSwitch)
 const NotificationSwitch: FC<Props> = ({
   title,
   description,

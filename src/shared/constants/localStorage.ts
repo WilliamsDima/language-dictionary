@@ -15,4 +15,6 @@ export enum LOCAL_KEYS {
   // префикс ключа `${prefix}:${userId}` — id достижений, для которых уже
   // показано уведомление «Половина пути» (ModalAchievementHalfway)
   achievementHalfwayShown = 'achievementHalfwayShown',
+  // вибрация при неправильном ответе в играх (нет значения — включена)
+  gameVibrationEnabled = 'gameVibrationEnabled',
 }
